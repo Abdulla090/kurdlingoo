@@ -1,0 +1,181 @@
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-background);
+}
+
+/* Sidebar (Desktop) */
+.sidebar {
+    width: 256px;
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-inline-end: 2px solid var(--color-border);
+    /* Logical border */
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    display: none;
+    /* Hidden on mobile by default */
+    flex-direction: column;
+    background-color: var(--color-background);
+    z-index: 50;
+    transition: width 0.3s ease;
+    inset-inline-start: 0;
+    /* Logical left/right */
+}
+
+.sidebar.collapsed {
+    width: 88px;
+    padding: var(--spacing-lg) var(--spacing-sm);
+}
+
+.sidebar-logo {
+    margin-bottom: var(--spacing-xl);
+    padding-inline-start: var(--spacing-sm);
+    /* Logical padding */
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    padding-inline-start: 0;
+    justify-content: center;
+}
+
+.logo-text {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.05em;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: 12px 16px;
+    border-radius: var(--radius-lg);
+    color: var(--color-text-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 12px;
+}
+
+.nav-item:hover {
+    background-color: var(--color-surface);
+}
+
+.nav-item.active {
+    color: var(--color-primary);
+    background-color: #f0fdf4;
+    border-color: #dcfce7;
+}
+
+.nav-icon {
+    stroke-width: 2.5px;
+}
+
+/* Collapse Button */
+.collapse-btn {
+    margin-top: auto;
+    background: transparent;
+    border: 2px solid var(--color-border);
+    color: var(--color-text-light);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: all 0.2s;
+}
+
+.collapse-btn:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-text);
+}
+
+.sidebar.collapsed .collapse-btn {
+    align-self: center;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding-bottom: 80px;
+    /* Space for bottom nav */
+    transition: margin-inline-start 0.3s ease;
+    /* Logical margin transition */
+}
+
+/* Bottom Nav (Mobile) */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    height: 80px;
+    /* Taller for better touch targets */
+    background-color: var(--color-background);
+    border-top: 2px solid var(--color-border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--color-text-light);
+}
+
+.bottom-nav-item.active {
+    color: var(--color-accent-blue);
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 769px) {
+    .sidebar {
+        display: flex;
+    }
+
+    .bottom-nav {
+        display: none;
+    }
+
+    .main-content {
+        margin-inline-start: 256px;
+        /* Logical margin */
+        padding-bottom: 0;
+    }
+
+    .main-content.collapsed {
+        margin-inline-start: 88px;
+        /* Logical margin */
+    }
+}

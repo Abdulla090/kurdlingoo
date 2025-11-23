@@ -1,0 +1,326 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, BookOpen, Volume2, Star, Info, Globe } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { unit1 } from '../../data/courses/unit1';
+import { unit2 } from '../../data/courses/unit2';
+import { unit3 } from '../../data/courses/unit3';
+import { unit4 } from '../../data/courses/unit4';
+import './Guidebook.css';
+
+const Guidebook = () => {
+    const { unitId } = useParams();
+    const navigate = useNavigate();
+    const [unit, setUnit] = useState(null);
+
+    useEffect(() => {
+        const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
+        const defaultUnits = [unit1, unit2, unit3, unit4];
+
+        let allUnits;
+        if (savedUnits) {
+            allUnits = savedUnits.map(savedUnit => {
+                const defaultUnit = defaultUnits.find(du => du.id === savedUnit.id);
+                return {
+                    ...defaultUnit,
+                    ...savedUnit,
+                    // ALWAYS use the guidebook from the file (defaultUnit) to ensure updates are seen.
+                    // LocalStorage should only store progress, not static content.
+                    guidebook: defaultUnit?.guidebook
+                };
+            });
+        } else {
+            allUnits = defaultUnits;
+        }
+
+        const foundUnit = allUnits.find(u => u.id == unitId);
+        setUnit(foundUnit);
+    }, [unitId]);
+
+    if (!unit) return (
+        <div className="guidebook-loading">
+            <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+                <BookOpen size={48} className="text-primary" />
+            </motion.div>
+        </div>
+    );
+
+    const guidebook = unit.guidebook || {
+        content: "No guidebook content available yet for this unit.",
+        keyPhrases: []
+    };
+
+    // Helper to render specific visual elements
+    const renderVisual = (visual) => {
+        if (!visual) return null;
+
+        switch (visual.type) {
+            case 'sentence-structure':
+                return (
+                    <div className="visual-block sentence-structure">
+                        <div className="sentence-row english">
+                            {visual.data.english.map((part, i) => (
+                                <div key={i} className="word-block" style={{ borderColor: part.color }}>
+                                    <span className="label" style={{ color: part.color }}>{part.label}</span>
+                                    <span className="word">{part.word}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="arrow-divider">⬇️ vs ⬇️</div>
+                        <div className="sentence-row kurdish">
+                            {visual.data.kurdish.map((part, i) => (
+                                <div key={i} className="word-block" style={{ borderColor: part.color }}>
+                                    <span className="label" style={{ color: part.color }}>{part.label}</span>
+                                    <span className="word">{part.word}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case 'pronoun-grid':
+                return (
+                    <div className="visual-block pronoun-grid">
+                        {visual.data.map((item, i) => (
+                            <div key={i} className="pronoun-card">
+                                <div className="p-english">{item.english}</div>
+                                <div className="p-kurdish">{item.kurdish}</div>
+                                <div className="p-icon">{item.icon}</div>
+                            </div>
+                        ))}
+                    </div>
+                );
+            case 'timeline':
+                return (
+                    <div className="visual-block timeline-visual">
+                        <div className="timeline-line"></div>
+                        <div className="timeline-points">
+                            {visual.data.map((point, i) => (
+                                <div key={i} className="t-point">
+                                    <div className="t-dot"></div>
+                                    <div className="t-label">{point.label}</div>
+                                    <div className="t-sub">{point.sub}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case 'comparison':
+                return (
+                    <div className="visual-block comparison-visual">
+                        {visual.data.map((item, i) => (
+                            <div key={i} className="comp-item">
+                                <div
+                                    className="comp-circle"
+                                    style={{
+                                        width: `${40 + (i * 20)}px`,
+                                        height: `${40 + (i * 20)}px`,
+                                        opacity: 0.5 + (i * 0.2)
+                                    }}
+                                >
+                                    {item.icon}
+                                </div>
+                                <div className="comp-text">
+                                    <span className="comp-eng">{item.english}</span>
+                                    <span className="comp-kur">{item.kurdish}</span>
+                                </div>
+                                {i < visual.data.length - 1 && <div className="comp-arrow">➜</div>}
+                            </div>
+                        ))}
+                    </div>
+                );
+            case 'conjugation':
+                return (
+                    <div className="visual-block conjugation-table">
+                        <div className="conj-header">
+                            <span>Subject</span>
+                            <span>Verb Form</span>
+                        </div>
+                        {visual.data.map((row, i) => (
+                            <div key={i} className="conj-row">
+                                <div className="conj-subject">
+                                    <span className="eng">{row.subject}</span>
+                                    <span className="kur">{row.subKurdish}</span>
+                                </div>
+                                <div className="conj-verb">{row.verb}</div>
+                            </div>
+                        ))}
+                    </div>
+                );
+            case 'dialogue':
+                return (
+                    <div className="visual-block chat-interface">
+                        {visual.data.map((msg, i) => (
+                            <div key={i} className={`chat-bubble ${msg.speaker === 'A' ? 'left' : 'right'}`}>
+                                <div className="chat-avatar">{msg.avatar}</div>
+                                <div className="chat-content">
+                                    <div className="chat-english">{msg.english}</div>
+                                    <div className="chat-kurdish">{msg.kurdish}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
+    // Helper to render content sections
+    const renderSection = (section, index) => {
+        return (
+            <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className={`guide-card ${section.type || ''}`}
+            >
+                <div className="card-header">
+                    {section.id === 'pronunciation' && <Volume2 className="card-icon" />}
+                    {section.id === 'grammar' && <Info className="card-icon" />}
+                    {section.id === 'culture' && <Globe className="card-icon" />}
+                    {section.id === 'vocabulary' && <Star className="card-icon" />}
+                    <h2>{section.title}</h2>
+                </div>
+
+                <div className="card-content">
+                    <p>{section.content}</p>
+
+                    {/* Render Custom Visuals */}
+                    {section.visual && renderVisual(section.visual)}
+
+                    {/* Render Items (e.g. Pronunciation) */}
+                    {section.items && (
+                        <div className="items-grid">
+                            {section.items.map((item, i) => (
+                                <div key={i} className="info-item">
+                                    <span className="term">{item.term}</span>
+                                    <span className="definition">{item.definition}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Render Subsections (e.g. Grammar) */}
+                    {section.subsections && (
+                        <div className="subsections">
+                            {section.subsections.map((sub, i) => (
+                                <div key={i} className="subsection">
+                                    <h3>{sub.subtitle}</h3>
+                                    <p>{sub.text}</p>
+
+                                    {/* Subsections can also have visuals */}
+                                    {sub.visual && renderVisual(sub.visual)}
+
+                                    {sub.list && (
+                                        <ul className="feature-list">
+                                            {sub.list.map((li, j) => <li key={j}>{li}</li>)}
+                                        </ul>
+                                    )}
+                                    {sub.example && (
+                                        <div className="example-box">
+                                            <div className="target-text" dir="ltr">{sub.example.english}</div>
+                                            <div className="native-text">{sub.example.kurdish}</div>
+                                            <div className="note-text">{sub.example.transliteration}</div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </motion.div>
+        );
+    };
+
+    return (
+        <div className="guidebook-page">
+            <header className="guidebook-hero">
+                <div className="hero-content">
+                    <button onClick={() => navigate('/learn')} className="back-btn">
+                        <ArrowLeft size={24} />
+                    </button>
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="title-group"
+                    >
+                        <h1>{unit.title} Guidebook</h1>
+                        <p>{unit.description}</p>
+                    </motion.div>
+                    <BookOpen size={64} className="hero-icon" />
+                </div>
+                <div className="hero-wave">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                        <path fill="#ffffff" fillOpacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+                </div>
+            </header>
+
+            <main className="guidebook-body" dir="rtl">
+                {/* Introduction */}
+                {guidebook.introduction && (
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="intro-section"
+                    >
+                        <p>{guidebook.introduction}</p>
+                    </motion.section>
+                )}
+
+                {/* Dynamic Sections */}
+                {guidebook.sections ? (
+                    guidebook.sections.map((section, index) => renderSection(section, index))
+                ) : (
+                    // Fallback for legacy string content
+                    <div className="guide-card">
+                        <div className="card-content">
+                            {typeof guidebook.content === 'string' && guidebook.content.split('\n').map((line, i) => (
+                                <p key={i}>{line}</p>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Key Phrases */}
+                {guidebook.keyPhrases && guidebook.keyPhrases.length > 0 && (
+                    <section className="phrases-section">
+                        <div className="section-header">
+                            <Star className="section-icon" />
+                            <h2>Key Phrases</h2>
+                        </div>
+                        <div className="phrases-grid">
+                            {guidebook.keyPhrases.map((phrase, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.05 }}
+                                    className="phrase-card"
+                                >
+                                    <div className="phrase-main">
+                                        <span className="target-lang" dir="ltr">{phrase.english}</span>
+                                        <span className="native-lang">{phrase.kurdish}</span>
+                                    </div>
+                                    {phrase.pronunciation && (
+                                        <div className="phrase-pronunciation">
+                                            <Volume2 size={14} />
+                                            <span>{phrase.pronunciation}</span>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+            </main>
+        </div>
+    );
+};
+
+export default Guidebook;

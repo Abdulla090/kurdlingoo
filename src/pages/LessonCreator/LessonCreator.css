@@ -1,0 +1,199 @@
+.lesson-creator {
+    min-height: 100vh;
+    background-color: var(--color-surface);
+    padding-bottom: var(--spacing-2xl);
+}
+
+.creator-header {
+    background-color: var(--color-background);
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-bottom: 2px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.creator-header h1 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+}
+
+.creator-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.creator-section {
+    background-color: var(--color-background);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.creator-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.ai-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.ai-section h2 {
+    color: white;
+}
+
+.ai-input-group {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.ai-input-group .input-field {
+    flex: 1;
+}
+
+.ai-hint {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.input-field {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color var(--transition-fast);
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.option-row,
+.pair-row {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    align-items: center;
+}
+
+.option-row .input-field,
+.pair-row .input-field {
+    flex: 1;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.icon-btn {
+    background-color: var(--color-accent-red);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast);
+}
+
+.icon-btn:hover {
+    background-color: var(--color-accent-red-dark);
+}
+
+.exercise-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.exercise-card {
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+}
+
+.exercise-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.exercise-number {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.exercise-type {
+    background-color: var(--color-accent-blue);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.exercise-question {
+    color: var(--color-text);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.creator-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-2xl);
+}
+
+@media (max-width: 768px) {
+    .ai-input-group {
+        flex-direction: column;
+    }
+
+    .option-row,
+    .pair-row {
+        flex-wrap: wrap;
+    }
+}

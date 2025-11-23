@@ -1,0 +1,646 @@
+// Unit 2: Intermediate Kurdish - Conversations & Daily Life
+export const unit2 = {
+    id: 'unit-2',
+    title: 'Conversations & Daily Life',
+    description: 'Master everyday conversations and common phrases',
+    guidebook: {
+        introduction: "لەم بەشەدا هەنگاو دەنێینە ناو گفتوگۆی ڕۆژانەوە. فێردەبیت چۆن پرسیار بکەیت، باسی خێزانەکەت بکەیت، کات بپرسیت و ڕێنمایی وەربگریت. ئەمە کلیلی پەیوەندی کردنە لە ژیانی ڕۆژانەدا.",
+        sections: [
+            {
+                id: "grammar",
+                title: "📚 ڕێزمانی بەسوود",
+                content: "بۆ ئەوەی پرسیار بکەیت و باسی خاوەندارێتی بکەیت، پێویستت بەم یاسایانە دەبێت:",
+                subsections: [
+                    {
+                        subtitle: "پرسیارکردن (Wh- Questions)",
+                        text: "لە ئینگلیزیدا زۆربەی پرسیارەکان بەم وشانە دەست پێ دەکەن:",
+                        list: [
+                            "Where (لە کوێ) - بۆ شوێن: Where is the bank?",
+                            "When (کەی) - بۆ کات: When do you sleep?",
+                            "What (چی) - بۆ شت: What is this?",
+                            "Who (کێ) - بۆ کەس: Who is she?",
+                            "How much (چەند) - بۆ نرخ: How much is it?"
+                        ]
+                    },
+                    {
+                        subtitle: "خاوەندارێتی (Possessives)",
+                        text: "چۆن بڵێیت شتێک هی منە یان هی تۆیە:",
+                        visual: {
+                            type: "pronoun-grid",
+                            data: [
+                                { english: "My", kurdish: "هی من", icon: "🙋‍♂️" },
+                                { english: "Your", kurdish: "هی تۆ", icon: "🫵" },
+                                { english: "His", kurdish: "هی ئەو (نێر)", icon: "👨" },
+                                { english: "Her", kurdish: "هی ئەو (مێ)", icon: "👩" }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                id: "vocabulary",
+                title: "🗣️ گفتوگۆی نموونەیی: لە بازاڕ",
+                content: "ئەمە نموونەیەکە لە گفتوگۆی کڕین و فرۆشتن:",
+                visual: {
+                    type: "dialogue",
+                    data: [
+                        { speaker: "A", avatar: "👨", english: "Hello, how much is this?", kurdish: "سڵاو، ئەمە بە چەندە؟" },
+                        { speaker: "B", avatar: "👩‍💼", english: "It is 5 dollars.", kurdish: "ئەوە ٥ دۆلارە." },
+                        { speaker: "A", avatar: "👨", english: "Can I pay with card?", kurdish: "دەتوانم بە کارت پارە بدەم؟" },
+                        { speaker: "B", avatar: "👩‍💼", english: "Yes, of course.", kurdish: "بەڵێ، بێگومان." }
+                    ]
+                }
+            },
+            {
+                id: "culture",
+                title: "🌍 کەلتوور: قسەکردن لەسەر کەشوهەوا",
+                content: "لە بەریتانیا و زۆربەی وڵاتە ڕۆژئاواییەکان، قسەکردن لەسەر کەشوهەوا (Small Talk) باشترین ڕێگایە بۆ کردنەوەی گفتوگۆ لەگەڵ کەسێکی نەناسراو. ڕستەی 'It is nice today' زۆر بەکاردێت."
+            },
+            {
+                id: "family",
+                title: "👨‍👩‍👧‍👦 ئەندامانی خێزان",
+                content: "وشە گرنگەکان بۆ باسی خێزانەکەت کردن:",
+                visual: {
+                    type: "pronoun-grid",
+                    data: [
+                        { english: "Father", kurdish: "باوک", icon: "👨" },
+                        { english: "Mother", kurdish: "دایک", icon: "👩" },
+                        { english: "Brother", kurdish: "برا", icon: "👦" },
+                        { english: "Sister", kurdish: "خوشک", icon: "👧" },
+                        { english: "Grandfather", kurdish: "باپیر", icon: "👴" },
+                        { english: "Grandmother", kurdish: "دایکگەورە", icon: "👵" },
+                        { english: "Son", kurdish: "کوڕ", icon: "👶" },
+                        { english: "Daughter", kurdish: "کچ", icon: "👶" },
+                        { english: "Husband", kurdish: "مێرد", icon: "🤵" },
+                        { english: "Wife", kurdish: "ژن", icon: "👰" },
+                        { english: "Uncle", kurdish: "مام", icon: "👨‍🦰" },
+                        { english: "Aunt", kurdish: "پورە", icon: "👩‍🦰" }
+                    ]
+                }
+            },
+            {
+                id: "time-expressions",
+                title: "⏰ دەربڕینی کات",
+                content: "چۆن باسی کات بکەیت:",
+                visual: {
+                    type: "timeline",
+                    data: [
+                        { label: "Morning", sub: "بەیانی" },
+                        { label: "Afternoon", sub: "دوانیوەڕۆ" },
+                        { label: "Evening", sub: "ئێوارە" },
+                        { label: "Night", sub: "شەو" }
+                    ]
+                }
+            },
+            {
+                id: "asking-dialogue",
+                title: "💬 گفتوگۆ: پرسیار لەسەر شوێن",
+                content: "چۆن پرسیار لەسەر شوێن بکەیت:",
+                visual: {
+                    type: "dialogue",
+                    data: [
+                        { speaker: "A", avatar: "🧑", english: "Where is the library?", kurdish: "کتێبخانە لە کوێیە؟" },
+                        { speaker: "B", avatar: "👩‍💼", english: "It is on Main Street.", kurdish: "لە شەقامی سەرەکییە." },
+                        { english: "Turn right", kurdish: "بچۆ بۆ لای ڕاست", pronunciation: "تێرن ڕایت" },
+                        { english: "Go straight", kurdish: "ڕێک بڕۆ", pronunciation: "گۆ سترەیت" },
+                        { english: "My mother is a teacher", kurdish: "دایکم مامۆستایە", pronunciation: "مای مازەر ئیز ئە تیچەر" },
+                        { english: "See you tomorrow", kurdish: "سبەی دەتبینمەوە", pronunciation: "سی یو تومۆرۆ" },
+                        { english: "I want to buy water", kurdish: "دەمەوێت ئاو بکڕم", pronunciation: "ئای وانت تو بای واتەر" }
+                    ]
+                },
+                lessons: [
+                    {
+                        id: 'unit2-lesson1',
+                        title: 'Time & Days',
+                        icon: '🕐',
+                        exercises: [
+                            {
+                                type: 'multiple-choice',
+                                question: 'What is "Monday" in Kurdish?',
+                                options: [
+                                    { text: 'دووشەممە', image: '📅', correct: true },
+                                    { text: 'سێشەممە', image: '📅', correct: false },
+                                    { text: 'چوارشەممە', image: '📅', correct: false },
+                                    { text: 'پێنجشەممە', image: '📅', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'بەیانی', english: 'Morning' },
+                                    { kurdish: 'نیوەڕۆ', english: 'Noon' },
+                                    { kurdish: 'ئێوارە', english: 'Evening' },
+                                    { kurdish: 'شەو', english: 'Night' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "What time is it?"',
+                                sourceText: 'What time is it?',
+                                correctSentence: ['کاتژمێر', 'چەندە', '؟'],
+                                options: ['کاتژمێر', 'چەندە', '؟', 'ئێستا', 'ئەوە']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "See you ___" (tomorrow)',
+                                sentenceParts: ['بۆ', '___', 'دەتبینمەوە'],
+                                correctOption: 'بەیانی',
+                                options: ['بەیانی', 'دوێنێ', 'ئێستا', 'ئەمڕۆ']
+                            },
+                            {
+                                type: 'listening',
+                                question: 'Listen and select the correct day',
+                                audio: 'شەممە',
+                                options: [
+                                    { text: 'شەممە', correct: true },
+                                    { text: 'یەکشەممە', correct: false },
+                                    { text: 'دووشەممە', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'How do you say "Yesterday"?',
+                                options: [
+                                    { text: 'دوێنێ', image: '📆', correct: true },
+                                    { text: 'ئەمڕۆ', image: '📆', correct: false },
+                                    { text: 'سبەی', image: '📆', correct: false },
+                                    { text: 'پارێز', image: '📆', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'typing',
+                                question: 'Type in Kurdish: "Good morning"',
+                                correctAnswer: 'بەیانی باش',
+                                hints: ['بەیانی', 'باش']
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "I wake up at 7 AM"',
+                                sourceText: 'I wake up at 7 AM',
+                                correctSentence: ['من', 'لە', 'کاتژمێر', 'حەوت', 'هەڵدەستم'],
+                                options: ['من', 'لە', 'کاتژمێر', 'حەوت', 'هەڵدەستم', 'دەخەوم', 'شەش']
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'ئەمڕۆ', english: 'Today' },
+                                    { kurdish: 'سبەی', english: 'Tomorrow' },
+                                    { kurdish: 'دوێنێ', english: 'Yesterday' },
+                                    { kurdish: 'ئێستا', english: 'Now' }
+                                ]
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "I go to work ___ morning"',
+                                sentenceParts: ['من', '___', 'بەیانی', 'دەچمە', 'کار'],
+                                correctOption: 'هەموو',
+                                options: ['هەموو', 'هیچ', 'کەم', 'زۆر']
+                            },
+                            {
+                                type: 'conversation',
+                                question: 'Complete the dialogue',
+                                dialogue: [
+                                    { speaker: 'A', text: 'سڵاو! چۆنی؟' },
+                                    { speaker: 'B', text: '___', options: ['باشم، تۆ چۆنی؟', 'خوا حافیز', 'سپاس'] }
+                                ],
+                                correctOption: 'باشم، تۆ چۆنی؟'
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'What does "کاتژمێر" mean?',
+                                options: [
+                                    { text: 'Clock/Time', image: '⏰', correct: true },
+                                    { text: 'Calendar', image: '📅', correct: false },
+                                    { text: 'Watch', image: '⌚', correct: false },
+                                    { text: 'Hour', image: '🕐', correct: false }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'unit2-lesson2',
+                        title: 'Family & Relationships',
+                        icon: '👨‍👩‍👧‍👦',
+                        exercises: [
+                            {
+                                type: 'multiple-choice',
+                                question: 'What is "Mother" in Kurdish?',
+                                options: [
+                                    { text: 'دایک', image: '👩', correct: true },
+                                    { text: 'باوک', image: '👨', correct: false },
+                                    { text: 'برا', image: '👦', correct: false },
+                                    { text: 'خوشک', image: '👧', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'باوک', english: 'Father' },
+                                    { kurdish: 'دایک', english: 'Mother' },
+                                    { kurdish: 'کوڕ', english: 'Son' },
+                                    { kurdish: 'کچ', english: 'Daughter' },
+                                    { kurdish: 'برا', english: 'Brother' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "My family is big"',
+                                sourceText: 'My family is big',
+                                correctSentence: ['خێزانی', 'من', 'گەورەیە'],
+                                options: ['خێزانی', 'من', 'گەورەیە', 'بچووکە', 'تۆ', 'ئەو']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "I have two ___" (brothers)',
+                                sentenceParts: ['من', 'دوو', '___', 'هەیە'],
+                                correctOption: 'برام',
+                                options: ['برام', 'خوشکم', 'کوڕم', 'کچم']
+                            },
+                            {
+                                type: 'typing',
+                                question: 'Type in Kurdish: "Grandfather"',
+                                correctAnswer: 'باپیر',
+                                hints: ['باپیر']
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'How do you say "Sister"?',
+                                options: [
+                                    { text: 'خوشک', image: '👧', correct: true },
+                                    { text: 'برا', image: '👦', correct: false },
+                                    { text: 'دایک', image: '👩', correct: false },
+                                    { text: 'خاڵ', image: '👩', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'باپیر', english: 'Grandfather' },
+                                    { kurdish: 'دایەپیر', english: 'Grandmother' },
+                                    { kurdish: 'مام', english: 'Uncle (paternal)' },
+                                    { kurdish: 'خاڵ', english: 'Uncle (maternal)' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "I love my family"',
+                                sourceText: 'I love my family',
+                                correctSentence: ['من', 'خێزانەکەم', 'خۆشدەوێت'],
+                                options: ['من', 'خێزانەکەم', 'خۆشدەوێت', 'ڕقم', 'لێیە', 'تۆ']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "My ___ is a teacher"',
+                                sentenceParts: ['___', 'من', 'مامۆستایە'],
+                                correctOption: 'باوکی',
+                                options: ['باوکی', 'دایکی', 'برای', 'خوشکی']
+                            },
+                            {
+                                type: 'conversation',
+                                question: 'Complete the dialogue about family',
+                                dialogue: [
+                                    { speaker: 'A', text: 'چەند برا و خوشکت هەیە؟' },
+                                    { speaker: 'B', text: '___', options: ['دوو برا و یەک خوشکم هەیە', 'من باشم', 'سپاس'] }
+                                ],
+                                correctOption: 'دوو برا و یەک خوشکم هەیە'
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'What does "خێزان" mean?',
+                                options: [
+                                    { text: 'Family', image: '👨‍👩‍👧‍👦', correct: true },
+                                    { text: 'Friend', image: '👥', correct: false },
+                                    { text: 'House', image: '🏠', correct: false },
+                                    { text: 'Love', image: '❤️', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'image-selection',
+                                question: 'Select the image that matches: "دایک"',
+                                correctImage: '👩',
+                                options: ['👩', '👨', '👧', '👦']
+                            }
+                        ]
+                    },
+                    {
+                        id: 'unit2-lesson3',
+                        title: 'Shopping & Money',
+                        icon: '🛒',
+                        exercises: [
+                            {
+                                type: 'multiple-choice',
+                                question: 'What is "Money" in Kurdish?',
+                                options: [
+                                    { text: 'پارە', image: '💰', correct: true },
+                                    { text: 'کڕین', image: '🛍️', correct: false },
+                                    { text: 'فرۆشتن', image: '🏪', correct: false },
+                                    { text: 'بازاڕ', image: '🏬', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'کڕین', english: 'Buying' },
+                                    { kurdish: 'فرۆشتن', english: 'Selling' },
+                                    { kurdish: 'نرخ', english: 'Price' },
+                                    { kurdish: 'بازاڕ', english: 'Market' },
+                                    { kurdish: 'دووکان', english: 'Shop' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "How much does this cost?"',
+                                sourceText: 'How much does this cost?',
+                                correctSentence: ['ئەمە', 'چەندە', '؟'],
+                                options: ['ئەمە', 'چەندە', '؟', 'ئەوە', 'کەی', 'کوێ']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "I want to ___ bread"',
+                                sentenceParts: ['من', 'دەمەوێت', 'نان', '___'],
+                                correctOption: 'بکڕم',
+                                options: ['بکڕم', 'بفرۆشم', 'بخۆم', 'بدەم']
+                            },
+                            {
+                                type: 'typing',
+                                question: 'Type in Kurdish: "Expensive"',
+                                correctAnswer: 'گران',
+                                hints: ['گران']
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'How do you say "Cheap"?',
+                                options: [
+                                    { text: 'هەرزان', image: '💵', correct: true },
+                                    { text: 'گران', image: '💰', correct: false },
+                                    { text: 'نرخ', image: '🏷️', correct: false },
+                                    { text: 'پارە', image: '💸', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'گران', english: 'Expensive' },
+                                    { kurdish: 'هەرزان', english: 'Cheap' },
+                                    { kurdish: 'داشکاندن', english: 'Discount' },
+                                    { kurdish: 'پسوڵە', english: 'Receipt' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "I need a bag"',
+                                sourceText: 'I need a bag',
+                                correctSentence: ['من', 'پێویستیم', 'بە', 'جانتایەکە'],
+                                options: ['من', 'پێویستیم', 'بە', 'جانتایەکە', 'دەمەوێت', 'هەیە']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "Can you give me a ___?" (discount)',
+                                sentenceParts: ['دەتوانیت', '___', 'بدەیتێ', '؟'],
+                                correctOption: 'داشکاندن',
+                                options: ['داشکاندن', 'پارە', 'نرخ', 'پسوڵە']
+                            },
+                            {
+                                type: 'conversation',
+                                question: 'Complete the shopping dialogue',
+                                dialogue: [
+                                    { speaker: 'Seller', text: 'سڵاو! چیت دەوێت؟' },
+                                    { speaker: 'You', text: '___', options: ['من دەمەوێت ئەم کراسە بکڕم', 'خوا حافیز', 'باشم'] }
+                                ],
+                                correctOption: 'من دەمەوێت ئەم کراسە بکڕم'
+                            },
+                            {
+                                type: 'number-match',
+                                question: 'Match Kurdish numbers with prices',
+                                pairs: [
+                                    { kurdish: 'پێنج هەزار', english: '5000' },
+                                    { kurdish: 'دە هەزار', english: '10000' },
+                                    { kurdish: 'بیست هەزار', english: '20000' }
+                                ]
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'What does "دووکان" mean?',
+                                options: [
+                                    { text: 'Shop', image: '🏪', correct: true },
+                                    { text: 'Market', image: '🏬', correct: false },
+                                    { text: 'Mall', image: '🏢', correct: false },
+                                    { text: 'Street', image: '🛣️', correct: false }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'unit2-lesson4',
+                        title: 'Weather & Seasons',
+                        icon: '🌤️',
+                        exercises: [
+                            {
+                                type: 'multiple-choice',
+                                question: 'What is "Summer" in Kurdish?',
+                                options: [
+                                    { text: 'هاوین', image: '☀️', correct: true },
+                                    { text: 'زستان', image: '❄️', correct: false },
+                                    { text: 'بەهار', image: '🌸', correct: false },
+                                    { text: 'پاییز', image: '🍂', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'بەهار', english: 'Spring' },
+                                    { kurdish: 'هاوین', english: 'Summer' },
+                                    { kurdish: 'پاییز', english: 'Autumn' },
+                                    { kurdish: 'زستان', english: 'Winter' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "It is raining today"',
+                                sourceText: 'It is raining today',
+                                correctSentence: ['ئەمڕۆ', 'باران', 'دەبارێت'],
+                                options: ['ئەمڕۆ', 'باران', 'دەبارێت', 'بەفر', 'گەرمە', 'ساردە']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "The weather is ___" (hot)',
+                                sentenceParts: ['کەش', 'و', 'هەوا', '___'],
+                                correctOption: 'گەرمە',
+                                options: ['گەرمە', 'ساردە', 'باشە', 'خراپە']
+                            },
+                            {
+                                type: 'typing',
+                                question: 'Type in Kurdish: "Snow"',
+                                correctAnswer: 'بەفر',
+                                hints: ['بەفر']
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'How do you say "Cold"?',
+                                options: [
+                                    { text: 'سارد', image: '🥶', correct: true },
+                                    { text: 'گەرم', image: '🥵', correct: false },
+                                    { text: 'باران', image: '🌧️', correct: false },
+                                    { text: 'با', image: '💨', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'باران', english: 'Rain' },
+                                    { kurdish: 'بەفر', english: 'Snow' },
+                                    { kurdish: 'با', english: 'Wind' },
+                                    { kurdish: 'هەور', english: 'Cloud' },
+                                    { kurdish: 'خۆر', english: 'Sun' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "I like spring"',
+                                sourceText: 'I like spring',
+                                correctSentence: ['من', 'بەهارم', 'خۆشدەوێت'],
+                                options: ['من', 'بەهارم', 'خۆشدەوێت', 'هاوین', 'زستان', 'ڕقم']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "It is ___ in winter"',
+                                sentenceParts: ['لە', 'زستاندا', '___'],
+                                correctOption: 'ساردە',
+                                options: ['ساردە', 'گەرمە', 'باران', 'بەفر']
+                            },
+                            {
+                                type: 'image-selection',
+                                question: 'Select the image for: "باران"',
+                                correctImage: '🌧️',
+                                options: ['🌧️', '☀️', '❄️', '💨']
+                            },
+                            {
+                                type: 'conversation',
+                                question: 'Complete the weather conversation',
+                                dialogue: [
+                                    { speaker: 'A', text: 'کەش و هەوا چۆنە ئەمڕۆ؟' },
+                                    { speaker: 'B', text: '___', options: ['زۆر گەرمە', 'باشم', 'سپاس'] }
+                                ],
+                                correctOption: 'زۆر گەرمە'
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'What does "کەش و هەوا" mean?',
+                                options: [
+                                    { text: 'Weather', image: '🌤️', correct: true },
+                                    { text: 'Season', image: '🍂', correct: false },
+                                    { text: 'Temperature', image: '🌡️', correct: false },
+                                    { text: 'Climate', image: '🌍', correct: false }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'unit2-lesson5',
+                        title: 'Directions & Places',
+                        icon: '🗺️',
+                        exercises: [
+                            {
+                                type: 'multiple-choice',
+                                question: 'What is "Right" (direction) in Kurdish?',
+                                options: [
+                                    { text: 'ڕاست', image: '➡️', correct: true },
+                                    { text: 'چەپ', image: '⬅️', correct: false },
+                                    { text: 'ڕێگا', image: '🛣️', correct: false },
+                                    { text: 'شوێن', image: '📍', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'ڕاست', english: 'Right' },
+                                    { kurdish: 'چەپ', english: 'Left' },
+                                    { kurdish: 'ڕێگا', english: 'Road/Way' },
+                                    { kurdish: 'شوێن', english: 'Place' },
+                                    { kurdish: 'نزیک', english: 'Near' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "Where is the hospital?"',
+                                sourceText: 'Where is the hospital?',
+                                correctSentence: ['نەخۆشخانە', 'لە', 'کوێیە', '؟'],
+                                options: ['نەخۆشخانە', 'لە', 'کوێیە', '؟', 'ئەوێ', 'ئێرە']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "Turn ___ at the corner"',
+                                sentenceParts: ['لە', 'گۆشەکە', 'بەرەو', '___', 'بسووڕێوە'],
+                                correctOption: 'ڕاست',
+                                options: ['ڕاست', 'چەپ', 'پێش', 'دواوە']
+                            },
+                            {
+                                type: 'typing',
+                                question: 'Type in Kurdish: "Straight ahead"',
+                                correctAnswer: 'ڕێک بەرەو پێش',
+                                hints: ['ڕێک', 'بەرەو', 'پێش']
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'How do you say "Far"?',
+                                options: [
+                                    { text: 'دوور', image: '↔️', correct: true },
+                                    { text: 'نزیک', image: '↕️', correct: false },
+                                    { text: 'ئێرە', image: '📍', correct: false },
+                                    { text: 'ئەوێ', image: '📌', correct: false }
+                                ]
+                            },
+                            {
+                                type: 'match-pairs',
+                                pairs: [
+                                    { kurdish: 'نەخۆشخانە', english: 'Hospital' },
+                                    { kurdish: 'قوتابخانە', english: 'School' },
+                                    { kurdish: 'بازاڕ', english: 'Market' },
+                                    { kurdish: 'پارک', english: 'Park' }
+                                ]
+                            },
+                            {
+                                type: 'sentence-builder',
+                                question: 'Translate: "The bank is near here"',
+                                sourceText: 'The bank is near here',
+                                correctSentence: ['بانک', 'لە', 'نزیکی', 'ئێرەیە'],
+                                options: ['بانک', 'لە', 'نزیکی', 'ئێرەیە', 'دوورە', 'ئەوێ']
+                            },
+                            {
+                                type: 'fill-blank',
+                                question: 'Complete: "Go ___ for 100 meters"',
+                                sentenceParts: ['بەرەو', '___', 'بڕۆ', 'بۆ', 'سەد', 'مەتر'],
+                                correctOption: 'پێش',
+                                options: ['پێش', 'دواوە', 'ڕاست', 'چەپ']
+                            },
+                            {
+                                type: 'map-navigation',
+                                question: 'Follow the directions to reach the destination',
+                                start: 'A',
+                                destination: 'Hospital',
+                                directions: ['ڕاست', 'پێش', 'چەپ'],
+                                correctPath: ['right', 'straight', 'left']
+                            },
+                            {
+                                type: 'conversation',
+                                question: 'Complete the directions dialogue',
+                                dialogue: [
+                                    { speaker: 'Tourist', text: 'ببورە، نەخۆشخانە لە کوێیە؟' },
+                                    { speaker: 'Local', text: '___', options: ['لە نزیکی ئێرەیە، بەرەو ڕاست بسووڕێوە', 'باشم', 'سپاس'] }
+                                ],
+                                correctOption: 'لە نزیکی ئێرەیە، بەرەو ڕاست بسووڕێوە'
+                            },
+                            {
+                                type: 'multiple-choice',
+                                question: 'What does "کوێ" mean?',
+                                options: [
+                                    { text: 'Where', image: '❓', correct: true },
+                                    { text: 'When', image: '⏰', correct: false },
+                                    { text: 'Who', image: '👤', correct: false },
+                                    { text: 'What', image: '🤔', correct: false }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            };

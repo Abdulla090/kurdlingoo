@@ -1,0 +1,153 @@
+:root {
+  /* --- Brand Colors (Vibrant & Accessible) --- */
+  /* Primary: Action Green */
+  --color-primary: #58cc02;
+  --color-primary-light: #89e219;
+  --color-primary-dark: #46a302;
+  --color-primary-shadow: #46a302;
+
+  /* Secondary: Alert Red */
+  --color-secondary: #ff4b4b;
+  --color-secondary-light: #ff6b6b;
+  --color-secondary-dark: #d33131;
+  --color-secondary-shadow: #d33131;
+
+  /* Accent: Sky Blue */
+  --color-accent: #1cb0f6;
+  --color-accent-light: #4bc7ff;
+  --color-accent-dark: #118cc0;
+  --color-accent-shadow: #118cc0;
+
+  /* Gold: Achievement */
+  --color-gold: #ffc800;
+  --color-gold-light: #ffda47;
+  --color-gold-dark: #e5b400;
+  --color-gold-shadow: #e5b400;
+
+  /* --- Neutral Colors (High Contrast) --- */
+  --color-background: #ffffff;
+  --color-surface: #f9fafb;
+  /* Cool Gray 50 - Very clean */
+
+  /* Text Colors - OPTIMIZED FOR CLARITY */
+  --color-text: #111827;
+  /* Gray 900 */
+  --color-text-secondary: #374151;
+  /* Gray 700 */
+  --color-text-light: #6b7280;
+  /* Gray 500 */
+
+  /* Borders & Dividers */
+  --color-border: #e5e7eb;
+  /* Gray 200 */
+  --color-border-hover: #d1d5db;
+  /* Gray 300 */
+
+  /* --- Shadows (Layered for Depth) --- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Button Shadows (Hard Edge for "Clicky" feel) */
+  --shadow-btn: 0 4px 0;
+
+  /* --- Typography --- */
+  /* Using system font stack for maximum native feel and clarity */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Nunito', var(--font-sans);
+  /* Rounded for headings */
+
+  /* --- Spacing & Radius --- */
+  --radius-sm: 0.5rem;
+  /* 8px */
+  --radius-md: 0.75rem;
+  /* 12px */
+  --radius-lg: 1rem;
+  /* 16px */
+  --radius-xl: 1.5rem;
+  /* 24px */
+  --radius-full: 9999px;
+
+  --spacing-xs: 0.25rem;
+  /* 4px */
+  --spacing-sm: 0.5rem;
+  /* 8px */
+  --spacing-md: 1rem;
+  /* 16px */
+  --spacing-lg: 1.5rem;
+  /* 24px */
+  --spacing-xl: 2rem;
+  /* 32px */
+  --spacing-2xl: 3rem;
+  /* 48px */
+}
+
+/* --- Global Reset & Base Styles --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Critical for crisp text on Mac */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--color-text);
+  margin-top: 0;
+  font-weight: 800;
+  /* Extra bold for headings */
+  letter-spacing: -0.025em;
+  /* Tighten headings slightly */
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  /* Slightly bolder than normal for readability */
+}
+
+/* --- Utility Classes --- */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

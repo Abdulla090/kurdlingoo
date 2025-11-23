@@ -1,0 +1,207 @@
+/* Button Component - Ultimate 3D Design */
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    border-radius: var(--radius-lg);
+    user-select: none;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.btn:disabled:active {
+    transform: none !important;
+}
+
+/* Button Face (Inner Content) */
+.btn-face {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+/* Primary Button - Dark Green 3D */
+.btn-primary {
+    background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+    color: white;
+    padding: 14px 28px;
+    box-shadow:
+        0 8px 0 #14532d,
+        0 10px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #166534;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, #15803d 0%, #166534 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 0 #14532d,
+        0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #14532d,
+        0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary Button - Red 3D */
+.btn-secondary {
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 14px 28px;
+    box-shadow:
+        0 8px 0 #991b1b,
+        0 10px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #b91c1c;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 0 #991b1b,
+        0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-secondary:active:not(:disabled) {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #991b1b,
+        0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Success Button - Bright Green 3D */
+.btn-success {
+    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    padding: 14px 28px;
+    box-shadow:
+        0 8px 0 #15803d,
+        0 10px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #16a34a;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 0 #15803d,
+        0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-success:active:not(:disabled) {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #15803d,
+        0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Danger Button - Deep Red 3D */
+.btn-danger {
+    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    padding: 14px 28px;
+    box-shadow:
+        0 8px 0 #7f1d1d,
+        0 10px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #991b1b;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 0 #7f1d1d,
+        0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-danger:active:not(:disabled) {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #7f1d1d,
+        0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Outline Button - White with Border 3D */
+.btn-outline {
+    background: white;
+    color: var(--color-text);
+    padding: 14px 28px;
+    box-shadow:
+        0 8px 0 #d1d5db,
+        0 10px 15px rgba(0, 0, 0, 0.1);
+    border: 3px solid var(--color-border);
+}
+
+.btn-outline:hover:not(:disabled) {
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 0 #d1d5db,
+        0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline:active:not(:disabled) {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #d1d5db,
+        0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Disabled Button - Gray 3D */
+.btn-disabled {
+    background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
+    color: #d1d5db;
+    padding: 14px 28px;
+    box-shadow:
+        0 8px 0 #4b5563,
+        0 10px 15px rgba(0, 0, 0, 0.1);
+    border: 3px solid #6b7280;
+    cursor: not-allowed;
+}
+
+/* Button Sizes */
+.btn-sm {
+    font-size: 0.875rem;
+    padding: 10px 20px;
+}
+
+.btn-md {
+    font-size: 1rem;
+    padding: 14px 28px;
+}
+
+.btn-lg {
+    font-size: 1.125rem;
+    padding: 18px 36px;
+}
+
+/* Full Width */
+.btn-full {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .btn-lg {
+        font-size: 1rem;
+        padding: 16px 32px;
+    }
+}
