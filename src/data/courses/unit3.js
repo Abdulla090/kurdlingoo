@@ -815,6 +815,246 @@ export const unit3 = {
                     ]
                 }
             ]
+        },
+        {
+            id: 'unit3-lesson6',
+            title: 'Health & Medical',
+            icon: '🏥',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Hospital" in Kurdish?',
+                    options: [
+                        { text: 'نەخۆشخانە', image: '🏥', correct: true },
+                        { text: 'دەرمانخانە', image: '💊', correct: false },
+                        { text: 'نووسینگە', image: '🏢', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'نەخۆشخانە', english: 'Hospital' },
+                        { kurdish: 'پزیشک', english: 'Doctor' },
+                        { kurdish: 'دەرمان', english: 'Medicine' },
+                        { kurdish: 'نەخۆش', english: 'Sick' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "I have a headache"',
+                    sourceText: 'I have a headache',
+                    correctSentence: ['سەرم', 'ئێشێت'],
+                    options: ['سەرم', 'ئێشێت', 'باشە', 'نییە', 'دڵم']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I need to see a ___" (doctor)',
+                    sentenceParts: ['پێویستە', '___', 'ببینم'],
+                    correctOption: 'پزیشک',
+                    options: ['پزیشک', 'هاوڕێ', 'مامۆستا', 'بەڕێوبەر']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'How do you say "Pain"?',
+                    options: [
+                        { text: 'ئازار', image: '😣', correct: true },
+                        { text: 'خۆشی', image: '😊', correct: false },
+                        { text: 'خەو', image: '😴', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit3-lesson7',
+            title: 'Weather & Seasons',
+            icon: '🌤️',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Rain" in Kurdish?',
+                    options: [
+                        { text: 'باران', image: '🌧️', correct: true },
+                        { text: 'بەفر', image: '❄️', correct: false },
+                        { text: 'تاو', image: '☀️', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'بەهار', english: 'Spring' },
+                        { kurdish: 'هاوین', english: 'Summer' },
+                        { kurdish: 'پاییز', english: 'Autumn' },
+                        { kurdish: 'زستان', english: 'Winter' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "It is raining today"',
+                    sourceText: 'It is raining today',
+                    correctSentence: ['ئەمڕۆ', 'باران', 'دەبارێت'],
+                    options: ['ئەمڕۆ', 'باران', 'دەبارێت', 'تاو', 'هەیە', 'بەفر']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "The weather is ___" (cold)',
+                    sentenceParts: ['کەشوهەوا', '___', 'یە'],
+                    correctOption: 'سارد',
+                    options: ['سارد', 'گەرم', 'جوان', 'خراپ']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'How do you say "Hot"?',
+                    options: [
+                        { text: 'گەرم', image: '🔥', correct: true },
+                        { text: 'سارد', image: '🧊', correct: false },
+                        { text: 'شل', image: '💨', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit3-lesson8',
+            title: 'Shopping & Money',
+            icon: '🛍️',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Shop" in Kurdish?',
+                    options: [
+                        { text: 'دووکان', image: '🏪', correct: true },
+                        { text: 'بازاڕ', image: '🏬', correct: false },
+                        { text: 'ماڵ', image: '🏠', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'دووکان', english: 'Shop' },
+                        { kurdish: 'پارە', english: 'Money' },
+                        { kurdish: 'کڕین', english: 'Buy' },
+                        { kurdish: 'فرۆشتن', english: 'Sell' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "How much is this?"',
+                    sourceText: 'How much is this?',
+                    correctSentence: ['ئەمە', 'چەندە', '؟'],
+                    options: ['ئەمە', 'چەندە', '؟', 'کەی', 'کوێیە', 'کێیە']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I want to ___ this" (buy)',
+                    sentenceParts: ['دەمەوێت', 'ئەمە', '___'],
+                    correctOption: 'بکڕم',
+                    options: ['بکڕم', 'بفرۆشم', 'ببینم', 'بدەم']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Expensive"?',
+                    options: [
+                        { text: 'گران', image: '💰', correct: true },
+                        { text: 'هەرزان', image: '🏷️', correct: false },
+                        { text: 'بێبەها', image: '🎁', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit3-lesson9',
+            title: 'Sports & Hobbies',
+            icon: '⚽',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Football" in Kurdish?',
+                    options: [
+                        { text: 'تۆپی پێ', image: '⚽', correct: true },
+                        { text: 'باسکێتبۆڵ', image: '🏀', correct: false },
+                        { text: 'تەنیس', image: '🎾', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'تۆپی پێ', english: 'Football' },
+                        { kurdish: 'مەلەوانی', english: 'Swimming' },
+                        { kurdish: 'ڕاکردن', english: 'Running' },
+                        { kurdish: 'یاری', english: 'Game' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "I like playing football"',
+                    sourceText: 'I like playing football',
+                    correctSentence: ['من', 'حەز', 'لە', 'تۆپی', 'پێ', 'یاریکردن', 'دەکەم'],
+                    options: ['من', 'حەز', 'لە', 'تۆپی', 'پێ', 'یاریکردن', 'دەکەم', 'بینین', 'خوێندنەوە']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I play ___ every week" (sport)',
+                    sentenceParts: ['من', 'هەموو', 'هەفتەیەک', '___', 'یاری', 'دەکەم'],
+                    correctOption: 'وەرزش',
+                    options: ['وەرزش', 'مۆسیقا', 'کتێب', 'کار']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'How do you say "Team"?',
+                    options: [
+                        { text: 'تیم', image: '👥', correct: true },
+                        { text: 'یارمەتی', image: '🤝', correct: false },
+                        { text: 'هاوڕێ', image: '👫', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit3-lesson10',
+            title: 'Unit 3 Review',
+            icon: '📝',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Culture"?',
+                    options: [
+                        { text: 'کەلتوور', image: '🎭', correct: true },
+                        { text: 'وەرزش', image: '⚽', correct: false },
+                        { text: 'کار', image: '💼', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'پزیشک', english: 'Doctor' },
+                        { kurdish: 'فڕۆکە', english: 'Airplane' },
+                        { kurdish: 'مۆبایل', english: 'Mobile' },
+                        { kurdish: 'باران', english: 'Rain' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "I work in the hospital"',
+                    sourceText: 'I work in the hospital',
+                    correctSentence: ['من', 'لە', 'نەخۆشخانە', 'کار', 'دەکەم'],
+                    options: ['من', 'لە', 'نەخۆشخانە', 'کار', 'دەکەم', 'دووکان', 'قوتابخانە']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "The weather is ___ today" (nice)',
+                    sentenceParts: ['ئەمڕۆ', 'کەشوهەوا', '___', 'یە'],
+                    correctOption: 'جوان',
+                    options: ['جوان', 'خراپ', 'سارد', 'گەرم']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'Review: What is "Expensive"?',
+                    options: [
+                        { text: 'گران', image: '💰', correct: true },
+                        { text: 'هەرزان', image: '🏷️', correct: false },
+                        { text: 'جوان', image: '😊', correct: false }
+                    ]
+                }
+            ]
         }
     ]
 };

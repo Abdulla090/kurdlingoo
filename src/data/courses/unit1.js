@@ -176,24 +176,6 @@ export const unit1 = {
                 }
             },
             {
-                id: "days",
-                title: "📅 ڕۆژەکانی هەفتە (Days of the Week)",
-                content: "حەوت ڕۆژی هەفتە:",
-                visual: {
-                    type: "conjugation",
-                    data: [
-                        { subject: "Monday", subKurdish: "دووشەممە", verb: "مەندەی" },
-                        { subject: "Tuesday", subKurdish: "سێشەممە", verb: "تیوزدەی" },
-                        { subject: "Wednesday", subKurdish: "چوارشەممە", verb: "وێنزدەی" },
-                        { subject: "Thursday", subKurdish: "پێنجشەممە", verb: "سێرزدەی" },
-                        { subject: "Friday", subKurdish: "هەینی", verb: "فرایدەی" },
-                        { subject: "Saturday", subKurdish: "شەممە", verb: "ساتەردەی" },
-                        { subject: "Sunday", subKurdish: "یەکشەممە", verb: "سەندەی" }
-                    ]
-                }
-            },
-            {
-                id: "common-verbs",
                 title: "🏃 کردارە باوەکان (Common Verbs)",
                 content: "گرنگترین کردارەکان بۆ دەستپێکردن:",
                 visual: {
@@ -234,9 +216,9 @@ export const unit1 = {
                     type: "multiple-choice",
                     question: "Which of these is 'Water'?",
                     options: [
-                        { id: "opt1", text: "ئاو (Aw)", image: "💧", correct: true },
-                        { id: "opt2", text: "نان (Nan)", image: "🍞", correct: false },
-                        { id: "opt3", text: "سێو (Sêw)", image: "🍎", correct: false }
+                        { id: "opt1", text: "ئاو", image: "💧", correct: true },
+                        { id: "opt2", text: "نان", image: "🍞", correct: false },
+                        { id: "opt3", text: "سێو", image: "🍎", correct: false }
                     ]
                 },
                 {
@@ -703,6 +685,266 @@ export const unit1 = {
                         { kurdish: "بچووک", english: "Small" },
                         { kurdish: "درێژ", english: "Long" },
                         { kurdish: "کورت", english: "Short" }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "l6",
+            title: "School Objects",
+            exercises: [
+                {
+                    id: 1,
+                    type: "multiple-choice",
+                    question: "What is 'Book'?",
+                    options: [
+                        { id: "opt1", text: "پەرتووک", image: "📚", correct: true },
+                        { id: "opt2", text: "پێنووس", image: "✏️", correct: false },
+                        { id: "opt3", text: "تۆمار", image: "📒", correct: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: "match-pairs",
+                    pairs: [
+                        { kurdish: "پەرتووک", english: "Book" },
+                        { kurdish: "پێنووس", english: "Pen" },
+                        { kurdish: "تۆمار", english: "Notebook" },
+                        { kurdish: "کیسە", english: "Bag" }
+                    ]
+                },
+                {
+                    id: 3,
+                    type: "sentence-builder",
+                    question: "Translate: 'This is a book'",
+                    sourceText: "This is a book",
+                    correctSentence: ["ئەمە", "پەرتووکێکە"],
+                    options: ["ئەمە", "پەرتووکێکە", "پێنووسێکە", "نییە"]
+                },
+                {
+                    id: 4,
+                    type: "fill-blank",
+                    question: "Complete: 'I have a ___' (pen)",
+                    sentenceParts: ["من", "___", "ێکم", "هەیە"],
+                    correctOption: "پێنووس",
+                    options: ["پێنووس", "پەرتووک", "ئاو", "نان"]
+                },
+                {
+                    id: 5,
+                    type: "multiple-choice",
+                    question: "What is 'School'?",
+                    options: [
+                        { id: "opt1", text: "قوتابخانە", image: "🏫", correct: true },
+                        { id: "opt2", text: "ماڵ", image: "🏠", correct: false },
+                        { id: "opt3", text: "بازاڕ", image: "🏪", correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "l7",
+            title: "Animals",
+            exercises: [
+                {
+                    id: 1,
+                    type: "multiple-choice",
+                    question: "What is 'Cat'?",
+                    options: [
+                        { id: "opt1", text: "پشیلە", image: "🐱", correct: true },
+                        { id: "opt2", text: "سەگ", image: "🐶", correct: false },
+                        { id: "opt3", text: "باڵندە", image: "🐦", correct: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: "match-pairs",
+                    pairs: [
+                        { kurdish: "پشیلە", english: "Cat" },
+                        { kurdish: "سەگ", english: "Dog" },
+                        { kurdish: "باڵندە", english: "Bird" },
+                        { kurdish: "ماسی", english: "Fish" }
+                    ]
+                },
+                {
+                    id: 3,
+                    type: "sentence-builder",
+                    question: "Translate: 'The dog is big'",
+                    sourceText: "The dog is big",
+                    correctSentence: ["سەگەکە", "گەورەیە"],
+                    options: ["سەگەکە", "گەورەیە", "بچووکە", "پشیلە"]
+                },
+                {
+                    id: 4,
+                    type: "fill-blank",
+                    question: "Complete: 'The ___ flies' (bird)",
+                    sentenceParts: ["___", "دەفڕێت"],
+                    correctOption: "باڵندە",
+                    options: ["باڵندە", "سەگ", "ماسی", "پشیلە"]
+                },
+                {
+                    id: 5,
+                    type: "multiple-choice",
+                    question: "What is 'Fish'?",
+                    options: [
+                        { id: "opt1", text: "ماسی", image: "🐟", correct: true },
+                        { id: "opt2", text: "مریشک", image: "🐔", correct: false },
+                        { id: "opt3", text: "مانگا", image: "🐮", correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "l8",
+            title: "Food Basics",
+            exercises: [
+                {
+                    id: 1,
+                    type: "multiple-choice",
+                    question: "What is 'Rice'?",
+                    options: [
+                        { id: "opt1", text: "برنج", image: "🍚", correct: true },
+                        { id: "opt2", text: "گۆشت", image: "🥩", correct: false },
+                        { id: "opt3", text: "نان", image: "🍞", correct: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: "match-pairs",
+                    pairs: [
+                        { kurdish: "برنج", english: "Rice" },
+                        { kurdish: "گۆشت", english: "Meat" },
+                        { kurdish: "مریشک", english: "Chicken" },
+                        { kurdish: "سەوزە", english: "Salad" }
+                    ]
+                },
+                {
+                    id: 3,
+                    type: "sentence-builder",
+                    question: "Translate: 'I eat chicken'",
+                    sourceText: "I eat chicken",
+                    correctSentence: ["من", "مریشک", "دەخۆم"],
+                    options: ["من", "مریشک", "دەخۆم", "دەخۆمەوە", "برنج"]
+                },
+                {
+                    id: 4,
+                    type: "fill-blank",
+                    question: "Complete: '___ is delicious' (Meat)",
+                    sentenceParts: ["___", "خۆشە"],
+                    correctOption: "گۆشت",
+                    options: ["گۆشت", "ئاو", "هێنک", "بیبەر"]
+                },
+                {
+                    id: 5,
+                    type: "multiple-choice",
+                    question: "What is 'Egg'?",
+                    options: [
+                        { id: "opt1", text: "هێلکە", image: "🥚", correct: true },
+                        { id: "opt2", text: "پەنیر", image: "🧀", correct: false },
+                        { id: "opt3", text: "شیر", image: "🥛", correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "l9",
+            title: "Common Verbs",
+            exercises: [
+                {
+                    id: 1,
+                    type: "multiple-choice",
+                    question: "What is 'Run'?",
+                    options: [
+                        { id: "opt1", text: "ڕاکردن", image: "🏃", correct: true },
+                        { id: "opt2", text: "پیاسەکردن", image: "🚶", correct: false },
+                        { id: "opt3", text: "دانیشتن", image: "🪑", correct: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: "match-pairs",
+                    pairs: [
+                        { kurdish: "ڕاکردن", english: "Run" },
+                        { kurdish: "پیاسەکردن", english: "Walk" },
+                        { kurdish: "نوستن", english: "Sleep" },
+                        { kurdish: "خوێندنەوە", english: "Read" }
+                    ]
+                },
+                {
+                    id: 3,
+                    type: "sentence-builder",
+                    question: "Translate: 'I walk'",
+                    sourceText: "I walk",
+                    correctSentence: ["من", "دەڕۆم"],
+                    options: ["من", "دەڕۆم", "ڕادەکەم", "دەخەوم"]
+                },
+                {
+                    id: 4,
+                    type: "fill-blank",
+                    question: "Complete: 'He ___' (sleeps)",
+                    sentenceParts: ["ئەو", "___"],
+                    correctOption: "دەخەوێت",
+                    options: ["دەخەوێت", "دەخۆیت", "دەڕوات", "دەبینێت"]
+                },
+                {
+                    id: 5,
+                    type: "multiple-choice",
+                    question: "What is 'Read'?",
+                    options: [
+                        { id: "opt1", text: "خوێندنەوە", image: "📖", correct: true },
+                        { id: "opt2", text: "نووسین", image: "✍️", correct: false },
+                        { id: "opt3", text: "قسەکردن", image: "🗣️", correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "l10",
+            title: "Unit 1 Review",
+            exercises: [
+                {
+                    id: 1,
+                    type: "multiple-choice",
+                    question: "What is 'Water'?",
+                    options: [
+                        { id: "opt1", text: "ئاو", image: "💧", correct: true },
+                        { id: "opt2", text: "نان", image: "🍞", correct: false },
+                        { id: "opt3", text: "شیر", image: "🥛", correct: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: "match-pairs",
+                    pairs: [
+                        { kurdish: "سڵاو", english: "Hello" },
+                        { kurdish: "سوپاس", english: "Thank you" },
+                        { kurdish: "خوات لەگەڵ", english: "Goodbye" },
+                        { kurdish: "تکایە", english: "Please" }
+                    ]
+                },
+                {
+                    id: 3,
+                    type: "sentence-builder",
+                    question: "Translate: 'I am fine'",
+                    sourceText: "I am fine",
+                    correctSentence: ["من", "باشم"],
+                    options: ["من", "باشم", "خراپم", "نەخۆشم"]
+                },
+                {
+                    id: 4,
+                    type: "fill-blank",
+                    question: "Complete: 'One, Two, ___'",
+                    sentenceParts: ["یەک", "،", "دوو", "،", "___"],
+                    correctOption: "سێ",
+                    options: ["سێ", "چوار", "پێنج", "شەش"]
+                },
+                {
+                    id: 5,
+                    type: "multiple-choice",
+                    question: "What is 'Red'?",
+                    options: [
+                        { id: "opt1", text: "سوور", image: "🔴", correct: true },
+                        { id: "opt2", text: "شین", image: "🔵", correct: false },
+                        { id: "opt3", text: "سەوز", image: "🟢", correct: false }
                     ]
                 }
             ]

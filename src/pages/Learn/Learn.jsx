@@ -64,21 +64,7 @@ const Learn = () => {
 
             {/* Main Content (Path) */}
             <div className="main-content">
-                {/* Dashboard Widget */}
-                <div className="dashboard-widget">
-                    <Link to="/create-lesson" style={{ flex: 1 }}>
-                        <Button variant="secondary" fullWidth>
-                            <Plus size={20} style={{ marginRight: '8px' }} />
-                            Create Lesson
-                        </Button>
-                    </Link>
-                    <Link to="/admin" style={{ flex: 1 }}>
-                        <Button variant="outline" fullWidth>
-                            <Settings size={20} style={{ marginRight: '8px' }} />
-                            Admin Panel
-                        </Button>
-                    </Link>
-                </div>
+
 
                 {/* Dynamic Units */}
                 {units.map((unit, unitIndex) => {
@@ -99,7 +85,7 @@ const Learn = () => {
                                 </div>
                                 <button className="btn-guidebook" onClick={() => navigate(`/guidebook/${unit.id}`)}>
                                     <BookOpen size={18} />
-                                    Guidebook
+                                    {t('guidebook')}
                                 </button>
                             </div>
 
@@ -162,11 +148,11 @@ const Learn = () => {
             {/* Right Sidebar (Stats) */}
             <div className="sidebar-right">
                 <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-                    <h3 style={{ margin: '0 0 15px 0', fontSize: '18px' }}>My Stats</h3>
+                    <h3 style={{ margin: '0 0 15px 0', fontSize: '18px' }}>{t('myStats')}</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <Flame color="#ff9600" fill="#ff9600" />
-                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>5 Day Streak</span>
+                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>5 {t('dayStreak')}</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <Zap color="#ffc800" fill="#ffc800" />
@@ -176,11 +162,11 @@ const Learn = () => {
                 </div>
 
                 <div className="glass-panel" style={{ padding: '20px' }}>
-                    <h3 style={{ margin: '0 0 15px 0', fontSize: '18px' }}>Daily Quests</h3>
+                    <h3 style={{ margin: '0 0 15px 0', fontSize: '18px' }}>{t('dailyQuests')}</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                                <span style={{ fontSize: '14px' }}>Earn 50 XP</span>
+                                <span style={{ fontSize: '14px' }}>{t('earnXp')}</span>
                                 <span style={{ fontSize: '14px', fontWeight: 'bold' }}>20/50</span>
                             </div>
                             <div style={{ height: '8px', background: '#e5e5e5', borderRadius: '4px', overflow: 'hidden' }}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Dumbbell, Shield, User } from 'lucide-react';
+import { Home, BookOpen, Trophy, Target, Store, User } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import './Layout.css';
 
@@ -9,8 +9,10 @@ const BottomNav = () => {
 
     const navItems = [
         { icon: Home, label: t('learn'), path: '/learn' },
-        { icon: Dumbbell, label: t('practice'), path: '/practice' },
-        { icon: Shield, label: t('leaderboards'), path: '/leaderboards' },
+        { icon: BookOpen, label: t('guidebook'), path: '/guidebook-hub' },
+        { icon: Trophy, label: t('leaderboards'), path: '/leaderboard' },
+        { icon: Target, label: t('quests'), path: '/quests' },
+        { icon: Store, label: t('shop'), path: '/shop' },
         { icon: User, label: t('profile'), path: '/profile' },
     ];
 

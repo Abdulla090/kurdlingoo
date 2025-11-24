@@ -1,9 +1,11 @@
 import React from 'react';
 import { Trophy, User } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Leaderboard = () => {
+    const { t } = useLanguage();
     const users = [
-        { name: "You", xp: 450, rank: 1, avatar: "👤" },
+        { name: t('you'), xp: 450, rank: 1, avatar: "👤" },
         { name: "Ali", xp: 420, rank: 2, avatar: "👨" },
         { name: "Sara", xp: 380, rank: 3, avatar: "👩" },
         { name: "KurdLearner", xp: 300, rank: 4, avatar: "🧑" },
@@ -12,7 +14,7 @@ const Leaderboard = () => {
 
     return (
         <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-            <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Leaderboard</h1>
+            <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>{t('leaderboards')}</h1>
             <div style={{ background: 'white', border: '2px solid var(--color-border)', borderRadius: 'var(--radius-xl)', overflow: 'hidden' }}>
                 {users.map((user, index) => (
                     <div key={index} style={{
@@ -28,7 +30,7 @@ const Leaderboard = () => {
                             <div style={{ width: '40px', height: '40px', background: '#e5e7eb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
                                 {user.avatar}
                             </div>
-                            <span style={{ fontWeight: 'bold', color: user.name === "You" ? 'var(--color-primary)' : 'var(--color-text)' }}>{user.name}</span>
+                            <span style={{ fontWeight: 'bold', color: user.name === t('you') ? 'var(--color-primary)' : 'var(--color-text)' }}>{user.name}</span>
                         </div>
                         <span style={{ fontWeight: 'bold', color: 'var(--color-text-secondary)' }}>{user.xp} XP</span>
                     </div>

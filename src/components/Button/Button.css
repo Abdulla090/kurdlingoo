@@ -9,10 +9,44 @@
     letter-spacing: 0.05em;
     border: none;
     cursor: pointer;
-    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     font-family: inherit;
     border-radius: var(--radius-lg);
     user-select: none;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn:hover::after {
+    left: 100%;
 }
 
 .btn:disabled {
@@ -47,17 +81,19 @@
 
 .btn-primary:hover:not(:disabled) {
     background: linear-gradient(180deg, #15803d 0%, #166534 100%);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.015);
     box-shadow:
         0 10px 0 #14532d,
         0 12px 20px rgba(0, 0, 0, 0.25);
+    animation: button-pulse 2s ease-in-out infinite;
 }
 
 .btn-primary:active:not(:disabled) {
-    transform: translateY(6px);
+    transform: translateY(6px) scale(0.99);
     box-shadow:
         0 2px 0 #14532d,
         0 3px 5px rgba(0, 0, 0, 0.2);
+    animation: button-press 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Secondary Button - Red 3D */
@@ -99,17 +135,19 @@
 
 .btn-success:hover:not(:disabled) {
     background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.015);
     box-shadow:
         0 10px 0 #15803d,
         0 12px 20px rgba(0, 0, 0, 0.25);
+    animation: button-glow-success 2.5s ease-in-out infinite;
 }
 
 .btn-success:active:not(:disabled) {
-    transform: translateY(6px);
+    transform: translateY(6px) scale(0.99);
     box-shadow:
         0 2px 0 #15803d,
         0 3px 5px rgba(0, 0, 0, 0.2);
+    animation: button-success-click 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Danger Button - Deep Red 3D */
@@ -203,5 +241,61 @@
     .btn-lg {
         font-size: 1rem;
         padding: 16px 32px;
+    }
+}
+
+/* Professional Button Animations */
+@keyframes button-pulse {
+    0%, 100% {
+        box-shadow:
+            0 10px 0 #14532d,
+            0 12px 20px rgba(0, 0, 0, 0.25);
+    }
+    50% {
+        box-shadow:
+            0 10px 0 #14532d,
+            0 12px 23px rgba(0, 0, 0, 0.28),
+            0 0 15px rgba(22, 163, 74, 0.2);
+    }
+}
+
+@keyframes button-glow-success {
+    0%, 100% {
+        box-shadow:
+            0 10px 0 #15803d,
+            0 12px 20px rgba(0, 0, 0, 0.25);
+    }
+    50% {
+        box-shadow:
+            0 10px 0 #15803d,
+            0 12px 23px rgba(0, 0, 0, 0.28),
+            0 0 20px rgba(34, 197, 94, 0.35);
+    }
+}
+
+@keyframes button-press {
+    0% {
+        transform: translateY(6px) scale(0.99);
+    }
+    50% {
+        transform: translateY(7px) scale(0.98);
+    }
+    100% {
+        transform: translateY(6px) scale(0.99);
+    }
+}
+
+@keyframes button-success-click {
+    0% {
+        transform: translateY(6px) scale(0.99);
+    }
+    30% {
+        transform: translateY(5px) scale(1.02);
+    }
+    60% {
+        transform: translateY(6.5px) scale(0.98);
+    }
+    100% {
+        transform: translateY(6px) scale(1);
     }
 }

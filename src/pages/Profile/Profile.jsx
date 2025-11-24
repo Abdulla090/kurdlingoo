@@ -1,39 +1,61 @@
 import React from 'react';
-import { User, Clock, CheckCircle, Flame, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { User, Clock, CheckCircle, Flame, Zap, Plus, Settings } from 'lucide-react';
+import Button from '../../components/Button/Button';
+import { useLanguage } from '../../context/LanguageContext';
+import './Profile.css';
 
 const Profile = () => {
+    const { t } = useLanguage();
+
     return (
-        <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '3rem' }}>
-                <div style={{ width: '120px', height: '120px', background: '#e5e7eb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', border: '4px solid white', boxShadow: '0 0 0 4px var(--color-border)' }}>
+        <div className="profile-page">
+            <div className="profile-header">
+                <div className="profile-avatar">
                     👤
                 </div>
-                <div>
-                    <h1 style={{ margin: 0, fontSize: '2.5rem' }}>You</h1>
-                    <p style={{ color: 'var(--color-text-secondary)', fontSize: '1.2rem' }}>Joined November 2025</p>
-                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 'bold' }}><Flame color="#ff9600" fill="#ff9600" /> 5</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 'bold' }}><Zap color="#ffc800" fill="#ffc800" /> 450 XP</span>
+                <div className="profile-info">
+                    <h1>{t('you')}</h1>
+                    <p className="profile-joined">{t('joined')} November 2025</p>
+                    <div className="profile-stats-row">
+                        <span className="stat-badge"><Flame color="#ff9600" fill="#ff9600" /> 5</span>
+                        <span className="stat-badge"><Zap color="#ffc800" fill="#ffc800" /> 450 XP</span>
                     </div>
                 </div>
             </div>
 
-            <h2 style={{ borderBottom: '2px solid var(--color-border)', paddingBottom: '10px', marginBottom: '20px' }}>Statistics</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-                <div style={{ background: 'white', border: '2px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <h2 className="section-title">{t('statistics')}</h2>
+            <div className="stats-grid">
+                <div className="stat-card">
                     <Flame size={32} color="#ff9600" />
                     <div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>5</div>
-                        <div style={{ color: 'var(--color-text-secondary)' }}>Day Streak</div>
+                        <div className="stat-value">5</div>
+                        <div className="stat-label">{t('dayStreak')}</div>
                     </div>
                 </div>
-                <div style={{ background: 'white', border: '2px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div className="stat-card">
                     <Zap size={32} color="#ffc800" />
                     <div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>450</div>
-                        <div style={{ color: 'var(--color-text-secondary)' }}>Total XP</div>
+                        <div className="stat-value">450</div>
+                        <div className="stat-label">{t('totalXp')}</div>
                     </div>
                 </div>
+            </div>
+
+            <h2 className="section-title">{t('adminControls')}</h2>
+            <div className="admin-controls-grid">
+                <Link to="/create-lesson" style={{ textDecoration: 'none' }}>
+                    <Button variant="secondary" fullWidth size="lg">
+                        <Plus size={20} style={{ marginRight: '8px' }} />
+                        {t('createLesson')}
+                    </Button>
+                </Link>
+                <Link to="/admin" style={{ textDecoration: 'none' }}>
+                    <Button variant="outline" fullWidth size="lg">
+                        <Settings size={20} style={{ marginRight: '8px' }} />
+                        {t('adminPanel')}
+                    </Button>
+                </Link>
             </div>
         </div>
     );

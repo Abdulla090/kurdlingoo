@@ -547,6 +547,246 @@ export const unit2 = {
                     ]
                 }
             ]
+        },
+        {
+            id: 'unit2-lesson6',
+            title: 'Daily Routine',
+            icon: '📅',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Wake up" in Kurdish?',
+                    options: [
+                        { text: 'لەخەو هەڵسان', image: '🌅', correct: true },
+                        { text: 'نوستن', image: '😴', correct: false },
+                        { text: 'خواردن', image: '🍽️', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'لەخەو هەڵسان', english: 'Wake up' },
+                        { kurdish: 'دەموچاو شوشتن', english: 'Wash face' },
+                        { kurdish: 'نانی بەیانی', english: 'Breakfast' },
+                        { kurdish: 'کارکردن', english: 'Work' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "I wake up early"',
+                    sourceText: 'I wake up early',
+                    correctSentence: ['من', 'زوو', 'لەخەو', 'هەڵدەستم'],
+                    options: ['من', 'زوو', 'لەخەو', 'هەڵدەستم', 'دەخەوم', 'درەنگ']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I eat ___" (breakfast)',
+                    sentenceParts: ['من', '___', 'دەخۆم'],
+                    correctOption: 'نانی بەیانی',
+                    options: ['نانی بەیانی', 'شەو', 'کار', 'خەو']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Shower"?',
+                    options: [
+                        { text: 'خۆشوشتن', image: '🚿', correct: true },
+                        { text: 'دەست شوشتن', image: '🧼', correct: false },
+                        { text: 'خواردن', image: '🍽️', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit2-lesson7',
+            title: 'Clothes & Colors',
+            icon: '👕',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Shirt"?',
+                    options: [
+                        { text: 'کراس', image: '👕', correct: true },
+                        { text: 'پانتۆڵ', image: '👖', correct: false },
+                        { text: 'پێڵاو', image: '👞', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'کراس', english: 'Shirt' },
+                        { kurdish: 'پانتۆڵ', english: 'Pants' },
+                        { kurdish: 'پێڵاو', english: 'Shoes' },
+                        { kurdish: 'عەزی', english: 'Dress' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "Red shirt"',
+                    sourceText: 'Red shirt',
+                    correctSentence: ['کراسی', 'سوور'],
+                    options: ['کراسی', 'سوور', 'شین', 'پانتۆڵ']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I wear ___" (shoes)',
+                    sentenceParts: ['من', '___', 'لەپێ دەکەم'],
+                    correctOption: 'پێڵاو',
+                    options: ['پێڵاو', 'کراس', 'کڵاو', 'دەستکێش']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Dress"?',
+                    options: [
+                        { text: 'عەزی', image: '👗', correct: true },
+                        { text: 'چاکەت', image: '🧥', correct: false },
+                        { text: 'گۆرەوی', image: '🧦', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit2-lesson8',
+            title: 'At Home',
+            icon: '🏠',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Room"?',
+                    options: [
+                        { text: 'ژوور', image: '🚪', correct: true },
+                        { text: 'مەتبەخ', image: '🍳', correct: false },
+                        { text: 'حەوشە', image: '🌳', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'ماڵ', english: 'House' },
+                        { kurdish: 'ژوور', english: 'Room' },
+                        { kurdish: 'مەتبەخ', english: 'Kitchen' },
+                        { kurdish: 'دەرگا', english: 'Door' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "Open the door"',
+                    sourceText: 'Open the door',
+                    correctSentence: ['دەرگاکە', 'بکەوە'],
+                    options: ['دەرگاکە', 'بکەوە', 'دابخە', 'پەنجەرە']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I am in the ___" (kitchen)',
+                    sentenceParts: ['من', 'لە', '___', 'م'],
+                    correctOption: 'مەتبەخ',
+                    options: ['مەتبەخ', 'سەربان', 'کۆڵان', 'بازاڕ']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Window"?',
+                    options: [
+                        { text: 'پەنجەرە', image: '🪟', correct: true },
+                        { text: 'دەرگا', image: '🚪', correct: false },
+                        { text: 'دیوار', image: '🧱', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit2-lesson9',
+            title: 'Feelings',
+            icon: '😊',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Happy"?',
+                    options: [
+                        { text: 'دڵخۆش', image: '😊', correct: true },
+                        { text: 'دڵتەنگ', image: '😢', correct: false },
+                        { text: 'تووڕە', image: '😠', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'دڵخۆش', english: 'Happy' },
+                        { kurdish: 'دڵتەنگ', english: 'Sad' },
+                        { kurdish: 'ماندوو', english: 'Tired' },
+                        { kurdish: 'برسی', english: 'Hunger' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "I am tired"',
+                    sourceText: 'I am tired',
+                    correctSentence: ['من', 'ماندووم'],
+                    options: ['من', 'ماندووم', 'باشم', 'خۆشم']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "Are you ___?" (sad)',
+                    sentenceParts: ['ئایا', 'تۆ', '___', 'یت', '؟'],
+                    correctOption: 'دڵتەنگ',
+                    options: ['دڵتەنگ', 'دڵخۆش', 'برسی', 'تینوو']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Thirsty"?',
+                    options: [
+                        { text: 'تینوو', image: '🥤', correct: true },
+                        { text: 'برسی', image: '🍽️', correct: false },
+                        { text: 'تێر', image: '😋', correct: false }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'unit2-lesson10',
+            title: 'Unit 2 Review',
+            icon: '⭐',
+            exercises: [
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Monday"?',
+                    options: [
+                        { text: 'دووشەممە', image: '📅', correct: true },
+                        { text: 'سێشەممە', image: '📅', correct: false },
+                        { text: 'هەینی', image: '📅', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs',
+                    pairs: [
+                        { kurdish: 'باوک', english: 'Father' },
+                        { kurdish: 'دایک', english: 'Mother' },
+                        { kurdish: 'بازاڕ', english: 'Market' },
+                        { kurdish: 'خۆرەتاو', english: 'Sunny' }
+                    ]
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "Where is the market?"',
+                    sourceText: 'Where is the market?',
+                    correctSentence: ['بازاڕ', 'لە', 'کوێیە', '؟'],
+                    options: ['بازاڕ', 'لە', 'کوێیە', '؟', 'چۆنە', 'کەی']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I am ___" (happy)',
+                    sentenceParts: ['من', '___', 'م'],
+                    correctOption: 'دڵخۆش',
+                    options: ['دڵخۆش', 'دڵتەنگ', 'ماندوو', 'نەخۆش']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Shirt"?',
+                    options: [
+                        { text: 'کراس', image: '👕', correct: true },
+                        { text: 'پانتۆڵ', image: '👖', correct: false },
+                        { text: 'پێڵاو', image: '👞', correct: false }
+                    ]
+                }
+            ]
         }
     ]
 };

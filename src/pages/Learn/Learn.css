@@ -1,50 +1,52 @@
+/* ============================================
+   MOBILE-FIRST RESPONSIVE DESIGN
+   ============================================ */
+
+/* Base Layout (Mobile Default) */
 .learn-page {
     max-width: 1000px;
     margin: 0 auto;
-    padding: var(--spacing-lg);
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    /* Main Content - Stats */
-    gap: var(--spacing-xl);
-    min-height: 100vh;
-    align-items: start;
-}
-
-@media (max-width: 1024px) {
-    .learn-page {
-        grid-template-columns: 1fr;
-        max-width: 600px;
-        padding-bottom: 80px;
-    }
-
-    .sidebar-right {
-        display: none;
-    }
-}
-
-/* --- Main Content Area --- */
-.main-content {
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xl);
+    gap: 24px;
+    min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
-/* Unit Header (Sticky Card) */
+/* Dashboard Widget (Create Lesson / Admin) */
+.dashboard-widget {
+    display: flex;
+    flex-direction: column;
+    /* Stack on mobile */
+    gap: 12px;
+    width: 100%;
+}
+
+/* Unit Section */
 .unit-section {
     position: relative;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 24px;
+    width: 100%;
 }
 
+/* Unit Header - Mobile Optimized */
 .unit-header {
     background: var(--color-primary);
     color: white;
-    padding: var(--spacing-lg) var(--spacing-xl);
-    border-radius: var(--radius-xl);
+    padding: 20px;
+    border-radius: 16px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    /* Stack vertically on mobile */
     align-items: center;
-    margin-bottom: var(--spacing-xl);
-    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
+    /* Center align items */
+    text-align: center;
+    /* Center text */
+    gap: 16px;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 10;
     border: 2px solid rgba(0, 0, 0, 0.05);
@@ -53,70 +55,73 @@
 .unit-info h2 {
     color: white;
     font-size: 1.5rem;
-    margin: 0;
+    margin: 0 0 8px 0;
     text-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
 }
 
 .unit-info p {
     color: rgba(255, 255, 255, 0.9);
-    margin-top: 4px;
+    margin: 0;
     font-size: 1rem;
+    line-height: 1.4;
 }
 
+/* Guidebook Button - Full Width on Mobile */
 .btn-guidebook {
     background: rgba(0, 0, 0, 0.2);
     border: 2px solid rgba(255, 255, 255, 0.3);
     color: white;
-    padding: 10px 18px;
-    border-radius: var(--radius-lg);
+    padding: 12px 24px;
+    border-radius: 12px;
     font-weight: 800;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: all 0.2s;
     cursor: pointer;
-}
-
-.btn-guidebook:hover {
-    background: rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
+    width: 100%;
+    /* Full width on mobile */
 }
 
 .btn-guidebook:active {
-    transform: translateY(0);
+    transform: scale(0.98);
 }
 
-/* --- The Winding Path --- */
+/* Learning Path */
 .learning-path {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 24px;
     position: relative;
-    padding: 20px 0;
+    padding: 24px 0;
+    width: 100%;
 }
 
-/* SVG Connector Line */
+/* Connector Line */
 .path-connector {
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 140px;
-    /* Width of the zig-zag */
+    width: 100px;
+    /* Narrower on mobile */
     height: 100%;
     z-index: 1;
     pointer-events: none;
-    opacity: 1;
+    opacity: 0.6;
 }
 
 /* Path Nodes */
 .path-node {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    /* Smaller on mobile */
+    height: 70px;
     border-radius: 50%;
     position: relative;
     z-index: 2;
@@ -124,49 +129,37 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Reset transforms for mobile flow */
+    transform: none !important;
+    margin: 0 auto;
+    /* Center everything on mobile */
 }
 
-.path-node.right {
-    transform: translateX(60px);
-}
-
-.path-node.left {
-    transform: translateX(-60px);
-}
-
-/* The "Circle" Button */
+/* Node Circle */
 .node-circle {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     background-color: var(--color-gold);
-    box-shadow: 0 8px 0 var(--color-gold-dark), 0 8px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 0 var(--color-gold-dark), 0 6px 10px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     position: relative;
-    transition: all 0.1s;
     border: 4px solid white;
 }
 
-/* Icons inside the circle */
-.node-circle svg {
-    color: white;
-    /* Default icon color */
-}
-
-/* Active State (Press Down) */
 .path-node:active .node-circle {
-    transform: translateY(6px);
+    transform: translateY(4px);
     box-shadow: 0 2px 0 var(--color-gold-dark);
 }
 
-/* Current Lesson (Pulse) */
+/* Current Lesson */
 .path-node.current .node-circle {
     background: var(--color-primary);
-    box-shadow: 0 8px 0 var(--color-primary-dark), 0 8px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 0 var(--color-primary-dark), 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 .path-node.current:active .node-circle {
@@ -176,61 +169,40 @@
 /* Locked State */
 .path-node.locked {
     cursor: not-allowed;
-    opacity: 1;
 }
 
 .path-node.locked .node-circle {
     background-color: #e5e7eb;
-    box-shadow: 0 8px 0 #d1d5db;
+    box-shadow: 0 6px 0 #d1d5db;
     color: #9ca3af;
-    /* Icon color for locked nodes */
 }
 
-.path-node.locked .node-circle svg {
-    color: #9ca3af;
-    /* Force icon color for locked state */
-}
-
-/* Tooltip (Pop-up) */
+/* Tooltip */
 .node-tooltip {
     position: absolute;
-    top: -60px;
+    top: -50px;
     left: 50%;
     transform: translateX(-50%) scale(0.8);
     background: white;
-    padding: 10px 16px;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -2px rgba(0, 0, 0, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--color-text);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
     white-space: nowrap;
     opacity: 0;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
     z-index: 100;
-    /* Much higher z-index */
     border: 2px solid var(--color-border);
-}
-
-.node-tooltip::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 8px 8px 0;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
-    filter: drop-shadow(0 2px 0 var(--color-border));
+    transition: all 0.2s;
 }
 
 .path-node:hover .node-tooltip {
     transform: translateX(-50%) scale(1);
     opacity: 1;
-    top: -75px;
+    top: -60px;
 }
 
 /* Crown Badge */
@@ -238,8 +210,8 @@
     position: absolute;
     bottom: -2px;
     right: -2px;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     background: white;
     border-radius: 50%;
     display: flex;
@@ -249,45 +221,77 @@
     border: 2px solid var(--color-gold);
 }
 
-/* Trophy */
+/* Trophy Node */
 .trophy-node {
-    width: 100px;
-    height: 100px;
-    margin-top: 40px;
+    width: 90px;
+    height: 90px;
+    margin-top: 24px;
 }
 
 .trophy-node .node-circle {
     background: linear-gradient(135deg, #fbbf24, #d97706);
-    box-shadow: 0 10px 0 #b45309;
+    box-shadow: 0 8px 0 #b45309;
 }
 
-/* --- Right Sidebar (Stats) --- */
+/* Right Sidebar (Stats) - Hidden on Mobile */
 .sidebar-right {
-    position: sticky;
-    top: var(--spacing-lg);
+    display: none;
 }
 
-.stats-card {
-    background: white;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-}
+/* ============================================
+   DESKTOP STYLES (Min-Width: 769px)
+   ============================================ */
+@media (min-width: 769px) {
+    .learn-page {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        align-items: start;
+        padding: 24px;
+        gap: 32px;
+    }
 
-.stat-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
+    .dashboard-widget {
+        flex-direction: row;
+    }
 
-.stat-row:last-child {
-    margin-bottom: 0;
-}
+    .unit-header {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        padding: 24px 32px;
+    }
 
-.stat-label {
-    font-weight: 800;
-    color: var(--color-text-secondary);
-    font-size: 1rem;
+    .unit-info {
+        align-items: flex-start;
+    }
+
+    .btn-guidebook {
+        width: auto;
+    }
+
+    .sidebar-right {
+        display: block;
+        position: sticky;
+        top: 24px;
+    }
+
+    /* Restore Zig-Zag Layout for Desktop */
+    .path-node {
+        width: 80px;
+        height: 80px;
+        transform: none;
+        /* Reset base transform */
+    }
+
+    .path-node.right {
+        transform: translateX(60px) !important;
+    }
+
+    .path-node.left {
+        transform: translateX(-60px) !important;
+    }
+
+    .path-connector {
+        width: 140px;
+    }
 }

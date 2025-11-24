@@ -93,12 +93,23 @@ const IconRenderer = ({ emoji, size = 40, className = '' }) => {
     return <span style={{ fontSize: `${size}px` }}>{emoji}</span>;
 };
 
+// Shuffle utility function for randomizing options
+const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
+
 const Lesson = () => {
     const { lessonId } = useParams();
     const navigate = useNavigate();
     const { t } = useLanguage();
 
     const [lesson, setLesson] = useState(null);
+    const [unitColor, setUnitColor] = useState({ primary: '#58cc02', dark: '#46a302', light: '#dcfce7' }); // Default Green
     const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
     const [lives, setLives] = useState(5);
     const [progress, setProgress] = useState(0);
@@ -114,10 +125,14 @@ const Lesson = () => {
 
         // 3. Find lesson in the determined units
         let foundLesson = null;
-        for (const unit of allUnits) {
+        let foundUnitIndex = 0;
+
+        for (let i = 0; i < allUnits.length; i++) {
+            const unit = allUnits[i];
             const lesson = unit.lessons.find(l => l.id === lessonId);
             if (lesson) {
                 foundLesson = lesson;
+                foundUnitIndex = i;
                 break;
             }
         }
@@ -128,10 +143,23 @@ const Lesson = () => {
             foundLesson = customLessons.find(l => l.id === lessonId);
         }
 
-        setLesson(foundLesson);
+        if (foundLesson) {
+            setLesson(foundLesson);
+
+            // Set Unit Color
+            const colors = [
+                { primary: '#58cc02', dark: '#46a302', light: '#dcfce7' }, // Unit 1: Green
+                { primary: '#3b82f6', dark: '#2563eb', light: '#dbeafe' }, // Unit 2: Blue
+                { primary: '#a855f7', dark: '#9333ea', light: '#f3e8ff' }, // Unit 3: Purple
+                { primary: '#ef4444', dark: '#dc2626', light: '#fee2e2' }  // Unit 4: Red
+            ];
+
+            // Use modulo to cycle through colors if more units exist
+            setUnitColor(colors[foundUnitIndex % colors.length]);
+        }
     }, [lessonId]);
 
-    if (!lesson) return <div className="lesson-view"><div className="exercise-container"><h2>Lesson not found</h2><Button onClick={() => navigate('/learn')}>Back to Learn</Button></div></div>;
+    if (!lesson) return <div className="lesson-view"><div className="exercise-container"><h2>{t('lessonNotFound')}</h2><Button onClick={() => navigate('/learn')}>{t('backToLearn')}</Button></div></div>;
 
     const currentExercise = lesson.exercises[currentExerciseIndex];
 
@@ -163,10 +191,10 @@ const Lesson = () => {
             <div className="lesson-completed">
                 <div className="completion-content">
                     <div className="completion-icon"><Sparkles size={80} color="var(--color-gold)" fill="var(--color-gold)" /></div>
-                    <h1>Lesson Complete!</h1>
-                    <p>You earned 10 XP</p>
+                    <h1>{t('lessonComplete')}</h1>
+                    <p>{t('earnedXp')}</p>
                     <Button variant="primary" size="lg" onClick={() => navigate('/learn')}>
-                        Continue
+                        {t('continue')}
                     </Button>
                 </div>
             </div>
@@ -178,12 +206,12 @@ const Lesson = () => {
             <div className="lesson-completed">
                 <div className="completion-content">
                     <div className="completion-icon"><Heart size={80} color="var(--color-secondary)" fill="var(--color-secondary)" /></div>
-                    <h1>Out of hearts!</h1>
+                    <h1>{t('outOfHearts')}</h1>
                     <Button variant="secondary" size="lg" onClick={() => navigate('/learn')}>
-                        Quit
+                        {t('quit')}
                     </Button>
                     <Button variant="primary" size="lg" onClick={() => setLives(5)}>
-                        Refill Hearts (Practice)
+                        {t('refillHearts')}
                     </Button>
                 </div>
             </div>
@@ -191,13 +219,20 @@ const Lesson = () => {
     }
 
     return (
-        <div className="lesson-view">
+        <div
+            className="lesson-view"
+            style={{
+                '--unit-color': unitColor.primary,
+                '--unit-color-dark': unitColor.dark,
+                '--unit-color-light': unitColor.light
+            }}
+        >
             <header className="lesson-header">
                 <button className="close-btn" onClick={() => navigate('/learn')}>
                     <X size={24} />
                 </button>
                 <div className="progress-bar-container">
-                    <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+                    <div className="progress-bar-fill" style={{ width: `${progress}%`, background: 'var(--unit-color)' }}></div>
                 </div>
                 <div className="lives-counter">
                     <Heart fill="#ff4b4b" color="#ff4b4b" size={24} />
@@ -263,13 +298,19 @@ const Lesson = () => {
 
 // Exercise Components
 const MultipleChoice = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
     const [selected, setSelected] = useState(null);
+    const [shuffledOptions, setShuffledOptions] = useState([]);
+
+    useEffect(() => {
+        setShuffledOptions(shuffleArray(exercise.options));
+    }, [exercise]);
 
     return (
         <div className="exercise-container">
             <h2 className="exercise-question">{exercise.question}</h2>
             <div className="options-grid">
-                {exercise.options.map((opt, idx) => (
+                {shuffledOptions.map((opt, idx) => (
                     <div
                         key={idx}
                         className={`option-card ${selected === opt ? 'selected' : ''}`}
@@ -288,21 +329,29 @@ const MultipleChoice = ({ exercise, onAnswer }) => {
                     onClick={() => selected && onAnswer(selected.correct)}
                     disabled={!selected}
                 >
-                    Check
+                    {t('check')}
                 </Button>
             </div>
         </div>
     );
 };
 
+
+
 const ImageSelection = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
     const [selected, setSelected] = useState(null);
+    const [shuffledOptions, setShuffledOptions] = useState([]);
+
+    useEffect(() => {
+        setShuffledOptions(shuffleArray(exercise.options));
+    }, [exercise]);
 
     return (
         <div className="exercise-container">
             <h2 className="exercise-question">{exercise.question}</h2>
             <div className="image-grid">
-                {exercise.options.map((opt, idx) => (
+                {shuffledOptions.map((opt, idx) => (
                     <div
                         key={idx}
                         className={`image-card ${selected === opt ? 'selected' : ''}`}
@@ -321,7 +370,7 @@ const ImageSelection = ({ exercise, onAnswer }) => {
                     onClick={() => selected && onAnswer(selected.correct)}
                     disabled={!selected}
                 >
-                    Check
+                    {t('check')}
                 </Button>
             </div>
         </div>
@@ -329,6 +378,7 @@ const ImageSelection = ({ exercise, onAnswer }) => {
 };
 
 const TypingExercise = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
     const [input, setInput] = useState('');
 
     const checkAnswer = () => {
@@ -348,7 +398,7 @@ const TypingExercise = ({ exercise, onAnswer }) => {
                 className="typing-input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your answer here..."
+                placeholder={t('typeAnswer')}
                 rows={3}
             />
             <div className="exercise-footer">
@@ -359,7 +409,7 @@ const TypingExercise = ({ exercise, onAnswer }) => {
                     onClick={checkAnswer}
                     disabled={input.trim().length === 0}
                 >
-                    Check
+                    {t('check')}
                 </Button>
             </div>
         </div>
@@ -367,6 +417,7 @@ const TypingExercise = ({ exercise, onAnswer }) => {
 };
 
 const SentenceBuilder = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
     const [sentence, setSentence] = useState([]);
     const [availableWords, setAvailableWords] = useState(exercise.options);
 
@@ -416,7 +467,7 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
                     onClick={checkAnswer}
                     disabled={sentence.length === 0}
                 >
-                    Check
+                    {t('check')}
                 </Button>
             </div>
         </div>
@@ -424,6 +475,7 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
 };
 
 const MatchPairs = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
     const [selected, setSelected] = useState([]);
     const [matched, setMatched] = useState([]);
     const [shuffledItems, setShuffledItems] = useState([]);
@@ -458,7 +510,7 @@ const MatchPairs = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">Match the pairs</h2>
+            <h2 className="exercise-question">{t('matchPairs')}</h2>
             <div className="pairs-grid">
                 {shuffledItems.map((item, idx) => (
                     <button
@@ -475,6 +527,7 @@ const MatchPairs = ({ exercise, onAnswer }) => {
 };
 
 const FillBlank = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
     const [selected, setSelected] = useState(null);
 
     return (
@@ -495,7 +548,7 @@ const FillBlank = ({ exercise, onAnswer }) => {
                         className={`option-card ${selected === opt ? 'selected' : ''}`}
                         onClick={() => setSelected(opt)}
                     >
-                        {opt}
+                        <div className="option-text">{opt}</div>
                     </button>
                 ))}
             </div>
@@ -505,10 +558,10 @@ const FillBlank = ({ exercise, onAnswer }) => {
                     variant={selected ? "primary" : "disabled"}
                     size="lg"
                     fullWidth
-                    onClick={() => onAnswer(selected === exercise.correctOption)}
+                    onClick={() => selected && onAnswer(selected === exercise.correctAnswer)}
                     disabled={!selected}
                 >
-                    Check
+                    {t('check')}
                 </Button>
             </div>
         </div>
