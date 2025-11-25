@@ -1,121 +1,197 @@
+/* ============================================
+   PROFILE PAGE - Clean Native Design
+   ============================================ */
+
 .profile-page {
-    padding: 2rem;
-    max-width: 800px;
+    padding: var(--spacing-lg);
+    max-width: 680px;
     margin: 0 auto;
     padding-bottom: 100px;
-    /* Space for bottom nav */
 }
 
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
 }
 
 .profile-avatar {
-    width: 120px;
-    height: 120px;
-    background: #e5e7eb;
-    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    background: var(--color-gray-100);
+    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
-    border: 4px solid white;
-    box-shadow: 0 0 0 4px var(--color-border);
+    font-size: 2rem;
+    flex-shrink: 0;
 }
 
 .profile-info h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: var(--color-text);
 }
 
 .profile-joined {
     color: var(--color-text-secondary);
-    font-size: 1.2rem;
-    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    margin-top: var(--spacing-xs);
 }
 
 .profile-stats-row {
     display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
 }
 
 .stat-badge {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-weight: bold;
+    gap: 4px;
+    font-weight: 500;
+    font-size: 0.875rem;
     color: var(--color-text);
+    background: var(--color-gray-100);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
 }
 
 .section-title {
-    border-bottom: 2px solid var(--color-border);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    margin-top: 40px;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-xl);
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: var(--spacing-sm);
 }
 
 .stat-card {
-    background: white;
-    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    padding: var(--spacing-md);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--spacing-sm);
+    transition: background-color 0.1s ease;
+}
+
+.stat-card:hover {
+    background: var(--color-gray-50);
 }
 
 .stat-value {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--color-text);
 }
 
 .stat-label {
     color: var(--color-text-secondary);
+    font-size: 0.8125rem;
 }
 
-/* Admin Controls Grid */
+/* Admin Controls */
 .admin-controls-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: var(--spacing-sm);
 }
 
-/* --- Mobile Responsive --- */
+/* ============================================
+   FONT SELECTOR - Clean Native Design
+   ============================================ */
+
+.font-selector-container {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+.font-selector-description {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.font-preview {
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+    font-size: 1.25rem;
+    color: var(--color-text);
+    direction: rtl;
+    line-height: 1.6;
+}
+
+.font-selector {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+    transition: border-color 0.1s ease;
+}
+
+.font-selector:hover {
+    border-color: var(--color-primary);
+}
+
+.font-selector:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* RTL Support */
+[dir="rtl"] .font-selector {
+    background-position: left 12px center;
+    padding-right: 14px;
+    padding-left: 40px;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .profile-page {
-        padding: 1rem;
-        padding-bottom: 120px;
+        padding: var(--spacing-md);
+        padding-bottom: 100px;
     }
 
     .profile-header {
         flex-direction: column;
         text-align: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
+        gap: var(--spacing-md);
     }
 
     .profile-avatar {
-        width: 100px;
-        height: 100px;
-        font-size: 3rem;
-        margin: 0 auto;
+        width: 72px;
+        height: 72px;
+        font-size: 1.75rem;
     }
 
     .profile-info h1 {
-        font-size: 2rem;
+        font-size: 1.375rem;
     }
 
     .profile-stats-row {

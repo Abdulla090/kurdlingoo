@@ -1,234 +1,225 @@
-/* Button Component - Ultimate 3D Design */
+/* ============================================
+   BUTTON - Premium Professional Design
+   ============================================ */
+
 .btn {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
     border: none;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     font-family: inherit;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     user-select: none;
-    overflow: hidden;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    box-shadow: var(--shadow-button);
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.btn:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-.btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.btn:hover::after {
-    left: 100%;
+.btn:focus-visible {
+    box-shadow: var(--shadow-focus);
 }
 
 .btn:disabled {
     cursor: not-allowed;
     opacity: 0.5;
-}
-
-.btn:disabled:active {
     transform: none !important;
+    box-shadow: none !important;
 }
 
-/* Button Face (Inner Content) */
 .btn-face {
     position: relative;
     z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm);
+    gap: 8px;
 }
 
-/* Primary Button - Dark Green 3D */
+/* Sizes */
+.btn-sm {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+}
+
+.btn-md {
+    padding: 14px 24px;
+    font-size: 15px;
+}
+
+.btn-lg {
+    padding: 18px 32px;
+    font-size: 16px;
+    border-radius: var(--radius-lg);
+}
+
+/* ============================================
+   PRIMARY - Premium Green with Depth
+   ============================================ */
+
 .btn-primary {
-    background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     color: white;
-    padding: 14px 28px;
-    box-shadow:
-        0 8px 0 #14532d,
-        0 10px 15px rgba(0, 0, 0, 0.2);
-    border: 3px solid #166534;
+    border: 1px solid var(--color-primary-dark);
+    box-shadow: 
+        var(--shadow-button),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: linear-gradient(180deg, #15803d 0%, #166534 100%);
-    transform: translateY(-2px) scale(1.015);
-    box-shadow:
-        0 10px 0 #14532d,
-        0 12px 20px rgba(0, 0, 0, 0.25);
-    animation: button-pulse 2s ease-in-out infinite;
+    background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+    box-shadow: 
+        var(--shadow-button-hover),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) {
-    transform: translateY(6px) scale(0.99);
-    box-shadow:
-        0 2px 0 #14532d,
-        0 3px 5px rgba(0, 0, 0, 0.2);
-    animation: button-press 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(0);
+    background: var(--color-primary-dark);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Secondary Button - Red 3D */
+/* ============================================
+   SECONDARY - Elegant Surface
+   ============================================ */
+
 .btn-secondary {
-    background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-    padding: 14px 28px;
-    box-shadow:
-        0 8px 0 #991b1b,
-        0 10px 15px rgba(0, 0, 0, 0.2);
-    border: 3px solid #b91c1c;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-button);
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
-    transform: translateY(-2px);
-    box-shadow:
-        0 10px 0 #991b1b,
-        0 12px 20px rgba(0, 0, 0, 0.25);
+    background: var(--color-surface-variant);
+    border-color: var(--color-divider);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
 }
 
 .btn-secondary:active:not(:disabled) {
-    transform: translateY(6px);
-    box-shadow:
-        0 2px 0 #991b1b,
-        0 3px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    background: var(--color-border);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Success Button - Bright Green 3D */
-.btn-success {
-    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
-    color: white;
-    padding: 14px 28px;
-    box-shadow:
-        0 8px 0 #15803d,
-        0 10px 15px rgba(0, 0, 0, 0.2);
-    border: 3px solid #16a34a;
-}
+/* ============================================
+   OUTLINE - Refined Border
+   ============================================ */
 
-.btn-success:hover:not(:disabled) {
-    background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
-    transform: translateY(-2px) scale(1.015);
-    box-shadow:
-        0 10px 0 #15803d,
-        0 12px 20px rgba(0, 0, 0, 0.25);
-    animation: button-glow-success 2.5s ease-in-out infinite;
-}
-
-.btn-success:active:not(:disabled) {
-    transform: translateY(6px) scale(0.99);
-    box-shadow:
-        0 2px 0 #15803d,
-        0 3px 5px rgba(0, 0, 0, 0.2);
-    animation: button-success-click 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Danger Button - Deep Red 3D */
-.btn-danger {
-    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
-    color: white;
-    padding: 14px 28px;
-    box-shadow:
-        0 8px 0 #7f1d1d,
-        0 10px 15px rgba(0, 0, 0, 0.2);
-    border: 3px solid #991b1b;
-}
-
-.btn-danger:hover:not(:disabled) {
-    background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
-    transform: translateY(-2px);
-    box-shadow:
-        0 10px 0 #7f1d1d,
-        0 12px 20px rgba(0, 0, 0, 0.25);
-}
-
-.btn-danger:active:not(:disabled) {
-    transform: translateY(6px);
-    box-shadow:
-        0 2px 0 #7f1d1d,
-        0 3px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Outline Button - White with Border 3D */
 .btn-outline {
-    background: white;
-    color: var(--color-text);
-    padding: 14px 28px;
-    box-shadow:
-        0 8px 0 #d1d5db,
-        0 10px 15px rgba(0, 0, 0, 0.1);
-    border: 3px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1.5px solid var(--color-border);
 }
 
 .btn-outline:hover:not(:disabled) {
     background: var(--color-surface);
-    border-color: var(--color-primary);
-    transform: translateY(-2px);
-    box-shadow:
-        0 10px 0 #d1d5db,
-        0 12px 20px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-divider);
+    color: var(--color-text);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-button-hover);
 }
 
 .btn-outline:active:not(:disabled) {
-    transform: translateY(6px);
-    box-shadow:
-        0 2px 0 #d1d5db,
-        0 3px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    background: var(--color-surface-variant);
 }
 
-/* Disabled Button - Gray 3D */
-.btn-disabled {
-    background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
-    color: #d1d5db;
-    padding: 14px 28px;
-    box-shadow:
-        0 8px 0 #4b5563,
-        0 10px 15px rgba(0, 0, 0, 0.1);
-    border: 3px solid #6b7280;
-    cursor: not-allowed;
+/* ============================================
+   DANGER - Professional Red
+   ============================================ */
+
+.btn-danger {
+    background: linear-gradient(180deg, var(--color-accent-red) 0%, var(--color-accent-red-dark) 100%);
+    color: white;
+    border: 1px solid var(--color-accent-red-dark);
+    box-shadow: 
+        var(--shadow-button),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Button Sizes */
-.btn-sm {
-    font-size: 0.875rem;
-    padding: 10px 20px;
+.btn-danger:hover:not(:disabled) {
+    background: linear-gradient(180deg, #f87171 0%, var(--color-accent-red) 100%);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
 }
 
-.btn-md {
-    font-size: 1rem;
-    padding: 14px 28px;
+.btn-danger:active:not(:disabled) {
+    transform: translateY(0);
+    background: var(--color-accent-red-dark);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-lg {
-    font-size: 1.125rem;
-    padding: 18px 36px;
+/* ============================================
+   SUCCESS - Premium Green
+   ============================================ */
+
+.btn-success {
+    background: linear-gradient(180deg, var(--color-success) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    border: 1px solid var(--color-primary-dark);
+    box-shadow: 
+        var(--shadow-button),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-success) 100%);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+}
+
+.btn-success:active:not(:disabled) {
+    transform: translateY(0);
+    background: var(--color-primary-dark);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   GHOST - Minimal
+   ============================================ */
+
+.btn-ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+    padding: 8px 12px;
+}
+
+.btn-ghost:hover:not(:disabled) {
+    background: var(--color-surface-variant);
+    color: var(--color-text);
+}
+
+.btn-ghost:active:not(:disabled) {
+    background: var(--color-border);
+}
+
+/* ============================================
+   TEXT - No Background
+   ============================================ */
+
+.btn-text {
+    background: transparent;
+    color: var(--color-primary);
+    padding: 8px 12px;
+}
+
+.btn-text:hover:not(:disabled) {
+    background: var(--color-primary-50);
+}
+
+.btn-text:active:not(:disabled) {
+    background: var(--color-primary-100);
 }
 
 /* Full Width */
@@ -236,66 +227,49 @@
     width: 100%;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Icon Only */
+.btn-icon {
+    padding: 12px;
+    border-radius: var(--radius-full);
+}
+
+.btn-icon.btn-sm { padding: 8px; }
+.btn-icon.btn-lg { padding: 16px; }
+
+/* Pill Shape */
+.btn-pill {
+    border-radius: var(--radius-full);
+}
+
+/* Loading */
+.btn-loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.btn-loading .btn-face {
+    opacity: 0;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
     .btn-lg {
-        font-size: 1rem;
-        padding: 16px 32px;
-    }
-}
-
-/* Professional Button Animations */
-@keyframes button-pulse {
-    0%, 100% {
-        box-shadow:
-            0 10px 0 #14532d,
-            0 12px 20px rgba(0, 0, 0, 0.25);
-    }
-    50% {
-        box-shadow:
-            0 10px 0 #14532d,
-            0 12px 23px rgba(0, 0, 0, 0.28),
-            0 0 15px rgba(22, 163, 74, 0.2);
-    }
-}
-
-@keyframes button-glow-success {
-    0%, 100% {
-        box-shadow:
-            0 10px 0 #15803d,
-            0 12px 20px rgba(0, 0, 0, 0.25);
-    }
-    50% {
-        box-shadow:
-            0 10px 0 #15803d,
-            0 12px 23px rgba(0, 0, 0, 0.28),
-            0 0 20px rgba(34, 197, 94, 0.35);
-    }
-}
-
-@keyframes button-press {
-    0% {
-        transform: translateY(6px) scale(0.99);
-    }
-    50% {
-        transform: translateY(7px) scale(0.98);
-    }
-    100% {
-        transform: translateY(6px) scale(0.99);
-    }
-}
-
-@keyframes button-success-click {
-    0% {
-        transform: translateY(6px) scale(0.99);
-    }
-    30% {
-        transform: translateY(5px) scale(1.02);
-    }
-    60% {
-        transform: translateY(6.5px) scale(0.98);
-    }
-    100% {
-        transform: translateY(6px) scale(1);
+        padding: 14px 24px;
+        font-size: 15px;
     }
 }

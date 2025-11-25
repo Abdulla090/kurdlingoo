@@ -1,64 +1,131 @@
 :root {
-  /* Brand Colors */
-  --color-primary: #58cc02; /* KurdLingo Green - similar to Duo but fresh */
-  --color-primary-dark: #46a302; /* For 3D effect/hover */
-  --color-primary-light: #89e219;
+  /* ============================================
+     PROFESSIONAL DESIGN SYSTEM
+     Inspired by: Apple, Stripe, Linear, Notion
+     ============================================ */
+
+  /* Brand Colors - Premium Green Palette */
+  --color-primary: #22c55e;
+  --color-primary-dark: #16a34a;
+  --color-primary-light: #4ade80;
+  --color-primary-50: rgba(34, 197, 94, 0.12);
+  --color-primary-surface: rgba(34, 197, 94, 0.08);
+
+  /* Accent - Gold/Yellow for achievements */
+  --color-gold: #f59e0b;
+  --color-gold-dark: #d97706;
+  --color-gold-light: #fbbf24;
   
-  --color-secondary: #ffc800; /* Gold/Yellow for crowns/streaks */
-  --color-secondary-dark: #e5a500;
+  /* Secondary Accents */
+  --color-accent-blue: #3b82f6;
+  --color-accent-blue-dark: #2563eb;
+  --color-info-bg: rgba(59, 130, 246, 0.08);
+  
+  --color-accent-red: #ef4444;
+  --color-accent-red-dark: #dc2626;
+  --color-error-bg: rgba(239, 68, 68, 0.08);
 
-  --color-accent-blue: #1cb0f6;
-  --color-accent-blue-dark: #1899d6;
-
-  --color-accent-red: #ff4b4b;
-  --color-accent-red-dark: #d43131;
-
-  /* Neutral Colors */
-  --color-text: #3c3c3c;
-  --color-text-light: #777777;
+  /* Neutral Colors - Refined Gray Scale */
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+  --color-text-light: #64748b;
+  
   --color-background: #ffffff;
-  --color-surface: #f7f7f7; /* Light gray background for app */
-  --color-border: #e5e5e5;
+  --color-surface: #f8fafc;
+  --color-surface-variant: #f1f5f9;
+  --color-surface-elevated: #ffffff;
+  
+  --color-border: #e2e8f0;
+  --color-divider: #cbd5e1;
 
-  /* UI Feedback */
-  --color-success: #58cc02;
-  --color-error: #ff4b4b;
-  --color-warning: #ffc800;
+  /* Semantic Colors */
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
 
-  /* Typography */
-  --font-family-base: 'Vazirmatn', 'Noto Sans', sans-serif; /* Good for Kurdish/Arabic script */
-  --font-family-display: 'Fredoka', 'Vazirmatn', sans-serif; /* Rounder, friendlier */
+  /* Typography - Modern Sans Stack */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-kurdish: 'Rabar_039', 'Vazirmatn', sans-serif;
 
-  /* Spacing */
+  /* Spacing Scale */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
 
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  /* Border Radius - Refined */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows / 3D Effects */
-  --shadow-sm: 0 2px 0 var(--color-border);
-  --shadow-md: 0 4px 0 var(--color-border);
-  --shadow-btn-primary: 0 4px 0 var(--color-primary-dark);
-  --shadow-btn-secondary: 0 4px 0 var(--color-secondary-dark);
+  /* Shadows - Layered Depth System */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
   
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-bounce: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Focus & Interactive Shadows */
+  --shadow-focus: 0 0 0 3px var(--color-primary-50);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.03);
+  --shadow-card-hover: 0 8px 16px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -4px rgba(15, 23, 42, 0.06);
+  --shadow-button: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-button-hover: 0 4px 8px -2px rgba(15, 23, 42, 0.1);
+  
+  /* Ring for selected states */
+  --ring-primary: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
+  --ring-blue: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-accent-blue);
+
+  /* Transitions - Smooth & Professional */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-Index Scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-toast: 600;
 }
 
+/* Dark Mode - Premium Dark Theme */
 .dark-mode {
-  --color-text: #f7f7f7;
-  --color-text-light: #a0a0a0;
-  --color-background: #131f24;
-  --color-surface: #202f36;
-  --color-border: #37464f;
+  --color-text: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-tertiary: #64748b;
+  --color-text-light: #94a3b8;
+  
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-variant: #334155;
+  --color-surface-elevated: #1e293b;
+  
+  --color-border: #334155;
+  --color-divider: #475569;
+  
+  --color-primary-50: rgba(34, 197, 94, 0.15);
+  --color-primary-surface: rgba(34, 197, 94, 0.1);
+  --color-info-bg: rgba(59, 130, 246, 0.12);
+  --color-error-bg: rgba(239, 68, 68, 0.12);
+  
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.35), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-card-hover: 0 8px 16px -4px rgba(0, 0, 0, 0.35);
 }
