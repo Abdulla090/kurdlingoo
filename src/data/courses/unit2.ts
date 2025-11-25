@@ -331,6 +331,24 @@ export const unit2: Unit = {
                     hints: ['دەمەوێت', 'بکڕم']
                 },
                 {
+                    type: 'roleplay-chat',
+                    question: 'You are at a market. Respond to the seller.',
+                    scenario: '🛒 You are at a Kurdish bazaar looking for a shirt. The seller greets you. Reply naturally in Kurdish!',
+                    chatMessages: [
+                        { sender: 'ai', text: 'سڵاو! بەخێربێیت بۆ دووکانەکەم. چیت دەوێت؟', avatar: '👨‍💼', name: 'فرۆشیار' },
+                        { sender: 'ai', text: 'confirm: زۆر باشە! بەڵێ کراسی جوانمان هەیە.', avatar: '👨‍💼', name: 'فرۆشیار' }
+                    ],
+                    acceptableResponses: [
+                        'سڵاو من کراسێکم دەوێت',
+                        'کراسێکم دەوێت',
+                        'من دەمەوێت کراس بکڕم',
+                        'دەمەوێت کراس بکڕم',
+                        'سڵاو کراس دەوێم'
+                    ],
+                    keywordsRequired: ['کراس'],
+                    hints: ['کراس', 'دەوێت', 'سڵاو']
+                },
+                {
                     type: 'conversation',
                     question: 'Complete the shopping dialogue',
                     dialogue: [
@@ -451,6 +469,24 @@ export const unit2: Unit = {
                     options: ['نزیک', 'دوور', 'گەورە', 'بچووک']
                 },
                 {
+                    type: 'roleplay-chat',
+                    question: 'A tourist asks you for directions. Help them!',
+                    scenario: '🗺️ You are on the street and a tourist asks you where the hospital is. Give them directions in Kurdish!',
+                    chatMessages: [
+                        { sender: 'ai', text: 'ببورە! من نەخۆشخانەم دەوێت. لە کوێیە؟', avatar: '🧑‍🦱', name: 'گەشتیار' },
+                        { sender: 'ai', text: 'confirm: زۆر سوپاس! دەست خۆش بیت.', avatar: '🧑‍🦱', name: 'گەشتیار' }
+                    ],
+                    acceptableResponses: [
+                        'بڕۆ ڕاستەوخۆ پاشان بچۆ بۆ چەپ',
+                        'بڕۆ ڕێک و پاشان بچۆ چەپ',
+                        'ڕاستەوخۆ بڕۆ و بچۆ بۆ چەپ',
+                        'بڕۆ ڕێک پاشان چەپ',
+                        'ڕێک بڕۆ و چەپ بچۆ'
+                    ],
+                    keywordsRequired: ['ڕێک', 'چەپ'],
+                    hints: ['بڕۆ', 'ڕێک', 'چەپ', 'ڕاست']
+                },
+                {
                     type: 'conversation',
                     question: 'Complete the directions dialogue',
                     dialogue: [
@@ -505,6 +541,24 @@ export const unit2: Unit = {
                     question: 'Type in Kurdish: "How is the weather?"',
                     correctAnswer: 'کەش و هەوا چۆنە',
                     hints: ['کەش', 'هەوا']
+                },
+                {
+                    type: 'roleplay-chat',
+                    question: 'Chat about the weather with a friend!',
+                    scenario: '☀️ Your Kurdish friend is asking about the weather today. Tell them it is sunny and hot!',
+                    chatMessages: [
+                        { sender: 'ai', text: 'سڵاو هاوڕێ! کەش و هەوا ئەمڕۆ چۆنە؟', avatar: '👋', name: 'هاوڕێ' },
+                        { sender: 'ai', text: 'confirm: ئاهان باشە! دەچمە دەرەوە!', avatar: '👋', name: 'هاوڕێ' }
+                    ],
+                    acceptableResponses: [
+                        'ئەمڕۆ خۆرەتاوە و گەرمە',
+                        'خۆرەتاوە و گەرمە',
+                        'ئەمڕۆ زۆر گەرمە',
+                        'کەشەکە خۆرەتاوە',
+                        'هەوا گەرمە'
+                    ],
+                    keywordsRequired: ['گەرم', 'خۆرەتاو'],
+                    hints: ['خۆرەتاو', 'گەرم', 'ئەمڕۆ']
                 },
                 {
                     type: 'multiple-choice',

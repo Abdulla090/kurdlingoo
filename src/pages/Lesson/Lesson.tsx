@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     X, Heart, Check,
@@ -35,6 +35,7 @@ import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { completeLesson, isLessonUnlocked } from '../../utils/progressManager';
 import Button from '../../components/Button/Button';
 import './Lesson.css';
 
@@ -110,12 +111,15 @@ const Lesson = () => {
     const { t } = useLanguage();
 
     const [lesson, setLesson] = useState(null);
+    const [currentUnitId, setCurrentUnitId] = useState('unit-1');
     const [unitColor, setUnitColor] = useState({ primary: '#58cc02', dark: '#46a302', light: '#dcfce7' }); // Default Green
     const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
     const [lives, setLives] = useState(5);
     const [progress, setProgress] = useState(0);
     const [feedback, setFeedback] = useState(null);
     const [isCompleted, setIsCompleted] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
+    const [xpEarned, setXpEarned] = useState(0);
 
     useEffect(() => {
         // 1. Try to load units from localStorage (Admin edits)
@@ -127,6 +131,7 @@ const Lesson = () => {
         // 3. Find lesson in the determined units
         let foundLesson = null;
         let foundUnitIndex = 0;
+        let foundUnit = null;
 
         for (let i = 0; i < allUnits.length; i++) {
             const unit = allUnits[i];
@@ -134,6 +139,7 @@ const Lesson = () => {
             if (lesson) {
                 foundLesson = lesson;
                 foundUnitIndex = i;
+                foundUnit = unit;
                 break;
             }
         }
@@ -145,7 +151,17 @@ const Lesson = () => {
         }
 
         if (foundLesson) {
+            // Check if lesson is unlocked
+            if (foundUnit && !isLessonUnlocked(lessonId, foundUnit.lessons)) {
+                setIsLocked(true);
+                return;
+            }
+            
             setLesson(foundLesson);
+            setCurrentUnitId(foundUnit?.id || 'unit-1');
+            
+            // Calculate XP based on number of exercises
+            setXpEarned(foundLesson.exercises?.length ? foundLesson.exercises.length * 2 : 10);
 
             // Set Unit Color
             const colors = [
@@ -159,6 +175,24 @@ const Lesson = () => {
             setUnitColor(colors[foundUnitIndex % colors.length]);
         }
     }, [lessonId]);
+
+    // Handle locked lesson
+    if (isLocked) {
+        return (
+            <div className="lesson-view">
+                <div className="exercise-container" style={{ textAlign: 'center', padding: '60px 20px' }}>
+                    <div style={{ fontSize: '64px', marginBottom: '20px' }}>🔒</div>
+                    <h2>{t('lessonLocked') || 'Lesson Locked'}</h2>
+                    <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px' }}>
+                        {t('completePreviousLesson') || 'Complete the previous lesson to unlock this one.'}
+                    </p>
+                    <Button variant="primary" onClick={() => navigate('/learn')}>
+                        {t('backToLearn') || 'Back to Learn'}
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 
     if (!lesson) return <div className="lesson-view"><div className="exercise-container"><h2>{t('lessonNotFound')}</h2><Button onClick={() => navigate('/learn')}>{t('backToLearn')}</Button></div></div>;
 
@@ -182,6 +216,8 @@ const Lesson = () => {
             if (nextIndex < lesson.exercises.length) {
                 setCurrentExerciseIndex(nextIndex);
             } else {
+                // Mark lesson as completed and save progress
+                completeLesson(lessonId, currentUnitId, xpEarned);
                 setIsCompleted(true);
             }
         }
@@ -193,7 +229,7 @@ const Lesson = () => {
                 <div className="completion-content">
                     <div className="completion-icon"><Sparkles size={80} color="var(--color-gold)" fill="var(--color-gold)" /></div>
                     <h1>{t('lessonComplete')}</h1>
-                    <p>{t('earnedXp')}</p>
+                    <p style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-gold)' }}>+{xpEarned} XP</p>
                     <Button variant="primary" size="lg" onClick={() => navigate('/learn')}>
                         {t('continue')}
                     </Button>
@@ -280,6 +316,9 @@ const Lesson = () => {
                 )}
                 {currentExercise.type === 'vocabulary-grid' && (
                     <VocabularyGrid exercise={currentExercise} onAnswer={handleAnswer} />
+                )}
+                {currentExercise.type === 'roleplay-chat' && (
+                    <RoleplayChat exercise={currentExercise} onAnswer={handleAnswer} />
                 )}
                 {currentExercise.type === 'image-match' && (
                     <ImageMatch exercise={currentExercise} onAnswer={handleAnswer} />
@@ -911,6 +950,245 @@ const StoryCompletion = ({ exercise, onAnswer }) => {
                     {t('check')}
                 </Button>
             </div>
+        </div>
+    );
+};
+
+// Roleplay Chat Exercise Component - AI-powered chat simulation
+const RoleplayChat = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
+    const [messages, setMessages] = useState(() => {
+        // Initialize with AI messages from the exercise
+        return exercise.chatMessages?.filter(m => m.sender === 'ai') || [];
+    });
+    const [userInput, setUserInput] = useState('');
+    const [isChecking, setIsChecking] = useState(false);
+    const [feedback, setFeedback] = useState<{ correct: boolean; message: string; correctAnswer?: string } | null>(null);
+    const [hasAnswered, setHasAnswered] = useState(false);
+    const chatEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        // Reset state when exercise changes
+        setMessages(exercise.chatMessages?.filter(m => m.sender === 'ai') || []);
+        setUserInput('');
+        setFeedback(null);
+        setHasAnswered(false);
+        setIsChecking(false);
+    }, [exercise.id, exercise.question]);
+
+    useEffect(() => {
+        // Scroll to bottom when messages change
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
+    const normalizeText = (text: string): string => {
+        return text
+            .trim()
+            .toLowerCase()
+            .replace(/[؟?!.،,]/g, '')
+            .replace(/\s+/g, ' ');
+    };
+
+    const checkAnswer = () => {
+        if (!userInput.trim() || hasAnswered) return;
+        
+        setIsChecking(true);
+        
+        // Add user message to chat
+        const userMessage = { sender: 'user' as const, text: userInput, avatar: '👤', name: t('you') || 'You' };
+        setMessages(prev => [...prev, userMessage]);
+        
+        const normalizedInput = normalizeText(userInput);
+        const acceptableResponses = exercise.acceptableResponses || [];
+        const keywordsRequired = exercise.keywordsRequired || [];
+        
+        // Check if the response is acceptable
+        let isCorrect = false;
+        let matchedResponse = '';
+        
+        // Check exact matches first
+        for (const response of acceptableResponses) {
+            if (normalizeText(response) === normalizedInput) {
+                isCorrect = true;
+                matchedResponse = response;
+                break;
+            }
+        }
+        
+        // If no exact match, check if all required keywords are present
+        if (!isCorrect && keywordsRequired.length > 0) {
+            const hasAllKeywords = keywordsRequired.every(keyword => 
+                normalizedInput.includes(normalizeText(keyword))
+            );
+            if (hasAllKeywords) {
+                isCorrect = true;
+            }
+        }
+        
+        // If still no match, check for partial matches (at least 70% similarity)
+        if (!isCorrect) {
+            for (const response of acceptableResponses) {
+                const normalizedResponse = normalizeText(response);
+                const similarity = calculateSimilarity(normalizedInput, normalizedResponse);
+                if (similarity >= 0.7) {
+                    isCorrect = true;
+                    matchedResponse = response;
+                    break;
+                }
+            }
+        }
+
+        setTimeout(() => {
+            setIsChecking(false);
+            setHasAnswered(true);
+            
+            if (isCorrect) {
+                setFeedback({
+                    correct: true,
+                    message: t('greatResponse') || 'Great response! 🎉'
+                });
+                // Add AI confirmation message
+                const confirmMessage = { 
+                    sender: 'ai' as const, 
+                    text: exercise.chatMessages?.find(m => m.sender === 'ai' && m.text.includes('confirm'))?.text || '✓ زۆر باشە!',
+                    avatar: exercise.chatMessages?.[0]?.avatar || '🤖',
+                    name: exercise.chatMessages?.[0]?.name || 'AI'
+                };
+                setMessages(prev => [...prev, confirmMessage]);
+            } else {
+                setFeedback({
+                    correct: false,
+                    message: t('tryAgainHint') || 'Not quite right.',
+                    correctAnswer: acceptableResponses[0] || ''
+                });
+            }
+        }, 800);
+    };
+
+    // Simple similarity calculation
+    const calculateSimilarity = (str1: string, str2: string): number => {
+        const words1 = str1.split(' ');
+        const words2 = str2.split(' ');
+        const allWords = new Set([...words1, ...words2]);
+        const matchingWords = words1.filter(w => words2.includes(w)).length;
+        return matchingWords / allWords.size;
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            checkAnswer();
+        }
+    };
+
+    const handleContinue = () => {
+        onAnswer(feedback?.correct || false);
+    };
+
+    return (
+        <div className="exercise-container roleplay-chat-container">
+            <h2 className="exercise-question">{exercise.question}</h2>
+            
+            {/* Scenario description */}
+            {exercise.scenario && (
+                <div className="roleplay-scenario">
+                    <span className="scenario-icon">🎭</span>
+                    <p>{exercise.scenario}</p>
+                </div>
+            )}
+            
+            {/* Chat interface */}
+            <div className="chat-interface">
+                <div className="chat-messages">
+                    {messages.map((msg, idx) => (
+                        <div key={idx} className={`chat-message ${msg.sender}`}>
+                            <div className="message-avatar">
+                                {msg.avatar || (msg.sender === 'ai' ? '🤖' : '👤')}
+                            </div>
+                            <div className="message-content">
+                                {msg.name && <span className="message-name">{msg.name}</span>}
+                                <div className="message-bubble">
+                                    {msg.text}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    
+                    {isChecking && (
+                        <div className="chat-message ai">
+                            <div className="message-avatar">🤖</div>
+                            <div className="message-content">
+                                <div className="message-bubble typing">
+                                    <span className="typing-dot"></span>
+                                    <span className="typing-dot"></span>
+                                    <span className="typing-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={chatEndRef} />
+                </div>
+                
+                {/* Feedback display */}
+                {feedback && (
+                    <div className={`chat-feedback ${feedback.correct ? 'correct' : 'incorrect'}`}>
+                        <div className="feedback-icon">
+                            {feedback.correct ? <Check size={20} /> : <X size={20} />}
+                        </div>
+                        <div className="feedback-text">
+                            <p>{feedback.message}</p>
+                            {!feedback.correct && feedback.correctAnswer && (
+                                <p className="correct-answer">
+                                    <strong>{t('correctAnswer') || 'Correct answer'}:</strong> {feedback.correctAnswer}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                )}
+                
+                {/* Input area */}
+                {!hasAnswered ? (
+                    <div className="chat-input-area">
+                        <textarea
+                            className="chat-input"
+                            value={userInput}
+                            onChange={(e) => setUserInput(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder={t('typeYourResponse') || 'Type your response in Kurdish...'}
+                            rows={2}
+                            disabled={isChecking}
+                        />
+                        <button 
+                            className={`chat-send-btn ${userInput.trim() && !isChecking ? 'active' : ''}`}
+                            onClick={checkAnswer}
+                            disabled={!userInput.trim() || isChecking}
+                        >
+                            <MessageCircle size={20} />
+                        </button>
+                    </div>
+                ) : (
+                    <div className="exercise-footer">
+                        <Button
+                            variant={feedback?.correct ? "success" : "danger"}
+                            size="lg"
+                            fullWidth
+                            onClick={handleContinue}
+                        >
+                            {t('continue')}
+                        </Button>
+                    </div>
+                )}
+            </div>
+            
+            {/* Hints */}
+            {exercise.hints && exercise.hints.length > 0 && !hasAnswered && (
+                <div className="chat-hints">
+                    <span className="hints-label">{t('hints') || 'Hints'}:</span>
+                    {exercise.hints.map((hint, idx) => (
+                        <span key={idx} className="hint-chip">{hint}</span>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

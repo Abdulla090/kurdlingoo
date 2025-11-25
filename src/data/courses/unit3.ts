@@ -188,6 +188,24 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    type: 'roleplay-chat',
+                    question: 'Order food at a restaurant in Kurdish!',
+                    scenario: '🍽️ You are at a Kurdish restaurant. The waiter is taking your order. Order your favorite dish!',
+                    chatMessages: [
+                        { sender: 'ai', text: 'سڵاو و بەخێربێیت! ئەم چێشتخانەیە ناوبانگی کەبابەکانمانە. چی حەزدەکەیت فەرمان بدەیت؟', avatar: '🧑‍🍳', name: 'گارسۆن' },
+                        { sender: 'ai', text: 'confirm: زۆر باش! ئێستا دەینێم بۆت. نۆشی گیانت!', avatar: '🧑‍🍳', name: 'گارسۆن' }
+                    ],
+                    acceptableResponses: [
+                        'من کەباب و بریانیم دەوێت',
+                        'کەبابێکم دەوێت',
+                        'دەمەوێت کەباب بخۆم',
+                        'من دۆلمەم دەوێت',
+                        'بریانی و سەڵاتە دەوێم'
+                    ],
+                    keywordsRequired: ['دەوێت'],
+                    hints: ['کەباب', 'بریانی', 'دۆلمە', 'دەوێت']
+                },
+                {
                     type: 'conversation',
                     question: 'Complete the restaurant dialogue',
                     dialogue: [
@@ -486,6 +504,23 @@ export const unit3: Unit = {
                     options: ['تاقیکردنەوە', 'کار', 'ئاهەنگ', 'سەردان']
                 },
                 {
+                    type: 'roleplay-chat',
+                    question: 'Answer job interview questions in Kurdish!',
+                    scenario: '💼 You are in a job interview. The interviewer asks about your profession and experience. Answer professionally!',
+                    chatMessages: [
+                        { sender: 'ai', text: 'سڵاو و بەخێربێیت! تکایە خۆت پێناسە بکە. پیشەکەت چییە و چەند ساڵ ئەزموونت هەیە؟', avatar: '👔', name: 'چاوپێکەوتنەکەر' },
+                        { sender: 'ai', text: 'confirm: زۆر باش! ئەزموونت باشە. کەی دەتوانیت دەست بکەیت بە کار؟', avatar: '👔', name: 'چاوپێکەوتنەکەر' }
+                    ],
+                    acceptableResponses: [
+                        'من ئەندازیارم و پێنج ساڵ ئەزموونم هەیە',
+                        'من مامۆستام و سێ ساڵ ئەزموونم هەیە',
+                        'پیشەکەم پزیشکە و دە ساڵ ئەزموونم هەیە',
+                        'من پرۆگرامەرم و چوار ساڵ ئەزموونم هەیە'
+                    ],
+                    keywordsRequired: ['ئەزموون'],
+                    hints: ['پیشەکەم', 'ئەزموون', 'ساڵ']
+                },
+                {
                     type: 'conversation',
                     question: 'Complete the job interview',
                     dialogue: [
@@ -620,6 +655,23 @@ export const unit3: Unit = {
                     sentenceParts: ['پێویستە', 'لە', '___', 'تۆمار', 'بکەم'],
                     correctOption: 'ئوتێل',
                     options: ['ئوتێل', 'فڕۆکەخانە', 'وێستگە', 'دووکان']
+                },
+                {
+                    type: 'roleplay-chat',
+                    question: 'Check into your hotel in Kurdish!',
+                    scenario: '🏨 You have arrived at a hotel in Kurdistan. Talk to the receptionist to check in!',
+                    chatMessages: [
+                        { sender: 'ai', text: 'سڵاو و بەخێربێیت بۆ ئوتێلەکەمان! ئایا حجزتان هەیە؟', avatar: '👩‍💼', name: 'پەڕستاری پێشوازی' },
+                        { sender: 'ai', text: 'confirm: زۆر باش! فەرمووە ئەمە کلیلی ژوورەکەتانە. ژوور ٣٠٥.', avatar: '👩‍💼', name: 'پەڕستاری پێشوازی' }
+                    ],
+                    acceptableResponses: [
+                        'بەڵێ حجزم هەیە بەناوی ئەحمەد',
+                        'بەڵێ من حجزم هەیە',
+                        'حجزم هەیە ناوم ئەحمەدە',
+                        'سڵاو بەڵێ حجزم کردووە'
+                    ],
+                    keywordsRequired: ['حجز', 'بەڵێ'],
+                    hints: ['حجز', 'ناوم', 'بەڵێ']
                 },
                 {
                     type: 'conversation',

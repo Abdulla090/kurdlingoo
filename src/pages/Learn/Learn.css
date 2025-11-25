@@ -164,8 +164,18 @@
 .path-node:nth-child(4) { animation-delay: 0.2s; }
 .path-node:nth-child(5) { animation-delay: 0.25s; }
 
-.path-node:hover {
+.path-node:hover:not(.locked) {
     transform: scale(1.08) translateY(-2px) !important;
+}
+
+@media (min-width: 769px) {
+    .path-node.right:hover:not(.locked) {
+        transform: translateX(65px) scale(1.08) translateY(-2px) !important;
+    }
+
+    .path-node.left:hover:not(.locked) {
+        transform: translateX(-65px) scale(1.08) translateY(-2px) !important;
+    }
 }
 
 /* Node Circle - 3D Effect */
@@ -219,8 +229,19 @@
     cursor: not-allowed;
 }
 
+/* Prevent hover scale on locked nodes while preserving position */
 .path-node.locked:hover {
-    transform: none !important;
+    transform: none;
+}
+
+@media (min-width: 769px) {
+    .path-node.locked.right:hover {
+        transform: translateX(65px) !important;
+    }
+
+    .path-node.locked.left:hover {
+        transform: translateX(-65px) !important;
+    }
 }
 
 .path-node.locked .node-circle {
@@ -232,6 +253,42 @@
         inset 0 3px 6px rgba(255, 255, 255, 0.5);
     color: #94a3b8;
     text-shadow: none;
+}
+
+/* Completed State - Golden with checkmark */
+.path-node.completed .node-circle {
+    background: linear-gradient(145deg, #fcd34d 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
+    box-shadow: 
+        0 8px 0 var(--color-gold-dark),
+        0 10px 20px rgba(217, 119, 6, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.path-node.completed:active .node-circle {
+    transform: translateY(6px);
+    box-shadow: 
+        0 2px 0 var(--color-gold-dark),
+        0 4px 8px rgba(217, 119, 6, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Completed Badge */
+.completed-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    border: 2px solid white;
+    z-index: 5;
 }
 
 @keyframes nodeAppear {

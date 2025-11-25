@@ -5,13 +5,19 @@ import {
     MessageCircle, Hash, Palette, Clock, Users, ShoppingBag,
     MapPin, Cloud, Utensils, Plane, Smartphone, Briefcase,
     Stethoscope, Calendar, MessageSquare, Landmark, Music,
-    Globe, Crown
+    Globe, Crown, Lock, CheckCircle
 } from 'lucide-react';
 import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
 import { useLanguage } from '../../context/LanguageContext';
+import { 
+    isLessonCompleted, 
+    isLessonUnlocked, 
+    getUserStats,
+    isUnitCompleted
+} from '../../utils/progressManager';
 import './Learn.css';
 
 import { Unit } from '../../types';
@@ -20,6 +26,10 @@ const Learn: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useLanguage();
     const [units, setUnits] = React.useState<Unit[]>([unit1, unit2, unit3, unit4]);
+    const [userStats, setUserStats] = React.useState(getUserStats());
+    
+    // Force re-render when returning to the page to update progress
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
     // Helper to get modern icon based on title
     const getLessonIcon = (title: string) => {
@@ -53,6 +63,21 @@ const Learn: React.FC = () => {
         if (savedUnits) {
             setUnits(JSON.parse(savedUnits));
         }
+        
+        // Update stats when component mounts or gains focus
+        setUserStats(getUserStats());
+        forceUpdate();
+        
+        // Listen for visibility change to update progress when returning to page
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                setUserStats(getUserStats());
+                forceUpdate();
+            }
+        };
+        
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     }, []);
 
     return (
@@ -99,10 +124,12 @@ const Learn: React.FC = () => {
                                     />
                                 </svg>
 
-                                {unit.lessons.map((lesson, index) => {
+                {unit.lessons.map((lesson, index) => {
                                     const Icon = getLessonIcon(lesson.title);
-                                    const isCurrent = index === 0;
-                                    const isLocked = !isCurrent; // Lock others for visual demo
+                                    const completed = isLessonCompleted(lesson.id);
+                                    const unlocked = isLessonUnlocked(lesson.id, unit.lessons);
+                                    const isCurrent = unlocked && !completed;
+                                    const isLocked = !unlocked;
 
                                     // Calculate position for zig-zag
                                     // 0: center, 1: right, 2: center, 3: left
@@ -110,17 +137,38 @@ const Learn: React.FC = () => {
                                     if (index % 4 === 1) positionClass = 'right';
                                     if (index % 4 === 3) positionClass = 'left';
 
+                                    // Handle click for locked lessons
+                                    const handleClick = (e: React.MouseEvent) => {
+                                        if (isLocked) {
+                                            e.preventDefault();
+                                            // Could show a toast/modal here
+                                        }
+                                    };
+
                                     return (
                                         <Link
-                                            to={`/lesson/${lesson.id}`}
+                                            to={isLocked ? '#' : `/lesson/${lesson.id}`}
                                             key={lesson.id}
-                                            className={`path-node ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''} ${positionClass}`}
+                                            className={`path-node ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''} ${completed ? 'completed' : ''} ${positionClass}`}
+                                            onClick={handleClick}
+                                            aria-disabled={isLocked}
                                         >
                                             <div className="node-circle">
-                                                <Icon size={32} strokeWidth={2.5} />
+                                                {isLocked ? (
+                                                    <Lock size={28} strokeWidth={2.5} />
+                                                ) : (
+                                                    <Icon size={32} strokeWidth={2.5} />
+                                                )}
 
-                                                {/* Crown Badge (Only for unlocked/completed) */}
-                                                {!isLocked && (
+                                                {/* Completed checkmark badge */}
+                                                {completed && (
+                                                    <div className="completed-badge">
+                                                        <CheckCircle size={18} fill="#58cc02" color="white" />
+                                                    </div>
+                                                )}
+                                                
+                                                {/* Crown Badge (Only for current unlocked lesson) */}
+                                                {isCurrent && (
                                                     <div className="crown-badge">
                                                         <Crown size={16} fill="#fbbf24" color="#b45309" />
                                                     </div>
@@ -131,9 +179,9 @@ const Learn: React.FC = () => {
                                     );
                                 })}
 
-                                <div className="path-node trophy-node">
+                                <div className={`path-node trophy-node ${isUnitCompleted(unit.lessons) ? 'completed' : ''}`}>
                                     <div className="node-circle">
-                                        <Trophy size={40} fill="white" strokeWidth={2} />
+                                        <Trophy size={40} fill={isUnitCompleted(unit.lessons) ? "#fbbf24" : "white"} strokeWidth={2} />
                                     </div>
                                 </div>
                             </div>
@@ -149,11 +197,15 @@ const Learn: React.FC = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <Flame color="#ff9600" fill="#ff9600" />
-                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>5 {t('dayStreak')}</span>
+                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{userStats.streak} {t('dayStreak')}</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <Zap color="#ffc800" fill="#ffc800" />
-                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>450 XP</span>
+                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{userStats.totalXp} XP</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <CheckCircle color="#58cc02" />
+                            <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{userStats.lessonsCompleted} {t('lessonsCompleted') || 'Lessons'}</span>
                         </div>
                     </div>
                 </div>
@@ -164,10 +216,10 @@ const Learn: React.FC = () => {
                         <div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                                 <span style={{ fontSize: '14px' }}>{t('earnXp')}</span>
-                                <span style={{ fontSize: '14px', fontWeight: 'bold' }}>20/50</span>
+                                <span style={{ fontSize: '14px', fontWeight: 'bold' }}>{Math.min(userStats.totalXp, 50)}/50</span>
                             </div>
                             <div style={{ height: '8px', background: '#e5e5e5', borderRadius: '4px', overflow: 'hidden' }}>
-                                <div style={{ width: '40%', height: '100%', background: '#ffc800' }}></div>
+                                <div style={{ width: `${Math.min((userStats.totalXp / 50) * 100, 100)}%`, height: '100%', background: '#ffc800' }}></div>
                             </div>
                         </div>
                     </div>

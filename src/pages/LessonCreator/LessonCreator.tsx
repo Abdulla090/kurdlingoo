@@ -1,444 +1,1105 @@
-// @ts-nocheck
-import { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Sparkles, Save } from 'lucide-react';
-import Button from '../../components/Button/Button';
-import { useLanguage } from '../../context/LanguageContext';
 import './LessonCreator.css';
 
-const LessonCreator = () => {
-    const navigate = useNavigate();
-    const { t } = useLanguage();
-
-    const [lessonTitle, setLessonTitle] = useState('');
-    const [exercises, setExercises] = useState([]);
-    const [currentExercise, setCurrentExercise] = useState({
-        type: 'multiple-choice',
-        question: '',
-        options: [{ text: '', correct: false }],
-        pairs: [],
-        correctSentence: [],
-        sentenceParts: [],
-        correctOption: ''
-    });
-
-    const [aiTopic, setAiTopic] = useState('');
-    const [aiLoading, setAiLoading] = useState(false);
-    const [selectedModel, setSelectedModel] = useState('gemini-2.5-pro');
-
-    const exerciseTypes = [
-        { value: 'multiple-choice', label: 'Multiple Choice' },
-        { value: 'sentence-builder', label: 'Sentence Builder' },
-        { value: 'match-pairs', label: 'Match Pairs' },
-        { value: 'fill-blank', label: 'Fill in the Blank' }
-    ];
-
-    const addOption = () => {
-        setCurrentExercise({
-            ...currentExercise,
-            options: [...currentExercise.options, { text: '', correct: false }]
-        });
-    };
-
-    const updateOption = (index, field, value) => {
-        const newOptions = [...currentExercise.options];
-        newOptions[index][field] = value;
-        setCurrentExercise({ ...currentExercise, options: newOptions });
-    };
-
-    const removeOption = (index) => {
-        const newOptions = currentExercise.options.filter((_, i) => i !== index);
-        setCurrentExercise({ ...currentExercise, options: newOptions });
-    };
-
-    const addPair = () => {
-        setCurrentExercise({
-            ...currentExercise,
-            pairs: [...currentExercise.pairs, { kurdish: '', english: '' }]
-        });
-    };
-
-    const updatePair = (index, field, value) => {
-        const newPairs = [...currentExercise.pairs];
-        newPairs[index][field] = value;
-        setCurrentExercise({ ...currentExercise, pairs: newPairs });
-    };
-
-    const removePair = (index) => {
-        const newPairs = currentExercise.pairs.filter((_, i) => i !== index);
-        setCurrentExercise({ ...currentExercise, pairs: newPairs });
-    };
-
-    const addExercise = () => {
-        if (!currentExercise.question) {
-            alert('Please add a question!');
-            return;
-        }
-
-        setExercises([...exercises, { ...currentExercise, id: Date.now() }]);
-        setCurrentExercise({
-            type: 'multiple-choice',
-            question: '',
-            options: [{ text: '', correct: false }],
-            pairs: [],
-            correctSentence: [],
-            sentenceParts: [],
-            correctOption: ''
-        });
-    };
-
-    const removeExercise = (id) => {
-        setExercises(exercises.filter(ex => ex.id !== id));
-    };
-
-    const generateWithAI = async () => {
-        if (!aiTopic) {
-            alert('Please enter a topic!');
-            return;
-        }
-
-        setAiLoading(true);
-
-        try {
-            const { GoogleGenerativeAI } = await import('@google/generative-ai');
-
-            const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY;
-            if (!apiKey) {
-                throw new Error('API key not configured. Please add VITE_GOOGLE_AI_API_KEY to your .env file.');
-            }
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ model: selectedModel });
-
-            const prompt = `You are a Kurdish language expert. Create exactly 5 diverse exercises about "${aiTopic}" in Kurdish Sorani and English.
-
-Return ONLY valid JSON (no markdown, no code blocks):
-
-[
+// Game type configurations with icons and descriptions
+const gameTypes = [
   {
-    "type": "multiple-choice",
-    "question": "What is 'X' in Kurdish?",
-    "options": [
-      {"text": "ئاو", "image": "💧", "correct": true},
-      {"text": "نان", "image": "🍞", "correct": false}
-    ]
+    id: 'multiple-choice',
+    icon: '🎯',
+    name: 'Multiple Choice',
+    description: 'Classic quiz with 4 options',
+    color: '#58cc02',
+    preview: '❓ → A B C D'
   },
   {
-    "type": "match-pairs",
-    "pairs": [
-      {"kurdish": "سوور", "english": "Red"},
-      {"kurdish": "شین", "english": "Blue"}
-    ]
+    id: 'image-selection',
+    icon: '🖼️',
+    name: 'Image Selection',
+    description: 'Pick the right image',
+    color: '#1cb0f6',
+    preview: '🖼️ 🖼️ 🖼️ 🖼️'
   },
   {
-    "type": "sentence-builder",
-    "question": "Translate: 'I am happy'",
-    "sourceText": "I am happy",
-    "correctSentence": ["من", "دڵخۆشم"],
-    "options": ["من", "دڵخۆشم", "تۆ", "خەمبارم"]
+    id: 'sentence-builder',
+    icon: '🧩',
+    name: 'Sentence Builder',
+    description: 'Arrange words in order',
+    color: '#ff9600',
+    preview: '📝 → 🔤🔤🔤'
   },
   {
-    "type": "fill-blank",
-    "question": "Complete: '___ باش' (Good morning)",
-    "sentenceParts": ["___", "باش"],
-    "correctOption": "بەیانی",
-    "options": ["بەیانی", "شەو", "ڕۆژ"]
+    id: 'match-pairs',
+    icon: '🔗',
+    name: 'Match Pairs',
+    description: 'Connect related items',
+    color: '#ce82ff',
+    preview: '← → ← →'
+  },
+  {
+    id: 'fill-blank',
+    icon: '✏️',
+    name: 'Fill in the Blank',
+    description: 'Complete the sentence',
+    color: '#ff4b4b',
+    preview: 'The ___ is red'
+  },
+  {
+    id: 'vocabulary-grid',
+    icon: '📚',
+    name: 'Vocabulary Grid',
+    description: 'Learn new words with images',
+    color: '#2dd4bf',
+    preview: '📖 + 🖼️'
+  },
+  {
+    id: 'conversation',
+    icon: '💬',
+    name: 'Conversation',
+    description: 'Interactive dialogue practice',
+    color: '#f472b6',
+    preview: '👤💬👤'
+  },
+  {
+    id: 'listening',
+    icon: '🎧',
+    name: 'Listening Exercise',
+    description: 'Listen and respond',
+    color: '#a78bfa',
+    preview: '🔊 → ❓'
   }
-]
+];
 
-Mix all 4 types. Use Kurdish Sorani script. Include emojis where appropriate.`;
+// Image upload component with drag & drop
+const ImageUploader: React.FC<{
+  value?: string;
+  onChange: (url: string) => void;
+  label?: string;
+  size?: 'small' | 'medium' | 'large';
+}> = ({ value, onChange, label, size = 'medium' }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            let text = response.text();
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setIsDragging(true);
+    } else if (e.type === 'dragleave') {
+      setIsDragging(false);
+    }
+  }, []);
 
-            text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  const processFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
 
-            try {
-                const generatedExercises = JSON.parse(text);
+    setIsLoading(true);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      onChange(e.target?.result as string);
+      setIsLoading(false);
+    };
+    reader.onerror = () => {
+      alert('Error reading file');
+      setIsLoading(false);
+    };
+    reader.readAsDataURL(file);
+  };
 
-                if (Array.isArray(generatedExercises) && generatedExercises.length > 0) {
-                    setExercises([...exercises, ...generatedExercises.map((ex, i) => ({ ...ex, id: Date.now() + i }))]);
-                    alert(`✅ Generated ${generatedExercises.length} exercises!`);
-                } else {
-                    throw new Error('Invalid format');
-                }
-            } catch (parseError) {
-                console.error('Parse Error:', parseError);
-                console.log('Response:', text);
-                alert('Failed to parse AI response. Check console.');
-            }
-        } catch (error) {
-            console.error('AI Error:', error);
-            alert('Failed to generate. Error: ' + error.message);
-        } finally {
-            setAiLoading(false);
-        }
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files[0]) {
+      processFile(files[0]);
+    }
+  }, []);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      processFile(files[0]);
+    }
+  };
+
+  const handleUrlPaste = () => {
+    const url = prompt('Enter image URL:');
+    if (url) {
+      onChange(url);
+    }
+  };
+
+  const sizeClasses = {
+    small: 'image-uploader-small',
+    medium: 'image-uploader-medium',
+    large: 'image-uploader-large'
+  };
+
+  return (
+    <div className={`image-uploader ${sizeClasses[size]}`}>
+      {label && <label className="image-uploader-label">{label}</label>}
+      <div
+        className={`image-upload-zone ${isDragging ? 'dragging' : ''} ${value ? 'has-image' : ''}`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        {isLoading ? (
+          <div className="upload-loading">
+            <div className="spinner"></div>
+            <span>Uploading...</span>
+          </div>
+        ) : value ? (
+          <div className="image-preview">
+            <img src={value} alt="Preview" />
+            <div className="image-overlay">
+              <button
+                type="button"
+                className="remove-image-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange('');
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="upload-placeholder">
+            <span className="upload-icon">📷</span>
+            <span className="upload-text">Drop image here or click to upload</span>
+            <div className="upload-actions">
+              <button
+                type="button"
+                className="url-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUrlPaste();
+                }}
+              >
+                🔗 Paste URL
+              </button>
+            </div>
+          </div>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          style={{ display: 'none' }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Option editor with text + image support
+const OptionEditor: React.FC<{
+  option: { text: string; image?: string };
+  index: number;
+  isCorrect: boolean;
+  onTextChange: (text: string) => void;
+  onImageChange: (image: string) => void;
+  onSetCorrect: () => void;
+  onRemove: () => void;
+  showImage?: boolean;
+}> = ({ option, index, isCorrect, onTextChange, onImageChange, onSetCorrect, onRemove, showImage = true }) => {
+  return (
+    <div className={`option-editor ${isCorrect ? 'correct' : ''}`}>
+      <div className="option-header">
+        <span className="option-number">{String.fromCharCode(65 + index)}</span>
+        <button
+          type="button"
+          className={`correct-toggle ${isCorrect ? 'active' : ''}`}
+          onClick={onSetCorrect}
+          title={isCorrect ? 'Correct answer' : 'Set as correct'}
+        >
+          {isCorrect ? '✓ Correct' : 'Set Correct'}
+        </button>
+        <button type="button" className="remove-option-btn" onClick={onRemove}>
+          🗑️
+        </button>
+      </div>
+      <div className="option-content">
+        <input
+          type="text"
+          value={option.text}
+          onChange={(e) => onTextChange(e.target.value)}
+          placeholder={`Option ${String.fromCharCode(65 + index)}`}
+          className="option-text-input"
+        />
+        {showImage && (
+          <ImageUploader
+            value={option.image}
+            onChange={onImageChange}
+            size="small"
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Match pair editor
+const MatchPairEditor: React.FC<{
+  pairs: Array<{ left: string; right: string; leftImage?: string; rightImage?: string }>;
+  onChange: (pairs: Array<{ left: string; right: string; leftImage?: string; rightImage?: string }>) => void;
+}> = ({ pairs, onChange }) => {
+  const addPair = () => {
+    onChange([...pairs, { left: '', right: '', leftImage: '', rightImage: '' }]);
+  };
+
+  const updatePair = (index: number, field: string, value: string) => {
+    const newPairs = [...pairs];
+    newPairs[index] = { ...newPairs[index], [field]: value };
+    onChange(newPairs);
+  };
+
+  const removePair = (index: number) => {
+    onChange(pairs.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="match-pairs-editor">
+      <div className="pairs-header">
+        <span>Left Side</span>
+        <span className="link-icon">🔗</span>
+        <span>Right Side</span>
+      </div>
+      {pairs.map((pair, index) => (
+        <div key={index} className="pair-row">
+          <div className="pair-side left">
+            <input
+              type="text"
+              value={pair.left}
+              onChange={(e) => updatePair(index, 'left', e.target.value)}
+              placeholder="Left item"
+            />
+            <ImageUploader
+              value={pair.leftImage}
+              onChange={(img) => updatePair(index, 'leftImage', img)}
+              size="small"
+            />
+          </div>
+          <div className="pair-connector">↔️</div>
+          <div className="pair-side right">
+            <input
+              type="text"
+              value={pair.right}
+              onChange={(e) => updatePair(index, 'right', e.target.value)}
+              placeholder="Right item"
+            />
+            <ImageUploader
+              value={pair.rightImage}
+              onChange={(img) => updatePair(index, 'rightImage', img)}
+              size="small"
+            />
+          </div>
+          <button type="button" className="remove-pair-btn" onClick={() => removePair(index)}>
+            🗑️
+          </button>
+        </div>
+      ))}
+      <button type="button" className="add-pair-btn" onClick={addPair}>
+        ➕ Add Pair
+      </button>
+    </div>
+  );
+};
+
+// Word bank editor for sentence builder
+const WordBankEditor: React.FC<{
+  words: string[];
+  correctOrder: string[];
+  onChange: (words: string[], correctOrder: string[]) => void;
+}> = ({ words, correctOrder, onChange }) => {
+  const [newWord, setNewWord] = useState('');
+
+  const addWord = () => {
+    if (newWord.trim()) {
+      onChange([...words, newWord.trim()], [...correctOrder, newWord.trim()]);
+      setNewWord('');
+    }
+  };
+
+  const removeWord = (index: number) => {
+    const wordToRemove = words[index];
+    onChange(
+      words.filter((_, i) => i !== index),
+      correctOrder.filter((w) => w !== wordToRemove)
+    );
+  };
+
+  const moveWord = (fromIndex: number, toIndex: number) => {
+    const newCorrectOrder = [...correctOrder];
+    const [moved] = newCorrectOrder.splice(fromIndex, 1);
+    newCorrectOrder.splice(toIndex, 0, moved);
+    onChange(words, newCorrectOrder);
+  };
+
+  return (
+    <div className="word-bank-editor">
+      <div className="word-input-row">
+        <input
+          type="text"
+          value={newWord}
+          onChange={(e) => setNewWord(e.target.value)}
+          placeholder="Add a word..."
+          onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addWord())}
+        />
+        <button type="button" onClick={addWord} className="add-word-btn">
+          ➕ Add
+        </button>
+      </div>
+      
+      <div className="words-section">
+        <h4>📦 Word Bank (drag to remove)</h4>
+        <div className="word-chips">
+          {words.map((word, index) => (
+            <div key={index} className="word-chip">
+              {word}
+              <button type="button" onClick={() => removeWord(index)}>×</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="correct-order-section">
+        <h4>✅ Correct Order (drag to reorder)</h4>
+        <div className="correct-order-chips">
+          {correctOrder.map((word, index) => (
+            <div key={index} className="order-chip">
+              <span className="order-number">{index + 1}</span>
+              {word}
+              <div className="order-controls">
+                {index > 0 && (
+                  <button type="button" onClick={() => moveWord(index, index - 1)}>←</button>
+                )}
+                {index < correctOrder.length - 1 && (
+                  <button type="button" onClick={() => moveWord(index, index + 1)}>→</button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Conversation editor
+const ConversationEditor: React.FC<{
+  dialogue: Array<{ speaker: string; text: string; translation?: string }>;
+  onChange: (dialogue: Array<{ speaker: string; text: string; translation?: string }>) => void;
+}> = ({ dialogue, onChange }) => {
+  const addLine = () => {
+    onChange([...dialogue, { speaker: 'A', text: '', translation: '' }]);
+  };
+
+  const updateLine = (index: number, field: string, value: string) => {
+    const newDialogue = [...dialogue];
+    newDialogue[index] = { ...newDialogue[index], [field]: value };
+    onChange(newDialogue);
+  };
+
+  const removeLine = (index: number) => {
+    onChange(dialogue.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="conversation-editor">
+      {dialogue.map((line, index) => (
+        <div key={index} className={`dialogue-line speaker-${line.speaker.toLowerCase()}`}>
+          <select
+            value={line.speaker}
+            onChange={(e) => updateLine(index, 'speaker', e.target.value)}
+            className="speaker-select"
+          >
+            <option value="A">👤 Person A</option>
+            <option value="B">👥 Person B</option>
+          </select>
+          <div className="dialogue-content">
+            <input
+              type="text"
+              value={line.text}
+              onChange={(e) => updateLine(index, 'text', e.target.value)}
+              placeholder="Dialogue text..."
+              className="dialogue-text"
+            />
+            <input
+              type="text"
+              value={line.translation || ''}
+              onChange={(e) => updateLine(index, 'translation', e.target.value)}
+              placeholder="Translation (optional)"
+              className="dialogue-translation"
+            />
+          </div>
+          <button type="button" className="remove-line-btn" onClick={() => removeLine(index)}>
+            🗑️
+          </button>
+        </div>
+      ))}
+      <button type="button" className="add-line-btn" onClick={addLine}>
+        💬 Add Dialogue Line
+      </button>
+    </div>
+  );
+};
+
+interface Exercise {
+  type: string;
+  question: string;
+  questionImage?: string;
+  options?: Array<{ text: string; image?: string }>;
+  correctAnswer?: string | number;
+  pairs?: Array<{ left: string; right: string; leftImage?: string; rightImage?: string }>;
+  words?: string[];
+  correctOrder?: string[];
+  sentence?: string;
+  blanks?: Array<{ answer: string; hint?: string }>;
+  dialogue?: Array<{ speaker: string; text: string; translation?: string }>;
+  explanation?: string;
+  hint?: string;
+}
+
+interface Lesson {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  exercises: Exercise[];
+}
+
+const LessonCreator: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const [step, setStep] = useState<'select-type' | 'create-exercise' | 'preview' | 'lesson-details'>('lesson-details');
+  const [lesson, setLesson] = useState<Lesson>({
+    id: `custom_${Date.now()}`,
+    title: '',
+    description: '',
+    icon: '📚',
+    exercises: []
+  });
+  const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  // Lesson icons
+  const lessonIcons = ['📚', '🎯', '🌟', '🔥', '💡', '🎨', '🎮', '🏆', '💎', '🚀', '🌈', '🎵', '📖', '✨', '🌸'];
+
+  // Initialize exercise based on type
+  const initializeExercise = (type: string): Exercise => {
+    const baseExercise: Exercise = {
+      type,
+      question: '',
+      hint: ''
     };
 
-    const saveLesson = () => {
-        if (!lessonTitle || exercises.length === 0) {
-            alert('Please add a title and at least one exercise!');
-            return;
-        }
-
-        const lesson = {
-            id: `custom-${Date.now()}`,
-            title: lessonTitle,
-            exercises: exercises
+    switch (type) {
+      case 'multiple-choice':
+      case 'image-selection':
+        return {
+          ...baseExercise,
+          options: [
+            { text: '', image: '' },
+            { text: '', image: '' },
+            { text: '', image: '' },
+            { text: '', image: '' }
+          ],
+          correctAnswer: 0
         };
+      case 'match-pairs':
+        return {
+          ...baseExercise,
+          pairs: [
+            { left: '', right: '', leftImage: '', rightImage: '' },
+            { left: '', right: '', leftImage: '', rightImage: '' },
+            { left: '', right: '', leftImage: '', rightImage: '' }
+          ]
+        };
+      case 'sentence-builder':
+        return {
+          ...baseExercise,
+          words: [],
+          correctOrder: []
+        };
+      case 'fill-blank':
+        return {
+          ...baseExercise,
+          sentence: 'The ___ is ___.',
+          blanks: [
+            { answer: '', hint: '' },
+            { answer: '', hint: '' }
+          ]
+        };
+      case 'conversation':
+        return {
+          ...baseExercise,
+          dialogue: [
+            { speaker: 'A', text: '', translation: '' },
+            { speaker: 'B', text: '', translation: '' }
+          ]
+        };
+      case 'vocabulary-grid':
+        return {
+          ...baseExercise,
+          options: [
+            { text: '', image: '' },
+            { text: '', image: '' },
+            { text: '', image: '' },
+            { text: '', image: '' }
+          ]
+        };
+      case 'listening':
+        return {
+          ...baseExercise,
+          options: [
+            { text: '', image: '' },
+            { text: '', image: '' },
+            { text: '', image: '' },
+            { text: '', image: '' }
+          ],
+          correctAnswer: 0
+        };
+      default:
+        return baseExercise;
+    }
+  };
 
-        const savedLessons = JSON.parse(localStorage.getItem('customLessons') || '[]');
-        savedLessons.push(lesson);
-        localStorage.setItem('customLessons', JSON.stringify(savedLessons));
+  // Handle type selection
+  const handleSelectType = (typeId: string) => {
+    setSelectedType(typeId);
+    setCurrentExercise(initializeExercise(typeId));
+    setStep('create-exercise');
+  };
 
-        alert('✅ Lesson saved!');
-        navigate('/learn');
-    };
+  // Add exercise to lesson
+  const handleAddExercise = () => {
+    if (currentExercise) {
+      setLesson(prev => ({
+        ...prev,
+        exercises: [...prev.exercises, currentExercise]
+      }));
+      setCurrentExercise(null);
+      setSelectedType(null);
+      setStep('select-type');
+    }
+  };
+
+  // Remove exercise from lesson
+  const handleRemoveExercise = (index: number) => {
+    setLesson(prev => ({
+      ...prev,
+      exercises: prev.exercises.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Edit existing exercise
+  const handleEditExercise = (index: number) => {
+    const exercise = lesson.exercises[index];
+    setCurrentExercise({ ...exercise });
+    setSelectedType(exercise.type);
+    setLesson(prev => ({
+      ...prev,
+      exercises: prev.exercises.filter((_, i) => i !== index)
+    }));
+    setStep('create-exercise');
+  };
+
+  // Save lesson
+  const handleSaveLesson = () => {
+    if (!lesson.title.trim()) {
+      alert('Please enter a lesson title');
+      return;
+    }
+    if (lesson.exercises.length === 0) {
+      alert('Please add at least one exercise');
+      return;
+    }
+
+    // Save to localStorage
+    const customLessons = JSON.parse(localStorage.getItem('kurdlingo_custom_lessons') || '[]');
+    customLessons.push(lesson);
+    localStorage.setItem('kurdlingo_custom_lessons', JSON.stringify(customLessons));
+
+    alert('🎉 Lesson saved successfully!');
+    navigate('/learn');
+  };
+
+  // AI Generation
+  const handleAIGenerate = async () => {
+    const topic = prompt('Enter a topic for AI to generate exercises (e.g., "greetings", "numbers 1-10", "colors"):');
+    if (!topic) return;
+
+    setIsGenerating(true);
+    
+    try {
+      const apiKey = localStorage.getItem('gemini_api_key');
+      if (!apiKey) {
+        alert('Please set your Gemini API key in Admin settings first');
+        setIsGenerating(false);
+        return;
+      }
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Generate 5 language learning exercises about "${topic}" for learning Kurdish (Sorani dialect). 
+                Return ONLY valid JSON array with this structure:
+                [
+                  {
+                    "type": "multiple-choice",
+                    "question": "What is 'hello' in Kurdish?",
+                    "options": [{"text": "Silav"}, {"text": "Xwa hafiz"}, {"text": "Supas"}, {"text": "Baş"}],
+                    "correctAnswer": 0,
+                    "hint": "It's a common greeting"
+                  },
+                  {
+                    "type": "fill-blank",
+                    "sentence": "___ is how you say goodbye",
+                    "blanks": [{"answer": "Xwa hafiz", "hint": "Farewell"}]
+                  }
+                ]
+                Mix different types: multiple-choice, fill-blank, match-pairs, sentence-builder.
+                Make it educational and fun!`
+              }]
+            }]
+          })
+        }
+      );
+
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      // Extract JSON from response
+      const jsonMatch = text.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        const exercises = JSON.parse(jsonMatch[0]);
+        setLesson(prev => ({
+          ...prev,
+          exercises: [...prev.exercises, ...exercises]
+        }));
+        alert(`✨ Generated ${exercises.length} exercises!`);
+      } else {
+        throw new Error('Could not parse AI response');
+      }
+    } catch (error) {
+      console.error('AI Generation error:', error);
+      alert('Failed to generate exercises. Please try again.');
+    }
+    
+    setIsGenerating(false);
+  };
+
+  // Render exercise form based on type
+  const renderExerciseForm = () => {
+    if (!currentExercise || !selectedType) return null;
+
+    const typeConfig = gameTypes.find(t => t.id === selectedType);
 
     return (
-        <div className="lesson-creator">
-            <header className="creator-header">
-                <h1>🎨 Lesson Creator</h1>
-                <Button variant="outline" onClick={() => navigate('/learn')}>
-                    Back to Learn
-                </Button>
-            </header>
-
-            <div className="creator-container">
-                <section className="creator-section">
-                    <h2>Lesson Information</h2>
-                    <input
-                        type="text"
-                        className="input-field"
-                        placeholder="Lesson Title (e.g., 'Colors in Kurdish')"
-                        value={lessonTitle}
-                        onChange={(e) => setLessonTitle(e.target.value)}
-                    />
-                </section>
-
-                <section className="creator-section ai-section">
-                    <h2><Sparkles size={20} /> AI Exercise Generator</h2>
-
-                    <div className="form-group">
-                        <label style={{ color: 'white' }}>AI Model</label>
-                        <select
-                            className="input-field"
-                            value={selectedModel}
-                            onChange={(e) => setSelectedModel(e.target.value)}
-                        >
-                            <option value="gemini-2.5-pro">Gemini 2.5 Pro (Recommended)</option>
-                            <option value="gemini-3-pro-preview">Gemini 3 Pro Preview (Experimental)</option>
-                        </select>
-                    </div>
-
-                    <div className="ai-input-group">
-                        <input
-                            type="text"
-                            className="input-field"
-                            placeholder="Topic (e.g., 'Kurdish colors', 'Family members')"
-                            value={aiTopic}
-                            onChange={(e) => setAiTopic(e.target.value)}
-                        />
-                        <Button
-                            variant="primary"
-                            onClick={generateWithAI}
-                            disabled={aiLoading}
-                        >
-                            <Sparkles size={18} style={{ marginRight: '8px' }} />
-                            {aiLoading ? 'Generating...' : 'Generate with AI'}
-                        </Button>
-                    </div>
-                    <p className="ai-hint">
-                        💡 {selectedModel === 'gemini-3-pro-preview'
-                            ? 'Gemini 3 Pro Preview - Most intelligent, experimental'
-                            : 'Gemini 2.5 Pro - Stable, production-ready'}
-                    </p>
-                </section>
-
-                <section className="creator-section">
-                    <h2>Manual Exercise Creator</h2>
-
-                    <div className="form-group">
-                        <label>Exercise Type</label>
-                        <select
-                            className="input-field"
-                            value={currentExercise.type}
-                            onChange={(e) => setCurrentExercise({ ...currentExercise, type: e.target.value })}
-                        >
-                            {exerciseTypes.map(type => (
-                                <option key={type.value} value={type.value}>{type.label}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Question</label>
-                        <input
-                            type="text"
-                            className="input-field"
-                            placeholder="Enter your question"
-                            value={currentExercise.question}
-                            onChange={(e) => setCurrentExercise({ ...currentExercise, question: e.target.value })}
-                        />
-                    </div>
-
-                    {currentExercise.type === 'multiple-choice' && (
-                        <div className="form-group">
-                            <label>Options</label>
-                            {currentExercise.options.map((option, index) => (
-                                <div key={index} className="option-row">
-                                    <input
-                                        type="text"
-                                        className="input-field"
-                                        placeholder={`Option ${index + 1}`}
-                                        value={option.text}
-                                        onChange={(e) => updateOption(index, 'text', e.target.value)}
-                                    />
-                                    <label className="checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={option.correct}
-                                            onChange={(e) => updateOption(index, 'correct', e.target.checked)}
-                                        />
-                                        Correct
-                                    </label>
-                                    <button className="icon-btn" onClick={() => removeOption(index)}>
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
-                            ))}
-                            <Button variant="outline" size="sm" onClick={addOption}>
-                                <Plus size={18} /> Add Option
-                            </Button>
-                        </div>
-                    )}
-
-                    {currentExercise.type === 'match-pairs' && (
-                        <div className="form-group">
-                            <label>Pairs (Kurdish - English)</label>
-                            {currentExercise.pairs.map((pair, index) => (
-                                <div key={index} className="pair-row">
-                                    <input
-                                        type="text"
-                                        className="input-field"
-                                        placeholder="Kurdish"
-                                        value={pair.kurdish}
-                                        onChange={(e) => updatePair(index, 'kurdish', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        className="input-field"
-                                        placeholder="English"
-                                        value={pair.english}
-                                        onChange={(e) => updatePair(index, 'english', e.target.value)}
-                                    />
-                                    <button className="icon-btn" onClick={() => removePair(index)}>
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
-                            ))}
-                            <Button variant="outline" size="sm" onClick={addPair}>
-                                <Plus size={18} /> Add Pair
-                            </Button>
-                        </div>
-                    )}
-
-                    {currentExercise.type === 'sentence-builder' && (
-                        <div className="form-group">
-                            <label>Correct Sentence (comma-separated)</label>
-                            <input
-                                type="text"
-                                className="input-field"
-                                placeholder="e.g., من, کوڕم"
-                                value={currentExercise.correctSentence.join(', ')}
-                                onChange={(e) => setCurrentExercise({
-                                    ...currentExercise,
-                                    correctSentence: e.target.value.split(',').map(w => w.trim())
-                                })}
-                            />
-                            <label>Available Options (comma-separated)</label>
-                            <input
-                                type="text"
-                                className="input-field"
-                                placeholder="e.g., من, کوڕم, کچم, تۆ"
-                                value={currentExercise.options?.join?.(', ') || ''}
-                                onChange={(e) => setCurrentExercise({
-                                    ...currentExercise,
-                                    options: e.target.value.split(',').map(w => w.trim())
-                                })}
-                            />
-                        </div>
-                    )}
-
-                    {currentExercise.type === 'fill-blank' && (
-                        <div className="form-group">
-                            <label>Sentence Parts (use ___ for blank)</label>
-                            <input
-                                type="text"
-                                className="input-field"
-                                placeholder="e.g., من, ___, دەخۆم"
-                                value={currentExercise.sentenceParts.join(', ')}
-                                onChange={(e) => setCurrentExercise({
-                                    ...currentExercise,
-                                    sentenceParts: e.target.value.split(',').map(w => w.trim())
-                                })}
-                            />
-                            <label>Correct Answer</label>
-                            <input
-                                type="text"
-                                className="input-field"
-                                placeholder="Correct word"
-                                value={currentExercise.correctOption}
-                                onChange={(e) => setCurrentExercise({ ...currentExercise, correctOption: e.target.value })}
-                            />
-                            <label>Options (comma-separated)</label>
-                            <input
-                                type="text"
-                                className="input-field"
-                                placeholder="e.g., نان, ئاو, چا"
-                                value={currentExercise.options?.join?.(', ') || ''}
-                                onChange={(e) => setCurrentExercise({
-                                    ...currentExercise,
-                                    options: e.target.value.split(',').map(w => w.trim())
-                                })}
-                            />
-                        </div>
-                    )}
-
-                    <Button variant="secondary" onClick={addExercise}>
-                        <Plus size={18} /> Add Exercise
-                    </Button>
-                </section>
-
-                {exercises.length > 0 && (
-                    <section className="creator-section">
-                        <h2>Exercises ({exercises.length})</h2>
-                        <div className="exercise-list">
-                            {exercises.map((ex, index) => (
-                                <div key={ex.id} className="exercise-card">
-                                    <div className="exercise-card-header">
-                                        <span className="exercise-number">#{index + 1}</span>
-                                        <span className="exercise-type">{ex.type}</span>
-                                        <button className="icon-btn" onClick={() => removeExercise(ex.id)}>
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
-                                    <p className="exercise-question">{ex.question}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                <div className="creator-actions">
-                    <Button variant="primary" size="lg" onClick={saveLesson}>
-                        <Save size={20} style={{ marginRight: '8px' }} />
-                        Save Lesson
-                    </Button>
-                </div>
-            </div>
+      <div className="exercise-form">
+        <div className="exercise-form-header">
+          <span className="type-icon">{typeConfig?.icon}</span>
+          <h3>{typeConfig?.name}</h3>
         </div>
+
+        {/* Question */}
+        <div className="form-group">
+          <label>Question / Prompt</label>
+          <textarea
+            value={currentExercise.question}
+            onChange={(e) => setCurrentExercise(prev => prev ? { ...prev, question: e.target.value } : null)}
+            placeholder="Enter your question or prompt..."
+            rows={2}
+          />
+        </div>
+
+        {/* Question Image */}
+        <div className="form-group">
+          <label>Question Image (Optional)</label>
+          <ImageUploader
+            value={currentExercise.questionImage}
+            onChange={(img) => setCurrentExercise(prev => prev ? { ...prev, questionImage: img } : null)}
+            size="medium"
+          />
+        </div>
+
+        {/* Type-specific fields */}
+        {(selectedType === 'multiple-choice' || selectedType === 'image-selection' || selectedType === 'listening') && (
+          <div className="form-group">
+            <label>Answer Options</label>
+            <div className="options-list">
+              {currentExercise.options?.map((option, index) => (
+                <OptionEditor
+                  key={index}
+                  option={option}
+                  index={index}
+                  isCorrect={currentExercise.correctAnswer === index}
+                  onTextChange={(text) => {
+                    const newOptions = [...(currentExercise.options || [])];
+                    newOptions[index] = { ...newOptions[index], text };
+                    setCurrentExercise(prev => prev ? { ...prev, options: newOptions } : null);
+                  }}
+                  onImageChange={(image) => {
+                    const newOptions = [...(currentExercise.options || [])];
+                    newOptions[index] = { ...newOptions[index], image };
+                    setCurrentExercise(prev => prev ? { ...prev, options: newOptions } : null);
+                  }}
+                  onSetCorrect={() => setCurrentExercise(prev => prev ? { ...prev, correctAnswer: index } : null)}
+                  onRemove={() => {
+                    const newOptions = (currentExercise.options || []).filter((_, i) => i !== index);
+                    setCurrentExercise(prev => prev ? { 
+                      ...prev, 
+                      options: newOptions,
+                      correctAnswer: typeof prev.correctAnswer === 'number' && prev.correctAnswer >= index 
+                        ? Math.max(0, (prev.correctAnswer as number) - 1) 
+                        : prev.correctAnswer
+                    } : null);
+                  }}
+                  showImage={selectedType !== 'listening'}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              className="add-option-btn"
+              onClick={() => {
+                setCurrentExercise(prev => prev ? {
+                  ...prev,
+                  options: [...(prev.options || []), { text: '', image: '' }]
+                } : null);
+              }}
+            >
+              ➕ Add Option
+            </button>
+          </div>
+        )}
+
+        {selectedType === 'match-pairs' && (
+          <div className="form-group">
+            <label>Match Pairs</label>
+            <MatchPairEditor
+              pairs={currentExercise.pairs || []}
+              onChange={(pairs) => setCurrentExercise(prev => prev ? { ...prev, pairs } : null)}
+            />
+          </div>
+        )}
+
+        {selectedType === 'sentence-builder' && (
+          <div className="form-group">
+            <label>Words & Correct Order</label>
+            <WordBankEditor
+              words={currentExercise.words || []}
+              correctOrder={currentExercise.correctOrder || []}
+              onChange={(words, correctOrder) => setCurrentExercise(prev => prev ? { ...prev, words, correctOrder } : null)}
+            />
+          </div>
+        )}
+
+        {selectedType === 'fill-blank' && (
+          <div className="form-group">
+            <label>Sentence with Blanks (use ___ for blanks)</label>
+            <input
+              type="text"
+              value={currentExercise.sentence}
+              onChange={(e) => setCurrentExercise(prev => prev ? { ...prev, sentence: e.target.value } : null)}
+              placeholder="The ___ is ___."
+              className="sentence-input"
+            />
+            <div className="blanks-list">
+              {currentExercise.blanks?.map((blank, index) => (
+                <div key={index} className="blank-item">
+                  <span className="blank-number">Blank {index + 1}</span>
+                  <input
+                    type="text"
+                    value={blank.answer}
+                    onChange={(e) => {
+                      const newBlanks = [...(currentExercise.blanks || [])];
+                      newBlanks[index] = { ...newBlanks[index], answer: e.target.value };
+                      setCurrentExercise(prev => prev ? { ...prev, blanks: newBlanks } : null);
+                    }}
+                    placeholder="Correct answer"
+                  />
+                  <input
+                    type="text"
+                    value={blank.hint || ''}
+                    onChange={(e) => {
+                      const newBlanks = [...(currentExercise.blanks || [])];
+                      newBlanks[index] = { ...newBlanks[index], hint: e.target.value };
+                      setCurrentExercise(prev => prev ? { ...prev, blanks: newBlanks } : null);
+                    }}
+                    placeholder="Hint (optional)"
+                  />
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="add-blank-btn"
+              onClick={() => {
+                setCurrentExercise(prev => prev ? {
+                  ...prev,
+                  blanks: [...(prev.blanks || []), { answer: '', hint: '' }]
+                } : null);
+              }}
+            >
+              ➕ Add Blank
+            </button>
+          </div>
+        )}
+
+        {selectedType === 'conversation' && (
+          <div className="form-group">
+            <label>Dialogue</label>
+            <ConversationEditor
+              dialogue={currentExercise.dialogue || []}
+              onChange={(dialogue) => setCurrentExercise(prev => prev ? { ...prev, dialogue } : null)}
+            />
+          </div>
+        )}
+
+        {selectedType === 'vocabulary-grid' && (
+          <div className="form-group">
+            <label>Vocabulary Items (word + image)</label>
+            <div className="vocabulary-grid">
+              {currentExercise.options?.map((option, index) => (
+                <div key={index} className="vocab-item">
+                  <ImageUploader
+                    value={option.image}
+                    onChange={(image) => {
+                      const newOptions = [...(currentExercise.options || [])];
+                      newOptions[index] = { ...newOptions[index], image };
+                      setCurrentExercise(prev => prev ? { ...prev, options: newOptions } : null);
+                    }}
+                    size="medium"
+                  />
+                  <input
+                    type="text"
+                    value={option.text}
+                    onChange={(e) => {
+                      const newOptions = [...(currentExercise.options || [])];
+                      newOptions[index] = { ...newOptions[index], text: e.target.value };
+                      setCurrentExercise(prev => prev ? { ...prev, options: newOptions } : null);
+                    }}
+                    placeholder="Word / Phrase"
+                    className="vocab-text-input"
+                  />
+                  <button
+                    type="button"
+                    className="remove-vocab-btn"
+                    onClick={() => {
+                      const newOptions = (currentExercise.options || []).filter((_, i) => i !== index);
+                      setCurrentExercise(prev => prev ? { ...prev, options: newOptions } : null);
+                    }}
+                  >
+                    🗑️
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="add-vocab-btn"
+              onClick={() => {
+                setCurrentExercise(prev => prev ? {
+                  ...prev,
+                  options: [...(prev.options || []), { text: '', image: '' }]
+                } : null);
+              }}
+            >
+              ➕ Add Vocabulary Item
+            </button>
+          </div>
+        )}
+
+        {/* Hint */}
+        <div className="form-group">
+          <label>Hint (Optional)</label>
+          <input
+            type="text"
+            value={currentExercise.hint || ''}
+            onChange={(e) => setCurrentExercise(prev => prev ? { ...prev, hint: e.target.value } : null)}
+            placeholder="A helpful hint for learners..."
+          />
+        </div>
+
+        {/* Explanation */}
+        <div className="form-group">
+          <label>Explanation (Optional)</label>
+          <textarea
+            value={currentExercise.explanation || ''}
+            onChange={(e) => setCurrentExercise(prev => prev ? { ...prev, explanation: e.target.value } : null)}
+            placeholder="Explain the answer or provide additional context..."
+            rows={2}
+          />
+        </div>
+
+        <div className="exercise-form-actions">
+          <button type="button" className="cancel-btn" onClick={() => {
+            setCurrentExercise(null);
+            setSelectedType(null);
+            setStep('select-type');
+          }}>
+            Cancel
+          </button>
+          <button type="button" className="add-exercise-btn" onClick={handleAddExercise}>
+            ✅ Add Exercise
+          </button>
+        </div>
+      </div>
     );
+  };
+
+  return (
+    <div className="lesson-creator">
+      <div className="creator-header">
+        <button className="back-btn" onClick={() => navigate('/learn')}>
+          ← Back
+        </button>
+        <h1>🎮 Game Creator</h1>
+        <div className="header-actions">
+          <button 
+            className="ai-generate-btn" 
+            onClick={handleAIGenerate}
+            disabled={isGenerating}
+          >
+            {isGenerating ? '🔄 Generating...' : '✨ AI Generate'}
+          </button>
+        </div>
+      </div>
+
+      <div className="creator-content">
+        {/* Lesson Details Section */}
+        {step === 'lesson-details' && (
+          <div className="lesson-details-section">
+            <h2>📝 Lesson Details</h2>
+            
+            <div className="form-group">
+              <label>Lesson Title</label>
+              <input
+                type="text"
+                value={lesson.title}
+                onChange={(e) => setLesson(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="e.g., Basic Greetings"
+                className="lesson-title-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                value={lesson.description}
+                onChange={(e) => setLesson(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="What will learners achieve?"
+                rows={2}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Lesson Icon</label>
+              <div className="icon-picker">
+                {lessonIcons.map((icon) => (
+                  <button
+                    key={icon}
+                    type="button"
+                    className={`icon-option ${lesson.icon === icon ? 'selected' : ''}`}
+                    onClick={() => setLesson(prev => ({ ...prev, icon }))}
+                  >
+                    {icon}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button 
+              type="button" 
+              className="continue-btn"
+              onClick={() => setStep('select-type')}
+            >
+              Continue to Add Exercises →
+            </button>
+          </div>
+        )}
+
+        {/* Game Type Selection */}
+        {step === 'select-type' && (
+          <div className="type-selection">
+            <h2>🎯 Choose Exercise Type</h2>
+            <div className="game-types-grid">
+              {gameTypes.map((type) => (
+                <button
+                  key={type.id}
+                  className="game-type-card"
+                  style={{ '--type-color': type.color } as React.CSSProperties}
+                  onClick={() => handleSelectType(type.id)}
+                >
+                  <div className="type-icon">{type.icon}</div>
+                  <div className="type-name">{type.name}</div>
+                  <div className="type-description">{type.description}</div>
+                  <div className="type-preview">{type.preview}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Exercise Creation Form */}
+        {step === 'create-exercise' && renderExerciseForm()}
+
+        {/* Exercise List */}
+        {(step === 'select-type' || step === 'lesson-details') && lesson.exercises.length > 0 && (
+          <div className="exercises-list">
+            <h3>📋 Exercises ({lesson.exercises.length})</h3>
+            <div className="exercise-cards">
+              {lesson.exercises.map((exercise, index) => {
+                const typeConfig = gameTypes.find(t => t.id === exercise.type);
+                return (
+                  <div key={index} className="exercise-card">
+                    <div className="exercise-card-header">
+                      <span className="exercise-type-badge" style={{ background: typeConfig?.color }}>
+                        {typeConfig?.icon} {typeConfig?.name}
+                      </span>
+                      <div className="exercise-card-actions">
+                        <button type="button" onClick={() => handleEditExercise(index)}>✏️</button>
+                        <button type="button" onClick={() => handleRemoveExercise(index)}>🗑️</button>
+                      </div>
+                    </div>
+                    <p className="exercise-question">{exercise.question || '(No question)'}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Save Button */}
+        {step === 'select-type' && lesson.exercises.length > 0 && (
+          <div className="save-section">
+            <button type="button" className="save-lesson-btn" onClick={handleSaveLesson}>
+              💾 Save Lesson ({lesson.exercises.length} exercises)
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default LessonCreator;

@@ -15,6 +15,15 @@
     line-height: 1.8;
 }
 
+:root[dir="rtl"] {
+    --font-family-base: var(--font-kurdish), 'Vazirmatn', sans-serif;
+    --font-family-display: var(--font-kurdish), 'Vazirmatn', sans-serif;
+}
+
+body[dir="rtl"] {
+    font-family: var(--font-family-base);
+}
+
 /* For RTL layout when language is Kurdish */
 [dir="rtl"] .exercise-question,
 [dir="rtl"] .option-text,

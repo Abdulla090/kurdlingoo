@@ -2,7 +2,7 @@
 
 export interface Exercise {
     id?: number;
-    type: 'multiple-choice' | 'match-pairs' | 'sentence-builder' | 'fill-blank' | 'typing' | 'listening' | 'conversation' | 'image-selection' | 'vocabulary-grid' | 'cultural-note' | 'cultural-timeline' | 'image-match' | 'story-completion' | 'career-path' | 'route-planner' | 'emergency-phrases' | 'app-vocabulary' | 'tech-troubleshooting';
+    type: 'multiple-choice' | 'match-pairs' | 'sentence-builder' | 'fill-blank' | 'typing' | 'listening' | 'conversation' | 'image-selection' | 'vocabulary-grid' | 'cultural-note' | 'cultural-timeline' | 'image-match' | 'story-completion' | 'career-path' | 'route-planner' | 'emergency-phrases' | 'app-vocabulary' | 'tech-troubleshooting' | 'roleplay-chat';
     question: string;
     options?: ExerciseOption[] | string[];
     pairs?: MatchPair[];
@@ -30,6 +30,11 @@ export interface Exercise {
     phrases?: any[];
     apps?: any[];
     problems?: any[];
+    // Roleplay chat properties
+    scenario?: string;
+    chatMessages?: ChatMessage[];
+    acceptableResponses?: string[];
+    keywordsRequired?: string[];
 }
 
 export interface ExerciseOption {
@@ -49,6 +54,13 @@ export interface DialogueLine {
     speaker: string;
     text: string;
     options?: string[];
+}
+
+export interface ChatMessage {
+    sender: 'ai' | 'user';
+    text: string;
+    avatar?: string;
+    name?: string;
 }
 
 export interface ImageOption {

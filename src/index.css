@@ -83,6 +83,11 @@
   /* 48px */
 }
 
+:root[dir="rtl"] {
+  --font-sans: var(--font-kurdish, 'Vazirmatn', sans-serif);
+  --font-display: var(--font-kurdish, 'Vazirmatn', sans-serif);
+}
+
 /* --- Global Reset & Base Styles --- */
 *,
 *::before,

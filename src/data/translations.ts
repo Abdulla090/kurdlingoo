@@ -75,6 +75,9 @@ export const translations = {
         outOfHearts: "Out of hearts!",
         refillHearts: "Refill Hearts (Practice)",
         typeAnswer: "Type your answer here...",
+        lessonLocked: "Lesson Locked",
+        completePreviousLesson: "Complete the previous lesson to unlock this one.",
+        lessonsCompleted: "Lessons",
 
         // Quests
         completeLesson: "Complete 1 Lesson",
@@ -92,6 +95,13 @@ export const translations = {
         // Font Settings
         kurdishFont: "Kurdish Font",
         selectKurdishFont: "Choose a font style for Kurdish text throughout the app.",
+        
+        // Roleplay Chat
+        typeYourResponse: "Type your response in Kurdish...",
+        greatResponse: "Great response! 🎉",
+        tryAgainHint: "Not quite right. Check the correct answer.",
+        correctAnswer: "Correct answer",
+        hints: "Hints",
     },
     ckb: { // Central Kurdish (Sorani)
         // Navigation
@@ -170,6 +180,9 @@ export const translations = {
         outOfHearts: "دڵەکانت تەواو بوون!",
         refillHearts: "دڵەکان پڕبکەرەوە (ڕاهێنان)",
         typeAnswer: "وەڵامەکەت لێرە بنووسە...",
+        lessonLocked: "وانە داخراوە",
+        completePreviousLesson: "وانەی پێشوو تەواو بکە بۆ کردنەوەی ئەم وانەیە.",
+        lessonsCompleted: "وانە",
 
         // Quests
         completeLesson: "١ وانە تەواو بکە",
@@ -186,5 +199,12 @@ export const translations = {
         // Font Settings
         kurdishFont: "فۆنتی کوردی",
         selectKurdishFont: "شێوازی فۆنت بۆ نووسینی کوردی لە ئەپەکە هەڵبژێرە.",
+        
+        // Roleplay Chat
+        typeYourResponse: "وەڵامەکەت بە کوردی بنووسە...",
+        greatResponse: "وەڵامی نایاب! 🎉",
+        tryAgainHint: "هەڵەیە. وەڵامی ڕاست ببینە.",
+        correctAnswer: "وەڵامی ڕاست",
+        hints: "یارمەتییەکان",
     }
 };

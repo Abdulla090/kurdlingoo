@@ -86,6 +86,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
         // Load saved font from localStorage
         return localStorage.getItem('kurdlingo-kurdish-font') || 'Rabar_039';
     });
+    const isRTL = language === 'ckb';
 
     // Save font preference to localStorage
     useEffect(() => {
@@ -113,14 +114,16 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
         setLanguage(prev => prev === 'en' ? 'ckb' : 'en');
     };
 
-    // Helper to check if current lang is RTL
-    const isRTL = language === 'ckb';
+    useEffect(() => {
+        const dir = isRTL ? 'rtl' : 'ltr';
+        document.documentElement.setAttribute('dir', dir);
+        document.body?.setAttribute('dir', dir);
+        document.documentElement.setAttribute('lang', language);
+    }, [isRTL, language]);
 
     return (
         <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, isRTL, kurdishFont, setKurdishFont }}>
-            <div dir={isRTL ? 'rtl' : 'ltr'}>
-                {children}
-            </div>
+            {children}
         </LanguageContext.Provider>
     );
 };
