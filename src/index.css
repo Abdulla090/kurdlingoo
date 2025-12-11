@@ -1,147 +1,106 @@
 :root {
-  /* --- Brand Colors (Vibrant & Accessible) --- */
-  /* Primary: Action Green */
+  /* ==========================================================================
+     PREMIUM DESIGN SYSTEM - KURDLINGO 2.0
+     ========================================================================== */
+
+  /* --- BRAND PALETTE (Vibrant & Rich) --- */
+
+  /* Primary Green (Success/Action) */
   --color-primary: #58cc02;
-  --color-primary-light: #89e219;
+  --color-primary-light: #58cc02;
+  /* Fallback */
   --color-primary-dark: #46a302;
   --color-primary-shadow: #46a302;
+  --grad-primary: linear-gradient(135deg, #58cc02 0%, #23ac00 100%);
+  /* Richer Gradient */
 
-  /* Secondary: Alert Red */
+  /* Secondary Red (Error/Alert) */
   --color-secondary: #ff4b4b;
-  --color-secondary-light: #ff6b6b;
-  --color-secondary-dark: #d33131;
-  --color-secondary-shadow: #d33131;
+  --color-secondary-light: #ff7878;
+  --color-secondary-dark: #d52222;
+  --color-secondary-shadow: #d52222;
+  --grad-secondary: linear-gradient(135deg, #ff4b4b 0%, #d52222 100%);
 
-  /* Accent: Sky Blue */
+  /* Accent Blue (Info/Neutral) */
   --color-accent: #1cb0f6;
-  --color-accent-light: #4bc7ff;
+  --color-accent-light: #3dd2ff;
   --color-accent-dark: #118cc0;
   --color-accent-shadow: #118cc0;
+  --grad-accent: linear-gradient(135deg, #1cb0f6 0%, #118cc0 100%);
 
-  /* Gold: Achievement */
+  /* Purple (Special/Premium) */
+  --color-purple: #ce82ff;
+  --color-purple-dark: #a562cc;
+  --grad-purple: linear-gradient(135deg, #ce82ff 0%, #a562cc 100%);
+
+  /* Gold (Achievement/XP) */
   --color-gold: #ffc800;
-  --color-gold-light: #ffda47;
-  --color-gold-dark: #e5b400;
-  --color-gold-shadow: #e5b400;
+  --color-gold-light: #ffe050;
+  --color-gold-dark: #cc9900;
+  --color-gold-shadow: #cc9900;
+  --grad-gold: linear-gradient(135deg, #ffc800 0%, #e5a500 100%);
 
-  /* --- Neutral Colors (High Contrast) --- */
+  /* --- NEUTRALS & SURFACES --- */
   --color-background: #ffffff;
-  --color-surface: #f9fafb;
-  /* Cool Gray 50 - Very clean */
-
-  /* Text Colors - OPTIMIZED FOR CLARITY */
-  --color-text: #111827;
-  /* Gray 900 */
-  --color-text-secondary: #374151;
-  /* Gray 700 */
-  --color-text-light: #6b7280;
-  /* Gray 500 */
-
-  /* Borders & Dividers */
-  --color-border: #e5e7eb;
-  /* Gray 200 */
+  --color-surface: #f7f7f7;
+  /* Very light gray for backgrounds */
+  --color-surface-dim: #e5e5e5;
+  /* Locked/Disabled states */
+  --color-border: #e5e5e5;
   --color-border-hover: #d1d5db;
-  /* Gray 300 */
 
-  /* --- Shadows (Layered for Depth) --- */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* --- TYPOGRAPHY --- */
+  --color-text-main: #3c3c3c;
+  --color-text-secondary: #777777;
+  --color-text-light: #afafaf;
+  --color-text-inverse: #ffffff;
 
-  /* Button Shadows (Hard Edge for "Clicky" feel) */
-  --shadow-btn: 0 4px 0;
+  /* --- ELEVATION & SHADOWS (Premium 3D) --- */
+  --shadow-sm: 0 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 0 #e5e5e5;
+  /* "Hard" shadow for buttons */
+  --shadow-lg: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+  /* Soft float shadow */
 
-  /* --- Typography --- */
-  /* Using system font stack for maximum native feel and clarity */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Nunito', var(--font-sans);
-  /* Rounded for headings */
+  --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  /* For cards */
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 
-  /* --- Spacing & Radius --- */
-  --radius-sm: 0.5rem;
-  /* 8px */
-  --radius-md: 0.75rem;
-  /* 12px */
-  --radius-lg: 1rem;
-  /* 16px */
-  --radius-xl: 1.5rem;
-  /* 24px */
-  --radius-full: 9999px;
+  /* --- GLASSMORPHISM --- */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: blur(12px);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 
-  --spacing-xs: 0.25rem;
-  /* 4px */
-  --spacing-sm: 0.5rem;
-  /* 8px */
-  --spacing-md: 1rem;
-  /* 16px */
-  --spacing-lg: 1.5rem;
-  /* 24px */
-  --spacing-xl: 2rem;
-  /* 32px */
-  --spacing-2xl: 3rem;
-  /* 48px */
+  /* --- SPACING & RADIUS --- */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  /* Very rounded for that friendly feel */
+
+  /* --- ANIMATIONS --- */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-:root[dir="rtl"] {
-  --font-sans: var(--font-kurdish, 'Vazirmatn', sans-serif);
-  --font-display: var(--font-kurdish, 'Vazirmatn', sans-serif);
-}
-
-/* --- Global Reset & Base Styles --- */
-*,
-*::before,
-*::after {
+/* Base Reset & Fonts */
+* {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  font-family: var(--font-sans);
+  font-family: 'Vazirmatn', 'Nunito', sans-serif;
+  /* Vazirmatn is great for Kurdish */
   background-color: var(--color-background);
-  color: var(--color-text);
-  line-height: 1.5;
+  color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
-  /* Critical for crisp text on Mac */
-  -moz-osx-font-smoothing: grayscale;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-display);
-  color: var(--color-text);
-  margin-top: 0;
-  font-weight: 800;
-  /* Extra bold for headings */
-  letter-spacing: -0.025em;
-  /* Tighten headings slightly */
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-  /* Slightly bolder than normal for readability */
-}
-
-/* --- Utility Classes --- */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: var(--shadow-lg);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -149,10 +108,46 @@ p {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 10px;
+  background: #e5e5e5;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: #d4d4d4;
+}
+
+/* Utility to Force Hardware Acceleration */
+.hardware-accel {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* New Premium Button Class (Utility) */
+.premium-btn {
+  background: white;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--color-border);
+  /* 3D effect */
+}
+
+.premium-btn:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.premium-btn:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border-hover);
+}
+
+/* Compatibility Mapping for Legacy Components */
+:root {
+  --color-text: var(--color-text-main);
 }

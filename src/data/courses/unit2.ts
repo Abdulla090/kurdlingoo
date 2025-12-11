@@ -2,8 +2,8 @@ import { Unit } from '../../types';
 
 export const unit2: Unit = {
     id: 'unit-2',
-    title: 'Conversations & Daily Life',
-    description: 'Master everyday conversations, family, shopping, and directions',
+    title: 'دووەمین یەکە',
+    description: 'گفتوگۆکان و ژیانی ڕۆژانە',
     guidebook: {
         introduction: "لەم بەشەدا فێردەبیت چۆن باسی کات بکەیت، لەگەڵ خێزانەکەت قسە بکەیت، لە بازاڕ کڕین و فرۆشتن بکەیت، و ڕێنمایی بۆ شوێنەکان وەربگریت.",
         sections: [

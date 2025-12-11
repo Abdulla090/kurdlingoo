@@ -2,8 +2,8 @@ import { Unit } from '../../types';
 
 export const unit3: Unit = {
     id: 'unit-3',
-    title: 'Culture, Work & Travel',
-    description: 'Master advanced topics: culture, profession, and travel',
+    title: 'سێیەمین یەکە',
+    description: 'کەلتوور، کار و گەشت',
     guidebook: {
         introduction: "لەم بەشەدا فێری چەمکە پێشکەوتووەکان دەبیت وەک گەشتکردن، کارکردن و کەلتوور. هەروەها فێردەبیت چۆن باسی داهاتوو بکەیت، داواکاری بە ڕێزەوە پێشکەش بکەیت، و باسی تەکنەلۆژیا بکەیت.",
         sections: [

@@ -14,9 +14,13 @@ const Admin = () => {
     const [units, setUnits] = useState<Unit[]>([]);
     const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-    const [editMode, setEditMode] = useState<string | null>(null); // 'unit', 'lesson', 'exercise'
+    const [editMode, setEditMode] = useState<string | null>(null); // 'unit', 'lesson', 'exercise', 'quick-create'
     const [editingItem, setEditingItem] = useState<any>(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    // Quick Create Game state
+    const [quickCreateUnit, setQuickCreateUnit] = useState<string>('');
+    const [quickCreateLesson, setQuickCreateLesson] = useState<string>('');
 
     useEffect(() => {
         // Load units from localStorage or use defaults
@@ -31,6 +35,12 @@ const Admin = () => {
     const saveUnits = (updatedUnits: Unit[]) => {
         setUnits(updatedUnits);
         localStorage.setItem('kurdlingo-units', JSON.stringify(updatedUnits));
+        console.log('✅ Units saved to localStorage:', updatedUnits.map(u => ({
+            id: u.id,
+            title: u.title,
+            lessonsCount: u.lessons.length,
+            lessons: u.lessons.map(l => ({ id: l.id, title: l.title, exercisesCount: l.exercises.length }))
+        })));
     };
 
     const handleUnitClick = (unit: Unit) => {
@@ -57,8 +67,8 @@ const Admin = () => {
         const maxId = units.length > 0 ? Math.max(...units.map(u => parseInt(u.id.replace('unit-', '')) || 0)) : 0;
         const newUnit: Partial<Unit> = {
             id: `unit-${maxId + 1}`,
-            title: `Unit ${maxId + 1}`,
-            description: 'New Unit Description',
+            title: `یەکەی ${maxId + 1}`,
+            description: 'وەسفی یەکەی نوێ',
             lessons: []
         };
         const updatedUnits = [...units, newUnit as Unit];
@@ -66,6 +76,25 @@ const Admin = () => {
         setSelectedUnit(newUnit as Unit);
         setEditMode('unit');
         setEditingItem(newUnit);
+    };
+
+    // Quick Create Game - Opens a form to create game in any unit/lesson
+    const handleQuickCreateGame = () => {
+        setEditMode('quick-create');
+        setQuickCreateUnit(units[0]?.id || '');
+        setQuickCreateLesson('');
+        const newExercise = {
+            id: Date.now(),
+            type: 'multiple-choice',
+            question: '',
+            options: [
+                { id: 'opt1', text: '', correct: true },
+                { id: 'opt2', text: '', correct: false },
+                { id: 'opt3', text: '', correct: false },
+                { id: 'opt4', text: '', correct: false }
+            ]
+        };
+        setEditingItem(newExercise);
     };
 
     const handleAddLesson = () => {
@@ -218,14 +247,63 @@ const Admin = () => {
         const newExercise = {
             id: maxId + 1,
             type: 'multiple-choice',
-            question: 'New Question',
+            question: '',
             options: [
-                { id: 'opt1', text: 'Option 1', correct: true },
-                { id: 'opt2', text: 'Option 2', correct: false }
+                { id: 'opt1', text: '', correct: true },
+                { id: 'opt2', text: '', correct: false },
+                { id: 'opt3', text: '', correct: false },
+                { id: 'opt4', text: '', correct: false }
             ]
         };
         setEditingItem(newExercise);
         setEditMode('exercise');
+    };
+
+    // Save from Quick Create mode - adds exercise to selected unit/lesson
+    const handleSaveQuickCreate = () => {
+        if (!quickCreateUnit || !quickCreateLesson) {
+            alert('تکایە یەکە و وانەیەک هەڵبژێرە!');
+            return;
+        }
+
+        const updatedUnits = units.map(u => {
+            if (u.id === quickCreateUnit) {
+                return {
+                    ...u,
+                    lessons: u.lessons.map(l => {
+                        if (l.id === quickCreateLesson) {
+                            return {
+                                ...l,
+                                exercises: [...l.exercises, editingItem]
+                            };
+                        }
+                        return l;
+                    })
+                };
+            }
+            return u;
+        });
+
+        saveUnits(updatedUnits);
+
+        // Navigate to the added exercise
+        const updatedUnit = updatedUnits.find(u => u.id === quickCreateUnit);
+        const updatedLesson = updatedUnit?.lessons.find(l => l.id === quickCreateLesson);
+
+        if (updatedUnit && updatedLesson) {
+            setSelectedUnit(updatedUnit);
+            setSelectedLesson(updatedLesson);
+        }
+
+        setEditMode(null);
+        setEditingItem(null);
+        alert('یاری بە سەرکەوتوویی زیادکرا! ✅');
+    };
+
+    // Get lessons for selected unit in quick create
+    const getQuickCreateLessons = () => {
+        const unit = units.find(u => u.id === quickCreateUnit);
+        return unit?.lessons || [];
     };
 
     const handleDeleteExercise = (exerciseId) => {
@@ -341,16 +419,19 @@ const Admin = () => {
     return (
         <div className="admin-container">
             <div className="admin-header">
-                <h1>🎮 KurdLingo Admin Panel</h1>
+                <h1>🎮 پانێلی بەڕێوەبردن</h1>
                 <div className="admin-actions">
+                    <button onClick={handleQuickCreateGame} className="btn-add" style={{ background: '#22c55e' }}>
+                        ➕ یاری نوێ دروست بکە
+                    </button>
                     <button onClick={exportData} className="btn-export">
-                        📥 Export Data
+                        📥 هەناردەکردن
                     </button>
                     <button onClick={resetToDefaults} className="btn-reset">
-                        🔄 Reset to Defaults
+                        🔄 ڕیسێت
                     </button>
                     <button onClick={() => navigate('/')} className="btn-back">
-                        🏠 Back to App
+                        🏠 گەڕانەوە
                     </button>
                 </div>
             </div>
@@ -359,8 +440,8 @@ const Admin = () => {
                 {/* Units Sidebar */}
                 <div className="admin-sidebar">
                     <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                        <h2>Units</h2>
-                        <button onClick={handleAddUnit} className="btn-add-small" title="Add New Unit">➕</button>
+                        <h2>یەکەکان</h2>
+                        <button onClick={handleAddUnit} className="btn-add-small" title="یەکەی نوێ">➕</button>
                     </div>
                     <div className="units-list">
                         {units.map((unit, index) => (
@@ -559,6 +640,136 @@ const Admin = () => {
                         onSave={handleSaveExercise}
                         onCancel={() => setEditMode(null)}
                     />
+                )}
+
+                {/* Quick Create Game Panel */}
+                {editMode === 'quick-create' && (
+                    <div className="admin-panel edit-panel exercise-editor" style={{ width: '100%', maxWidth: '900px' }}>
+                        <h2>➕ یاری نوێ دروست بکە</h2>
+
+                        {/* Unit/Lesson Selection */}
+                        <div style={{ display: 'flex', gap: '20px', marginBottom: '24px', padding: '16px', background: '#f0fdf4', borderRadius: '12px', border: '2px solid #22c55e' }}>
+                            <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                                <label style={{ fontWeight: 700, color: '#15803d' }}>📚 یەکە هەڵبژێرە</label>
+                                <select
+                                    value={quickCreateUnit}
+                                    onChange={(e) => {
+                                        setQuickCreateUnit(e.target.value);
+                                        setQuickCreateLesson(''); // Reset lesson when unit changes
+                                    }}
+                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #22c55e', fontSize: '16px' }}
+                                >
+                                    <option value="">-- یەکە هەڵبژێرە --</option>
+                                    {units.map(u => (
+                                        <option key={u.id} value={u.id}>{u.title}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                                <label style={{ fontWeight: 700, color: '#15803d' }}>📖 وانە هەڵبژێرە</label>
+                                <select
+                                    value={quickCreateLesson}
+                                    onChange={(e) => setQuickCreateLesson(e.target.value)}
+                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #22c55e', fontSize: '16px' }}
+                                    disabled={!quickCreateUnit}
+                                >
+                                    <option value="">-- وانە هەڵبژێرە --</option>
+                                    {getQuickCreateLessons().map(l => (
+                                        <option key={l.id} value={l.id}>{l.title}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Exercise Type */}
+                        <div className="form-group">
+                            <label>🎮 جۆری یاری</label>
+                            <select
+                                value={editingItem?.type || 'multiple-choice'}
+                                onChange={(e) => setEditingItem({ ...editingItem, type: e.target.value })}
+                                className="type-selector"
+                            >
+                                <option value="multiple-choice">هەڵبژاردنی چەند</option>
+                                <option value="sentence-builder">دروستکردنی ڕستە</option>
+                                <option value="match-pairs">جووتکردنەوە</option>
+                                <option value="fill-blank">پڕکردنەوەی بۆشایی</option>
+                                <option value="typing">تایپکردن</option>
+                                <option value="image-selection">هەڵبژاردنی وێنە</option>
+                            </select>
+                        </div>
+
+                        {/* Question */}
+                        <div className="form-group">
+                            <label>❓ پرسیار</label>
+                            <textarea
+                                rows={2}
+                                value={editingItem?.question || ''}
+                                onChange={(e) => setEditingItem({ ...editingItem, question: e.target.value })}
+                                placeholder="پرسیار بنووسە..."
+                            />
+                        </div>
+
+                        {/* Quick options for multiple-choice */}
+                        {editingItem?.type === 'multiple-choice' && (
+                            <div className="form-section">
+                                <h3>📝 هەڵبژاردنەکان</h3>
+                                {(editingItem?.options || []).map((option, index) => (
+                                    <div key={index} className="option-editor">
+                                        <div className="option-number">{index + 1}</div>
+                                        <input
+                                            type="text"
+                                            placeholder={`هەڵبژاردن ${index + 1}`}
+                                            value={option.text || ''}
+                                            onChange={(e) => {
+                                                const newOptions = [...editingItem.options];
+                                                newOptions[index] = { ...option, text: e.target.value };
+                                                setEditingItem({ ...editingItem, options: newOptions });
+                                            }}
+                                        />
+                                        <label className="correct-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                checked={option.correct || false}
+                                                onChange={(e) => {
+                                                    const newOptions = [...editingItem.options];
+                                                    newOptions[index] = { ...option, correct: e.target.checked };
+                                                    setEditingItem({ ...editingItem, options: newOptions });
+                                                }}
+                                            />
+                                            ✓ ڕاست
+                                        </label>
+                                        <button
+                                            onClick={() => {
+                                                const newOptions = editingItem.options.filter((_, i) => i !== index);
+                                                setEditingItem({ ...editingItem, options: newOptions });
+                                            }}
+                                            className="btn-remove"
+                                        >❌</button>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={() => {
+                                        const newOptions = [...(editingItem.options || []), { id: `opt${Date.now()}`, text: '', correct: false }];
+                                        setEditingItem({ ...editingItem, options: newOptions });
+                                    }}
+                                    className="btn-add-small"
+                                >➕ هەڵبژاردن زیاد بکە</button>
+                            </div>
+                        )}
+
+                        <div className="form-actions" style={{ marginTop: '24px' }}>
+                            <button
+                                onClick={handleSaveQuickCreate}
+                                className="btn-save"
+                                disabled={!quickCreateUnit || !quickCreateLesson}
+                                style={{ opacity: (!quickCreateUnit || !quickCreateLesson) ? 0.5 : 1 }}
+                            >
+                                💾 یاری زیاد بکە
+                            </button>
+                            <button onClick={() => setEditMode(null)} className="btn-cancel">❌ پاشگەزبوونەوە</button>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

@@ -2,8 +2,8 @@ import { Unit } from '../../types';
 
 export const unit4: Unit = {
     id: 'unit-4',
-    title: 'Business, Health & Society',
-    description: 'Master professional communication, health topics, and social interactions',
+    title: 'چوارەمین یەکە',
+    description: 'بازرگانی، تەندروستی و کۆمەڵگا',
     guidebook: {
         introduction: "لەم بەشەدا فێری قسەکردنی پیشەیی، باسکردنی تەندروستی، و کارلێککردنی کۆمەڵایەتی دەبیت. ئەم توانایانە زۆر گرنگن بۆ ژیانی کاری و کۆمەڵایەتی.",
         sections: [

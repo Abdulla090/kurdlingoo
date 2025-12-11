@@ -2,8 +2,8 @@ import { Unit } from '../../types';
 
 export const unit1: Unit = {
     id: "unit-1",
-    title: "Unit 1",
-    description: "Basics, Greetings, and Numbers",
+    title: "یەکەمین یەکە",
+    description: "بنەڕەتییەکان، سڵاوکردن، و ژمارەکان",
     guidebook: {
         introduction: "بەخێربێیت بۆ یەکەم هەنگاوی فێربوونی زمانی ئینگلیزی! لەم بەشەدا فێری سڵاوکردن، ناساندنی خۆت و وشە بنچینەییەکان دەبیت. ئامانجەکە ئەوەیە بتوانێت بە سادەیی گفتوگۆ بکەیت.",
         sections: [
