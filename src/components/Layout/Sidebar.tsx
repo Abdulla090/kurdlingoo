@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, BookOpen, Trophy, Target, Store, User, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, BookOpen, Trophy, Target, Store, User, MessageCircle, Book, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import './Layout.css';
 
@@ -14,6 +14,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
     const navItems = [
         { icon: Home, label: t('learn'), path: '/learn' },
         { icon: BookOpen, label: t('guidebook'), path: '/guidebook-hub' },
+        { icon: MessageCircle, label: t('roleplay') || 'Role-Play', path: '/roleplay' },
+        { icon: Book, label: 'فەرهەنگ', path: '/dictionary' },
         { icon: Trophy, label: t('leaderboards'), path: '/leaderboard' },
         { icon: Target, label: t('quests'), path: '/quests' },
         { icon: Store, label: t('shop'), path: '/shop' },
@@ -34,18 +36,18 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
                         className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                         title={isCollapsed ? item.label : ''}
                     >
-                        <item.icon size={28} className="nav-icon" />
+                        <item.icon size={32} className="nav-icon" />
                         {!isCollapsed && <span className="nav-label">{item.label}</span>}
                     </NavLink>
                 ))}
                 <button className="nav-item more-btn">
-                    <MoreHorizontal size={28} className="nav-icon" />
+                    <MoreHorizontal size={32} className="nav-icon" />
                     {!isCollapsed && <span className="nav-label">{t('more')}</span>}
                 </button>
             </nav>
 
             <button className="collapse-btn" onClick={toggleSidebar}>
-                {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                {isCollapsed ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
             </button>
         </aside>
     );

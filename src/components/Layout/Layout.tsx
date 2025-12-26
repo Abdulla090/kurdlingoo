@@ -1,6 +1,7 @@
 import { useState, ReactNode } from 'react';
 import Sidebar from './Sidebar';
 import BottomNav from './BottomNav';
+import PageTransition from '../PageTransition';
 import './Layout.css';
 
 interface LayoutProps {
@@ -18,7 +19,9 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="app-layout">
             <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
             <main className={`main-content ${isCollapsed ? 'collapsed' : ''}`}>
-                {children}
+                <PageTransition>
+                    {children}
+                </PageTransition>
             </main>
             <BottomNav />
         </div>

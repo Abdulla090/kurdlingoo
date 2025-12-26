@@ -243,6 +243,49 @@
     font-weight: 500;
 }
 
+/* Interactivity */
+.clickable {
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clickable:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+
+.speech-hint,
+.card-voice-hint,
+.t-voice-hint,
+.phrase-voice,
+.example-voice {
+    color: var(--unit-primary);
+    opacity: 0.6;
+    transition: all 0.2s;
+    margin-right: 0.25rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.clickable:hover .speech-hint,
+.clickable:hover .card-voice-hint,
+.clickable:hover .t-voice-hint,
+.clickable:hover .phrase-voice,
+.clickable:hover .example-voice {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.target-text,
+.chat-english,
+.comp-eng,
+.phrase-main .target-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
 /* Key Phrases Section */
 .phrases-section {
     margin-top: 1rem;

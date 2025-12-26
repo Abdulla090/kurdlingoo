@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Volume2, Star, Info, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
+import useTextToSpeech from '../../hooks/useTextToSpeech';
 import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
@@ -13,6 +14,7 @@ const Guidebook = () => {
     const { unitId } = useParams();
     const navigate = useNavigate();
     const [unit, setUnit] = useState(null);
+    const { speak } = useTextToSpeech();
 
     useEffect(() => {
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
@@ -25,9 +27,9 @@ const Guidebook = () => {
                 return {
                     ...defaultUnit,
                     ...savedUnit,
-                    // ALWAYS use the guidebook from the file (defaultUnit) to ensure updates are seen.
-                    // LocalStorage should only store progress, not static content.
-                    guidebook: defaultUnit?.guidebook
+                    // If it's a default unit, prioritize the file content for updates.
+                    // If it's a custom unit (like Unit 5), keep its saved guidebook.
+                    guidebook: defaultUnit ? defaultUnit.guidebook : savedUnit.guidebook
                 };
             });
         } else {
@@ -78,6 +80,20 @@ const Guidebook = () => {
             gradient: 'linear-gradient(135deg, #ce82ff 0%, #a560ff 100%)',
             light: '#faf5ff',
             accent: '#f3e8ff'
+        },
+        'unit-5': {
+            primary: '#ff9600',
+            primaryDark: '#e58700',
+            gradient: 'linear-gradient(135deg, #ff9600 0%, #e58700 100%)',
+            light: '#fffef0',
+            accent: '#ffedd5'
+        },
+        'unit-6': {
+            primary: '#2b2b2b',
+            primaryDark: '#1a1a1a',
+            gradient: 'linear-gradient(135deg, #444 0%, #222 100%)',
+            light: '#f5f5f5',
+            accent: '#e5e5e5'
         }
     };
 
@@ -96,13 +112,14 @@ const Guidebook = () => {
             case 'sentence-structure':
                 return (
                     <div className="visual-block sentence-structure">
-                        <div className="sentence-row english">
+                        <div className="sentence-row english" onClick={() => speak(visual.data.english.map(p => p.word).join(' '))}>
                             {visual.data.english.map((part, i) => (
                                 <div key={i} className="word-block" style={{ borderColor: part.color }}>
                                     <span className="label" style={{ color: part.color }}>{part.label}</span>
                                     <span className="word">{part.word}</span>
                                 </div>
                             ))}
+                            <Volume2 size={16} className="speech-hint" />
                         </div>
                         <div className="arrow-divider">⬇️ vs ⬇️</div>
                         <div className="sentence-row kurdish">
@@ -119,8 +136,8 @@ const Guidebook = () => {
                 return (
                     <div className="visual-block pronoun-grid">
                         {visual.data.map((item, i) => (
-                            <div key={i} className="pronoun-card">
-                                <div className="p-english">{item.english}</div>
+                            <div key={i} className="pronoun-card clickable" onClick={() => speak(item.english)}>
+                                <div className="p-english">{item.english} <Volume2 size={12} className="card-voice-hint" /></div>
                                 <div className="p-kurdish">{item.kurdish}</div>
                                 <div className="p-icon">{item.icon}</div>
                             </div>
@@ -133,10 +150,11 @@ const Guidebook = () => {
                         <div className="timeline-line"></div>
                         <div className="timeline-points">
                             {visual.data.map((point, i) => (
-                                <div key={i} className="t-point">
+                                <div key={i} className="t-point clickable" onClick={() => speak(point.label)}>
                                     <div className="t-dot"></div>
                                     <div className="t-label">{point.label}</div>
                                     <div className="t-sub">{point.sub}</div>
+                                    <Volume2 size={10} className="t-voice-hint" />
                                 </div>
                             ))}
                         </div>
@@ -146,7 +164,7 @@ const Guidebook = () => {
                 return (
                     <div className="visual-block comparison-visual">
                         {visual.data.map((item, i) => (
-                            <div key={i} className="comp-item">
+                            <div key={i} className="comp-item clickable" onClick={() => speak(item.english)}>
                                 <div
                                     className="comp-circle"
                                     style={{
@@ -158,7 +176,7 @@ const Guidebook = () => {
                                     {item.icon}
                                 </div>
                                 <div className="comp-text">
-                                    <span className="comp-eng">{item.english}</span>
+                                    <span className="comp-eng">{item.english} <Volume2 size={10} /></span>
                                     <span className="comp-kur">{item.kurdish}</span>
                                 </div>
                                 {i < visual.data.length - 1 && <div className="comp-arrow">➜</div>}
@@ -174,12 +192,12 @@ const Guidebook = () => {
                             <span>Verb Form</span>
                         </div>
                         {visual.data.map((row, i) => (
-                            <div key={i} className="conj-row">
+                            <div key={i} className="conj-row clickable" onClick={() => speak(`${row.subject} ${row.verb}`)}>
                                 <div className="conj-subject">
                                     <span className="eng">{row.subject}</span>
                                     <span className="kur">{row.subKurdish}</span>
                                 </div>
-                                <div className="conj-verb">{row.verb}</div>
+                                <div className="conj-verb">{row.verb} <Volume2 size={12} /></div>
                             </div>
                         ))}
                     </div>
@@ -188,10 +206,13 @@ const Guidebook = () => {
                 return (
                     <div className="visual-block chat-interface">
                         {visual.data.map((msg, i) => (
-                            <div key={i} className={`chat-bubble ${msg.speaker === 'A' ? 'left' : 'right'}`}>
+                            <div key={i}
+                                className={`chat-bubble ${msg.speaker === 'A' ? 'left' : 'right'} clickable`}
+                                onClick={() => speak(msg.english)}
+                            >
                                 <div className="chat-avatar">{msg.avatar}</div>
                                 <div className="chat-content">
-                                    <div className="chat-english">{msg.english}</div>
+                                    <div className="chat-english">{msg.english} <Volume2 size={12} /></div>
                                     <div className="chat-kurdish">{msg.kurdish}</div>
                                 </div>
                             </div>
@@ -231,8 +252,8 @@ const Guidebook = () => {
                     {section.items && (
                         <div className="items-grid">
                             {section.items.map((item, i) => (
-                                <div key={i} className="info-item">
-                                    <span className="term">{item.term}</span>
+                                <div key={i} className="info-item clickable" onClick={() => speak(item.term)}>
+                                    <span className="term">{item.term} <Volume2 size={12} /></span>
                                     <span className="definition">{item.definition}</span>
                                 </div>
                             ))}
@@ -256,8 +277,11 @@ const Guidebook = () => {
                                         </ul>
                                     )}
                                     {sub.example && (
-                                        <div className="example-box">
-                                            <div className="target-text" dir="ltr">{sub.example.english}</div>
+                                        <div className="example-box clickable" onClick={() => speak(sub.example.english)}>
+                                            <div className="target-text" dir="ltr">
+                                                {sub.example.english}
+                                                <Volume2 size={16} className="example-voice" />
+                                            </div>
                                             <div className="native-text">{sub.example.kurdish}</div>
                                             <div className="note-text">{sub.example.transliteration}</div>
                                         </div>
@@ -344,15 +368,18 @@ const Guidebook = () => {
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.05 }}
-                                    className="phrase-card"
+                                    className="phrase-card clickable"
+                                    onClick={() => speak(phrase.english)}
                                 >
                                     <div className="phrase-main">
-                                        <span className="target-lang" dir="ltr">{phrase.english}</span>
+                                        <span className="target-lang" dir="ltr">
+                                            {phrase.english}
+                                            <Volume2 size={16} className="phrase-voice" />
+                                        </span>
                                         <span className="native-lang">{phrase.kurdish}</span>
                                     </div>
                                     {phrase.pronunciation && (
                                         <div className="phrase-pronunciation">
-                                            <Volume2 size={14} />
                                             <span>{phrase.pronunciation}</span>
                                         </div>
                                     )}

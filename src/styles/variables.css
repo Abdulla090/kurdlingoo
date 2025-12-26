@@ -1,49 +1,52 @@
 :root {
   /* ============================================
-     PROFESSIONAL DESIGN SYSTEM
-     Inspired by: Apple, Stripe, Linear, Notion
+     DUOLINGO NATIVE DESIGN SYSTEM
+     Exact colors from Duolingo's design
      ============================================ */
 
-  /* Brand Colors - Premium Green Palette */
-  --color-primary: #22c55e;
-  --color-primary-dark: #16a34a;
-  --color-primary-light: #4ade80;
-  --color-primary-50: rgba(34, 197, 94, 0.12);
-  --color-primary-surface: rgba(34, 197, 94, 0.08);
+  /* Brand Colors - Duolingo's Feather Green */
+  --color-primary: #58cc02;
+  --color-primary-dark: #58a700;
+  --color-primary-light: #89e219;
+  --color-primary-50: rgba(88, 204, 2, 0.15);
+  --color-primary-surface: rgba(88, 204, 2, 0.1);
 
-  /* Accent - Gold/Yellow for achievements */
-  --color-gold: #f59e0b;
-  --color-gold-dark: #d97706;
-  --color-gold-light: #fbbf24;
+  /* Achievements & Streaks */
+  --color-gold: #ff9600;
+  --color-gold-dark: #cd7900;
+  --color-gold-light: #ffc800;
   
-  /* Secondary Accents */
-  --color-accent-blue: #3b82f6;
-  --color-accent-blue-dark: #2563eb;
-  --color-info-bg: rgba(59, 130, 246, 0.08);
+  /* Duolingo Blue - for links/info */
+  --color-accent-blue: #1cb0f6;
+  --color-accent-blue-dark: #1899d6;
+  --color-info-bg: rgba(28, 176, 246, 0.15);
   
-  --color-accent-red: #ef4444;
-  --color-accent-red-dark: #dc2626;
-  --color-error-bg: rgba(239, 68, 68, 0.08);
+  /* Duolingo Red - for errors/hearts */
+  --color-accent-red: #ff4b4b;
+  --color-accent-red-dark: #ea2b2b;
+  --color-error-bg: rgba(255, 75, 75, 0.15);
 
-  /* Neutral Colors - Refined Gray Scale */
-  --color-text: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #94a3b8;
-  --color-text-light: #64748b;
+  /* Duolingo's Exact Gray Scale */
+  --color-text: #4b4b4b;
+  --color-text-secondary: #777777;
+  --color-text-tertiary: #afafaf;
+  --color-text-light: #afafaf;
   
-  --color-background: #ffffff;
-  --color-surface: #f8fafc;
-  --color-surface-variant: #f1f5f9;
+  /* Backgrounds */
+  --color-background: #f7f7f7;
+  --color-surface: #ffffff;
+  --color-surface-variant: #f7f7f7;
   --color-surface-elevated: #ffffff;
   
-  --color-border: #e2e8f0;
-  --color-divider: #cbd5e1;
+  /* Borders - Duolingo uses #e5e5e5 consistently */
+  --color-border: #e5e5e5;
+  --color-divider: #e5e5e5;
 
-  /* Semantic Colors */
-  --color-success: #22c55e;
-  --color-error: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  /* Semantic */
+  --color-success: #58cc02;
+  --color-error: #ff4b4b;
+  --color-warning: #ff9600;
+  --color-info: #1cb0f6;
 
   /* Typography - Modern Sans Stack */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

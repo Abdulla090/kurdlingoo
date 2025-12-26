@@ -1,11 +1,11 @@
 /* ============================================
-   LAYOUT - Premium Professional Design
+   LAYOUT - Duolingo Native Design
    ============================================ */
 
 .app-layout {
     display: flex;
     min-height: 100vh;
-    background-color: var(--color-background);
+    background: #d0d0d0;
 }
 
 /* ============================================
@@ -13,24 +13,26 @@
    ============================================ */
 
 .sidebar {
-    width: 260px;
-    padding: 28px 18px;
-    border-inline-end: 1px solid var(--color-border);
+    width: 256px;
+    padding: 24px 16px;
+    border-inline-end: 2px solid #e5e5e5;
     position: fixed;
     height: 100vh;
     overflow-y: auto;
     display: none;
     flex-direction: column;
-    background-color: var(--color-surface);
+    background-color: #fff;
     z-index: var(--z-fixed);
     transition: width var(--transition-normal), padding var(--transition-normal);
     inset-inline-start: 0;
-    box-shadow: 1px 0 0 var(--color-border);
+
+    /* Subtle green tint at bottom */
+    background: linear-gradient(180deg, #ffffff 0%, #ffffff 80%, #f0fff0 100%);
 }
 
 .sidebar.collapsed {
-    width: 76px;
-    padding: 28px 14px;
+    width: 80px;
+    padding: 24px 12px;
 }
 
 /* Logo */
@@ -48,11 +50,10 @@
 }
 
 .logo-text {
-    color: var(--color-primary);
-    font-size: 24px;
+    color: #58cc02;
+    font-size: 26px;
     font-weight: 700;
     margin: 0;
-    letter-spacing: -0.03em;
 }
 
 /* Navigation */
@@ -65,15 +66,14 @@
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     padding: 14px 16px;
-    border-radius: var(--radius-md);
-    color: var(--color-text-secondary);
-    font-weight: 500;
+    border-radius: 12px;
+    color: #4b4b4b;
+    font-weight: 700;
     font-size: 15px;
-    letter-spacing: -0.01em;
-    transition: all var(--transition-fast);
-    border: none;
+    transition: all 0.1s;
+    border: 2px solid transparent;
     cursor: pointer;
     text-decoration: none;
     background: transparent;
@@ -85,21 +85,21 @@
 }
 
 .nav-item:hover {
-    background-color: var(--color-surface-variant);
-    color: var(--color-text);
-    box-shadow: var(--shadow-xs);
+    background-color: #f7f7f7;
+    color: #4b4b4b;
+    border-color: #e5e5e5;
 }
 
 .nav-item.active {
-    color: var(--color-primary);
-    background: linear-gradient(135deg, var(--color-primary-50), rgba(34, 197, 94, 0.06));
-    font-weight: 600;
-    box-shadow: var(--shadow-xs);
+    color: #1cb0f6;
+    background: #ddf4ff;
+    border-color: #84d8ff;
+    font-weight: 700;
 }
 
 .nav-icon {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
     stroke-width: 2px;
     flex-shrink: 0;
 }
@@ -149,29 +149,21 @@
 
 .bottom-nav {
     position: fixed;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ffffff;
-    border-radius: 50px;
-    border: 2px solid #e5e7eb;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 2px solid #e5e5e5;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 8px 20px;
-    gap: 8px;
+    justify-content: space-around;
+    padding: 8px 0;
     z-index: var(--z-fixed);
-    box-shadow:
-        0 4px 0 #d4d4d8,
-        0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .bottom-nav {
     background: #1e293b;
     border-color: #334155;
-    box-shadow:
-        0 4px 0 #0f172a,
-        0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Nav Item */
@@ -180,38 +172,33 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    padding: 8px 20px;
-    border-radius: 20px;
+    gap: 4px;
+    padding: 8px 16px;
     text-decoration: none;
-    transition: all 0.2s ease;
     -webkit-tap-highlight-color: transparent;
+    min-width: 64px;
 }
 
 .bottom-nav-item:active {
-    transform: scale(0.92);
+    opacity: 0.7;
 }
 
 /* Label */
 .nav-label {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
-    color: #a0a0a0;
+    color: #4b4b4b;
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
 
-/* Active state - bigger icon via SVG, blue label */
-.bottom-nav-item.active {
-    background: rgba(28, 176, 246, 0.1);
-}
-
+/* Active state */
 .bottom-nav-item.active .nav-label {
     color: #1cb0f6;
 }
 
 .bottom-nav-item.active svg {
-    transform: scale(1.15);
+    color: #1cb0f6;
 }
 
 /* Small screens - hide labels, keep icons */
@@ -260,35 +247,22 @@
     }
 
     .main-content {
-        margin-inline-start: 280px;
+        margin-inline-start: 256px;
         padding-bottom: 0;
     }
 
     .main-content.collapsed {
-        margin-inline-start: 84px;
+        margin-inline-start: 90px;
     }
 }
 
 /* ============================================
-   GLASS PANEL - Premium Glassmorphism
+   CARD PANEL - Clean Native Style
    ============================================ */
 
 .glass-panel {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: var(--radius-xl);
-    box-shadow:
-        0 8px 32px rgba(31, 38, 135, 0.06),
-        inset 0 2px 0 rgba(255, 255, 255, 0.5);
-    transition: all var(--transition-fast);
-}
-
-.glass-panel:hover {
-    box-shadow:
-        0 12px 40px rgba(31, 38, 135, 0.1),
-        inset 0 2px 0 rgba(255, 255, 255, 0.6);
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.75);
+    background: #fff;
+    border: 2px solid #e5e5e5;
+    border-radius: 16px;
+    box-shadow: 0 2px 0 #e5e5e5;
 }

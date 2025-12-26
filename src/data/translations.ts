@@ -33,7 +33,7 @@ export const translations = {
         writeInEnglish: "Write this in English",
         matchPairs: "Tap the matching pairs",
         fillBlank: "Fill in the blank",
-        
+
         // New Exercise Types
         selectResponse: "Select a response",
         culturalNote: "Cultural Note",
@@ -91,17 +91,33 @@ export const translations = {
         streakFreezeDesc: "Keep your streak alive for one more day of inactivity.",
         gems: "Gems",
         keyPhrases: "Key Phrases",
-        
+
         // Font Settings
         kurdishFont: "Kurdish Font",
         selectKurdishFont: "Choose a font style for Kurdish text throughout the app.",
-        
+
         // Roleplay Chat
         typeYourResponse: "Type your response in Kurdish...",
         greatResponse: "Great response! 🎉",
         tryAgainHint: "Not quite right. Check the correct answer.",
         correctAnswer: "Correct answer",
         hints: "Hints",
+
+        // Space Typing Game
+        spaceGame: "Space Typing",
+        selectLevel: "Select a level and start playing!",
+        gameOver: "Game Over!",
+        victory: "Victory!",
+        yourScore: "Your Score:",
+        tryAgain: "Try Again",
+        nextLevel: "Next Level",
+        levels: "Levels",
+        typeHere: "Type here...",
+        typeWord: "Type:",
+        words: "words",
+        slow: "Slow",
+        medium: "Medium",
+        fast: "Fast",
     },
     ckb: { // Central Kurdish (Sorani)
         // Navigation
@@ -138,7 +154,7 @@ export const translations = {
         writeInEnglish: "ئەمە بە ئینگلیزی بنووسە",
         matchPairs: "جوتەکان لێک بدە",
         fillBlank: "بۆشاییەکە پڕبکەرەوە",
-        
+
         // New Exercise Types
         selectResponse: "وەڵامێک هەڵبژێرە",
         culturalNote: "تێبینیی کەلتووری",
@@ -154,7 +170,7 @@ export const translations = {
         conversationPractice: "ڕاهێنانی گفتوگۆ",
         listenAndRepeat: "گوێ بگرە و دووبارە بکەرەوە",
         speakNow: "ئێستا قسە بکە",
-        
+
         // Profile & Stats
         you: "تۆ",
         joined: "بەژداربووی",
@@ -195,16 +211,32 @@ export const translations = {
         streakFreeze: "ڕاگرتنی ڕۆژەکان",
         streakFreezeDesc: "ڕۆژەکانت بپارێزە بۆ ڕۆژێکی تر لە چالاکی نەکردن.",
         gems: "جەوهەر",
-        
+
         // Font Settings
         kurdishFont: "فۆنتی کوردی",
         selectKurdishFont: "شێوازی فۆنت بۆ نووسینی کوردی لە ئەپەکە هەڵبژێرە.",
-        
+
         // Roleplay Chat
         typeYourResponse: "وەڵامەکەت بە کوردی بنووسە...",
         greatResponse: "وەڵامی نایاب! 🎉",
         tryAgainHint: "هەڵەیە. وەڵامی ڕاست ببینە.",
         correctAnswer: "وەڵامی ڕاست",
         hints: "یارمەتییەکان",
+
+        // Space Typing Game
+        spaceGame: "تایپی ئەفیرانەوەیی",
+        selectLevel: "ئاستێک هەڵبژێرە و دەست بە یاری بکە!",
+        gameOver: "یاری کۆتایی هات!",
+        victory: "سەرکەوتوو بوویت!",
+        yourScore: "خاڵەکانت:",
+        tryAgain: "دووبارە هەوڵ بدەوە",
+        nextLevel: "ئاستی دواتر",
+        levels: "ئاستەکان",
+        typeHere: "لێرە بنووسە...",
+        typeWord: "بینووسە:",
+        words: "وشە",
+        slow: "هێواش",
+        medium: "ناوەندی",
+        fast: "خێرا",
     }
 };

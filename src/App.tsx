@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Learn from './pages/Learn/Learn';
 import Lesson from './pages/Lesson/Lesson';
@@ -11,29 +12,59 @@ import Leaderboard from './pages/Leaderboard/Leaderboard';
 import Quests from './pages/Quests/Quests';
 import Shop from './pages/Shop/Shop';
 import Profile from './pages/Profile/Profile';
+import RolePlayHub from './pages/RolePlayHub/RolePlayHub';
+import RolePlayChat from './pages/RolePlayChat/RolePlayChat';
+import SpaceTypingGame from './pages/SpaceTypingGame/SpaceTypingGame';
+import BookDictionary from './pages/BookDictionary/BookDictionary';
 import Layout from './components/Layout/Layout';
+import PageTransition from './components/PageTransition';
+import ScrollToTop from './components/ScrollToTop';
+import { CONFIG } from './config';
 
-const App: React.FC = () => {
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><LandingPage /></PageTransition>} />
 
-        {/* Main App Routes with Sidebar Layout */}
+        {/* Main App Routes with Sidebar Layout - Layout already has PageTransition for его children */}
         <Route path="/learn" element={<Layout><Learn /></Layout>} />
         <Route path="/guidebook-hub" element={<Layout><GuidebookHub /></Layout>} />
         <Route path="/leaderboard" element={<Layout><Leaderboard /></Layout>} />
         <Route path="/quests" element={<Layout><Quests /></Layout>} />
         <Route path="/shop" element={<Layout><Shop /></Layout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/roleplay" element={<Layout><RolePlayHub /></Layout>} />
 
         {/* Standalone Routes */}
-        <Route path="/lesson/:lessonId" element={<Lesson />} />
-        <Route path="/create-lesson" element={<LessonCreator />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/guidebook/:unitId" element={<Guidebook />} />
-        <Route path="/login" element={<div className="container"><h1>Login (Coming Soon)</h1></div>} />
+        <Route path="/roleplay/:scenarioId" element={<PageTransition><RolePlayChat /></PageTransition>} />
+        <Route path="/lesson/:lessonId" element={<PageTransition><Lesson /></PageTransition>} />
+        <Route path="/create-lesson" element={<PageTransition><LessonCreator /></PageTransition>} />
+        <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
+        <Route path="/guidebook/:unitId" element={<PageTransition><Guidebook /></PageTransition>} />
+        <Route path="/space-game" element={<PageTransition><SpaceTypingGame /></PageTransition>} />
+        <Route path="/dictionary" element={<Layout><BookDictionary /></Layout>} />
+        <Route path="/login" element={<PageTransition><div className="container"><h1>Login (Coming Soon)</h1></div></PageTransition>} />
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+const App: React.FC = () => {
+  React.useEffect(() => {
+    // Initialize Gemini API Key from user
+    const apiKey = CONFIG.GEMINI_API_KEY;
+    if (apiKey) {
+      localStorage.setItem('gemini_api_key', apiKey);
+    }
+  }, []);
+
+  return (
+    <Router>
+      <ScrollToTop />
+      <AnimatedRoutes />
     </Router>
   );
 }

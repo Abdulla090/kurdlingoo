@@ -6,7 +6,7 @@ import {
     MapPin, CloudSun, ForkKnife, Airplane, DeviceMobile, Briefcase,
     Stethoscope, CalendarCheck, ChatTeardrop, Bank, MusicNotes,
     GlobeHemisphereWest, Crown, Lock, CheckCircle, BookOpenText,
-    Fire, Lightning, Trophy
+    Fire, Lightning, Trophy, Rocket
 } from '@phosphor-icons/react';
 import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
@@ -180,10 +180,12 @@ const Learn: React.FC = () => {
                                                 className="node-circle"
                                                 style={completed ? {
                                                     background: theme.gradient,
-                                                    boxShadow: `0 8px 0 ${theme.shadow}, 0 12px 24px rgba(0,0,0,0.2)`
+                                                    borderBottom: `8px solid ${theme.shadow}`,
+                                                    boxShadow: `0 4px 12px rgba(0,0,0,0.2)`
                                                 } : isCurrent ? {
-                                                    borderColor: `${theme.color}40`,
-                                                    boxShadow: `0 8px 0 ${theme.shadow}, 0 12px 24px ${theme.color}40, 0 0 0 8px ${theme.color}15`
+                                                    background: `linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%)`,
+                                                    borderBottom: `8px solid ${theme.color}`,
+                                                    boxShadow: `0 0 0 5px ${theme.color}20, 0 4px 15px ${theme.color}30`
                                                 } : {}}
                                             >
                                                 {isLocked ? (
@@ -236,19 +238,19 @@ const Learn: React.FC = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                             <Fire color="#ff9600" weight="fill" size={28} />
-                            <span style={{ fontWeight: 700, fontSize: '17px', color: '#1f2937' }}>
+                            <span className="stat-text">
                                 {userStats.streak} {t('dayStreak')}
                             </span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                             <Lightning color="#ffc800" weight="fill" size={28} />
-                            <span style={{ fontWeight: 700, fontSize: '17px', color: '#1f2937' }}>
+                            <span className="stat-text">
                                 {userStats.totalXp} XP
                             </span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                             <CheckCircle color="#22c55e" weight="fill" size={28} />
-                            <span style={{ fontWeight: 700, fontSize: '17px', color: '#1f2937' }}>
+                            <span className="stat-text">
                                 {userStats.lessonsCompleted} {t('lessonsCompleted') || 'Lessons'}
                             </span>
                         </div>
@@ -260,8 +262,8 @@ const Learn: React.FC = () => {
                     <h3>{t('dailyQuests')}</h3>
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <span style={{ fontSize: '15px', fontWeight: 600, color: '#374151' }}>{t('earnXp')}</span>
-                            <span style={{ fontSize: '15px', fontWeight: 800, color: '#fbbf24' }}>
+                            <span className="quest-label">{t('earnXp')}</span>
+                            <span className="quest-value">
                                 {Math.min(userStats.totalXp, 50)}/50
                             </span>
                         </div>
@@ -280,6 +282,49 @@ const Learn: React.FC = () => {
                             }} />
                         </div>
                     </div>
+                </div>
+
+                {/* Space Typing Game Card */}
+                <div
+                    className="glass-panel space-game-card"
+                    onClick={() => navigate('/space-game')}
+                    style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(88, 204, 2, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '';
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        <div style={{
+                            width: '48px',
+                            height: '48px',
+                            borderRadius: '12px',
+                            background: 'linear-gradient(135deg, #1a1a3a 0%, #0a0a1a 100%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Rocket size={28} weight="fill" color="#58cc02" />
+                        </div>
+                        <div>
+                            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>🚀 Space Typing</h3>
+                            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                                {t('practice') || 'Practice'} 🌟
+                            </p>
+                        </div>
+                    </div>
+                    <p style={{
+                        fontSize: '0.85rem',
+                        color: 'var(--color-text-secondary)',
+                        margin: 0,
+                        lineHeight: 1.4
+                    }}>
+                        Type words to destroy falling space objects!
+                    </p>
                 </div>
             </div>
         </div>

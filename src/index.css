@@ -41,9 +41,9 @@
   --grad-gold: linear-gradient(135deg, #ffc800 0%, #e5a500 100%);
 
   /* --- NEUTRALS & SURFACES --- */
-  --color-background: #ffffff;
-  --color-surface: #f7f7f7;
-  /* Very light gray for backgrounds */
+  --color-background: #d0d0d0;
+  --color-surface: #ffffff;
+  /* Visible gray background, white cards */
   --color-surface-dim: #e5e5e5;
   /* Locked/Disabled states */
   --color-border: #e5e5e5;
@@ -85,6 +85,12 @@
 }
 
 /* Base Reset & Fonts */
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
 * {
   box-sizing: border-box;
 }
