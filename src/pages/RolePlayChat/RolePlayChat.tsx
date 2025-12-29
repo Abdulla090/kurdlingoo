@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { rolePlayScenarios } from '../../data/rolePlayScenarios';
-import { CONFIG } from '../../config';
+import { sendChatMessage } from '../../services/api';
 import useSpeechRecognition from '../../hooks/useSpeechRecognition';
 import useTextToSpeech from '../../hooks/useTextToSpeech';
+import { useLanguage } from '../../context/LanguageContext';
 import { Mic, Send, ArrowLeft, Play } from 'lucide-react';
 import './RolePlayChat.css';
 
@@ -12,6 +12,13 @@ interface Message {
     role: 'ai' | 'user';
     text: string;
     timestamp: Date;
+    image?: string;
+    avatar?: string;
+}
+
+interface ChatHistoryItem {
+    role: string;
+    parts: Array<{ text: string }>;
 }
 
 const RolePlayChat: React.FC = () => {
@@ -19,9 +26,11 @@ const RolePlayChat: React.FC = () => {
     const navigate = useNavigate();
     const scenario = rolePlayScenarios.find(s => s.id === scenarioId);
 
+    const { t, language } = useLanguage();
+
     const [messages, setMessages] = useState<Message[]>([]);
     const [isTyping, setIsTyping] = useState(false);
-    const [chatSession, setChatSession] = useState<any>(null);
+    const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const { transcript, isListening, startListening, stopListening, error: speechError } = useSpeechRecognition();
@@ -36,43 +45,27 @@ const RolePlayChat: React.FC = () => {
     useEffect(() => {
         if (!scenario) return;
 
-        const initChat = async () => {
-            // Use the API key provided by the user via config
-            const apiKey = CONFIG.GEMINI_API_KEY;
-
-            if (!apiKey) {
-                alert('Please set your Gemini API key!');
-                navigate('/roleplay');
-                return;
-            }
-
-            try {
-                const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({
-                    model: "gemini-2.5-flash", // Using 2.5-flash to resolve 429 quota issues
-                    systemInstruction: scenario.systemPrompt
-                });
-
-                const session = model.startChat({
-                    history: [],
-                });
-
-                setChatSession(session);
-
-                // Initial AI Message
-                const initialAI = { role: 'ai' as const, text: scenario.initialMessage, timestamp: new Date() };
-                setMessages([initialAI]);
-                speak(scenario.initialMessage, undefined, {
-                    aiName: scenario.aiName,
-                    gender: scenario.gender,
-                    tone: scenario.tone
-                });
-            } catch (err) {
-                console.error("Failed to initialize Gemini:", err);
-            }
+        // Initialize with the AI's first message
+        const initialAI: Message = {
+            role: 'ai' as const,
+            text: scenario.initialMessage,
+            timestamp: new Date(),
+            avatar: scenario.image
         };
+        setMessages([initialAI]);
 
-        initChat();
+        // Add initial message to history
+        setChatHistory([{
+            role: 'model',
+            parts: [{ text: scenario.initialMessage }]
+        }]);
+
+
+        speak(scenario.initialMessage, undefined, {
+            aiName: scenario.aiName,
+            gender: scenario.gender,
+            tone: scenario.tone
+        });
 
         return () => {
             stopSpeaking();
@@ -87,26 +80,96 @@ const RolePlayChat: React.FC = () => {
         }
     }, [isListening, transcript]);
 
+    const getVisualAttachment = (text: string, scenarioId: string): string | undefined => {
+        const lowerText = text.toLowerCase();
+
+        // Cafe Scenario Logic
+        if (scenarioId === 'coffee-shop') {
+            if (lowerText.includes('latte')) return '/roleplay/item_iced_latte.png';
+            if (lowerText.includes('water')) return '/roleplay/item_water.png';
+            if (lowerText.includes('coffee') || lowerText.includes('cappuccino') || lowerText.includes('espresso')) return '/roleplay/item_coffee.png';
+        }
+
+        return undefined;
+    };
+
+    const getAvatarForEmotion = (text: string, baseAvatar: string, scenarioId: string): string => {
+        const lowerText = text.toLowerCase();
+
+        // Cafe Scenario Emotion Logic
+        if (scenarioId === 'coffee-shop') {
+            if (lowerText.includes('happy') || lowerText.includes('great') || lowerText.includes('enjoy') || lowerText.includes('welcome')) {
+                return '/roleplay/sam_happy.png';
+            }
+            if (lowerText.includes('sorry') || lowerText.includes('confused') || lowerText.includes('repeat') || lowerText.includes('what')) {
+                return '/roleplay/sam_confused.png';
+            }
+            if (lowerText.includes('angry') || lowerText.includes('wrong') || lowerText.includes('unfortunately')) {
+                return '/roleplay/sam_angry.png';
+            }
+        }
+
+        return baseAvatar;
+    };
+
+    const [inputText, setInputText] = useState('');
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    // Auto-expand textarea
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'inherit';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [inputText]);
+
     const handleSendMessage = async (text: string) => {
-        if (!text.trim() || !chatSession || !scenario) return;
+        if (!text.trim() || !scenario) return;
 
         const userMsg: Message = { role: 'user', text, timestamp: new Date() };
         setMessages(prev => [...prev, userMsg]);
         setIsTyping(true);
+        setInputText(''); // Clear input
+
+        // Update history with user message
+        const newHistory = [...chatHistory, {
+            role: 'user',
+            parts: [{ text }]
+        }];
 
         try {
-            const result = await chatSession.sendMessage(text);
-            const aiResponse = result.response.text();
+            // Use secure API - no API key exposed!
+            const result = await sendChatMessage(text, scenario.systemPrompt, newHistory);
 
-            const aiMsg: Message = { role: 'ai', text: aiResponse, timestamp: new Date() };
-            setMessages(prev => [...prev, aiMsg]);
-            speak(aiResponse, undefined, {
-                aiName: scenario.aiName,
-                gender: scenario.gender,
-                tone: scenario.tone
-            });
+            if (result.success && result.response) {
+                const attachment = getVisualAttachment(result.response, scenario.id);
+                const currentAvatar = getAvatarForEmotion(result.response, scenario.image, scenario.id);
+
+                const aiMsg: Message = {
+                    role: 'ai',
+                    text: result.response,
+                    timestamp: new Date(),
+                    image: attachment,
+                    avatar: currentAvatar
+                };
+                setMessages(prev => [...prev, aiMsg]);
+
+                // Update history with AI response
+                setChatHistory([...newHistory, {
+                    role: 'model',
+                    parts: [{ text: result.response }]
+                }]);
+
+                speak(result.response, undefined, {
+                    aiName: scenario.aiName,
+                    gender: scenario.gender,
+                    tone: scenario.tone
+                });
+            } else {
+                throw new Error(result.error || 'Failed to get response');
+            }
         } catch (err) {
-            console.error("Gemini Error:", err);
+            console.error("Chat API Error:", err);
             setMessages(prev => [...prev, { role: 'ai', text: "I'm sorry, I'm having trouble connecting right now. Let's try again in a moment.", timestamp: new Date() }]);
         } finally {
             setIsTyping(false);
@@ -122,43 +185,62 @@ const RolePlayChat: React.FC = () => {
                     <ArrowLeft size={24} />
                 </button>
                 <div className="scenario-info">
-                    <span className="scenario-icon-small">{scenario.icon}</span>
+                    <div className="scenario-avatar-container">
+                        <img src={scenario.image} alt={scenario.title} className="scenario-avatar" />
+                        <span className="scenario-icon-overlay">{scenario.icon}</span>
+                    </div>
                     <div className="scenario-titles">
-                        <h2>{scenario.title}</h2>
-                        <p>{scenario.aiRole} & {scenario.userRole}</p>
+                        <h2>{language === 'ckb' ? scenario.titleKu : scenario.title}</h2>
+                        <p>
+                            {t('aiLabel')}: {language === 'ckb' ? scenario.aiRoleKu : scenario.aiRole} &
+                            {t('youLabel')}: {language === 'ckb' ? scenario.userRoleKu : scenario.userRole}
+                        </p>
                     </div>
                 </div>
                 <div className={`difficulty-indicator ${scenario.difficulty}`}>
-                    {scenario.difficulty}
+                    {t(scenario.difficulty)}
                 </div>
             </header>
 
             <div className="chat-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className={`message-bubble ${msg.role}`}>
-                        <div className="bubble-content">
-                            {msg.text}
-                        </div>
-                        <div className="bubble-meta">
-                            {msg.role === 'ai' && (
-                                <button className="re-speak-btn" onClick={() => speak(msg.text, undefined, {
-                                    aiName: scenario.aiName,
-                                    gender: scenario.gender,
-                                    tone: scenario.tone
-                                })}>
-                                    <Play size={12} fill="currentColor" />
-                                </button>
-                            )}
-                            <span className="message-time">
-                                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
+                    <div key={index} className={`message-row ${msg.role}`}>
+                        {msg.role === 'ai' && (
+                            <img src={msg.avatar || scenario.image} alt="AI Avatar" className="chat-avatar" />
+                        )}
+                        <div className={`message-bubble ${msg.role}`}>
+                            <div className="bubble-content">
+                                {msg.text}
+                                {msg.image && (
+                                    <div className="message-attachment">
+                                        <img src={msg.image} alt="Attached item" />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="bubble-meta">
+                                {msg.role === 'ai' && (
+                                    <button className="re-speak-btn" onClick={() => speak(msg.text, undefined, {
+                                        aiName: scenario.aiName,
+                                        gender: scenario.gender,
+                                        tone: scenario.tone
+                                    })}>
+                                        <Play size={12} fill="currentColor" />
+                                    </button>
+                                )}
+                                <span className="message-time">
+                                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 ))}
                 {isTyping && (
-                    <div className="message-bubble ai typing">
-                        <div className="typing-indicator">
-                            <span></span><span></span><span></span>
+                    <div className="message-row ai">
+                        <img src={scenario.image} alt="AI Avatar" className="chat-avatar" />
+                        <div className="message-bubble ai typing">
+                            <div className="typing-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -167,32 +249,37 @@ const RolePlayChat: React.FC = () => {
 
             <footer className="chat-footer">
                 <div className={`record-status ${isListening ? 'active' : ''}`}>
-                    {isListening ? "Listening... Speak now" : speechError ? speechError : "Tap the mic to answer by voice"}
+                    {isListening ? t('listening') : (speechError ? speechError : t('tapToAnswer'))}
                 </div>
 
                 <div className="input-row">
                     <button
                         className={`mic-button ${isListening ? 'listening' : ''}`}
                         onClick={isListening ? stopListening : startListening}
-                        title="Answer by voice"
+                        title={t('tapToAnswer')}
                     >
                         <Mic size={32} />
                         {isListening && <div className="pulse-ring"></div>}
                     </button>
 
-                    {/* Optional text input as fallback */}
                     <div className="text-input-fallback">
-                        <input
-                            type="text"
-                            placeholder="Type a message..."
+                        <textarea
+                            ref={textareaRef}
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            placeholder={t('typeMessage')}
+                            rows={1}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSendMessage((e.target as HTMLInputElement).value);
-                                    (e.target as HTMLInputElement).value = '';
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleSendMessage(inputText);
                                 }
                             }}
                         />
-                        <button className="send-btn">
+                        <button
+                            className={`send-btn ${inputText.trim() ? 'active' : ''}`}
+                            onClick={() => handleSendMessage(inputText)}
+                        >
                             <Send size={20} />
                         </button>
                     </div>

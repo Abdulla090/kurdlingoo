@@ -8,6 +8,7 @@ export const translations = {
         shop: "Shop",
         profile: "Profile",
         more: "More",
+        dictionary: "Dictionary",
 
         // Landing
         slogan: "The free, fun, and effective way to learn Kurdish!",
@@ -102,6 +103,18 @@ export const translations = {
         tryAgainHint: "Not quite right. Check the correct answer.",
         correctAnswer: "Correct answer",
         hints: "Hints",
+        roleplay: "Role-Play",
+        roleplayTitle: "Practice Your English",
+        roleplaySubtitle: "Choose a scenario and start a voice-powered roleplay with AI.",
+        aiLabel: "AI",
+        youLabel: "You",
+        difficulty: "Difficulty",
+        beginner: "Beginner",
+        intermediate: "Intermediate",
+        advanced: "Advanced",
+        listening: "Listening... Speak now",
+        tapToAnswer: "Tap the mic to answer by voice",
+        typeMessage: "Type a message...",
 
         // Space Typing Game
         spaceGame: "Space Typing",
@@ -128,6 +141,7 @@ export const translations = {
         shop: "فرۆشگا",
         profile: "پرۆفایل",
         more: "زیاتر",
+        dictionary: "فەرهەنگ",
 
         // Landing
         slogan: "ڕێگایەکی خۆڕایی، خۆش و کاریگەر بۆ فێربوونی کوردی!",
@@ -222,6 +236,18 @@ export const translations = {
         tryAgainHint: "هەڵەیە. وەڵامی ڕاست ببینە.",
         correctAnswer: "وەڵامی ڕاست",
         hints: "یارمەتییەکان",
+        roleplay: "ڕۆڵگێڕان",
+        roleplayTitle: "مەشق بکە لەسەر ئینگلیزی",
+        roleplaySubtitle: "سیناریۆیەک هەڵبژێرە و دەست بکە بە گفتوگۆ لەگەڵ زیرەکی دەستکرد بە دەنگ.",
+        aiLabel: "ژیری دەستکرد",
+        youLabel: "تۆ",
+        difficulty: "ئاستی قورسی",
+        beginner: "سەرەتایی",
+        intermediate: "مامناوەند",
+        advanced: "پێشکەوتوو",
+        listening: "گوێت لێ دەگیرێت... ئێستا قسە بکە",
+        tapToAnswer: "پەنجە بنێ بە مایکرۆفۆن بۆ وەڵامدانەوە",
+        typeMessage: "نامەیەک بنووسە...",
 
         // Space Typing Game
         spaceGame: "تایپی ئەفیرانەوەیی",

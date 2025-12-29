@@ -88,6 +88,7 @@
 html {
   scroll-behavior: smooth;
   overflow-y: scroll;
+  overflow-x: hidden;
   scrollbar-gutter: stable;
 }
 
@@ -95,8 +96,16 @@ html {
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
+  padding: 0;
+  height: 100%;
   font-family: 'Vazirmatn', 'Nunito', sans-serif;
   /* Vazirmatn is great for Kurdish */
   background-color: var(--color-background);

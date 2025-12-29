@@ -15,7 +15,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
         { icon: Home, label: t('learn'), path: '/learn' },
         { icon: BookOpen, label: t('guidebook'), path: '/guidebook-hub' },
         { icon: MessageCircle, label: t('roleplay') || 'Role-Play', path: '/roleplay' },
-        { icon: Book, label: 'فەرهەنگ', path: '/dictionary' },
+        { icon: Book, label: t('dictionary'), path: '/dictionary' },
         { icon: Trophy, label: t('leaderboards'), path: '/leaderboard' },
         { icon: Target, label: t('quests'), path: '/quests' },
         { icon: Store, label: t('shop'), path: '/shop' },

@@ -19,7 +19,6 @@ import BookDictionary from './pages/BookDictionary/BookDictionary';
 import Layout from './components/Layout/Layout';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
-import { CONFIG } from './config';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -53,14 +52,6 @@ const AnimatedRoutes = () => {
 }
 
 const App: React.FC = () => {
-  React.useEffect(() => {
-    // Initialize Gemini API Key from user
-    const apiKey = CONFIG.GEMINI_API_KEY;
-    if (apiKey) {
-      localStorage.setItem('gemini_api_key', apiKey);
-    }
-  }, []);
-
   return (
     <Router>
       <ScrollToTop />
@@ -70,3 +61,4 @@ const App: React.FC = () => {
 }
 
 export default App;
+

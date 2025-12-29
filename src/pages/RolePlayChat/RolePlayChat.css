@@ -1,21 +1,27 @@
 .roleplay-chat-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: #f7f7f7;
-    position: relative;
     overflow: hidden;
+    z-index: 1000;
 }
 
-/* Header */
+/* Header - Fixed at Top */
 .chat-header {
-    height: 70px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
     background: #fff;
     border-bottom: 2px solid #e5e5e5;
-    padding: 0 20px;
+    padding: 0 12px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     z-index: 10;
 }
 
@@ -24,7 +30,7 @@
     border: none;
     color: #3c3c3c;
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     border-radius: 50%;
     transition: background 0.2s;
 }
@@ -36,34 +42,73 @@
 .scenario-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex: 1;
+    min-width: 0;
 }
 
-.scenario-icon-small {
-    font-size: 32px;
+.scenario-avatar-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.scenario-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e5e5;
+}
+
+.scenario-icon-overlay {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: #fff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+.scenario-titles {
+    min-width: 0;
 }
 
 .scenario-titles h2 {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
     margin: 0;
     color: #3c3c3c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .scenario-titles p {
-    font-size: 12px;
+    font-size: 11px;
     margin: 0;
     color: #777;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .difficulty-indicator {
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
     font-weight: 800;
     text-transform: uppercase;
+    flex-shrink: 0;
 }
 
 .difficulty-indicator.beginner {
@@ -81,18 +126,51 @@
     color: #ef4444;
 }
 
-/* Messages Area */
+/* Messages Area - Between header and footer */
 .chat-messages {
-    flex: 1;
+    position: absolute;
+    top: 56px;
+    /* Below header */
+    left: 0;
+    right: 0;
+    bottom: 120px;
+    /* Above footer */
     overflow-y: auto;
-    padding: 24px 20px;
+    padding: 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
+}
+
+/* Message Row Layout */
+.message-row {
+    display: flex;
+    gap: 12px;
+    max-width: 80%;
+}
+
+.message-row.ai {
+    align-self: flex-start;
+}
+
+.message-row.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e5e5;
+    flex-shrink: 0;
+    margin-top: auto;
+    /* Align to bottom of message */
+    background: #fff;
 }
 
 .message-bubble {
-    max-width: 80%;
     padding: 12px 16px;
     border-radius: 18px;
     position: relative;
@@ -102,7 +180,6 @@
 }
 
 .message-bubble.ai {
-    align-self: flex-start;
     background: #fff;
     border: 2px solid #e5e5e5;
     color: #3c3c3c;
@@ -110,11 +187,25 @@
 }
 
 .message-bubble.user {
-    align-self: flex-end;
     background: #1cb0f6;
     color: #fff;
     border-bottom-right-radius: 4px;
     box-shadow: 0 4px 0 #1899d6;
+}
+
+/* Attachments */
+.message-attachment {
+    margin-top: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #f0f0f0;
+    max-width: 200px;
+}
+
+.message-attachment img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .bubble-meta {
@@ -182,22 +273,29 @@
     }
 }
 
-/* Footer */
+/* Footer - Fixed at Bottom */
 .chat-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: #fff;
     border-top: 2px solid #e5e5e5;
-    padding: 20px;
+    padding: 10px 12px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
+    z-index: 10;
 }
 
 .record-status {
     font-size: 13px;
     font-weight: 700;
     color: #777;
-    height: 20px;
+    height: 18px;
+    transition: color 0.3s;
 }
 
 .record-status.active {
@@ -207,15 +305,16 @@
 
 .input-row {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-end;
+    /* Align icons to bottom as bar grows */
+    gap: 12px;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .mic-button {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: #fff;
     border: 3px solid #e5e5e5;
@@ -225,13 +324,14 @@
     justify-content: center;
     cursor: pointer;
     position: relative;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
 }
 
 .mic-button:hover {
     background: #f7f7f7;
     border-color: #d0d0d0;
+    transform: scale(1.05);
 }
 
 .mic-button.listening {
@@ -262,32 +362,75 @@
     }
 }
 
-/* Fallback Input */
+/* Fallback Input - Now Expanding Textarea */
 .text-input-fallback {
     flex: 1;
     background: #f0f0f0;
     border-radius: 24px;
     display: flex;
-    align-items: center;
-    padding: 0 16px;
-    height: 48px;
+    align-items: flex-end;
+    padding: 8px 16px;
+    min-height: 48px;
+    max-height: 150px;
+    /* Limit expansion */
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
 }
 
-.text-input-fallback input {
+.text-input-fallback:focus-within {
+    background: #fff;
+    border-color: #1cb0f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.text-input-fallback textarea {
     background: none;
     border: none;
     flex: 1;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     outline: none;
+    resize: none;
+    padding: 6px 0;
+    margin: 0;
+    width: 100%;
+    max-height: 120px;
+    line-height: 1.4;
+    font-family: inherit;
+    transition: height 0.1s ease;
+}
+
+.text-input-fallback textarea::-webkit-scrollbar {
+    width: 4px;
+}
+
+.text-input-fallback textarea::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
 }
 
 .send-btn {
     background: none;
     border: none;
+    color: #ccc;
+    cursor: default;
+    padding: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+}
+
+.send-btn.active {
     color: #1cb0f6;
     cursor: pointer;
-    padding: 4px;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.send-btn.active:hover {
+    transform: scale(1.2);
 }
 
 @keyframes pulse {

@@ -156,9 +156,22 @@
     border-top: 2px solid #e5e5e5;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 8px 0;
+    justify-content: flex-start;
+    /* Start from left for scrolling */
+    padding: 8px 12px;
     z-index: var(--z-fixed);
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    -ms-overflow-style: none;
+    /* Hide scrollbar IE/Edge */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+    gap: 12px;
+}
+
+.bottom-nav::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
 }
 
 .dark-mode .bottom-nav {

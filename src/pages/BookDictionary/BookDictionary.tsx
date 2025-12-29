@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from 'framer-motion';
 import {
-    ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Volume2,
+    ArrowLeft, ChevronLeft, ChevronRight, Volume2,
     Hand, UtensilsCrossed, ShoppingCart, Car, Users,
     Briefcase, Heart, Home, Smile, Clock
 } from 'lucide-react';
@@ -17,7 +17,8 @@ const iconMap: Record<string, React.ElementType> = {
     Briefcase, Heart, Home, Smile, Clock
 };
 
-const ENTRIES_PER_PAGE = 8;
+// Reduced entries to ensure they fit comfortably on the page without overflow
+const ENTRIES_PER_PAGE = 7;
 
 const BookDictionary: React.FC = () => {
     const navigate = useNavigate();
@@ -27,49 +28,93 @@ const BookDictionary: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [speakingId, setSpeakingId] = useState<string | null>(null);
     const [isFlipping, setIsFlipping] = useState(false);
-    const [flipDirection, setFlipDirection] = useState<'prev' | 'next' | null>(null);
 
-    // Calculate pagination
+    // Derived state
     const totalPages = Math.ceil(activeCategory.entries.length / ENTRIES_PER_PAGE);
-    const startIndex = currentPage * ENTRIES_PER_PAGE;
-    const currentEntries = activeCategory.entries.slice(startIndex, startIndex + ENTRIES_PER_PAGE);
 
-    // Handle category change
-    const handleCategoryChange = (category: DictionaryCategory) => {
-        if (category.id !== activeCategory.id) {
-            setActiveCategory(category);
-            setCurrentPage(0);
-        }
-    };
-
-    // Handle page navigation with flip animation
-    // When going NEXT: flip the right page (Kurdish) towards left
-    // When going PREV: flip back (previous page slides in from left)
-    const handlePageChange = useCallback((direction: 'prev' | 'next') => {
-        if (isFlipping) return;
-
-        const newPage = direction === 'next' ? currentPage + 1 : currentPage - 1;
-        if (newPage < 0 || newPage >= totalPages) return;
-
-        setIsFlipping(true);
-        // 'next' = animate right page, 'prev' = animate left page
-        setFlipDirection(direction);
-
-        setTimeout(() => {
-            setCurrentPage(newPage);
-            setIsFlipping(false);
-            setFlipDirection(null);
-        }, 400);
-    }, [currentPage, totalPages, isFlipping]);
-
-    // Handle text-to-speech
+    // Sound Handling
     const handleSpeak = useCallback((text: string, id: string) => {
         setSpeakingId(id);
         speak(text, () => setSpeakingId(null));
     }, [speak]);
 
-    // Get icon component
-    const CategoryIcon = iconMap[activeCategory.icon] || Hand;
+    // Page Change Logic
+    const handlePageChange = useCallback((newPage: number) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
+    }, [totalPages]);
+
+    // Render a Single Page Face (Front or Back content)
+    const renderPageContent = (pageIndex: number, side: 'left' | 'right') => {
+        if (pageIndex < 0 || pageIndex >= totalPages) return <div className="empty-page" />;
+
+        const startIndex = pageIndex * ENTRIES_PER_PAGE;
+        const entries = activeCategory.entries.slice(startIndex, startIndex + ENTRIES_PER_PAGE);
+        const CategoryIcon = iconMap[activeCategory.icon] || Hand;
+        const isLeft = side === 'left';
+
+        return (
+            <div className={`book-page page-${side} ${isLeft ? 'static-left' : 'static-right'}`}>
+                {/* Book Header */}
+                <div className="page-header">
+                    <div className="header-title-row">
+                        <CategoryIcon size={22} style={{ color: activeCategory.color }} />
+                        <h3>{isLeft ? activeCategory.name.english : activeCategory.name.kurdish}</h3>
+                    </div>
+                    <div className="page-number-box">
+                        <span className="page-number">{isLeft ? `P. ${pageIndex + 1}` : `${pageIndex + 1}`}</span>
+                    </div>
+                </div>
+
+                {/* Content List */}
+                <div className="entries-list">
+                    {entries.map((entry, index) => (
+                        <div key={entry.id} className={`entry-item ${isLeft ? 'ltr' : 'rtl'}`}>
+                            {/* Number Badge */}
+                            <span className="entry-number" style={{ background: activeCategory.color + '20', color: activeCategory.color }}>
+                                {startIndex + index + 1}
+                            </span>
+
+                            {/* Text Content */}
+                            <div className="entry-content">
+                                {isLeft ? (
+                                    <span className="entry-text english">{entry.english}</span>
+                                ) : (
+                                    <div className="kurdish-group">
+                                        <span className="entry-text kurdish">{entry.kurdish}</span>
+                                        {entry.pronunciation && (
+                                            <span className="entry-pronunciation">{entry.pronunciation}</span>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Speaker Button - ONLY FOR ENGLISH (LEFT PAGE) */}
+                            {isLeft ? (
+                                <button
+                                    className={`speak-button ${speakingId === entry.id ? 'speaking' : ''}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSpeak(entry.english, entry.id);
+                                    }}
+                                    style={{ color: activeCategory.color }}
+                                >
+                                    <Volume2 size={18} />
+                                </button>
+                            ) : (
+                                /* Placeholder to maintain layout balance */
+                                <div style={{ width: 32 }} />
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Footer Decor */}
+                <div className="page-footer-decor" style={{ background: activeCategory.color }} />
+            </div>
+        );
+    };
 
     return (
         <div className="book-dictionary">
@@ -87,142 +132,222 @@ const BookDictionary: React.FC = () => {
             </header>
 
             {/* Category Tabs */}
-            <div className="category-tabs">
-                {bookDictionaryData.map((category) => {
-                    const Icon = iconMap[category.icon] || Hand;
-                    return (
-                        <button
-                            key={category.id}
-                            className={`category-tab ${activeCategory.id === category.id ? 'active' : ''}`}
-                            onClick={() => handleCategoryChange(category)}
-                            style={{ '--tab-gradient': category.gradient } as React.CSSProperties}
-                        >
-                            <Icon size={18} />
-                            <span>{category.name.kurdish}</span>
-                        </button>
-                    );
-                })}
-            </div>
-
-            {/* The Book */}
-            <div className="book-container">
-                <div className="book-wrapper">
-                    <div className="book-spine" />
-
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={`${activeCategory.id}-${currentPage}`}
-                            className="book-pages"
-                            initial={{ opacity: 0.8, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0.8, scale: 0.98 }}
-                            transition={{ duration: 0.3 }}
-                            style={{
-                                '--category-color': activeCategory.color,
-                                '--category-dark': activeCategory.color + 'cc',
-                            } as React.CSSProperties}
-                        >
-                            {/* Left Page - English */}
-                            <div className={`book-page page-left ${flipDirection === 'prev' ? 'flipping-left' : ''}`}>
-                                <div className="page-header">
-                                    <h2>
-                                        <CategoryIcon size={24} style={{ color: activeCategory.color }} />
-                                        {activeCategory.name.english}
-                                    </h2>
-                                    <span className="page-number">Page {currentPage + 1}</span>
-                                </div>
-
-                                <div className="entries-list">
-                                    {currentEntries.map((entry, index) => (
-                                        <div key={entry.id} className="entry-item">
-                                            <span className="entry-number">{startIndex + index + 1}</span>
-                                            <span className="entry-text">{entry.english}</span>
-                                            <button
-                                                className={`speak-button ${speakingId === entry.id ? 'speaking' : ''}`}
-                                                onClick={() => handleSpeak(entry.english, entry.id)}
-                                                title="Listen"
-                                            >
-                                                <Volume2 size={18} />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Corner curl effect */}
-                                <div
-                                    className="page-corner page-corner-left"
-                                    onClick={() => handlePageChange('prev')}
-                                />
-                            </div>
-
-                            {/* Right Page - Kurdish */}
-                            <div className={`book-page page-right ${flipDirection === 'next' ? 'flipping-right' : ''}`}>
-                                <div className="page-header">
-                                    <h2>
-                                        <CategoryIcon size={24} style={{ color: activeCategory.color }} />
-                                        {activeCategory.name.kurdish}
-                                    </h2>
-                                    <span className="page-number">لاپەڕە {currentPage + 1}</span>
-                                </div>
-
-                                <div className="entries-list">
-                                    {currentEntries.map((entry, index) => (
-                                        <div key={entry.id} className="entry-item">
-                                            <span className="entry-number">{startIndex + index + 1}</span>
-                                            <div style={{ flex: 1 }}>
-                                                <span className="entry-text">{entry.kurdish}</span>
-                                                {entry.pronunciation && (
-                                                    <span className="entry-pronunciation"> ({entry.pronunciation})</span>
-                                                )}
-                                            </div>
-                                            <button
-                                                className={`speak-button ${speakingId === entry.id + '-ku' ? 'speaking' : ''}`}
-                                                onClick={() => handleSpeak(entry.pronunciation || entry.english, entry.id + '-ku')}
-                                                title="گوێ بگرە"
-                                            >
-                                                <Volume2 size={18} />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Corner curl effect */}
-                                <div
-                                    className="page-corner page-corner-right"
-                                    onClick={() => handlePageChange('next')}
-                                />
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
+            <div className="category-tabs-container">
+                <div className="category-tabs">
+                    {bookDictionaryData.map((category) => {
+                        const Icon = iconMap[category.icon] || Hand;
+                        return (
+                            <button
+                                key={category.id}
+                                className={`category-tab ${activeCategory.id === category.id ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveCategory(category);
+                                    setCurrentPage(0);
+                                }}
+                                style={{ '--tab-gradient': category.gradient } as React.CSSProperties}
+                            >
+                                <Icon size={18} />
+                                <span>{category.name.kurdish}</span>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
-            {/* Page Navigation */}
-            <div className="page-navigation">
+            {/* Navigation Controls */}
+            <div className="book-navigation">
                 <button
-                    className="nav-button"
-                    onClick={() => handlePageChange('prev')}
-                    disabled={currentPage === 0 || isFlipping}
+                    className="nav-btn prev"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 0}
                 >
                     <ChevronLeft size={20} />
                     <span>پێشوو</span>
                 </button>
 
-                <div className="page-indicator">
-                    <span>{currentPage + 1}</span>
-                    <span style={{ opacity: 0.5 }}>/</span>
-                    <span>{totalPages}</span>
+                <div className="page-status">
+                    <span className="current">{currentPage + 1}</span>
+                    <span className="divider">/</span>
+                    <span className="total">{totalPages}</span>
                 </div>
 
                 <button
-                    className="nav-button"
-                    onClick={() => handlePageChange('next')}
-                    disabled={currentPage >= totalPages - 1 || isFlipping}
+                    className="nav-btn next"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages - 1}
                 >
                     <span>دواتر</span>
                     <ChevronRight size={20} />
                 </button>
             </div>
+
+            {/* THE BOOK STAGE */}
+            <div className="book-container">
+                <div className="book-wrapper">
+                    <div className="book-spine" />
+
+                    <div className="book-pages">
+                        {/* BASE LAYER */}
+                        <div className="book-pages-layer base-layer" style={{ zIndex: 0 }}>
+                            <div className="page-placeholder left">
+                                {renderPageContent(currentPage > 0 ? currentPage - 1 : currentPage, 'left')}
+                            </div>
+                            <div className="page-placeholder right">
+                                {renderPageContent(currentPage < totalPages - 1 ? currentPage + 1 : currentPage, 'right')}
+                            </div>
+                        </div>
+
+                        {/* PREV FLIPPER */}
+                        {currentPage > 0 && (
+                            <FlippingSheet
+                                side="left"
+                                frontContent={renderPageContent(currentPage, 'left')}
+                                backContent={renderPageContent(currentPage - 1, 'right')}
+                                onFlipComplete={() => handlePageChange(currentPage - 1)}
+                                onFlipStart={() => setIsFlipping(true)}
+                                onFlipCancel={() => setIsFlipping(false)}
+                            />
+                        )}
+
+                        {/* NEXT FLIPPER */}
+                        {currentPage < totalPages - 1 && (
+                            <FlippingSheet
+                                side="right"
+                                frontContent={renderPageContent(currentPage, 'right')}
+                                backContent={renderPageContent(currentPage + 1, 'left')}
+                                onFlipComplete={() => handlePageChange(currentPage + 1)}
+                                onFlipStart={() => setIsFlipping(true)}
+                                onFlipCancel={() => setIsFlipping(false)}
+                            />
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// =========================================================
+// FLIPPING SHEET COMPONENT (Optimized Physics)
+// =========================================================
+interface FlippingSheetProps {
+    side: 'left' | 'right';
+    frontContent: React.ReactNode;
+    backContent: React.ReactNode;
+    onFlipComplete: () => void;
+    onFlipStart?: () => void;
+    onFlipCancel?: () => void;
+}
+
+const FlippingSheet: React.FC<FlippingSheetProps> = ({ side, frontContent, backContent, onFlipComplete, onFlipStart, onFlipCancel }) => {
+    const isRight = side === 'right';
+    const x = useMotionValue(0);
+    const controls = useAnimation();
+    const [isDragging, setIsDragging] = useState(false);
+
+    // MAPPING
+    const rotation = useTransform(
+        x,
+        isRight ? [0, -300] : [0, 300],
+        isRight ? [0, -178] : [0, 178]
+    );
+
+    // SHADOWS
+    const shadowOpacity = useTransform(rotation, isRight ? [0, -90, -180] : [0, 90, 180], [0, 0.4, 0]);
+    const highlightOpacity = useTransform(rotation, isRight ? [0, -90, -180] : [0, 90, 180], [0, 0.2, 0]);
+
+    const handleDragEnd = (event: any, info: PanInfo) => {
+        setIsDragging(false);
+        const threshold = 80;
+        const velocity = info.velocity.x;
+        const offset = info.offset.x;
+
+        let shouldFlip = false;
+        if (isRight) {
+            if (offset < -threshold || velocity < -300) shouldFlip = true;
+        } else {
+            if (offset > threshold || velocity > 300) shouldFlip = true;
+        }
+
+        if (shouldFlip) {
+            controls.start({
+                x: isRight ? -600 : 600,
+                transition: { duration: 0.4, ease: "easeInOut" }
+            })
+                .then(() => {
+                    onFlipComplete();
+                    x.set(0);
+                });
+        } else {
+            controls.start({
+                x: 0,
+                transition: { type: "spring", stiffness: 300, damping: 25 }
+            })
+                .then(() => onFlipCancel?.());
+        }
+    };
+
+    const dragHandleStyle: React.CSSProperties = {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        width: '20%',
+        [isRight ? 'right' : 'left']: 0,
+        zIndex: 500,
+        cursor: isDragging ? 'grabbing' : 'grab',
+        pointerEvents: 'auto',
+        x
+    };
+
+    const dragConstraints = isRight ? { left: -600, right: 0 } : { left: 0, right: 600 };
+
+    return (
+        <div
+            className={`book-pages-layer flipping-layer ${side}`}
+            style={{
+                zIndex: isDragging ? 200 : 50,
+                perspective: '2000px',
+                pointerEvents: 'none'
+            }}
+        >
+            <motion.div
+                className="visual-page-container"
+                style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    transformStyle: 'preserve-3d', transformOrigin: isRight ? 'left center' : 'right center',
+                    rotateY: rotation, boxShadow: isDragging ? '0 10px 30px rgba(0,0,0,0.2)' : 'none'
+                }}
+            >
+                <div className="face front" style={{
+                    background: '#fcfaf7',
+                    backfaceVisibility: 'hidden', position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'auto'
+                }}>
+                    {frontContent}
+                    <motion.div style={{ position: 'absolute', top: 0, bottom: 0, width: '15%', right: isRight ? 'auto' : 0, left: isRight ? 0 : 'auto', background: `linear-gradient(${isRight ? 'to right' : 'to left'}, rgba(0,0,0,0.15), transparent)`, opacity: 1, pointerEvents: 'none' }} />
+                    <motion.div style={{ position: 'absolute', top: 0, bottom: 0, width: '30%', right: isRight ? 'auto' : 0, left: isRight ? 0 : 'auto', background: `linear-gradient(${isRight ? 'to right' : 'to left'}, rgba(0,0,0,0.3), transparent)`, opacity: shadowOpacity, pointerEvents: 'none' }} />
+                    <motion.div style={{ position: 'absolute', inset: 0, background: `linear-gradient(${isRight ? '90deg' : '-90deg'}, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)`, opacity: highlightOpacity, pointerEvents: 'none' }} />
+
+                    <div className={`corner-hint corner-${side}`} />
+                </div>
+
+                <div className="face back" style={{
+                    background: '#fcfaf7',
+                    backfaceVisibility: 'hidden', position: 'absolute', inset: 0, overflow: 'hidden', transform: 'rotateY(180deg)'
+                }}>
+                    {backContent}
+                    <motion.div style={{ position: 'absolute', top: 0, bottom: 0, width: '15%', right: isRight ? 0 : 'auto', left: isRight ? 'auto' : 0, background: `linear-gradient(${isRight ? 'to left' : 'to right'}, rgba(0,0,0,0.15), transparent)`, opacity: 1, pointerEvents: 'none' }} />
+                    <motion.div style={{ position: 'absolute', top: 0, bottom: 0, width: '30%', right: isRight ? 0 : 'auto', left: isRight ? 'auto' : 0, background: `linear-gradient(${isRight ? 'to left' : 'to right'}, rgba(0,0,0,0.3), transparent)`, opacity: shadowOpacity, pointerEvents: 'none' }} />
+                </div>
+            </motion.div>
+
+            <motion.div
+                className="drag-handle"
+                style={dragHandleStyle}
+                drag="x" dragConstraints={dragConstraints} dragElastic={0.1}
+                onDragStart={() => { setIsDragging(true); onFlipStart?.(); }}
+                onDragEnd={handleDragEnd} animate={controls}
+                whileHover={{ scale: 1.0, opacity: 1 }}
+            />
         </div>
     );
 };
