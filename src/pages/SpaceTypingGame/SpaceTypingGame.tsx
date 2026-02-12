@@ -1,21 +1,19 @@
-
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Star } from 'lucide-react';
+import { ArrowLeft, Heart, Star, Crosshair, Gauge, RotateCcw } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { gameLevels, GameLevel, SpaceWord } from '../../data/spaceGameWords';
 import { SpaceshipSvg, AsteroidSvg, PlanetSaturnSvg, PlanetEarthSvg, PlanetRedSvg, PlanetIceSvg, StarSvg } from './SpaceAssets';
 import './SpaceTypingGame.css';
 
-// Asset components array for random selection
-const ASSET_TYPES = [
-    { component: AsteroidSvg, type: 'asteroid', scale: 0.8 },
-    { component: AsteroidSvg, type: 'asteroid', scale: 1.0 },
-    { component: PlanetSaturnSvg, type: 'planet', scale: 1.3 },
-    { component: PlanetEarthSvg, type: 'planet', scale: 1.1 },
-    { component: PlanetRedSvg, type: 'planet', scale: 1.0 },
-    { component: PlanetIceSvg, type: 'planet', scale: 0.9 },
-    { component: StarSvg, type: 'star', scale: 0.7 }
+const ASSET_POOL = [
+    { component: AsteroidSvg, scale: 0.85 },
+    { component: AsteroidSvg, scale: 1.0 },
+    { component: PlanetSaturnSvg, scale: 1.2 },
+    { component: PlanetEarthSvg, scale: 1.05 },
+    { component: PlanetRedSvg, scale: 1.0 },
+    { component: PlanetIceSvg, scale: 0.9 },
+    { component: StarSvg, scale: 0.7 },
 ];
 
 interface FallingObject {
@@ -23,18 +21,16 @@ interface FallingObject {
     word: SpaceWord;
     x: number;
     y: number;
-    baseX: number; // Store spawn X for oscillation
+    baseX: number;
     rotation: number;
     rotationSpeed: number;
     oscillationOffset: number;
     oscillationSpeed: number;
     oscillationAmp: number;
     assetIndex: number;
-    speed: number; // pixels per frame
-    isActive: boolean;
+    speed: number;
     isDestroying: boolean;
     typedProgress: number;
-    shakeTime: number;
 }
 
 interface Particle {
@@ -42,24 +38,18 @@ interface Particle {
     x: number;
     y: number;
     color: string;
-    velocity: { x: number; y: number };
+    vx: number;
+    vy: number;
     life: number;
-    scale: number;
-}
-
-interface Shockwave {
-    id: string;
-    x: number;
-    y: number;
-    createdAt: number;
+    size: number;
 }
 
 interface Laser {
     id: string;
     startX: number;
     startY: number;
-    targetX: number;
-    targetY: number;
+    endX: number;
+    endY: number;
     createdAt: number;
 }
 
@@ -67,413 +57,452 @@ interface ScorePopup {
     id: string;
     x: number;
     y: number;
-    score: number;
+    value: number;
+    createdAt: number;
 }
 
 const SpaceTypingGame = () => {
     const navigate = useNavigate();
     const { language } = useLanguage();
+    const isKu = language === 'ckb';
 
-    // Game States
-    const [gameState, setGameState] = useState<'menu' | 'playing' | 'victory' | 'gameover'>('menu');
+    // Core state
+    const [gameState, setGameState] = useState<'menu' | 'playing' | 'results'>('menu');
     const [selectedLevel, setSelectedLevel] = useState<GameLevel | null>(null);
     const [score, setScore] = useState(0);
     const [lives, setLives] = useState(3);
-    const [fallingObjects, setFallingObjects] = useState<FallingObject[]>([]);
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [activeInfo, setActiveInfo] = useState<{ id: string | null }>({ id: null });
+    const [objects, setObjects] = useState<FallingObject[]>([]);
+    const [wordIndex, setWordIndex] = useState(0);
+    const [wordsCleared, setWordsCleared] = useState(0);
+    const [activeId, setActiveId] = useState<string | null>(null);
+    const [streak, setStreak] = useState(0);
+    const [maxStreak, setMaxStreak] = useState(0);
+    const [accuracy, setAccuracy] = useState({ hits: 0, misses: 0 });
+    const [wpm, setWpm] = useState(0);
 
-    // Visual States
+    // Visual
     const [particles, setParticles] = useState<Particle[]>([]);
-    const [shockwaves, setShockwaves] = useState<Shockwave[]>([]);
     const [lasers, setLasers] = useState<Laser[]>([]);
     const [scorePopups, setScorePopups] = useState<ScorePopup[]>([]);
-    const [wordsCompleted, setWordsCompleted] = useState(0);
-    const [muzzleFlash, setMuzzleFlash] = useState(false);
+    const [screenFlash, setScreenFlash] = useState('');
+    const [shipAngle, setShipAngle] = useState(0); // Ship rotation in degrees
+    const [highScores, setHighScores] = useState<Record<string, number>>(() => {
+        try { return JSON.parse(localStorage.getItem('stg-hs') || '{}'); } catch { return {}; }
+    });
 
-    // Background Stars
-    const [stars] = useState(() => {
-        return Array.from({ length: 150 }).map((_, i) => ({
+    // Stars
+    const [bgStars] = useState(() =>
+        Array.from({ length: 120 }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             y: Math.random() * 100,
             layer: Math.floor(Math.random() * 3) + 1,
-            delay: Math.random() * 5,
-        }));
-    });
+            delay: Math.random() * 8,
+        }))
+    );
 
     // Refs
-    const gameLoopRef = useRef<number>(0);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const gameCanvasRef = useRef<HTMLDivElement>(null);
-    const lastTimeRef = useRef<number>(0);
-    const fallingObjectsRef = useRef<FallingObject[]>([]);
+    const objectsRef = useRef<FallingObject[]>([]);
     const livesRef = useRef(3);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const gameStartTime = useRef(0);
+    const totalCharsTyped = useRef(0);
+    const wordIndexRef = useRef(0);
+    const scoreRef = useRef(0);
 
-    // Keep refs in sync
+    useEffect(() => { objectsRef.current = objects; }, [objects]);
+    useEffect(() => { livesRef.current = lives; }, [lives]);
+    useEffect(() => { wordIndexRef.current = wordIndex; }, [wordIndex]);
+    useEffect(() => { scoreRef.current = score; }, [score]);
+
+    // Track ship angle toward active target
     useEffect(() => {
-        fallingObjectsRef.current = fallingObjects;
-    }, [fallingObjects]);
+        if (!activeId) { setShipAngle(0); return; }
+        const target = objectsRef.current.find(o => o.id === activeId);
+        if (!target) { setShipAngle(0); return; }
 
-    useEffect(() => {
-        livesRef.current = lives;
-    }, [lives]);
+        const shipX = window.innerWidth / 2;
+        const shipY = window.innerHeight - 80;
+        const dx = target.x - shipX;
+        const dy = target.y - shipY; // always negative (target is above)
+        const angle = Math.atan2(dx, -dy) * (180 / Math.PI); // 0 = straight up
+        setShipAngle(Math.max(-45, Math.min(45, angle)));
+    }, [activeId, objects]);
 
-    // Start Game
-    const startGame = (level: GameLevel) => {
+    // ===== GAME CONTROL =====
+    const startGame = useCallback((level: GameLevel) => {
         setSelectedLevel(level);
         setGameState('playing');
         setScore(0);
+        scoreRef.current = 0;
         setLives(3);
         livesRef.current = 3;
-        setFallingObjects([]);
-        fallingObjectsRef.current = [];
-        setCurrentWordIndex(0);
-        setWordsCompleted(0);
-        setActiveInfo({ id: null });
-        setLasers([]);
+        setObjects([]);
+        objectsRef.current = [];
+        setWordIndex(0);
+        wordIndexRef.current = 0;
+        setWordsCleared(0);
+        setActiveId(null);
+        setStreak(0);
+        setMaxStreak(0);
+        setAccuracy({ hits: 0, misses: 0 });
+        setWpm(0);
         setParticles([]);
-        setShockwaves([]);
-        setTimeout(() => inputRef.current?.focus(), 100);
-    };
+        setLasers([]);
+        setScorePopups([]);
+        setScreenFlash('');
+        setShipAngle(0);
+        gameStartTime.current = Date.now();
+        totalCharsTyped.current = 0;
+        setTimeout(() => inputRef.current?.focus(), 150);
+    }, []);
 
-    // Spawn Object
+    // ===== SPAWN =====
     const spawnObject = useCallback(() => {
-        if (!selectedLevel || currentWordIndex >= selectedLevel.words.length) return;
+        if (!selectedLevel || wordIndexRef.current >= selectedLevel.words.length) return;
 
-        const word = selectedLevel.words[currentWordIndex];
-        const canvasWidth = window.innerWidth;
-        const minX = 100;
-        const maxX = canvasWidth - 100;
-        const spawnX = Math.random() * (maxX - minX) + minX;
+        const idx = wordIndexRef.current;
+        const word = selectedLevel.words[idx];
+        const vw = window.innerWidth;
+        const margin = Math.max(80, vw * 0.1);
+        const spawnX = margin + Math.random() * (vw - margin * 2);
+        const baseSpeed = 0.5 + selectedLevel.speed * 1.6;
 
-        // Speed: pixels per frame at 60fps
-        // Level speed 0.5 = slow (1.5 px/frame), 1.0 = fast (3 px/frame)
-        const baseSpeed = 1.0 + selectedLevel.speed * 2.0;
-
-        const newObject: FallingObject = {
-            id: `obj-${Date.now()}-${currentWordIndex}`,
+        const obj: FallingObject = {
+            id: `obj-${Date.now()}-${idx}`,
             word,
             x: spawnX,
-            y: 50, // Start at top, visible immediately
+            y: -20,
             baseX: spawnX,
             rotation: Math.random() * 360,
-            rotationSpeed: (Math.random() - 0.5) * 2,
+            rotationSpeed: (Math.random() - 0.5) * 1.5,
             oscillationOffset: Math.random() * Math.PI * 2,
-            oscillationSpeed: 0.5 + Math.random() * 1.5,
-            oscillationAmp: 30 + Math.random() * 40,
-            assetIndex: Math.floor(Math.random() * ASSET_TYPES.length),
-            speed: baseSpeed + (Math.random() - 0.5) * 0.5,
-            isActive: false,
+            oscillationSpeed: 0.4 + Math.random() * 1.2,
+            oscillationAmp: 15 + Math.random() * 30,
+            assetIndex: Math.floor(Math.random() * ASSET_POOL.length),
+            speed: baseSpeed + (Math.random() - 0.5) * 0.3,
             isDestroying: false,
             typedProgress: 0,
-            shakeTime: 0
         };
 
-        setFallingObjects(prev => [...prev, newObject]);
-        setCurrentWordIndex(prev => prev + 1);
-    }, [selectedLevel, currentWordIndex]);
+        setObjects(prev => [...prev, obj]);
+        setWordIndex(prev => prev + 1);
+        wordIndexRef.current = idx + 1;
+    }, [selectedLevel]);
 
-    const addLaser = (targetX: number, targetY: number) => {
-        const spaceshipX = window.innerWidth / 2;
-        const spaceshipY = window.innerHeight - 80;
-        setMuzzleFlash(true);
-        setTimeout(() => setMuzzleFlash(false), 50);
+    // ===== FIRE LASER =====
+    const fireLaser = useCallback((targetX: number, targetY: number) => {
+        const shipX = window.innerWidth / 2;
+        const shipY = window.innerHeight - 80;
         setLasers(prev => [...prev, {
             id: `laser-${Date.now()}-${Math.random()}`,
-            startX: spaceshipX,
-            startY: spaceshipY,
-            targetX,
-            targetY,
-            createdAt: Date.now()
+            startX: shipX,
+            startY: shipY,
+            endX: targetX,
+            endY: targetY,
+            createdAt: Date.now(),
         }]);
-    };
+    }, []);
 
-    const destroyObjectEffect = (obj: FallingObject) => {
-        const points = obj.word.difficulty === 'easy' ? 10 : obj.word.difficulty === 'medium' ? 20 : 30;
+    // ===== DESTROY EFFECT =====
+    const destroyObject = useCallback((obj: FallingObject) => {
+        const diffPoints = obj.word.difficulty === 'easy' ? 10 : obj.word.difficulty === 'medium' ? 25 : 40;
+        const streakBonus = Math.min(streak * 3, 30);
+        const points = diffPoints + streakBonus;
+
         setScore(s => s + points);
-        setWordsCompleted(w => w + 1);
+        scoreRef.current += points;
+        setWordsCleared(w => w + 1);
+        setStreak(s => { const n = s + 1; if (n > maxStreak) setMaxStreak(n); return n; });
+        setScreenFlash('hit');
+        setTimeout(() => setScreenFlash(''), 200);
 
-        const newParticles: Particle[] = [];
-        const colors = ['#fbbf24', '#f87171', '#94a3b8', '#ffffff', '#f59e0b'];
-        for (let i = 0; i < 25; i++) {
+        const colors = ['#f59e0b', '#ef4444', '#e2e8f0', '#fff', '#22c55e'];
+        const newP: Particle[] = [];
+        for (let i = 0; i < 22; i++) {
             const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 8 + 3;
-            newParticles.push({
+            const speed = 2 + Math.random() * 7;
+            newP.push({
                 id: `p-${Date.now()}-${i}`,
-                x: obj.x,
-                y: obj.y,
+                x: obj.x, y: obj.y,
                 color: colors[Math.floor(Math.random() * colors.length)],
-                velocity: { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed },
-                life: 1.0,
-                scale: Math.random() * 0.8 + 0.4
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 1,
+                size: 3 + Math.random() * 5,
             });
         }
-        setParticles(prev => [...prev, ...newParticles]);
-        setShockwaves(prev => [...prev, { id: `sw-${Date.now()}`, x: obj.x, y: obj.y, createdAt: Date.now() }]);
-        setScorePopups(prev => [...prev, { id: `sp-${Date.now()}`, x: obj.x, y: obj.y, score: points }]);
-    };
+        setParticles(prev => [...prev, ...newP]);
+        setScorePopups(prev => [...prev, { id: `sp-${Date.now()}`, x: obj.x, y: obj.y, value: points, createdAt: Date.now() }]);
+    }, [streak, maxStreak]);
 
+    // ===== INPUT HANDLER =====
     const processInput = useCallback((char: string) => {
-        const currentObjects = fallingObjectsRef.current;
-        const currentActive = currentObjects.find(o => o.id === activeInfo.id && !o.isDestroying);
+        const current = objectsRef.current;
+        const activeObj = current.find(o => o.id === activeId && !o.isDestroying);
 
-        let targetId = activeInfo.id;
-        let shouldFire = false;
-        let targetPos = { x: 0, y: 0 };
+        if (activeObj) {
+            const expected = activeObj.word.text[activeObj.typedProgress];
+            if (char.toLowerCase() === expected.toLowerCase()) {
+                totalCharsTyped.current++;
+                setAccuracy(a => ({ ...a, hits: a.hits + 1 }));
+                fireLaser(activeObj.x, activeObj.y);
 
-        if (currentActive) {
-            const requiredChar = currentActive.word.text[currentActive.typedProgress];
-            if (char.toLowerCase() === requiredChar.toLowerCase()) {
-                shouldFire = true;
-                targetPos = { x: currentActive.x, y: currentActive.y };
+                setObjects(prev => prev.map(o => {
+                    if (o.id !== activeObj.id) return o;
+                    const np = o.typedProgress + 1;
+                    if (np >= o.word.text.length) {
+                        destroyObject(o);
+                        setActiveId(null);
+                        return { ...o, typedProgress: np, isDestroying: true };
+                    }
+                    return { ...o, typedProgress: np };
+                }));
+            } else {
+                setAccuracy(a => ({ ...a, misses: a.misses + 1 }));
             }
         } else {
-            const candidates = currentObjects.filter(o =>
-                !o.isDestroying &&
-                o.y > 0 &&
+            const candidates = current.filter(o =>
+                !o.isDestroying && o.y > 0 &&
                 o.word.text[0].toLowerCase() === char.toLowerCase()
             );
             if (candidates.length > 0) {
                 const target = candidates.sort((a, b) => b.y - a.y)[0];
-                targetId = target.id;
-                shouldFire = true;
-                targetPos = { x: target.x, y: target.y };
+                setActiveId(target.id);
+                totalCharsTyped.current++;
+                setAccuracy(a => ({ ...a, hits: a.hits + 1 }));
+                fireLaser(target.x, target.y);
+
+                setObjects(prev => prev.map(o => {
+                    if (o.id !== target.id) return o;
+                    const np = 1;
+                    if (np >= o.word.text.length) {
+                        destroyObject(o);
+                        setActiveId(null);
+                        return { ...o, typedProgress: np, isDestroying: true };
+                    }
+                    return { ...o, typedProgress: np };
+                }));
             }
         }
+    }, [activeId, destroyObject, fireLaser]);
 
-        if (shouldFire && targetId) {
-            addLaser(targetPos.x, targetPos.y);
-            if (targetId !== activeInfo.id) setActiveInfo({ id: targetId });
-
-            setFallingObjects(prev => prev.map(o => {
-                if (o.id === targetId) {
-                    const newProgress = o.typedProgress + 1;
-                    if (newProgress >= o.word.text.length) {
-                        destroyObjectEffect(o);
-                        setActiveInfo({ id: null });
-                        return { ...o, typedProgress: newProgress, isDestroying: true };
-                    }
-                    return { ...o, typedProgress: newProgress, shakeTime: Date.now() };
-                }
-                return o;
-            }));
-        } else if (currentActive) {
-            setFallingObjects(prev => prev.map(o =>
-                o.id === currentActive.id ? { ...o, shakeTime: Date.now() } : o
-            ));
-        }
-    }, [activeInfo]);
-
-    // Main Game Loop
+    // ===== GAME LOOP =====
     useEffect(() => {
-        if (gameState !== 'playing') {
-            lastTimeRef.current = 0;
-            return;
-        }
+        if (gameState !== 'playing') return;
 
-        let animationId: number;
+        let animId: number;
+        let lastTime = 0;
 
         const loop = (time: number) => {
-            if (!lastTimeRef.current) lastTimeRef.current = time;
-            const deltaTime = Math.min((time - lastTimeRef.current) / 16.67, 3); // Cap at 3x speed
-            lastTimeRef.current = time;
+            if (!lastTime) lastTime = time;
+            const dt = Math.min((time - lastTime) / 16.67, 3);
+            lastTime = time;
 
             const now = Date.now();
-            const canvasHeight = window.innerHeight;
-            const floorY = canvasHeight - 150;
+            const floorY = window.innerHeight - 140;
 
-            // Update falling objects
-            setFallingObjects(prev => {
+            setObjects(prev => {
                 const updated: FallingObject[] = [];
                 let lostLife = false;
 
                 for (const obj of prev) {
                     if (obj.isDestroying) continue;
 
-                    // Move down
-                    const newY = obj.y + obj.speed * deltaTime;
+                    const newY = obj.y + obj.speed * dt;
+                    const osc = Math.sin((now / 1000) * obj.oscillationSpeed + obj.oscillationOffset);
+                    const newX = obj.baseX + osc * obj.oscillationAmp;
+                    const newRot = obj.rotation + obj.rotationSpeed * dt;
 
-                    // Oscillate X
-                    const oscillation = Math.sin((now / 1000) * obj.oscillationSpeed + obj.oscillationOffset);
-                    const newX = obj.baseX + oscillation * obj.oscillationAmp;
-
-                    // Rotate
-                    const newRotation = obj.rotation + obj.rotationSpeed * deltaTime;
-
-                    // Check if hit floor
                     if (newY > floorY) {
                         lostLife = true;
-                        continue; // Don't add to updated array
+                        continue;
                     }
 
-                    updated.push({
-                        ...obj,
-                        x: newX,
-                        y: newY,
-                        rotation: newRotation
-                    });
+                    updated.push({ ...obj, x: newX, y: newY, rotation: newRot });
                 }
 
                 if (lostLife) {
-                    const currentLives = livesRef.current;
-                    if (currentLives > 0) {
-                        setLives(currentLives - 1);
-                        livesRef.current = currentLives - 1;
-                        if (currentLives - 1 <= 0) {
-                            setGameState('gameover');
-                        }
+                    const cl = livesRef.current;
+                    if (cl > 0) {
+                        setLives(cl - 1);
+                        livesRef.current = cl - 1;
+                        setStreak(0);
+                        setScreenFlash('damage');
+                        setTimeout(() => setScreenFlash(''), 300);
+                        const activeStillExists = updated.find(o => o.id === activeId);
+                        if (!activeStillExists) setActiveId(null);
+                        if (cl - 1 <= 0) setGameState('results');
                     }
                 }
 
                 return updated;
             });
 
-            // Update particles
-            setParticles(prev => prev.map(p => ({
-                ...p,
-                x: p.x + p.velocity.x * deltaTime,
-                y: p.y + p.velocity.y * deltaTime,
-                life: p.life - 0.03 * deltaTime,
-                velocity: { x: p.velocity.x * 0.98, y: p.velocity.y + 0.15 * deltaTime }
-            })).filter(p => p.life > 0));
+            // Particles
+            setParticles(prev => prev
+                .map(p => ({ ...p, x: p.x + p.vx * dt, y: p.y + p.vy * dt, vy: p.vy + 0.12 * dt, life: p.life - 0.025 * dt }))
+                .filter(p => p.life > 0)
+            );
 
-            // Clean up lasers and shockwaves
-            setLasers(prev => prev.filter(l => now - l.createdAt < 150));
-            setShockwaves(prev => prev.filter(s => now - s.createdAt < 500));
+            // Lasers — die after 180ms
+            setLasers(prev => prev.filter(l => now - l.createdAt < 180));
 
-            animationId = requestAnimationFrame(loop);
-            gameLoopRef.current = animationId;
+            // Score popups
+            setScorePopups(prev => prev.filter(sp => now - sp.createdAt < 1200));
+
+            // WPM
+            const elapsed = (now - gameStartTime.current) / 60000;
+            if (elapsed > 0.05) setWpm(Math.round((totalCharsTyped.current / 5) / elapsed));
+
+            // Victory check
+            if (selectedLevel) {
+                const allSpawned = wordIndexRef.current >= selectedLevel.words.length;
+                const currentObj = objectsRef.current;
+                const allCleared = currentObj.filter(o => !o.isDestroying).length === 0;
+                if (allSpawned && allCleared && livesRef.current > 0) {
+                    const key = selectedLevel.id;
+                    const cs = scoreRef.current;
+                    if (cs > (highScores[key] || 0)) {
+                        const newHS = { ...highScores, [key]: cs };
+                        setHighScores(newHS);
+                        localStorage.setItem('stg-hs', JSON.stringify(newHS));
+                    }
+                    setGameState('results');
+                    return;
+                }
+            }
+
+            animId = requestAnimationFrame(loop);
         };
 
-        animationId = requestAnimationFrame(loop);
-        gameLoopRef.current = animationId;
+        animId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(animId);
+    }, [gameState, activeId, selectedLevel, highScores]);
 
-        return () => cancelAnimationFrame(animationId);
-    }, [gameState]);
-
-    // Score popup cleanup
-    useEffect(() => {
-        if (scorePopups.length > 0) {
-            const timer = setTimeout(() => setScorePopups(prev => prev.slice(1)), 1000);
-            return () => clearTimeout(timer);
-        }
-    }, [scorePopups]);
-
-    // Spawner
+    // ===== SPAWNER — BALANCED: 2-3 on screen =====
     useEffect(() => {
         if (gameState !== 'playing' || !selectedLevel) return;
 
-        // Spawn first object immediately
-        if (fallingObjects.length === 0 && currentWordIndex === 0) {
-            spawnObject();
-        }
+        // Spawn first word immediately
+        spawnObject();
 
-        const interval = setInterval(() => {
-            spawnObject();
-        }, selectedLevel.spawnRate * 1000);
-
+        // Then spawn at the level's pace — rates are tuned in data
+        const interval = setInterval(() => spawnObject(), selectedLevel.spawnRate * 1000);
         return () => clearInterval(interval);
-    }, [gameState, selectedLevel, spawnObject, fallingObjects.length, currentWordIndex]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameState, selectedLevel]);
 
-    // Keyboard Listener
+    // Keyboard
     useEffect(() => {
         if (gameState !== 'playing') return;
-
-        const handleKey = (e: KeyboardEvent) => {
+        const handler = (e: KeyboardEvent) => {
             if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+                e.preventDefault();
                 processInput(e.key);
             }
         };
-        window.addEventListener('keydown', handleKey);
-        return () => window.removeEventListener('keydown', handleKey);
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
     }, [gameState, processInput]);
 
-    // ==================== RENDER ====================
-
-    // Menu Screen
+    // ===== RENDER: MENU =====
     if (gameState === 'menu') {
         return (
-            <div className="space-game">
-                <div className="starfield">
-                    {stars.map(star => (
-                        <div
-                            key={star.id}
-                            className={`star layer-${star.layer}`}
-                            style={{
-                                left: `${star.x}%`,
-                                top: `${star.y}%`,
-                                animationDelay: `-${star.delay * 10}s`,
-                            }}
-                        />
+            <div className="stg-root stg-menu">
+                <div className="stg-starfield">
+                    {bgStars.map(s => (
+                        <div key={s.id} className={`stg-star l${s.layer}`}
+                            style={{ left: `${s.x}%`, top: `${s.y}%`, animationDelay: `${s.delay}s` }} />
                     ))}
                 </div>
 
-                <div className="level-select-screen">
-                    <div className="level-select-header">
-                        <div className="level-select-title">🚀 Space Typing 🌟</div>
-                        <div className="level-select-subtitle">
-                            {language === 'ckb' ? 'ئاستێک هەڵبژێرە و دەست بە یاری بکە!' : 'Select a level and start playing!'}
+                <div className="stg-menu-content">
+                    <button className="stg-back-btn" onClick={() => navigate('/learn')}>
+                        <ArrowLeft size={18} /> {isKu ? 'گەڕانەوە' : 'Back'}
+                    </button>
+
+                    <div className="stg-menu-hero">
+                        <div className="stg-hero-ship">
+                            <SpaceshipSvg className="stg-hero-ship-svg" />
+                        </div>
+                        <h1 className="stg-menu-title">Space Typing</h1>
+                        <p className="stg-menu-sub">
+                            {isKu ? 'وشەکان بنووسە پێش ئەوەی بگەنە خوارەوە!' : 'Type the words before they reach the ground!'}
+                        </p>
+                    </div>
+
+                    <div className="stg-levels">
+                        {gameLevels.map((level, i) => {
+                            const hs = highScores[level.id];
+                            return (
+                                <button key={level.id} className="stg-level-card" onClick={() => startGame(level)}>
+                                    <div className="stg-level-num">{String(i + 1).padStart(2, '0')}</div>
+                                    <div className="stg-level-info">
+                                        <div className="stg-level-name">{isKu ? level.nameKu : level.name}</div>
+                                        <div className="stg-level-desc">{isKu ? level.descriptionKu : level.description}</div>
+                                        <div className="stg-level-meta">
+                                            <span>{level.words.length} {isKu ? 'وشە' : 'words'}</span>
+                                            <span>{level.speed < 0.6 ? (isKu ? 'هێواش' : 'Slow') : level.speed < 0.8 ? (isKu ? 'ناوەندی' : 'Medium') : (isKu ? 'خێرا' : 'Fast')}</span>
+                                            {hs ? <span className="stg-hs-badge"><Star size={10} /> {hs}</span> : null}
+                                        </div>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ===== RENDER: RESULTS =====
+    if (gameState === 'results') {
+        const isVictory = livesRef.current > 0;
+        const acc = accuracy.hits + accuracy.misses > 0
+            ? Math.round((accuracy.hits / (accuracy.hits + accuracy.misses)) * 100) : 0;
+        const isNewHS = selectedLevel && score > (highScores[selectedLevel.id] || 0) && score > 0;
+
+        return (
+            <div className="stg-root stg-results-screen">
+                <div className="stg-starfield">
+                    {bgStars.map(s => (
+                        <div key={s.id} className={`stg-star l${s.layer}`} style={{ left: `${s.x}%`, top: `${s.y}%` }} />
+                    ))}
+                </div>
+                <div className="stg-results-panel">
+                    {isNewHS && <div className="stg-new-record">{isKu ? 'تۆمارێکی نوێ!' : 'NEW HIGH SCORE'}</div>}
+                    <h1 className={`stg-results-title ${isVictory ? 'victory' : 'defeat'}`}>
+                        {isVictory ? (isKu ? 'سەرکەوتوو بوویت' : 'MISSION COMPLETE') : (isKu ? 'یاری کۆتایی هات' : 'MISSION FAILED')}
+                    </h1>
+                    <div className="stg-results-grid">
+                        <div className="stg-rstat">
+                            <Star size={18} />
+                            <span className="stg-rstat-val">{score}</span>
+                            <span className="stg-rstat-lbl">{isKu ? 'خاڵ' : 'Score'}</span>
+                        </div>
+                        <div className="stg-rstat">
+                            <Crosshair size={18} />
+                            <span className="stg-rstat-val">{acc}%</span>
+                            <span className="stg-rstat-lbl">{isKu ? 'وردی' : 'Accuracy'}</span>
+                        </div>
+                        <div className="stg-rstat">
+                            <Gauge size={18} />
+                            <span className="stg-rstat-val">{wpm}</span>
+                            <span className="stg-rstat-lbl">WPM</span>
                         </div>
                     </div>
-
-                    <div className="level-grid">
-                        {gameLevels.map((level, index) => (
-                            <div
-                                key={level.id}
-                                className="level-card"
-                                onClick={() => startGame(level)}
-                            >
-                                <div className="level-icon">
-                                    {['🌟', '☄️', '🪐', '🌙', '🌌'][index]}
-                                </div>
-                                <div className="level-name">{level.name}</div>
-                                <div className="level-name-ku">{level.nameKu}</div>
-                                <div className="level-description">
-                                    {language === 'ckb' ? level.descriptionKu : level.description}
-                                </div>
-                                <div className="level-meta">
-                                    <span>📝 {level.words.length} {language === 'ckb' ? 'وشە' : 'words'}</span>
-                                    <span>⚡ {level.speed < 0.7 ? (language === 'ckb' ? 'هێواش' : 'Slow') : level.speed < 0.9 ? (language === 'ckb' ? 'ناوەندی' : 'Medium') : (language === 'ckb' ? 'خێرا' : 'Fast')}</span>
-                                </div>
-                            </div>
-                        ))}
+                    <div className="stg-results-detail">
+                        <div>{isKu ? 'وشە تایپکراو' : 'Words cleared'}: <strong>{wordsCleared}</strong></div>
+                        <div>{isKu ? 'باشترین زنجیرە' : 'Best streak'}: <strong>{maxStreak}</strong></div>
+                        <div>{isKu ? 'گیانی ماوە' : 'Lives left'}: <strong>{lives}</strong></div>
                     </div>
-
-                    <button className="back-to-home" onClick={() => navigate('/learn')}>
-                        <ArrowLeft size={18} style={{ marginRight: 8, verticalAlign: 'middle' }} />
-                        {language === 'ckb' ? 'گەڕانەوە' : 'Back to Learn'}
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    // Game Over / Victory Screen
-    if (gameState === 'gameover' || gameState === 'victory') {
-        const isVic = gameState === 'victory';
-        return (
-            <div className="space-game">
-                <div className="starfield">
-                    {stars.map(star => (
-                        <div key={star.id} className={`star layer-${star.layer}`} style={{ left: `${star.x}%`, top: `${star.y}%` }} />
-                    ))}
-                </div>
-
-                <div className="game-end-screen">
-                    <div className="game-end-icon">{isVic ? '🏆' : '💥'}</div>
-                    <h1 className={`game-end-title ${isVic ? 'victory' : 'game-over'}`}>
-                        {isVic ? (language === 'ckb' ? 'سەرکەوتوو بوویت!' : 'Victory!') : (language === 'ckb' ? 'یاری کۆتایی هات!' : 'Game Over!')}
-                    </h1>
-                    <p className="game-end-score">
-                        {language === 'ckb' ? 'خاڵەکانت:' : 'Your Score:'} {score}
-                    </p>
-                    <div className="game-end-buttons">
-                        <button className="game-end-btn primary" onClick={() => selectedLevel && startGame(selectedLevel)}>
-                            🔄 {language === 'ckb' ? 'دووبارە هەوڵ بدەوە' : 'Try Again'}
+                    <div className="stg-results-btns">
+                        <button className="stg-btn stg-btn-primary" onClick={() => selectedLevel && startGame(selectedLevel)}>
+                            <RotateCcw size={16} /> {isKu ? 'دووبارە' : 'Retry'}
                         </button>
-                        <button className="game-end-btn secondary" onClick={() => setGameState('menu')}>
-                            📋 {language === 'ckb' ? 'ئاستەکان' : 'Levels'}
+                        <button className="stg-btn stg-btn-secondary" onClick={() => setGameState('menu')}>
+                            {isKu ? 'ئاستەکان' : 'Levels'}
                         </button>
                     </div>
                 </div>
@@ -481,154 +510,116 @@ const SpaceTypingGame = () => {
         );
     }
 
-    // Playing State
-    const progress = selectedLevel ? (wordsCompleted / selectedLevel.words.length) * 100 : 0;
+    // ===== RENDER: PLAYING =====
+    const progress = selectedLevel ? (wordsCleared / selectedLevel.words.length) * 100 : 0;
 
     return (
-        <div className="space-game" onClick={() => inputRef.current?.focus()}>
-            {/* Starfield */}
-            <div className="starfield">
-                {stars.map(star => (
-                    <div
-                        key={star.id}
-                        className={`star layer-${star.layer}`}
-                        style={{
-                            left: `${star.x}%`,
-                            top: `${star.y}%`,
-                            animationDelay: `-${star.delay * 10}s`,
-                        }}
-                    />
+        <div className={`stg-root stg-playing ${screenFlash === 'hit' ? 'flash-hit' : ''} ${screenFlash === 'damage' ? 'flash-dmg' : ''}`}
+            onClick={() => inputRef.current?.focus()}
+        >
+            <div className="stg-starfield">
+                {bgStars.map(s => (
+                    <div key={s.id} className={`stg-star l${s.layer}`}
+                        style={{ left: `${s.x}%`, top: `${s.y}%`, animationDelay: `${s.delay}s` }} />
                 ))}
             </div>
 
-            {/* Header */}
-            <header className="game-header">
-                <div className="game-header-left">
-                    <button className="back-btn" onClick={() => setGameState('menu')}>
-                        <ArrowLeft size={20} />
-                    </button>
-                    <span className="game-title">
-                        {selectedLevel ? (language === 'ckb' ? selectedLevel.nameKu : selectedLevel.name) : 'Space Typing'}
-                    </span>
-                </div>
-                <div className="game-stats">
-                    <div className="stat-box score">
-                        <Star size={18} className="stat-icon" fill="#58cc02" color="#58cc02" />
-                        <span className="stat-value">{score}</span>
+            {/* HUD */}
+            <header className="stg-hud">
+                <button className="stg-hud-back" onClick={() => setGameState('menu')}>
+                    <ArrowLeft size={18} />
+                </button>
+                <div className="stg-hud-center">
+                    <div className="stg-progress-bar">
+                        <div className="stg-progress-fill" style={{ width: `${progress}%` }} />
                     </div>
-                    <div className="stat-box lives">
-                        <Heart size={18} className="stat-icon" fill="#ff4b4b" color="#ff4b4b" />
-                        <span className="stat-value">{lives}</span>
+                    <span className="stg-hud-level">{selectedLevel ? (isKu ? selectedLevel.nameKu : selectedLevel.name) : ''}</span>
+                </div>
+                <div className="stg-hud-stats">
+                    <div className="stg-hud-stat score-stat">
+                        <Star size={14} fill="#f59e0b" color="#f59e0b" />
+                        <span>{score}</span>
+                    </div>
+                    <div className="stg-hud-stat lives-stat">
+                        {Array.from({ length: 3 }, (_, i) => (
+                            <Heart key={i} size={14} fill={i < lives ? '#ef4444' : 'none'} color={i < lives ? '#ef4444' : '#374151'} />
+                        ))}
                     </div>
                 </div>
             </header>
 
-            {/* Progress Bar */}
-            <div className="game-progress">
-                <div className="game-progress-fill" style={{ width: `${progress}%` }} />
-            </div>
+            {streak > 2 && <div className="stg-streak" key={streak}>{streak}x {isKu ? 'زنجیرە' : 'STREAK'}</div>}
+            {wpm > 0 && <div className="stg-wpm">{wpm} WPM</div>}
 
             {/* Game Canvas */}
-            <div className="game-canvas" ref={gameCanvasRef}>
+            <div className="stg-canvas">
                 {/* Falling Objects */}
-                {fallingObjects.map(obj => {
-                    const AssetType = ASSET_TYPES[obj.assetIndex];
-                    const AssetComponent = AssetType.component;
-                    const isLocked = obj.id === activeInfo.id;
+                {objects.map(obj => {
+                    const asset = ASSET_POOL[obj.assetIndex];
+                    const AssetComp = asset.component;
+                    const isLocked = obj.id === activeId;
                     const typed = obj.word.text.substring(0, obj.typedProgress);
                     const untyped = obj.word.text.substring(obj.typedProgress);
 
                     return (
-                        <div
-                            key={obj.id}
-                            className={`falling-object ${isLocked ? 'active' : ''} ${obj.isDestroying ? 'destroying' : ''}`}
-                            style={{
-                                left: obj.x,
-                                top: obj.y,
-                                transform: `translateX(-50%)`,
-                            }}
+                        <div key={obj.id}
+                            className={`stg-obj ${isLocked ? 'locked' : ''} ${obj.isDestroying ? 'destroying' : ''}`}
+                            style={{ left: obj.x, top: obj.y, transform: 'translateX(-50%)' }}
                         >
-                            <div className="object-word">
-                                <span style={{ color: '#4ade80', textShadow: '0 0 10px rgba(74, 222, 128, 0.5)' }}>{typed}</span>
-                                <span style={{ color: 'white' }}>{untyped}</span>
-                                <div className="object-translation">{obj.word.translation}</div>
+                            <div className={`stg-obj-label ${isLocked ? 'active' : ''}`}>
+                                <span className="stg-typed">{typed}</span>
+                                <span className="stg-untyped">{untyped}</span>
+                                <div className="stg-obj-trans">{obj.word.translation}</div>
                             </div>
-                            <div
-                                className="object-asset-wrapper"
-                                style={{
-                                    transform: `rotate(${obj.rotation}deg) scale(${AssetType.scale})`
-                                }}
-                            >
-                                <AssetComponent className="game-asset" />
+                            <div className="stg-obj-asset" style={{ transform: `rotate(${obj.rotation}deg) scale(${asset.scale})` }}>
+                                <AssetComp className="stg-asset-svg" />
                             </div>
                         </div>
+                    );
+                })}
+
+                {/* LASER BEAMS */}
+                {lasers.map(l => {
+                    const dx = l.endX - l.startX;
+                    const dy = l.endY - l.startY;
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                    const age = Date.now() - l.createdAt;
+                    const opacity = Math.max(0, 1 - age / 180);
+
+                    return (
+                        <div key={l.id} className="stg-laser" style={{
+                            left: l.startX,
+                            top: l.startY,
+                            width: length,
+                            transform: `rotate(${angle}deg)`,
+                            opacity,
+                        }} />
                     );
                 })}
 
                 {/* Particles */}
                 {particles.map(p => (
-                    <div
-                        key={p.id}
-                        className="particle"
-                        style={{
-                            left: p.x,
-                            top: p.y,
-                            background: p.color,
-                            width: `${10 * p.scale}px`,
-                            height: `${10 * p.scale}px`,
-                            opacity: p.life,
-                        }}
-                    />
+                    <div key={p.id} className="stg-particle"
+                        style={{ left: p.x, top: p.y, background: p.color, width: p.size, height: p.size, opacity: p.life }} />
                 ))}
 
-                {/* Shockwaves */}
-                {shockwaves.map(s => (
-                    <div key={s.id} className="shockwave" style={{ left: s.x, top: s.y }} />
-                ))}
-
-                {/* Lasers */}
-                {lasers.map(l => {
-                    const dx = l.targetX - l.startX;
-                    const dy = l.targetY - l.startY;
-                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                    const len = Math.sqrt(dx * dx + dy * dy);
-
-                    return (
-                        <div key={l.id} className="laser-beam" style={{
-                            left: l.startX,
-                            top: l.startY,
-                            width: len,
-                            height: 4,
-                            transformOrigin: '0 50%',
-                            transform: `rotate(${angle}deg)`
-                        }} />
-                    );
-                })}
-
-                {/* Score Popups */}
+                {/* Score popups */}
                 {scorePopups.map(sp => (
-                    <div key={sp.id} className="score-popup" style={{ left: sp.x, top: sp.y }}>
-                        +{sp.score}
-                    </div>
+                    <div key={sp.id} className="stg-score-pop" style={{ left: sp.x, top: sp.y }}>+{sp.value}</div>
                 ))}
             </div>
 
-            {/* Spaceship */}
-            <div className="spaceship-container">
-                <div className={`muzzle-flash ${muzzleFlash ? 'active' : ''}`} />
-                <div className={`spaceship-wrapper ${muzzleFlash ? 'firing' : ''}`}>
-                    <SpaceshipSvg className="spaceship-svg" />
+            {/* Spaceship — rotates toward target */}
+            <div className="stg-ship" style={{ transform: `translateX(-50%) rotate(${shipAngle}deg)` }}>
+                <div className="stg-ship-body">
+                    <SpaceshipSvg className="stg-ship-svg" />
                 </div>
             </div>
 
-            {/* Hidden Input */}
-            <input
-                ref={inputRef}
-                type="text"
-                className="typing-input"
-                style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
-                autoComplete="off"
-            />
+            {/* Hidden input */}
+            <input ref={inputRef} type="text" className="stg-hidden-input"
+                autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
         </div>
     );
 };

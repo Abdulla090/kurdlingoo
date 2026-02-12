@@ -35,6 +35,7 @@ import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { unit5 } from '../../data/courses/unit5';
 import { completeLesson, isLessonUnlocked } from '../../utils/progressManager';
 import Button from '../../components/Button/Button';
 import './Lesson.css';
@@ -126,7 +127,7 @@ const Lesson = () => {
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
 
         // 2. Use saved units or fallback to default imports
-        const allUnits = savedUnits || [unit1, unit2, unit3, unit4];
+        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5];
 
         // 3. Find lesson in the determined units
         let foundLesson = null;
@@ -156,10 +157,10 @@ const Lesson = () => {
                 setIsLocked(true);
                 return;
             }
-            
+
             setLesson(foundLesson);
             setCurrentUnitId(foundUnit?.id || 'unit-1');
-            
+
             // Calculate XP based on number of exercises
             setXpEarned(foundLesson.exercises?.length ? foundLesson.exercises.length * 2 : 10);
 
@@ -266,14 +267,14 @@ const Lesson = () => {
             role="main"
         >
             <header className="lesson-header" role="banner">
-                <button 
-                    className="close-btn" 
+                <button
+                    className="close-btn"
                     onClick={() => navigate('/learn')}
                     aria-label="Close lesson and return to learn page"
                 >
                     <X size={24} aria-hidden="true" />
                 </button>
-                <div 
+                <div
                     className="progress-bar-container"
                     role="progressbar"
                     aria-valuenow={Math.round(progress)}
@@ -552,7 +553,7 @@ const MatchPairs = ({ exercise, onAnswer }) => {
     const { t } = useLanguage();
     const [selected, setSelected] = useState([]);
     const [matched, setMatched] = useState([]);
-    
+
     // Create and shuffle items immediately
     const createShuffledItems = () => {
         const items = exercise.pairs.flatMap(p => [
@@ -561,7 +562,7 @@ const MatchPairs = ({ exercise, onAnswer }) => {
         ]);
         return shuffleArray(items);
     };
-    
+
     const [shuffledItems, setShuffledItems] = useState(() => createShuffledItems());
 
     useEffect(() => {
@@ -662,9 +663,9 @@ const Conversation = ({ exercise, onAnswer }) => {
     const [responses, setResponses] = useState({});
     const dialogue = exercise.dialogue || [];
     const correctOptions = exercise.correctOptions || [];
-    
+
     // Initialize with shuffled dialogue
-    const [shuffledDialogue, setShuffledDialogue] = useState(() => 
+    const [shuffledDialogue, setShuffledDialogue] = useState(() =>
         dialogue.map(line => ({
             ...line,
             options: line.options ? shuffleArray([...line.options]) : undefined
@@ -738,7 +739,7 @@ const CulturalNote = ({ exercise, onAnswer }) => {
     const { t } = useLanguage();
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const quiz = exercise.quiz || {};
-    const [shuffledQuizOptions, setShuffledQuizOptions] = useState(() => 
+    const [shuffledQuizOptions, setShuffledQuizOptions] = useState(() =>
         quiz.options ? shuffleArray([...quiz.options]) : []
     );
 
@@ -826,7 +827,7 @@ const ImageMatch = ({ exercise, onAnswer }) => {
             { id: `text-${p.kurdish}`, type: 'text', value: p.kurdish, pairId: p.image }
         ]));
     };
-    
+
     const [items, setItems] = useState(() => createShuffledItems());
 
     useEffect(() => {
@@ -991,21 +992,21 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
 
     const checkAnswer = () => {
         if (!userInput.trim() || hasAnswered) return;
-        
+
         setIsChecking(true);
-        
+
         // Add user message to chat
         const userMessage = { sender: 'user' as const, text: userInput, avatar: '👤', name: t('you') || 'You' };
         setMessages(prev => [...prev, userMessage]);
-        
+
         const normalizedInput = normalizeText(userInput);
         const acceptableResponses = exercise.acceptableResponses || [];
         const keywordsRequired = exercise.keywordsRequired || [];
-        
+
         // Check if the response is acceptable
         let isCorrect = false;
         let matchedResponse = '';
-        
+
         // Check exact matches first
         for (const response of acceptableResponses) {
             if (normalizeText(response) === normalizedInput) {
@@ -1014,17 +1015,17 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                 break;
             }
         }
-        
+
         // If no exact match, check if all required keywords are present
         if (!isCorrect && keywordsRequired.length > 0) {
-            const hasAllKeywords = keywordsRequired.every(keyword => 
+            const hasAllKeywords = keywordsRequired.every(keyword =>
                 normalizedInput.includes(normalizeText(keyword))
             );
             if (hasAllKeywords) {
                 isCorrect = true;
             }
         }
-        
+
         // If still no match, check for partial matches (at least 70% similarity)
         if (!isCorrect) {
             for (const response of acceptableResponses) {
@@ -1041,15 +1042,15 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         setTimeout(() => {
             setIsChecking(false);
             setHasAnswered(true);
-            
+
             if (isCorrect) {
                 setFeedback({
                     correct: true,
                     message: t('greatResponse') || 'Great response! 🎉'
                 });
                 // Add AI confirmation message
-                const confirmMessage = { 
-                    sender: 'ai' as const, 
+                const confirmMessage = {
+                    sender: 'ai' as const,
                     text: exercise.chatMessages?.find(m => m.sender === 'ai' && m.text.includes('confirm'))?.text || '✓ زۆر باشە!',
                     avatar: exercise.chatMessages?.[0]?.avatar || '🤖',
                     name: exercise.chatMessages?.[0]?.name || 'AI'
@@ -1088,7 +1089,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
     return (
         <div className="exercise-container roleplay-chat-container">
             <h2 className="exercise-question">{exercise.question}</h2>
-            
+
             {/* Scenario description */}
             {exercise.scenario && (
                 <div className="roleplay-scenario">
@@ -1096,7 +1097,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                     <p>{exercise.scenario}</p>
                 </div>
             )}
-            
+
             {/* Chat interface */}
             <div className="chat-interface">
                 <div className="chat-messages">
@@ -1113,7 +1114,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             </div>
                         </div>
                     ))}
-                    
+
                     {isChecking && (
                         <div className="chat-message ai">
                             <div className="message-avatar">🤖</div>
@@ -1128,7 +1129,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                     )}
                     <div ref={chatEndRef} />
                 </div>
-                
+
                 {/* Feedback display */}
                 {feedback && (
                     <div className={`chat-feedback ${feedback.correct ? 'correct' : 'incorrect'}`}>
@@ -1145,7 +1146,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                         </div>
                     </div>
                 )}
-                
+
                 {/* Input area */}
                 {!hasAnswered ? (
                     <div className="chat-input-area">
@@ -1158,7 +1159,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             rows={2}
                             disabled={isChecking}
                         />
-                        <button 
+                        <button
                             className={`chat-send-btn ${userInput.trim() && !isChecking ? 'active' : ''}`}
                             onClick={checkAnswer}
                             disabled={!userInput.trim() || isChecking}
@@ -1179,7 +1180,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                     </div>
                 )}
             </div>
-            
+
             {/* Hints */}
             {exercise.hints && exercise.hints.length > 0 && !hasAnswered && (
                 <div className="chat-hints">

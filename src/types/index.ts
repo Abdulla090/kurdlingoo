@@ -1,47 +1,29 @@
-// Core type definitions for KurdLingo
-
-export interface Exercise {
-    id?: number;
-    type: 'multiple-choice' | 'match-pairs' | 'sentence-builder' | 'fill-blank' | 'typing' | 'listening' | 'conversation' | 'image-selection' | 'vocabulary-grid' | 'cultural-note' | 'cultural-timeline' | 'image-match' | 'story-completion' | 'career-path' | 'route-planner' | 'emergency-phrases' | 'app-vocabulary' | 'tech-troubleshooting' | 'roleplay-chat';
-    question: string;
-    options?: ExerciseOption[] | string[];
-    pairs?: MatchPair[];
-    sourceText?: string;
-    correctSentence?: string[];
-    sentenceParts?: string[];
-    correctOption?: string;
-    correctAnswer?: string;
-    hints?: string[];
-    dialogue?: DialogueLine[];
-    correctOptions?: string[];
-    audioUrl?: string;
-    images?: ImageOption[];
-    // New properties for advanced exercises
-    items?: any[];
-    content?: string;
-    quiz?: any;
-    events?: any[];
-    story?: string;
-    blanks?: string[];
-    levels?: any[];
-    start?: string;
-    destination?: string;
-    steps?: any[];
-    phrases?: any[];
-    apps?: any[];
-    problems?: any[];
-    // Roleplay chat properties
-    scenario?: string;
-    chatMessages?: ChatMessage[];
-    acceptableResponses?: string[];
-    keywordsRequired?: string[];
-}
+export type ExerciseType =
+    | 'multiple-choice'
+    | 'match-pairs'
+    | 'sentence-builder'
+    | 'fill-blank'
+    | 'typing'
+    | 'listening'
+    | 'conversation'
+    | 'image-selection'
+    | 'vocabulary-grid'
+    | 'cultural-note'
+    | 'cultural-timeline'
+    | 'image-match'
+    | 'story-completion'
+    | 'career-path'
+    | 'route-planner'
+    | 'emergency-phrases'
+    | 'app-vocabulary'
+    | 'tech-troubleshooting'
+    | 'roleplay-chat';
 
 export interface ExerciseOption {
     id?: string;
     text: string;
     image?: string;
-    correct: boolean;
+    correct?: boolean;  // Made optional
 }
 
 export interface MatchPair {
@@ -69,16 +51,9 @@ export interface ImageOption {
     correct: boolean;
 }
 
-export interface Lesson {
-    id: string;
-    title: string;
-    icon?: string;
-    exercises: Exercise[];
-}
-
 export interface GuidebookVisual {
-    type: 'sentence-structure' | 'pronoun-grid' | 'timeline' | 'comparison' | 'conjugation' | 'dialogue' | (string & {});
-    data: any; // Can be more specific based on type
+    type: string;
+    data: any;
 }
 
 export interface GuidebookSubsection {
@@ -116,6 +91,50 @@ export interface Guidebook {
     introduction: string;
     sections: GuidebookSection[];
     keyPhrases: KeyPhrase[];
+}
+
+export interface Exercise {
+    id?: number;
+    type: ExerciseType;
+    question: string;
+    options?: ExerciseOption[] | string[];
+    pairs?: MatchPair[];
+    sourceText?: string;
+    correctSentence?: string[];
+    sentenceParts?: string[];
+    correctOption?: string;
+    correctAnswer?: string;
+    hints?: string[];
+    dialogue?: DialogueLine[];
+    correctOptions?: string[];
+    audioUrl?: string;
+    images?: ImageOption[];
+    items?: any[];
+    content?: string;
+    quiz?: any;
+    events?: any[];
+    story?: string;
+    blanks?: string[];
+    levels?: any[];
+    start?: string;
+    destination?: string;
+    steps?: any[];
+    phrases?: any[];
+    apps?: any[];
+    problems?: any[];
+    scenario?: string;
+    chatMessages?: ChatMessage[];
+    acceptableResponses?: string[];
+    keywordsRequired?: string[];
+}
+
+export interface Lesson {
+    id: string;
+    title: string;
+    icon?: string;
+    type?: 'regular' | 'game'; // Added type property
+    gameId?: string;           // Added gameId property
+    exercises: Exercise[];
 }
 
 export interface Unit {

@@ -15,6 +15,8 @@ import Profile from './pages/Profile/Profile';
 import RolePlayHub from './pages/RolePlayHub/RolePlayHub';
 import RolePlayChat from './pages/RolePlayChat/RolePlayChat';
 import SpaceTypingGame from './pages/SpaceTypingGame/SpaceTypingGame';
+import NeuroMatch from './pages/NeuroMatch/NeuroMatch';
+import TypingRush from './pages/TypingRush/TypingRush';
 import BookDictionary from './pages/BookDictionary/BookDictionary';
 import Layout from './components/Layout/Layout';
 import PageTransition from './components/PageTransition';
@@ -44,6 +46,8 @@ const AnimatedRoutes = () => {
         <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
         <Route path="/guidebook/:unitId" element={<PageTransition><Guidebook /></PageTransition>} />
         <Route path="/space-game" element={<PageTransition><SpaceTypingGame /></PageTransition>} />
+        <Route path="/neuromatch" element={<PageTransition><NeuroMatch /></PageTransition>} />
+        <Route path="/typing-rush" element={<PageTransition><TypingRush /></PageTransition>} />
         <Route path="/dictionary" element={<Layout><BookDictionary /></Layout>} />
         <Route path="/login" element={<PageTransition><div className="container"><h1>Login (Coming Soon)</h1></div></PageTransition>} />
       </Routes>
