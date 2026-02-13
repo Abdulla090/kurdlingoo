@@ -4,6 +4,66 @@
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
+   LEVEL TOGGLE HEADER
+   ----------------------------------------------------------------------------- */
+.level-toggle-header {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.level-toggle-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    padding: 4px;
+    border: 2px solid #e0e0e0;
+}
+
+.level-toggle-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    color: #9ca3af;
+    letter-spacing: 0.02em;
+}
+
+.level-toggle-tab:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.04);
+    color: #6b7280;
+}
+
+.level-toggle-tab.active {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 12px rgba(34, 197, 94, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 600px) {
+    .level-toggle-header {
+        justify-content: center;
+    }
+
+    .level-toggle-tab {
+        padding: 8px 16px;
+        font-size: 0.82rem;
+    }
+}
+
+/* -----------------------------------------------------------------------------
    PAGE CONTAINER
    ----------------------------------------------------------------------------- */
 .learn-page {
@@ -272,10 +332,16 @@
    Default: Pressed/Recessed state
    Hover: Rises up with dramatic 3D pop
    Click: Presses back down
+/* The actual circle button - REAL 3D BUTTON (Premium Game Style)
+   Structure:
+   - Base Face: Gradient/Color 
+   - 3D Side: Hard shadow (var(--node-shadow))
+   - Lighting: White inset top highlight, dark inset bottom shading
+   - Icon: Drop shadow for depth
 */
 .node-circle {
-    width: 76px;
-    height: 76px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -283,121 +349,225 @@
     position: relative;
     cursor: pointer;
 
-    /* Default: Pressed/Recessed Look */
-    background: linear-gradient(145deg, #e6e6e6, #ffffff);
+    /* Base Face */
+    background: var(--node-bg, #e5e7eb);
+    color: var(--node-text, #9ca3af);
     border: none;
 
-    /* Inset shadow for "pressed" appearance */
+    /* 
+       Complex Layered Shadows for "Real 3D":
+       1. Top Inner Highlight (Plastic Sheen)
+       2. Bottom Inner Shade (Curvature)
+       3. The "Side" (3D Depth)
+       4. Diffused Shadow (Ground Ambient)
+    */
     box-shadow:
-        inset 5px 5px 12px rgba(0, 0, 0, 0.15),
-        inset -5px -5px 12px rgba(255, 255, 255, 0.9),
-        0 2px 4px rgba(0, 0, 0, 0.05);
+        inset 0 4px 2px rgba(255, 255, 255, 0.4),
+        /* Top sheen */
+        inset 0 -4px 2px rgba(0, 0, 0, 0.05),
+        /* Bottom shade */
+        0 8px 0 var(--node-shadow, #d1d5db),
+        /* The Hard 3D Side */
+        0 12px 10px rgba(0, 0, 0, 0.15);
+    /* Drop shadow on ground */
 
-    /* Smooth 3D transition */
-    transition:
-        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Smooth mechanical movement */
+    transition: transform 0.15s cubic-bezier(0.3, 0.7, 0.4, 1),
+        box-shadow 0.15s cubic-bezier(0.3, 0.7, 0.4, 1),
+        filter 0.2s;
+
+    transform: translateY(0);
 }
 
+/* Icon - Engraved/Floating Effect */
 .node-circle svg,
 .node-circle span {
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     z-index: 2;
+    pointer-events: none;
+    /* Subtle drop shadow for the icon itself to lift it off the button face */
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+    transition: transform 0.15s;
 }
 
-/* Hover - RISES UP with 3D Pop Effect */
+/* Hover - Brighten and slight lift */
 .path-node:hover:not(.locked) .node-circle {
-    /* Remove inset, add outward shadows */
-    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    transform: translateY(-2px);
+    filter: brightness(1.1);
     box-shadow:
-        8px 8px 20px rgba(0, 0, 0, 0.18),
-        -8px -8px 20px rgba(255, 255, 255, 1),
-        0 12px 35px rgba(0, 0, 0, 0.12),
-        inset 0 2px 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-6px) scale(1.02);
+        inset 0 4px 5px rgba(255, 255, 255, 0.5),
+        inset 0 -4px 5px rgba(0, 0, 0, 0.05),
+        0 10px 0 var(--node-shadow, #d1d5db),
+        /* Shadow grows */
+        0 16px 20px rgba(0, 0, 0, 0.2);
 }
 
-.path-node:hover:not(.locked) .node-circle svg,
-.path-node:hover:not(.locked) .node-circle span {
-    transform: scale(1.15);
+/* Hover Icon Lift */
+.path-node:hover:not(.locked) .node-circle svg {
+    transform: scale(1.1);
 }
 
-/* Active/Press - PRESSES FLAT (shadow disappears completely) */
+/* Active - PRESS DOWN LOGIC */
 .path-node:active:not(.locked) .node-circle {
-    background: linear-gradient(145deg, #d8d8d8, #ececec);
-    box-shadow: none;
-    transform: translateY(0) scale(0.96);
+    /* Move down by the depth of the shadow (8px) + the hover lift (2px) = 10px total relative to hover, or 8px relative to default */
+    transform: translateY(8px);
+
+    /* Shadow gets squashed */
+    box-shadow:
+        inset 0 6px 5px rgba(0, 0, 0, 0.1),
+        /* Inner shadow deeper implies getting pushed in */
+        inset 0 -2px 2px rgba(255, 255, 255, 0.2),
+        0 0 0 var(--node-shadow, #d1d5db),
+        /* Hard shadow disappears */
+        0 2px 2px rgba(0, 0, 0, 0.1);
+    /* Ground shadow shrinks largely */
+
+    filter: brightness(0.95);
+    transition: transform 0.05s ease-out, box-shadow 0.05s ease-out;
 }
 
-.path-node:active:not(.locked) .node-circle svg,
-.path-node:active:not(.locked) .node-circle span {
-    transform: scale(0.92);
+/* Active Icon Squish */
+.path-node:active:not(.locked) .node-circle svg {
+    transform: scale(0.95) translateY(1px);
+    /* Icon presses in too */
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.1));
 }
 
-/* Locked state - Flat, truly pressed, no interactivity */
+/* Locked state - Flat and desaturated */
 .path-node.locked {
-    cursor: not-allowed;
+    cursor: default;
 }
 
 .path-node.locked .node-circle {
-    background: linear-gradient(145deg, #d8d8d8, #e8e8e8);
+    background: #e5e7eb;
+    /* Force gray */
+    color: #9ca3af;
     box-shadow:
-        inset 4px 4px 10px rgba(0, 0, 0, 0.1),
-        inset -4px -4px 10px rgba(255, 255, 255, 0.6);
-    opacity: 0.7;
-}
-
-/* Current lesson - White with colored bottom border (3D) */
-.path-node.current .node-circle {
-    /* Uses inline styles for background and border-bottom color */
-    border: 4px solid #e8e8e8;
-    border-bottom-width: 8px;
-    /* border-bottom-color comes from inline style */
-}
-
-.path-node.current:hover .node-circle {
-    border-bottom-width: 12px;
-    transform: translateY(-4px);
-}
-
-.path-node.current:active .node-circle {
-    border-bottom-width: 4px !important;
+        inset 0 2px 0 rgba(255, 255, 255, 0.5),
+        0 4px 0 #d1d5db;
     transform: translateY(4px);
-    box-shadow: none !important;
+    /* Permanently half-pressed */
+    filter: none;
 }
 
-/* Completed lesson - Colored with 3D bottom border */
-.path-node.completed .node-circle {
-    /* Uses inline styles for background and border */
-    border: none;
-}
-
-.path-node.completed:hover .node-circle {
-    border-bottom-width: 12px;
-    transform: translateY(-4px);
-}
-
-.path-node.completed:active .node-circle {
-    border-bottom-width: 4px !important;
+.path-node.locked:active .node-circle {
     transform: translateY(4px);
-    box-shadow: none !important;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 4px 0 #d1d5db;
 }
 
-/* ----------------------------------------------------------------------------- 
-   BADGES (Crown, Checkmark)
-   ----------------------------------------------------------------------------- */
+/* Current Lesson Pulse Ring */
+.path-node.current .node-circle::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 4px solid var(--node-accent, #3b82f6);
+    opacity: 0;
+    animation: pulse-ring 2s infinite;
+    z-index: -1;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: scale(1.35);
+        opacity: 0;
+    }
+}
+
+/* Larger Start Bubble Hit Area */
+.path-node.current {
+    z-index: 10;
+    /* Ensure current node stays on top */
+}
+
+/* CROWN ICON */
 .crown-badge {
     position: absolute;
-    top: -20px;
+    top: -42px;
+    /* Adjusted slightly up since no float */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
-    animation: float 2s ease-in-out infinite;
+    /* No rotation */
+    z-index: 20;
+    /* No background circle, just the "real" crown sitting on top */
+    background: transparent;
+    box-shadow: none;
+    width: auto;
+    height: auto;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3));
+    /* Animation removed */
+    pointer-events: none;
 }
 
-@keyframes float {
+/* Checkmark Badge Adjustment */
+.completed-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 28px;
+    height: 28px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+    z-index: 5;
+    color: var(--node-accent, #22c55e);
+}
+
+@keyframes bounce-slight {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(10deg);
+    }
+
+    50% {
+        transform: translateY(-4px) rotate(10deg);
+    }
+}
+
+/* START BUBBLE (Duolingo style) */
+.start-bubble {
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    color: #4b5563;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.15), 0 12px 20px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+    border: 2px solid #e5e7eb;
+    animation: float-bubble 2s ease-in-out infinite;
+}
+
+.start-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 14px;
+    height: 14px;
+    background: #ffffff;
+    border-bottom: 2px solid #e5e7eb;
+    border-right: 2px solid #e5e7eb;
+}
+
+@keyframes float-bubble {
 
     0%,
     100% {
@@ -405,8 +575,38 @@
     }
 
     50% {
-        transform: translateX(-50%) translateY(-5px);
+        transform: translateX(-50%) translateY(-6px);
     }
+}
+
+/* Pulse Ring for Current Node */
+.path-node.current .node-circle::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 4px solid currentColor;
+    opacity: 0;
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* Current Node Styling override */
+.path-node.current .node-circle {
+    /* Make the current node slightly larger */
+    width: 84px;
+    height: 84px;
 }
 
 .completed-badge {

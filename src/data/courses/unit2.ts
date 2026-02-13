@@ -122,11 +122,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Monday" in Kurdish?',
+                    question: "'دووشەممە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'دووشەممە', image: '📅', correct: true },
-                        { text: 'سێشەممە', image: '📅', correct: false },
-                        { text: 'چوارشەممە', image: '📅', correct: false }
+                        { text: 'Monday', image: '📅', correct: true },
+                        { text: 'Tuesday', image: '📅', correct: false },
+                        { text: 'Wednesday', image: '📅', correct: false }
                     ]
                 },
                 {
@@ -140,32 +140,32 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Good Morning"',
-                    sourceText: 'Good Morning',
-                    correctSentence: ['بەیانی', 'باش'],
-                    options: ['بەیانی', 'باش', 'شەو', 'خۆش']
+                    question: "بە ئینگلیزی بنووسە: 'بەیانی باش'",
+                    sourceText: 'بەیانی باش',
+                    correctSentence: ['Good', 'Morning'],
+                    options: ['Good', 'Morning', 'Night', 'Evening', 'Hello']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Friday" in Kurdish?',
+                    question: "'هەینی' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'هەینی', image: '📅', correct: true },
-                        { text: 'شەممە', image: '📅', correct: false },
-                        { text: 'یەکشەممە', image: '📅', correct: false }
+                        { text: 'Friday', image: '📅', correct: true },
+                        { text: 'Saturday', image: '📅', correct: false },
+                        { text: 'Sunday', image: '📅', correct: false }
                     ]
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "What ___ is it?"',
-                    sentenceParts: ['What', '___', 'is', 'it', '?'],
+                    question: "Complete: 'What ___ is it?'",
+                    sentenceParts: ['What', '___', 'is it?'],
                     correctOption: 'time',
                     options: ['time', 'day', 'week', 'month']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "Good Evening"',
-                    correctAnswer: 'ئێوارە باش',
-                    hints: ['ئێوارە', 'باش']
+                    question: "بە ئینگلیزی بنووسە: 'ئێوارە باش'",
+                    correctAnswer: 'Good Evening',
+                    hints: ['Good', 'Evening']
                 },
                 {
                     type: 'match-pairs', question: 'Match the pairs',
@@ -178,26 +178,26 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "What time is it?"',
-                    sourceText: 'What time is it?',
-                    correctSentence: ['کاتژمێر', 'چەندە', '؟'],
-                    options: ['کاتژمێر', 'چەندە', '؟', 'ڕۆژ', 'کەی']
+                    question: "بە ئینگلیزی بنووسە: 'کاتژمێر چەندە؟'",
+                    sourceText: 'کاتژمێر چەندە؟',
+                    correctSentence: ['What', 'time', 'is', 'it?'],
+                    options: ['What', 'time', 'is', 'it?', 'day', 'where']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Afternoon" in Kurdish?',
+                    question: "'دوای نیوەڕۆ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'دوای نیوەڕۆ', image: '🌅', correct: true },
-                        { text: 'بەیانی', image: '🌄', correct: false },
-                        { text: 'شەو', image: '🌙', correct: false }
+                        { text: 'Afternoon', image: '🌅', correct: true },
+                        { text: 'Morning', image: '🌄', correct: false },
+                        { text: 'Night', image: '🌙', correct: false }
                     ]
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Today is ___"',
-                    sentenceParts: ['ئەمڕۆ', '___'],
-                    correctOption: 'دووشەممەیە',
-                    options: ['دووشەممەیە', 'باشە', 'گەرمە', 'ساردە']
+                    question: "Complete: 'Today is ___' (دووشەممە)",
+                    sentenceParts: ['Today is', '___'],
+                    correctOption: 'Monday',
+                    options: ['Monday', 'Good', 'Hot', 'Cold']
                 }
             ]
         },
@@ -217,40 +217,40 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Father" in Kurdish?',
+                    question: "'باوک' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'باوک', image: '👨', correct: true },
-                        { text: 'دایک', image: '👩', correct: false },
-                        { text: 'برا', image: '👦', correct: false }
+                        { text: 'Father', image: '👨', correct: true },
+                        { text: 'Mother', image: '👩', correct: false },
+                        { text: 'Brother', image: '👦', correct: false }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "My mother"',
-                    sourceText: 'My mother',
-                    correctSentence: ['دایکی', 'من'],
-                    options: ['دایکی', 'من', 'باوکی', 'تۆ']
+                    question: "بە ئینگلیزی بنووسە: 'دایکی من'",
+                    sourceText: 'دایکی من',
+                    correctSentence: ['My', 'mother'],
+                    options: ['My', 'mother', 'father', 'Your', 'his']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I have two ___"',
-                    sentenceParts: ['دوو', '___', 'م', 'هەیە'],
-                    correctOption: 'خوشک',
-                    options: ['خوشک', 'برا', 'باوک', 'دایک']
+                    question: "Complete: 'I have two ___' (خوشک)",
+                    sentenceParts: ['I have two', '___'],
+                    correctOption: 'sisters',
+                    options: ['sisters', 'brothers', 'fathers', 'mothers']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "My family"',
-                    correctAnswer: 'خێزانەکەم',
-                    hints: ['خێزان']
+                    question: "بە ئینگلیزی بنووسە: 'خێزانەکەم'",
+                    correctAnswer: 'My family',
+                    hints: ['My', 'family']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Grandfather" in Kurdish?',
+                    question: "'باپیر' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'باپیر', image: '👴', correct: true },
-                        { text: 'باوک', image: '👨', correct: false },
-                        { text: 'برا', image: '👦', correct: false }
+                        { text: 'Grandfather', image: '👴', correct: true },
+                        { text: 'Father', image: '👨', correct: false },
+                        { text: 'Brother', image: '👦', correct: false }
                     ]
                 },
                 {
@@ -264,25 +264,25 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "His sister"',
-                    sourceText: 'His sister',
-                    correctSentence: ['خوشکی', 'ئەو'],
-                    options: ['خوشکی', 'ئەو', 'براکەی', 'من']
+                    question: "بە ئینگلیزی بنووسە: 'خوشکی ئەو'",
+                    sourceText: 'خوشکی ئەو',
+                    correctSentence: ['His', 'sister'],
+                    options: ['His', 'sister', 'brother', 'My', 'Her']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "This is my ___"',
-                    sentenceParts: ['ئەمە', '___', 'ی', 'منە'],
-                    correctOption: 'برا',
-                    options: ['برا', 'خوشک', 'هاوڕێ', 'مامۆستا']
+                    question: "Complete: 'This is my ___' (برا)",
+                    sentenceParts: ['This is my', '___'],
+                    correctOption: 'brother',
+                    options: ['brother', 'sister', 'friend', 'teacher']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Daughter" in Kurdish?',
+                    question: "'کچ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'کچ', image: '👧', correct: true },
-                        { text: 'کوڕ', image: '👦', correct: false },
-                        { text: 'خوشک', image: '👩', correct: false }
+                        { text: 'Daughter', image: '👧', correct: true },
+                        { text: 'Son', image: '👦', correct: false },
+                        { text: 'Sister', image: '👩', correct: false }
                     ]
                 }
             ]
@@ -294,11 +294,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Expensive" in Kurdish?',
+                    question: "'گران' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'گران', image: '💰', correct: true },
-                        { text: 'هەرزان', image: '💵', correct: false },
-                        { text: 'باش', image: '👍', correct: false }
+                        { text: 'Expensive', image: '💰', correct: true },
+                        { text: 'Cheap', image: '💵', correct: false },
+                        { text: 'Good', image: '👍', correct: false }
                     ]
                 },
                 {
@@ -312,23 +312,23 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "How much is this?"',
-                    sourceText: 'How much is this?',
-                    correctSentence: ['ئەمە', 'بە', 'چەندە', '؟'],
-                    options: ['ئەمە', 'بە', 'چەندە', '؟', 'کوێیە', 'کەی']
+                    question: "بە ئینگلیزی بنووسە: 'ئەمە بە چەندە؟'",
+                    sourceText: 'ئەمە بە چەندە؟',
+                    correctSentence: ['How', 'much', 'is', 'this?'],
+                    options: ['How', 'much', 'is', 'this?', 'where', 'when']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "This is ___" (expensive)',
-                    sentenceParts: ['ئەمە', '___'],
-                    correctOption: 'گرانە',
-                    options: ['گرانە', 'هەرزانە', 'باشە', 'خراپە']
+                    question: "Complete: 'This is ___' (گران)",
+                    sentenceParts: ['This is', '___'],
+                    correctOption: 'expensive',
+                    options: ['expensive', 'cheap', 'good', 'bad']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "I want to buy"',
-                    correctAnswer: 'دەمەوێت بکڕم',
-                    hints: ['دەمەوێت', 'بکڕم']
+                    question: "بە ئینگلیزی بنووسە: 'دەمەوێت بکڕم'",
+                    correctAnswer: 'I want to buy',
+                    hints: ['I', 'want', 'buy']
                 },
                 {
                     type: 'roleplay-chat',
@@ -361,11 +361,11 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Market" in Kurdish?',
+                    question: "'بازاڕ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'بازاڕ', image: '🏪', correct: true },
-                        { text: 'ماڵ', image: '🏠', correct: false },
-                        { text: 'قوتابخانە', image: '🏫', correct: false }
+                        { text: 'Market', image: '🏪', correct: true },
+                        { text: 'House', image: '🏠', correct: false },
+                        { text: 'School', image: '🏫', correct: false }
                     ]
                 },
                 {
@@ -379,17 +379,17 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I need ___"',
-                    sentenceParts: ['پێویستیم', 'بە', '___', 'هەیە'],
-                    correctOption: 'پارە',
-                    options: ['پارە', 'ئاو', 'نان', 'چای']
+                    question: "Complete: 'I need ___' (پارە)",
+                    sentenceParts: ['I need', '___'],
+                    correctOption: 'money',
+                    options: ['money', 'water', 'bread', 'tea']
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Can I help you?"',
-                    sourceText: 'Can I help you?',
-                    correctSentence: ['دەتوانم', 'یارمەتیت', 'بدەم', '؟'],
-                    options: ['دەتوانم', 'یارمەتیت', 'بدەم', '؟', 'بکەم', 'بڵێم']
+                    question: "بە ئینگلیزی بنووسە: 'دەتوانم یارمەتیت بدەم؟'",
+                    sourceText: 'دەتوانم یارمەتیت بدەم؟',
+                    correctSentence: ['Can', 'I', 'help', 'you?'],
+                    options: ['Can', 'I', 'help', 'you?', 'want', 'buy']
                 }
             ]
         },
@@ -400,11 +400,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Left" in Kurdish?',
+                    question: "'چەپ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'چەپ', image: '⬅️', correct: true },
-                        { text: 'ڕاست', image: '➡️', correct: false },
-                        { text: 'ڕێک', image: '⬆️', correct: false }
+                        { text: 'Left', image: '⬅️', correct: true },
+                        { text: 'Right', image: '➡️', correct: false },
+                        { text: 'Straight', image: '⬆️', correct: false }
                     ]
                 },
                 {
@@ -418,31 +418,31 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Turn left"',
-                    sourceText: 'Turn left',
-                    correctSentence: ['بچۆ', 'بۆ', 'چەپ'],
-                    options: ['بچۆ', 'بۆ', 'چەپ', 'ڕاست', 'ڕێک']
+                    question: "بە ئینگلیزی بنووسە: 'بچۆ بۆ چەپ'",
+                    sourceText: 'بچۆ بۆ چەپ',
+                    correctSentence: ['Turn', 'left'],
+                    options: ['Turn', 'left', 'right', 'Go', 'straight']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Go ___" (straight)',
-                    sentenceParts: ['بڕۆ', '___'],
-                    correctOption: 'ڕێک',
-                    options: ['ڕێک', 'چەپ', 'ڕاست', 'دواوە']
+                    question: "Complete: 'Go ___' (ڕێک)",
+                    sentenceParts: ['Go', '___'],
+                    correctOption: 'straight',
+                    options: ['straight', 'left', 'right', 'back']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "Where is the school?"',
-                    correctAnswer: 'قوتابخانە لە کوێیە',
-                    hints: ['قوتابخانە', 'کوێیە']
+                    question: "بە ئینگلیزی بنووسە: 'قوتابخانە لە کوێیە؟'",
+                    correctAnswer: 'Where is the school?',
+                    hints: ['Where', 'school']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Near" in Kurdish?',
+                    question: "'نزیک' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'نزیک', image: '📍', correct: true },
-                        { text: 'دوور', image: '🗺️', correct: false },
-                        { text: 'ناوەڕاست', image: '🎯', correct: false }
+                        { text: 'Near', image: '📍', correct: true },
+                        { text: 'Far', image: '🗺️', correct: false },
+                        { text: 'Middle', image: '🎯', correct: false }
                     ]
                 },
                 {
@@ -456,17 +456,17 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Where is the market?"',
-                    sourceText: 'Where is the market?',
-                    correctSentence: ['بازاڕ', 'لە', 'کوێیە', '؟'],
-                    options: ['بازاڕ', 'لە', 'کوێیە', '؟', 'کەی', 'چۆن']
+                    question: "بە ئینگلیزی بنووسە: 'بازاڕ لە کوێیە؟'",
+                    sourceText: 'بازاڕ لە کوێیە؟',
+                    correctSentence: ['Where', 'is', 'the', 'market?'],
+                    options: ['Where', 'is', 'the', 'market?', 'when', 'how']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "It is ___" (near)',
-                    sentenceParts: ['ئەوە', '___', 'یە'],
-                    correctOption: 'نزیک',
-                    options: ['نزیک', 'دوور', 'گەورە', 'بچووک']
+                    question: "Complete: 'It is ___' (نزیک)",
+                    sentenceParts: ['It is', '___'],
+                    correctOption: 'near',
+                    options: ['near', 'far', 'big', 'small']
                 },
                 {
                     type: 'roleplay-chat',
@@ -506,11 +506,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Sunny" in Kurdish?',
+                    question: "'خۆرەتاو' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'خۆرەتاو', image: '☀️', correct: true },
-                        { text: 'بارانی', image: '🌧️', correct: false },
-                        { text: 'هەوری', image: '☁️', correct: false }
+                        { text: 'Sunny', image: '☀️', correct: true },
+                        { text: 'Rainy', image: '🌧️', correct: false },
+                        { text: 'Cloudy', image: '☁️', correct: false }
                     ]
                 },
                 {
@@ -524,23 +524,23 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "It is sunny today"',
-                    sourceText: 'It is sunny today',
-                    correctSentence: ['ئەمڕۆ', 'خۆرەتاوە'],
-                    options: ['ئەمڕۆ', 'خۆرەتاوە', 'بارانیە', 'ساردە']
+                    question: "بە ئینگلیزی بنووسە: 'ئەمڕۆ خۆرەتاوە'",
+                    sourceText: 'ئەمڕۆ خۆرەتاوە',
+                    correctSentence: ['It', 'is', 'sunny', 'today'],
+                    options: ['It', 'is', 'sunny', 'today', 'rainy', 'cold']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Today is ___" (hot)',
-                    sentenceParts: ['ئەمڕۆ', '___'],
-                    correctOption: 'گەرمە',
-                    options: ['گەرمە', 'ساردە', 'باشە', 'خراپە']
+                    question: "Complete: 'Today is ___' (گەرم)",
+                    sentenceParts: ['Today is', '___'],
+                    correctOption: 'hot',
+                    options: ['hot', 'cold', 'good', 'bad']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "How is the weather?"',
-                    correctAnswer: 'کەش و هەوا چۆنە',
-                    hints: ['کەش', 'هەوا']
+                    question: "بە ئینگلیزی بنووسە: 'کەش و هەوا چۆنە؟'",
+                    correctAnswer: 'How is the weather?',
+                    hints: ['How', 'weather']
                 },
                 {
                     type: 'roleplay-chat',
@@ -562,11 +562,11 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Snow" in Kurdish?',
+                    question: "'بەفر' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'بەفر', image: '❄️', correct: true },
-                        { text: 'باران', image: '🌧️', correct: false },
-                        { text: 'هەور', image: '☁️', correct: false }
+                        { text: 'Snow', image: '❄️', correct: true },
+                        { text: 'Rain', image: '🌧️', correct: false },
+                        { text: 'Cloud', image: '☁️', correct: false }
                     ]
                 },
                 {
@@ -580,25 +580,25 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "It is raining"',
-                    sourceText: 'It is raining',
-                    correctSentence: ['باران', 'دەبارێت'],
-                    options: ['باران', 'دەبارێت', 'بەفر', 'دەکات']
+                    question: "بە ئینگلیزی بنووسە: 'باران دەبارێت'",
+                    sourceText: 'باران دەبارێت',
+                    correctSentence: ['It', 'is', 'raining'],
+                    options: ['It', 'is', 'raining', 'snowing', 'sunny', 'cold']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Tomorrow will be ___" (cold)',
-                    sentenceParts: ['سبەی', '___', 'دەبێت'],
-                    correctOption: 'سارد',
-                    options: ['سارد', 'گەرم', 'خۆرەتاو', 'بارانی']
+                    question: "Complete: 'Tomorrow will be ___' (سارد)",
+                    sentenceParts: ['Tomorrow will be', '___'],
+                    correctOption: 'cold',
+                    options: ['cold', 'hot', 'sunny', 'rainy']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Cloudy" in Kurdish?',
+                    question: "'هەوری' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'هەوری', image: '☁️', correct: true },
-                        { text: 'خۆرەتاو', image: '☀️', correct: false },
-                        { text: 'بارانی', image: '🌧️', correct: false }
+                        { text: 'Cloudy', image: '☁️', correct: true },
+                        { text: 'Sunny', image: '☀️', correct: false },
+                        { text: 'Rainy', image: '🌧️', correct: false }
                     ]
                 }
             ]
@@ -610,11 +610,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Wake up" in Kurdish?',
+                    question: "'لەخەو هەڵسان' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'لەخەو هەڵسان', image: '🌅', correct: true },
-                        { text: 'نوستن', image: '😴', correct: false },
-                        { text: 'خواردن', image: '🍽️', correct: false }
+                        { text: 'Wake up', image: '🌅', correct: true },
+                        { text: 'Sleep', image: '😴', correct: false },
+                        { text: 'Eat', image: '🍽️', correct: false }
                     ]
                 },
                 {
@@ -628,25 +628,25 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I wake up early"',
-                    sourceText: 'I wake up early',
-                    correctSentence: ['من', 'زوو', 'لەخەو', 'هەڵدەستم'],
-                    options: ['من', 'زوو', 'لەخەو', 'هەڵدەستم', 'دەخەوم', 'درەنگ']
+                    question: "بە ئینگلیزی بنووسە: 'من زوو لەخەو هەڵدەستم'",
+                    sourceText: 'من زوو لەخەو هەڵدەستم',
+                    correctSentence: ['I', 'wake', 'up', 'early'],
+                    options: ['I', 'wake', 'up', 'early', 'late', 'sleep']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I eat ___" (breakfast)',
-                    sentenceParts: ['من', '___', 'دەخۆم'],
-                    correctOption: 'نانی بەیانی',
-                    options: ['نانی بەیانی', 'شەو', 'کار', 'خەو']
+                    question: "Complete: 'I eat ___' (نانی بەیانی)",
+                    sentenceParts: ['I eat', '___'],
+                    correctOption: 'breakfast',
+                    options: ['breakfast', 'dinner', 'lunch', 'nothing']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Shower"?',
+                    question: "'خۆشوشتن' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'خۆشوشتن', image: '🚿', correct: true },
-                        { text: 'دەست شوشتن', image: '🧼', correct: false },
-                        { text: 'خواردن', image: '🍽️', correct: false }
+                        { text: 'Shower', image: '🚿', correct: true },
+                        { text: 'Wash hands', image: '🧼', correct: false },
+                        { text: 'Eat', image: '🍽️', correct: false }
                     ]
                 }
             ]
@@ -658,11 +658,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Shirt"?',
+                    question: "'کراس' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'کراس', image: '👕', correct: true },
-                        { text: 'پانتۆڵ', image: '👖', correct: false },
-                        { text: 'پێڵاو', image: '👞', correct: false }
+                        { text: 'Shirt', image: '👕', correct: true },
+                        { text: 'Pants', image: '👖', correct: false },
+                        { text: 'Shoes', image: '👞', correct: false }
                     ]
                 },
                 {
@@ -676,25 +676,25 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Red shirt"',
-                    sourceText: 'Red shirt',
-                    correctSentence: ['کراسی', 'سوور'],
-                    options: ['کراسی', 'سوور', 'شین', 'پانتۆڵ']
+                    question: "بە ئینگلیزی بنووسە: 'کراسی سوور'",
+                    sourceText: 'کراسی سوور',
+                    correctSentence: ['Red', 'shirt'],
+                    options: ['Red', 'shirt', 'Blue', 'pants', 'shoes']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I wear ___" (shoes)',
-                    sentenceParts: ['من', '___', 'لەپێ دەکەم'],
-                    correctOption: 'پێڵاو',
-                    options: ['پێڵاو', 'کراس', 'کڵاو', 'دەستکێش']
+                    question: "Complete: 'I wear ___' (پێڵاو)",
+                    sentenceParts: ['I wear', '___'],
+                    correctOption: 'shoes',
+                    options: ['shoes', 'shirt', 'hat', 'gloves']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Dress"?',
+                    question: "'عەزی' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'عەزی', image: '👗', correct: true },
-                        { text: 'چاکەت', image: '🧥', correct: false },
-                        { text: 'گۆرەوی', image: '🧦', correct: false }
+                        { text: 'Dress', image: '👗', correct: true },
+                        { text: 'Jacket', image: '🧥', correct: false },
+                        { text: 'Socks', image: '🧦', correct: false }
                     ]
                 }
             ]
@@ -706,11 +706,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Room"?',
+                    question: "'ژوور' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'ژوور', image: '🚪', correct: true },
-                        { text: 'مەتبەخ', image: '🍳', correct: false },
-                        { text: 'حەوشە', image: '🌳', correct: false }
+                        { text: 'Room', image: '🚪', correct: true },
+                        { text: 'Kitchen', image: '🍳', correct: false },
+                        { text: 'Garden', image: '🌳', correct: false }
                     ]
                 },
                 {
@@ -724,25 +724,25 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Open the door"',
-                    sourceText: 'Open the door',
-                    correctSentence: ['دەرگاکە', 'بکەوە'],
-                    options: ['دەرگاکە', 'بکەوە', 'دابخە', 'پەنجەرە']
+                    question: "بە ئینگلیزی بنووسە: 'دەرگاکە بکەوە'",
+                    sourceText: 'دەرگاکە بکەوە',
+                    correctSentence: ['Open', 'the', 'door'],
+                    options: ['Open', 'the', 'door', 'Close', 'window', 'room']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I am in the ___" (kitchen)',
-                    sentenceParts: ['من', 'لە', '___', 'م'],
-                    correctOption: 'مەتبەخ',
-                    options: ['مەتبەخ', 'سەربان', 'کۆڵان', 'بازاڕ']
+                    question: "Complete: 'I am in the ___' (مەتبەخ)",
+                    sentenceParts: ['I am in the', '___'],
+                    correctOption: 'kitchen',
+                    options: ['kitchen', 'roof', 'street', 'market']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Window"?',
+                    question: "'پەنجەرە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'پەنجەرە', image: '🪟', correct: true },
-                        { text: 'دەرگا', image: '🚪', correct: false },
-                        { text: 'دیوار', image: '🧱', correct: false }
+                        { text: 'Window', image: '🪟', correct: true },
+                        { text: 'Door', image: '🚪', correct: false },
+                        { text: 'Wall', image: '🧱', correct: false }
                     ]
                 }
             ]
@@ -754,11 +754,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Happy"?',
+                    question: "'دڵخۆش' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'دڵخۆش', image: '😊', correct: true },
-                        { text: 'دڵتەنگ', image: '😢', correct: false },
-                        { text: 'تووڕە', image: '😠', correct: false }
+                        { text: 'Happy', image: '😊', correct: true },
+                        { text: 'Sad', image: '😢', correct: false },
+                        { text: 'Angry', image: '😠', correct: false }
                     ]
                 },
                 {
@@ -767,30 +767,30 @@ export const unit2: Unit = {
                         { kurdish: 'دڵخۆش', english: 'Happy' },
                         { kurdish: 'دڵتەنگ', english: 'Sad' },
                         { kurdish: 'ماندوو', english: 'Tired' },
-                        { kurdish: 'برسی', english: 'Hunger' }
+                        { kurdish: 'برسی', english: 'Hungry' }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I am tired"',
-                    sourceText: 'I am tired',
-                    correctSentence: ['من', 'ماندووم'],
-                    options: ['من', 'ماندووم', 'باشم', 'خۆشم']
+                    question: "بە ئینگلیزی بنووسە: 'من ماندووم'",
+                    sourceText: 'من ماندووم',
+                    correctSentence: ['I', 'am', 'tired'],
+                    options: ['I', 'am', 'tired', 'happy', 'sad', 'hungry']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Are you ___?" (sad)',
-                    sentenceParts: ['ئایا', 'تۆ', '___', 'یت', '؟'],
-                    correctOption: 'دڵتەنگ',
-                    options: ['دڵتەنگ', 'دڵخۆش', 'برسی', 'تینوو']
+                    question: "Complete: 'Are you ___?' (دڵتەنگ)",
+                    sentenceParts: ['Are you', '___?'],
+                    correctOption: 'sad',
+                    options: ['sad', 'happy', 'hungry', 'thirsty']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Thirsty"?',
+                    question: "'تینوو' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'تینوو', image: '🥤', correct: true },
-                        { text: 'برسی', image: '🍽️', correct: false },
-                        { text: 'تێر', image: '😋', correct: false }
+                        { text: 'Thirsty', image: '🥤', correct: true },
+                        { text: 'Hungry', image: '🍽️', correct: false },
+                        { text: 'Full', image: '😋', correct: false }
                     ]
                 }
             ]
@@ -802,11 +802,11 @@ export const unit2: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Monday"?',
+                    question: "'دووشەممە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'دووشەممە', image: '📅', correct: true },
-                        { text: 'سێشەممە', image: '📅', correct: false },
-                        { text: 'هەینی', image: '📅', correct: false }
+                        { text: 'Monday', image: '📅', correct: true },
+                        { text: 'Tuesday', image: '📅', correct: false },
+                        { text: 'Friday', image: '📅', correct: false }
                     ]
                 },
                 {
@@ -820,25 +820,25 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Where is the market?"',
-                    sourceText: 'Where is the market?',
-                    correctSentence: ['بازاڕ', 'لە', 'کوێیە', '؟'],
-                    options: ['بازاڕ', 'لە', 'کوێیە', '؟', 'چۆنە', 'کەی']
+                    question: "بە ئینگلیزی بنووسە: 'بازاڕ لە کوێیە؟'",
+                    sourceText: 'بازاڕ لە کوێیە؟',
+                    correctSentence: ['Where', 'is', 'the', 'market?'],
+                    options: ['Where', 'is', 'the', 'market?', 'how', 'when']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I am ___" (happy)',
-                    sentenceParts: ['من', '___', 'م'],
-                    correctOption: 'دڵخۆش',
-                    options: ['دڵخۆش', 'دڵتەنگ', 'ماندوو', 'نەخۆش']
+                    question: "Complete: 'I am ___' (دڵخۆش)",
+                    sentenceParts: ['I am', '___'],
+                    correctOption: 'happy',
+                    options: ['happy', 'sad', 'tired', 'sick']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Shirt"?',
+                    question: "'کراس' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'کراس', image: '👕', correct: true },
-                        { text: 'پانتۆڵ', image: '👖', correct: false },
-                        { text: 'پێڵاو', image: '👞', correct: false }
+                        { text: 'Shirt', image: '👕', correct: true },
+                        { text: 'Pants', image: '👖', correct: false },
+                        { text: 'Shoes', image: '👞', correct: false }
                     ]
                 }
             ]

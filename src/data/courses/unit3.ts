@@ -871,144 +871,258 @@ export const unit3: Unit = {
         },
         {
             id: 'unit3-lesson6',
-            title: 'Health & Medical',
-            icon: '🏥',
+            title: 'Body Parts & Appearance',
+            icon: '🧍',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Hospital" in Kurdish?',
+                    question: 'What is "Head" in Kurdish?',
                     options: [
-                        { text: 'نەخۆشخانە', image: '🏥', correct: true },
-                        { text: 'دەرمانخانە', image: '💊', correct: false },
-                        { text: 'نووسینگە', image: '🏢', correct: false }
+                        { text: 'سەر', image: '🧠', correct: true },
+                        { text: 'دەست', image: '🤚', correct: false },
+                        { text: 'پێ', image: '🦶', correct: false }
                     ]
                 },
                 {
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
-                        { kurdish: 'نەخۆشخانە', english: 'Hospital' },
-                        { kurdish: 'پزیشک', english: 'Doctor' },
-                        { kurdish: 'دەرمان', english: 'Medicine' },
-                        { kurdish: 'نەخۆش', english: 'Sick' }
+                        { kurdish: 'سەر', english: 'Head' },
+                        { kurdish: 'دەست', english: 'Hand' },
+                        { kurdish: 'چاو', english: 'Eye' },
+                        { kurdish: 'گوێ', english: 'Ear' }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I have a headache"',
-                    sourceText: 'I have a headache',
-                    correctSentence: ['سەرم', 'ئێشێت'],
-                    options: ['سەرم', 'ئێشێت', 'باشە', 'نییە', 'دڵم']
+                    question: 'Translate: "I have brown eyes"',
+                    sourceText: 'I have brown eyes',
+                    correctSentence: ['چاوم', 'قاوەیییە'],
+                    options: ['چاوم', 'قاوەیییە', 'سەوزە', 'شینە', 'سەرم']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I need to see a ___" (doctor)',
-                    sentenceParts: ['پێویستە', '___', 'ببینم'],
-                    correctOption: 'پزیشک',
-                    options: ['پزیشک', 'هاوڕێ', 'مامۆستا', 'بەڕێوبەر']
+                    question: 'Complete: "She has long ___" (hair)',
+                    sentenceParts: ['قژی', '___', 'یە'],
+                    correctOption: 'درێژ',
+                    options: ['درێژ', 'کورت', 'ڕەش', 'سوور']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'How do you say "Pain"?',
+                    question: 'How do you say "Tall"?',
                     options: [
-                        { text: 'ئازار', image: '😣', correct: true },
-                        { text: 'خۆشی', image: '😊', correct: false },
-                        { text: 'خەو', image: '😴', correct: false }
+                        { text: 'بەرز', image: '📏', correct: true },
+                        { text: 'کورت', image: '📐', correct: false },
+                        { text: 'قەڵەو', image: '🔵', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs', question: 'Match the pairs',
+                    pairs: [
+                        { kurdish: 'قژ', english: 'Hair' },
+                        { kurdish: 'دەم', english: 'Mouth' },
+                        { kurdish: 'لووت', english: 'Nose' },
+                        { kurdish: 'پەنجە', english: 'Finger' }
+                    ]
+                },
+                {
+                    type: 'typing',
+                    question: 'Type in Kurdish: "Shoulder"',
+                    correctAnswer: 'شان',
+                    hints: ['شان']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "He is ___ and strong" (tall)',
+                    sentenceParts: ['ئەو', '___', 'و', 'بەهێزە'],
+                    correctOption: 'بەرز',
+                    options: ['بەرز', 'کورت', 'لاواز', 'پیر']
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "My hand hurts"',
+                    sourceText: 'My hand hurts',
+                    correctSentence: ['دەستم', 'ئێشێت'],
+                    options: ['دەستم', 'ئێشێت', 'سەرم', 'باشە', 'پێم']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Knee" in Kurdish?',
+                    options: [
+                        { text: 'ئەژنۆ', image: '🦵', correct: true },
+                        { text: 'پێ', image: '🦶', correct: false },
+                        { text: 'مل', image: '🧣', correct: false }
                     ]
                 }
             ]
         },
         {
             id: 'unit3-lesson7',
-            title: 'Weather & Seasons',
-            icon: '🌤️',
+            title: 'Nature & Environment',
+            icon: '🏔️',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Rain" in Kurdish?',
+                    question: 'What is "Mountain" in Kurdish?',
                     options: [
-                        { text: 'باران', image: '🌧️', correct: true },
-                        { text: 'بەفر', image: '❄️', correct: false },
-                        { text: 'تاو', image: '☀️', correct: false }
+                        { text: 'چیا', image: '🏔️', correct: true },
+                        { text: 'دەریا', image: '🌊', correct: false },
+                        { text: 'دار', image: '🌳', correct: false }
                     ]
                 },
                 {
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
-                        { kurdish: 'بەهار', english: 'Spring' },
-                        { kurdish: 'هاوین', english: 'Summer' },
-                        { kurdish: 'پاییز', english: 'Autumn' },
-                        { kurdish: 'زستان', english: 'Winter' }
+                        { kurdish: 'چیا', english: 'Mountain' },
+                        { kurdish: 'ڕووبار', english: 'River' },
+                        { kurdish: 'دار', english: 'Tree' },
+                        { kurdish: 'دەریاچە', english: 'Lake' }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "It is raining today"',
-                    sourceText: 'It is raining today',
-                    correctSentence: ['ئەمڕۆ', 'باران', 'دەبارێت'],
-                    options: ['ئەمڕۆ', 'باران', 'دەبارێت', 'تاو', 'هەیە', 'بەفر']
+                    question: 'Translate: "The mountain is very high"',
+                    sourceText: 'The mountain is very high',
+                    correctSentence: ['چیاکە', 'زۆر', 'بەرزە'],
+                    options: ['چیاکە', 'زۆر', 'بەرزە', 'نزمە', 'گەورەیە', 'ڕووبارەکە']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "The weather is ___" (cold)',
-                    sentenceParts: ['کەشوهەوا', '___', 'یە'],
-                    correctOption: 'سارد',
-                    options: ['سارد', 'گەرم', 'جوان', 'خراپ']
+                    question: 'Complete: "There are many ___ in Kurdistan" (trees)',
+                    sentenceParts: ['لە', 'کوردستان', 'زۆر', '___', 'هەیە'],
+                    correctOption: 'دار',
+                    options: ['دار', 'چیا', 'دەریا', 'ئاسمان']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'How do you say "Hot"?',
+                    question: 'How do you say "Sky"?',
                     options: [
-                        { text: 'گەرم', image: '🔥', correct: true },
-                        { text: 'سارد', image: '🧊', correct: false },
-                        { text: 'شل', image: '💨', correct: false }
+                        { text: 'ئاسمان', image: '🌤️', correct: true },
+                        { text: 'زەمین', image: '🌍', correct: false },
+                        { text: 'دەریا', image: '🌊', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs', question: 'Match the pairs',
+                    pairs: [
+                        { kurdish: 'ئاسمان', english: 'Sky' },
+                        { kurdish: 'هەتاو', english: 'Sun' },
+                        { kurdish: 'مانگ', english: 'Moon' },
+                        { kurdish: 'ستێرە', english: 'Star' }
+                    ]
+                },
+                {
+                    type: 'typing',
+                    question: 'Type in Kurdish: "Forest"',
+                    correctAnswer: 'دارستان',
+                    hints: ['دارستان']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "The ___ is beautiful at night" (sky)',
+                    sentenceParts: ['___', 'لە', 'شەوان', 'جوانە'],
+                    correctOption: 'ئاسمان',
+                    options: ['ئاسمان', 'زەمین', 'دەریا', 'چیا']
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "I love nature"',
+                    sourceText: 'I love nature',
+                    correctSentence: ['من', 'سروشتم', 'خۆشدەوێت'],
+                    options: ['من', 'سروشتم', 'خۆشدەوێت', 'ڕقم', 'لێیە', 'چیام']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Flower" in Kurdish?',
+                    options: [
+                        { text: 'گوڵ', image: '🌺', correct: true },
+                        { text: 'دار', image: '🌳', correct: false },
+                        { text: 'بەرد', image: '🪨', correct: false }
                     ]
                 }
             ]
         },
         {
             id: 'unit3-lesson8',
-            title: 'Shopping & Money',
-            icon: '🛍️',
+            title: 'Social Media & Communication',
+            icon: '💬',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Shop" in Kurdish?',
+                    question: 'What is "Message" in Kurdish?',
                     options: [
-                        { text: 'دووکان', image: '🏪', correct: true },
-                        { text: 'بازاڕ', image: '🏬', correct: false },
-                        { text: 'ماڵ', image: '🏠', correct: false }
+                        { text: 'پەیام', image: '💬', correct: true },
+                        { text: 'ئیمەیل', image: '📧', correct: false },
+                        { text: 'ناو', image: '📛', correct: false }
                     ]
                 },
                 {
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
-                        { kurdish: 'دووکان', english: 'Shop' },
-                        { kurdish: 'پارە', english: 'Money' },
-                        { kurdish: 'کڕین', english: 'Buy' },
-                        { kurdish: 'فرۆشتن', english: 'Sell' }
+                        { kurdish: 'پەیام', english: 'Message' },
+                        { kurdish: 'پۆست', english: 'Post' },
+                        { kurdish: 'لایک', english: 'Like' },
+                        { kurdish: 'شێر', english: 'Share' }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "How much is this?"',
-                    sourceText: 'How much is this?',
-                    correctSentence: ['ئەمە', 'چەندە', '؟'],
-                    options: ['ئەمە', 'چەندە', '؟', 'کەی', 'کوێیە', 'کێیە']
+                    question: 'Translate: "Send me a message"',
+                    sourceText: 'Send me a message',
+                    correctSentence: ['پەیامێکم', 'بۆ', 'بنێرە'],
+                    options: ['پەیامێکم', 'بۆ', 'بنێرە', 'بنووسە', 'بخوێنەوە', 'لایک']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I want to ___ this" (buy)',
-                    sentenceParts: ['دەمەوێت', 'ئەمە', '___'],
-                    correctOption: 'بکڕم',
-                    options: ['بکڕم', 'بفرۆشم', 'ببینم', 'بدەم']
+                    question: 'Complete: "I will ___ your photo" (like)',
+                    sentenceParts: ['من', 'وێنەکەت', '___', 'دەکەم'],
+                    correctOption: 'لایک',
+                    options: ['لایک', 'شێر', 'سڕین', 'بلۆک']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Expensive"?',
+                    question: 'How do you say "Phone call"?',
                     options: [
-                        { text: 'گران', image: '💰', correct: true },
-                        { text: 'هەرزان', image: '🏷️', correct: false },
-                        { text: 'بێبەها', image: '🎁', correct: false }
+                        { text: 'پەیوەندی تەلەفۆنی', image: '📞', correct: true },
+                        { text: 'پەیام', image: '💬', correct: false },
+                        { text: 'ئیمەیل', image: '📧', correct: false }
+                    ]
+                },
+                {
+                    type: 'match-pairs', question: 'Match the pairs',
+                    pairs: [
+                        { kurdish: 'فۆڵۆکردن', english: 'Follow' },
+                        { kurdish: 'بلۆککردن', english: 'Block' },
+                        { kurdish: 'کۆمێنت', english: 'Comment' },
+                        { kurdish: 'پرۆفایل', english: 'Profile' }
+                    ]
+                },
+                {
+                    type: 'typing',
+                    question: 'Type in Kurdish: "Video call"',
+                    correctAnswer: 'ڤیدیۆ کۆڵ',
+                    hints: ['ڤیدیۆ', 'کۆڵ']
+                },
+                {
+                    type: 'fill-blank',
+                    question: 'Complete: "I ___ you on Instagram" (followed)',
+                    sentenceParts: ['من', 'لەسەر', 'ئینستاگرام', '___', 'م', 'کردیت'],
+                    correctOption: 'فۆڵۆ',
+                    options: ['فۆڵۆ', 'بلۆک', 'لایک', 'شێر']
+                },
+                {
+                    type: 'sentence-builder',
+                    question: 'Translate: "Check your notification"',
+                    sourceText: 'Check your notification',
+                    correctSentence: ['ئاگاداریەکانت', 'بپشکنە'],
+                    options: ['ئاگاداریەکانت', 'بپشکنە', 'بنووسە', 'بخوێنەوە', 'پەیامەکانت']
+                },
+                {
+                    type: 'multiple-choice',
+                    question: 'What is "Group chat" in Kurdish?',
+                    options: [
+                        { text: 'گروپی گفتوگۆ', image: '👥', correct: true },
+                        { text: 'پەیامی تایبەت', image: '🔒', correct: false },
+                        { text: 'ستۆری', image: '📸', correct: false }
                     ]
                 }
             ]
@@ -1078,33 +1192,33 @@ export const unit3: Unit = {
                 {
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
-                        { kurdish: 'پزیشک', english: 'Doctor' },
+                        { kurdish: 'چیا', english: 'Mountain' },
                         { kurdish: 'فڕۆکە', english: 'Airplane' },
                         { kurdish: 'مۆبایل', english: 'Mobile' },
-                        { kurdish: 'باران', english: 'Rain' }
+                        { kurdish: 'پەیام', english: 'Message' }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I work in the hospital"',
-                    sourceText: 'I work in the hospital',
-                    correctSentence: ['من', 'لە', 'نەخۆشخانە', 'کار', 'دەکەم'],
-                    options: ['من', 'لە', 'نەخۆشخانە', 'کار', 'دەکەم', 'دووکان', 'قوتابخانە']
+                    question: 'Translate: "I love nature"',
+                    sourceText: 'I love nature',
+                    correctSentence: ['من', 'سروشتم', 'خۆشدەوێت'],
+                    options: ['من', 'سروشتم', 'خۆشدەوێت', 'ڕقم', 'لێیە', 'کارەکەم']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "The weather is ___ today" (nice)',
-                    sentenceParts: ['ئەمڕۆ', 'کەشوهەوا', '___', 'یە'],
-                    correctOption: 'جوان',
-                    options: ['جوان', 'خراپ', 'سارد', 'گەرم']
+                    question: 'Complete: "My ___ hurts" (head)',
+                    sentenceParts: ['___', 'م', 'ئێشێت'],
+                    correctOption: 'سەر',
+                    options: ['سەر', 'دەست', 'پێ', 'چاو']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'Review: What is "Expensive"?',
+                    question: 'Review: What is "Follow" in social media?',
                     options: [
-                        { text: 'گران', image: '💰', correct: true },
-                        { text: 'هەرزان', image: '🏷️', correct: false },
-                        { text: 'جوان', image: '😊', correct: false }
+                        { text: 'فۆڵۆکردن', image: '➕', correct: true },
+                        { text: 'بلۆککردن', image: '🚫', correct: false },
+                        { text: 'لایککردن', image: '❤️', correct: false }
                     ]
                 }
             ]

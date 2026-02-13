@@ -2,98 +2,97 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-    X, Heart, Check,
-    // Food & Dining
-    UtensilsCrossed, Coffee, Wheat, Utensils, Salad, Sandwich, CircleDot, Egg, Package, Receipt,
-    // Business & Work
-    Handshake, Building2, FolderOpen, Shirt, Briefcase, Calendar, Clock,
-    // Health
-    Stethoscope, Hospital, HeartPulse, ShieldAlert, Thermometer,
-    // Actions & Symbols
-    RefreshCw, MessageCircle, Brain, MessageSquare,
-    // Finance
-    Landmark, Store, ArrowRightLeft, DollarSign, Banknote,
-    // Celebrations
-    Flame, PartyPopper, Sparkles, Gift, Church,
-    // Travel & Places
-    Plane, Hotel, Ticket, Map, Car, Bus, Train, Ship, Mountain,
-    // Tech & Apps
-    Smartphone, Laptop, Mail, Camera, Battery, Signal, Plug, Settings,
-    // Common Objects
-    Armchair, Music, Music2, BookOpen, Pencil, Palette,
-    // Nature & Weather
-    Sun, CloudRain, Snowflake, Wind, CloudSun,
-    // People & Family
-    User, UserCircle, Baby, Users,
-    // Numbers & Time
-    Hash, Clock1, Clock2, Clock3,
-    // Shapes
-    Circle
+    // UI Icons
+    X, Check, Heart, Sparkles, RefreshCw, MessageCircle, MessageSquare, ChevronRight, // Lucide for UI
+    Settings, Play, Pause, RotateCcw
 } from 'lucide-react';
+import {
+    // Colorful Flat Icons (all verified exports)
+    FcCheckmark, FcCancel, FcIdea, FcMindMap, FcClock, FcCalendar,
+    FcBriefcase, FcBusiness, FcBusinessman, FcBusinesswoman,
+    FcGraduationCap, FcReading, FcLibrary, FcKindle, FcGlobe,
+    FcHome, FcDepartment, FcOrganization, FcShop, FcFactory,
+    FcCurrencyExchange, FcMoneyTransfer, FcSalesPerformance, FcDebt,
+    FcPicture, FcCamera, FcMusic, FcHeadset, FcSpeaker,
+    FcSmartphoneTablet, FcElectronics, FcCalculator, FcDatabase,
+    FcLandscape, FcNightLandscape, FcBinoculars, FcGallery,
+    FcAutomotive, FcShipped, FcPackage, FcInTransit,
+    FcComments, FcCollaboration, FcVoicePresentation, FcSupport,
+    FcAbout, FcInfo, FcRules, FcDisclaimer, FcProcess,
+    FcRating, FcLike, FcDislike, FcStart, FcEndCall,
+    FcMultipleDevices, FcFullBattery, FcPhone
+} from 'react-icons/fc';
 import { useLanguage } from '../../context/LanguageContext';
 import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
 import { unit5 } from '../../data/courses/unit5';
+import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
 import { completeLesson, isLessonUnlocked } from '../../utils/progressManager';
 import Button from '../../components/Button/Button';
 import './Lesson.css';
 
-// Emoji to Lucide Icon Component Mapping
+// Emoji to Icon Mapping
+// Uses Flat Color Icons (Fc) for abstract/business/tech to give a "Duolingo" vector look.
+// Concrete nouns (Apple, Cat) still use Native Emojis because icon sets lack them.
 const emojiToIconComponent = {
-    // Food & Dining
-    '🍽️': UtensilsCrossed, '☕': Coffee, '🍞': Wheat, '🍴': Utensils,
-    '🫑': Salad, '🥙': Sandwich, '🍚': CircleDot, '🍖': CircleDot,
-    '🍳': Egg, '🍱': Package, '🧾': Receipt,
+    // Actions & UI
+    '✅': FcCheckmark, '❌': FcCancel, '💡': FcIdea, '🧠': FcMindMap,
+    '📅': FcCalendar, '⏰': FcClock, '⚙️': Settings, '🔄': RefreshCw,
+
     // Business & Work
-    '🤝': Handshake, '🏢': Building2, '📁': FolderOpen, '👔': Shirt,
-    '👨‍💼': Briefcase, '📅': Calendar, '⏰': Clock,
-    // Health
-    '👨‍⚕️': Stethoscope, '🏥': Hospital, '💊': CircleDot, '🌡️': Thermometer,
-    '🤕': HeartPulse, '😷': ShieldAlert,
-    // Actions & Symbols
-    '❌': X, '✅': Check, '🔄': RefreshCw, '💭': MessageCircle,
-    '🧠': Brain, '🗣️': MessageSquare, '🙏': Heart,
-    // Finance
-    '🏦': Landmark, '🏪': Store, '💸': ArrowRightLeft,
-    '💰': DollarSign, '💵': Banknote,
-    // Celebrations
-    '🔥': Flame, '🎊': PartyPopper, '🎉': Sparkles,
-    '🎈': Gift, '💒': Church,
+    '💼': FcBriefcase, '🏢': FcDepartment, '🤝': FcCollaboration,
+    '👨‍💼': FcBusinessman, '👩‍💼': FcBusinesswoman, '🏭': FcFactory,
+    '📊': FcSalesPerformance, '💰': FcMoneyTransfer, '💵': FcCurrencyExchange,
+
+    // Education
+    '🎓': FcGraduationCap, '📚': FcLibrary, '📖': FcReading,
+    '🏫': FcDepartment, '✏️': FcKindle,
+
+    // Tech & Media
+    '📷': FcCamera, '🖼️': FcPicture, '🎵': FcMusic, '🎧': FcHeadset,
+    '📱': FcSmartphoneTablet, '💻': FcElectronics, '🖥️': FcMultipleDevices,
+    '📡': FcStart, '🔋': FcFullBattery,
+
     // Travel & Places
-    '✈️': Plane, '🏨': Hotel, '🎫': Ticket, '🗺️': Map,
-    '🚕': Car, '🚌': Bus, '🚂': Train, '⛴️': Ship,
-    '🏖️': CircleDot, '🏔️': Mountain, '🏛️': Landmark, '🕌': Church,
-    // Tech & Apps
-    '📱': Smartphone, '💻': Laptop, '📧': Mail, '📷': Camera,
-    '🔋': Battery, '📶': Signal, '🔌': Plug, '⚙️': Settings,
-    // Common Objects
-    '🪑': Armchair, '🎵': Music, '🎶': Music2, '📚': BookOpen,
-    '✏️': Pencil, '🎨': Palette,
-    // Nature & Weather
-    '🌞': Sun, '🌧️': CloudRain, '❄️': Snowflake,
-    '🌬️': Wind, '⛅': CloudSun,
-    // People & Family
-    '👨': User, '👩': UserCircle, '👶': Baby,
-    '👴': Users, '👵': Users, '👪': Users,
-    // Numbers & Time
-    '🔢': Hash, '🕐': Clock1, '🕑': Clock2, '🕒': Clock3,
-    // Colors/Shapes
-    '🔴': Circle, '🔵': Circle, '🟢': Circle, '🟡': Circle,
-    '🟣': Circle, '🟤': Circle, '⚫': Circle, '⚪': Circle,
+    '🌍': FcGlobe, '🏠': FcHome, '🏪': FcShop, '🗺️': FcGallery,
+    '🚗': FcAutomotive, '🚚': FcShipped, '📦': FcPackage,
+    '⛰️': FcLandscape, '🌃': FcNightLandscape, '🔭': FcBinoculars,
+
+    // Communication
+    '💬': FcComments, '🗣️': FcVoicePresentation, '📞': FcPhone,
+    '💁': FcSupport, 'ℹ️': FcInfo, '❓': FcAbout,
+
+    // Ratings
+    '⭐': FcRating, '👍': FcLike, '👎': FcDislike, '❤️': FcLike,
 };
 
 // Icon Renderer Component
 const IconRenderer = ({ emoji, size = 40, className = '' }) => {
     const IconComponent = emojiToIconComponent[emoji];
 
+    // If we have a mapped Colorful Icon, use it
     if (IconComponent) {
-        return <IconComponent size={size} className={className} strokeWidth={2} />;
+        return <IconComponent size={size} className={className} />;
     }
 
-    // Fallback to emoji if no icon mapping exists
-    return <span style={{ fontSize: `${size}px` }}>{emoji}</span>;
+    // Fallback to Native Emoji with Premium Styling
+    // We removed the Lucide fallbacks to ensure consistency: either a rich Vector Icon or a rich Emoji.
+    return (
+        <span
+            className="premium-emoji"
+            style={{
+                fontSize: `${size}px`,
+                lineHeight: 1,
+                display: 'inline-block',
+                filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.2))',
+                transform: 'translateY(1px)'
+            }}
+        >
+            {emoji}
+        </span>
+    );
 };
 
 // Shuffle utility function for randomizing options
@@ -121,13 +120,14 @@ const Lesson = () => {
     const [isCompleted, setIsCompleted] = useState(false);
     const [isLocked, setIsLocked] = useState(false);
     const [xpEarned, setXpEarned] = useState(0);
+    const [isIntermediateLesson, setIsIntermediateLesson] = useState(false);
 
     useEffect(() => {
         // 1. Try to load units from localStorage (Admin edits)
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
 
         // 2. Use saved units or fallback to default imports
-        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5];
+        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5, intermediateUnit1];
 
         // 3. Find lesson in the determined units
         let foundLesson = null;
@@ -161,19 +161,25 @@ const Lesson = () => {
             setLesson(foundLesson);
             setCurrentUnitId(foundUnit?.id || 'unit-1');
 
+            // Detect intermediate lessons
+            const isIntermediate = foundUnit?.id?.startsWith('int-') || lessonId?.startsWith('int-');
+            setIsIntermediateLesson(isIntermediate);
+
             // Calculate XP based on number of exercises
             setXpEarned(foundLesson.exercises?.length ? foundLesson.exercises.length * 2 : 10);
 
             // Set Unit Color
-            const colors = [
-                { primary: '#58cc02', dark: '#46a302', light: '#dcfce7' }, // Unit 1: Green
-                { primary: '#3b82f6', dark: '#2563eb', light: '#dbeafe' }, // Unit 2: Blue
-                { primary: '#a855f7', dark: '#9333ea', light: '#f3e8ff' }, // Unit 3: Purple
-                { primary: '#ef4444', dark: '#dc2626', light: '#fee2e2' }  // Unit 4: Red
-            ];
-
-            // Use modulo to cycle through colors if more units exist
-            setUnitColor(colors[foundUnitIndex % colors.length]);
+            if (isIntermediate) {
+                setUnitColor({ primary: '#3b82f6', dark: '#1e40af', light: '#1e293b' });
+            } else {
+                const colors = [
+                    { primary: '#58cc02', dark: '#46a302', light: '#dcfce7' }, // Unit 1: Green
+                    { primary: '#3b82f6', dark: '#2563eb', light: '#dbeafe' }, // Unit 2: Blue
+                    { primary: '#a855f7', dark: '#9333ea', light: '#f3e8ff' }, // Unit 3: Purple
+                    { primary: '#ef4444', dark: '#dc2626', light: '#fee2e2' }  // Unit 4: Red
+                ];
+                setUnitColor(colors[foundUnitIndex % colors.length]);
+            }
         }
     }, [lessonId]);
 
@@ -231,7 +237,7 @@ const Lesson = () => {
                     <div className="completion-icon"><Sparkles size={80} color="var(--color-gold)" fill="var(--color-gold)" /></div>
                     <h1>{t('lessonComplete')}</h1>
                     <p style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-gold)' }}>+{xpEarned} XP</p>
-                    <Button variant="primary" size="lg" onClick={() => navigate('/learn')}>
+                    <Button variant="primary" size="lg" onClick={() => navigate(isIntermediateLesson ? '/intermediate' : '/learn')}>
                         {t('continue')}
                     </Button>
                 </div>
@@ -245,7 +251,7 @@ const Lesson = () => {
                 <div className="completion-content">
                     <div className="completion-icon"><Heart size={80} color="var(--color-secondary)" fill="var(--color-secondary)" /></div>
                     <h1>{t('outOfHearts')}</h1>
-                    <Button variant="secondary" size="lg" onClick={() => navigate('/learn')}>
+                    <Button variant="secondary" size="lg" onClick={() => navigate(isIntermediateLesson ? '/intermediate' : '/learn')}>
                         {t('quit')}
                     </Button>
                     <Button variant="primary" size="lg" onClick={() => setLives(5)}>
@@ -258,7 +264,7 @@ const Lesson = () => {
 
     return (
         <div
-            className="lesson-view"
+            className={`lesson-view ${isIntermediateLesson ? 'dark-blue-mode' : ''}`}
             style={{
                 '--unit-color': unitColor.primary,
                 '--unit-color-dark': unitColor.dark,
@@ -269,7 +275,7 @@ const Lesson = () => {
             <header className="lesson-header" role="banner">
                 <button
                     className="close-btn"
-                    onClick={() => navigate('/learn')}
+                    onClick={() => navigate(isIntermediateLesson ? '/intermediate' : '/learn')}
                     aria-label="Close lesson and return to learn page"
                 >
                     <X size={24} aria-hidden="true" />
@@ -377,7 +383,7 @@ const MultipleChoice = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
             <div className="options-grid">
                 {shuffledOptions.map((opt, idx) => (
                     <div
@@ -386,7 +392,7 @@ const MultipleChoice = ({ exercise, onAnswer }) => {
                         onClick={() => setSelected(opt)}
                     >
                         {opt.image && <div className="option-image"><IconRenderer emoji={opt.image} size={48} /></div>}
-                        <div className="option-text">{opt.text}</div>
+                        <div className="option-text" dir="auto">{opt.text}</div>
                     </div>
                 ))}
             </div>
@@ -419,7 +425,7 @@ const ImageSelection = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
             <div className="image-grid">
                 {shuffledOptions.map((opt, idx) => (
                     <div
@@ -460,7 +466,7 @@ const TypingExercise = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
             <div className="typing-prompt">
                 {exercise.textToTranslate}
             </div>
@@ -511,14 +517,18 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
         onAnswer(isCorrect);
     };
 
+    // Detect if the target sentence is English (LTR) or Kurdish (RTL)
+    const isEnglishSentence = /[a-zA-Z]/.test(exercise.correctSentence[0]);
+    const sentenceDir = isEnglishSentence ? 'ltr' : 'rtl';
+
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
             <div className="source-text-bubble">
                 {exercise.sourceText}
             </div>
 
-            <div className="sentence-area">
+            <div className="sentence-area" dir={sentenceDir}>
                 {sentence.map((word, idx) => (
                     <button key={idx} className="word-chip" onClick={() => removeFromSentence(word)}>
                         {word}
@@ -526,7 +536,7 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
                 ))}
             </div>
 
-            <div className="word-bank">
+            <div className="word-bank" dir={sentenceDir}>
                 {availableWords.map((word, idx) => (
                     <button key={idx} className="word-chip bank" onClick={() => addToSentence(word)}>
                         {word}
@@ -593,7 +603,7 @@ const MatchPairs = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{t('matchPairs')}</h2>
+            <h2 className="exercise-question" dir="auto">{t('matchPairs')}</h2>
             <div className="pairs-grid">
                 {shuffledItems.map((item, idx) => (
                     <button
@@ -621,8 +631,8 @@ const FillBlank = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question}</h2>
-            <div className="sentence-display">
+            <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
+            <div className="sentence-display" dir="auto">
                 {exercise.sentenceParts.map((part, idx) => (
                     <span key={idx} className={part === "___" ? "blank-space" : ""}>
                         {part === "___" && selected ? selected : part}
@@ -696,7 +706,7 @@ const Conversation = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question || t('completeConversation')}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question || t('completeConversation')}</h2>
             <div className="conversation-container">
                 {shuffledDialogue.map((line, idx) => (
                     <div key={idx} className={`dialogue-line ${line.speaker === 'You' ? 'user' : 'other'}`}>
@@ -752,7 +762,7 @@ const CulturalNote = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question || t('culturalNote')}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question || t('culturalNote')}</h2>
             <div className="cultural-note-content">
                 <p className="cultural-text">{exercise.content}</p>
                 {quiz.question && (
@@ -794,7 +804,7 @@ const VocabularyGrid = ({ exercise, onAnswer }) => {
 
     return (
         <div className="exercise-container">
-            <h2 className="exercise-question">{exercise.question || t('learnVocabulary')}</h2>
+            <h2 className="exercise-question" dir="auto">{exercise.question || t('learnVocabulary')}</h2>
             <div className="vocabulary-grid">
                 {items.map((item, idx) => (
                     <div key={idx} className="vocabulary-card">
@@ -1155,7 +1165,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             value={userInput}
                             onChange={(e) => setUserInput(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder={t('typeYourResponse') || 'Type your response in Kurdish...'}
+                            placeholder={t('typeYourResponse') || 'Type your response here...'}
                             rows={2}
                             disabled={isChecking}
                         />

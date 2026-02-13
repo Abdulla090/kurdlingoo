@@ -218,20 +218,20 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "Which of these is 'Water'?",
+                    question: "'ئاو' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ئاو", image: "💧", correct: true },
-                        { id: "opt2", text: "نان", image: "🍞", correct: false },
-                        { id: "opt3", text: "سێو", image: "🍎", correct: false }
+                        { id: "opt1", text: "Water", image: "💧", correct: true },
+                        { id: "opt2", text: "Bread", image: "🍞", correct: false },
+                        { id: "opt3", text: "Apple", image: "🍎", correct: false }
                     ]
                 },
                 {
                     id: 2,
                     type: "sentence-builder",
-                    question: "Write this in English",
-                    sourceText: "ئاو",
-                    correctSentence: ["Water"],
-                    options: ["Water", "Bread", "Apple", "Please"]
+                    question: "بە ئینگلیزی بنووسە: 'ئاو و نان'",
+                    sourceText: "ئاو و نان",
+                    correctSentence: ["Water", "and", "Bread"],
+                    options: ["Water", "Bread", "and", "Apple", "Please"]
                 },
                 {
                     id: 3,
@@ -241,52 +241,52 @@ export const unit1: Unit = {
                         { kurdish: "نان", english: "Bread" },
                         { kurdish: "سێو", english: "Apple" },
                         { kurdish: "سڵاو", english: "Hello" },
-                        { kurdish: "ماڵئاوا", english: "Goodbye" }
+                        { kurdish: "خوات لەگەڵ", english: "Goodbye" }
                     ]
                 },
                 {
                     id: 4,
                     type: "multiple-choice",
-                    question: "Which of these is 'Bread'?",
+                    question: "'نان' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ئاو", image: "💧", correct: false },
-                        { id: "opt2", text: "نان", image: "🍞", correct: true },
-                        { id: "opt3", text: "شیر", image: "🥛", correct: false }
+                        { id: "opt1", text: "Water", image: "💧", correct: false },
+                        { id: "opt2", text: "Bread", image: "🍞", correct: true },
+                        { id: "opt3", text: "Milk", image: "🥛", correct: false }
                     ]
                 },
                 {
                     id: 5,
-                    type: "sentence-builder",
-                    question: "Write this in Kurdish",
-                    sourceText: "Water and Bread",
-                    correctSentence: ["ئاو", "و", "نان"],
-                    options: ["ئاو", "نان", "و", "سێو", "بخۆ"]
+                    type: "fill-blank",
+                    question: "Complete: 'I eat ___' (نان)",
+                    sentenceParts: ["I", "eat", "___"],
+                    correctOption: "Bread",
+                    options: ["Bread", "Water", "Apple"]
                 },
                 {
                     id: 6,
-                    type: "fill-blank",
-                    question: "Complete the sentence: '___ بخۆ' (Eat ___)",
-                    sentenceParts: ["___", "بخۆ"],
-                    correctOption: "نان",
-                    options: ["نان", "ئاو", "خەو"]
+                    type: "sentence-builder",
+                    question: "بە ئینگلیزی بنووسە: 'من ئاو دەخۆمەوە'",
+                    sourceText: "من ئاو دەخۆمەوە",
+                    correctSentence: ["I", "drink", "Water"],
+                    options: ["I", "drink", "Water", "eat", "Bread"]
                 },
                 {
                     id: 7,
                     type: "multiple-choice",
-                    question: "How do you say 'Hello'?",
+                    question: "'سڵاو' بە ئینگلیزی چۆن دەوترێت؟",
                     options: [
-                        { id: "opt1", text: "سڵاو", correct: true },
-                        { id: "opt2", text: "سوپاس", correct: false },
-                        { id: "opt3", text: "بەڵێ", correct: false }
+                        { id: "opt1", text: "Hello", correct: true },
+                        { id: "opt2", text: "Thank you", correct: false },
+                        { id: "opt3", text: "Yes", correct: false }
                     ]
                 },
                 {
                     id: 8,
-                    type: "sentence-builder",
-                    question: "Translate: 'Hello, KurdLingo'",
-                    sourceText: "Hello, KurdLingo",
-                    correctSentence: ["سڵاو", "،", "کوردلینۆ"],
-                    options: ["سڵاو", "کوردلینۆ", "،", "نان", "ئاو"]
+                    type: "fill-blank",
+                    question: "Complete: '___, my name is Sara'",
+                    sentenceParts: ["___", ", my name is Sara"],
+                    correctOption: "Hello",
+                    options: ["Hello", "Goodbye", "Please", "Sorry"]
                 },
                 {
                     id: 9,
@@ -301,11 +301,11 @@ export const unit1: Unit = {
                 {
                     id: 10,
                     type: "multiple-choice",
-                    question: "Which is 'Apple'?",
+                    question: "'سێو' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "سێو", image: "🍎", correct: true },
-                        { id: "opt2", text: "مۆز", image: "🍌", correct: false },
-                        { id: "opt3", text: "هەنار", image: "🍇", correct: false }
+                        { id: "opt1", text: "Apple", image: "🍎", correct: true },
+                        { id: "opt2", text: "Banana", image: "🍌", correct: false },
+                        { id: "opt3", text: "Grape", image: "🍇", correct: false }
                     ]
                 }
             ]
@@ -318,18 +318,19 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "sentence-builder",
-                    question: "Translate: 'I am a boy'",
-                    sourceText: "I am a boy",
-                    correctSentence: ["من", "کوڕم"],
-                    options: ["من", "کوڕم", "کچم", "ئاو"]
+                    question: "بە ئینگلیزی بنووسە: 'من کوڕم'",
+                    sourceText: "من کوڕم",
+                    correctSentence: ["I", "am", "a", "boy"],
+                    options: ["I", "am", "a", "boy", "girl", "man"]
                 },
                 {
                     id: 2,
                     type: "multiple-choice",
-                    question: "Select 'Woman'",
+                    question: "'ژن' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ژن", image: "👩", correct: true },
-                        { id: "opt2", text: "پیاو", image: "👨", correct: false }
+                        { id: "opt1", text: "Woman", image: "👩", correct: true },
+                        { id: "opt2", text: "Man", image: "👨", correct: false },
+                        { id: "opt3", text: "Girl", image: "👧", correct: false }
                     ]
                 },
                 {
@@ -338,41 +339,43 @@ export const unit1: Unit = {
                     pairs: [
                         { kurdish: "من", english: "I" },
                         { kurdish: "تۆ", english: "You" },
-                        { kurdish: "ئەو", english: "He/She" }
+                        { kurdish: "ئەو", english: "He/She" },
+                        { kurdish: "ئێمە", english: "We" }
                     ]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: '___ کچم' (I am a girl)",
-                    sentenceParts: ["___", "کچم"],
-                    correctOption: "من",
-                    options: ["من", "تۆ", "ئەو"]
+                    question: "Complete: '___ am a girl'",
+                    sentenceParts: ["___", "am a girl"],
+                    correctOption: "I",
+                    options: ["I", "You", "He", "She"]
                 },
                 {
                     id: 5,
                     type: "sentence-builder",
-                    question: "Translate: 'You are a man'",
-                    sourceText: "You are a man",
-                    correctSentence: ["تۆ", "پیاویت"],
-                    options: ["تۆ", "پیاویت", "ژنیت", "من"]
+                    question: "بە ئینگلیزی بنووسە: 'تۆ پیاویت'",
+                    sourceText: "تۆ پیاویت",
+                    correctSentence: ["You", "are", "a", "man"],
+                    options: ["You", "are", "a", "man", "woman", "I"]
                 },
                 {
                     id: 6,
                     type: "multiple-choice",
-                    question: "What is 'Milk'?",
+                    question: "'شیر' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "شیر", image: "🥛", correct: true },
-                        { id: "opt2", text: "چا", image: "☕", correct: false }
+                        { id: "opt1", text: "Milk", image: "🥛", correct: true },
+                        { id: "opt2", text: "Tea", image: "☕", correct: false },
+                        { id: "opt3", text: "Water", image: "💧", correct: false }
                     ]
                 },
                 {
                     id: 7,
                     type: "sentence-builder",
-                    question: "Translate: 'I drink water'",
-                    sourceText: "I drink water",
-                    correctSentence: ["من", "ئاو", "دەخۆمەوە"],
-                    options: ["من", "ئاو", "دەخۆمەوە", "دەخۆم", "نان"]
+                    question: "بە ئینگلیزی بنووسە: 'من ئاو دەخۆمەوە'",
+                    sourceText: "من ئاو دەخۆمەوە",
+                    correctSentence: ["I", "drink", "water"],
+                    options: ["I", "drink", "water", "eat", "milk", "bread"]
                 },
                 {
                     id: 8,
@@ -385,20 +388,21 @@ export const unit1: Unit = {
                 },
                 {
                     id: 9,
-                    type: "multiple-choice",
-                    question: "Select 'Tea'",
-                    options: [
-                        { id: "opt1", text: "چا", image: "☕", correct: true },
-                        { id: "opt2", text: "شیر", image: "🥛", correct: false }
-                    ]
+                    type: "fill-blank",
+                    question: "Complete: 'I drink ___' (چا)",
+                    sentenceParts: ["I", "drink", "___"],
+                    correctOption: "tea",
+                    options: ["tea", "milk", "water", "bread"]
                 },
                 {
                     id: 10,
-                    type: "fill-blank",
-                    question: "Complete: 'من ___ دەخۆمەوە' (I drink milk)",
-                    sentenceParts: ["من", "___", "دەخۆمەوە"],
-                    correctOption: "شیر",
-                    options: ["شیر", "چا", "ئاو"]
+                    type: "multiple-choice",
+                    question: "'چا' بە ئینگلیزی چییە؟",
+                    options: [
+                        { id: "opt1", text: "Tea", image: "☕", correct: true },
+                        { id: "opt2", text: "Milk", image: "🥛", correct: false },
+                        { id: "opt3", text: "Coffee", image: "☕", correct: false }
+                    ]
                 }
             ]
         },
@@ -410,11 +414,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "How do you say 'Good morning'?",
+                    question: "'بەیانی باش' بە ئینگلیزی چۆن دەوترێت؟",
                     options: [
-                        { id: "opt1", text: "بەیانی باش", correct: true },
-                        { id: "opt2", text: "ئێوارە باش", correct: false },
-                        { id: "opt3", text: "شەو باش", correct: false }
+                        { id: "opt1", text: "Good morning", correct: true },
+                        { id: "opt2", text: "Good evening", correct: false },
+                        { id: "opt3", text: "Good night", correct: false }
                     ]
                 },
                 {
@@ -430,36 +434,36 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'How are you?'",
-                    sourceText: "How are you?",
-                    correctSentence: ["چۆنیت", "؟"],
-                    options: ["چۆنیت", "؟", "باشم", "سڵاو"]
+                    question: "بە ئینگلیزی بنووسە: 'چۆنیت؟'",
+                    sourceText: "چۆنیت؟",
+                    correctSentence: ["How", "are", "you?"],
+                    options: ["How", "are", "you?", "What", "is", "name"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'My name is ___'",
-                    sentenceParts: ["ناوم", "___"],
-                    correctOption: "ئەحمەدە",
-                    options: ["ئەحمەدە", "سارایە", "عەلییە", "فاتیمەیە"]
+                    question: "Complete: 'My ___ is Ahmed'",
+                    sentenceParts: ["My", "___", "is Ahmed"],
+                    correctOption: "name",
+                    options: ["name", "house", "book", "friend"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Thank you'?",
+                    question: "'سوپاس' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "سوپاس", correct: true },
-                        { id: "opt2", text: "ببورە", correct: false },
-                        { id: "opt3", text: "تکایە", correct: false }
+                        { id: "opt1", text: "Thank you", correct: true },
+                        { id: "opt2", text: "Sorry", correct: false },
+                        { id: "opt3", text: "Please", correct: false }
                     ]
                 },
                 {
                     id: 6,
                     type: "sentence-builder",
-                    question: "Translate: 'Nice to meet you'",
-                    sourceText: "Nice to meet you",
-                    correctSentence: ["خۆشحاڵم", "بە", "ناسینت"],
-                    options: ["خۆشحاڵم", "بە", "ناسینت", "بینینت", "قسەکردن"]
+                    question: "بە ئینگلیزی بنووسە: 'خۆشحاڵم بە ناسینت'",
+                    sourceText: "خۆشحاڵم بە ناسینت",
+                    correctSentence: ["Nice", "to", "meet", "you"],
+                    options: ["Nice", "to", "meet", "you", "see", "Hello"]
                 },
                 {
                     id: 7,
@@ -474,28 +478,28 @@ export const unit1: Unit = {
                 {
                     id: 8,
                     type: "fill-blank",
-                    question: "Complete: 'I am ___' (fine)",
-                    sentenceParts: ["من", "___"],
-                    correctOption: "باشم",
-                    options: ["باشم", "نەخۆشم", "ماندووم", "خۆشحاڵم"]
+                    question: "Complete: 'I am ___' (باشم)",
+                    sentenceParts: ["I", "am", "___"],
+                    correctOption: "fine",
+                    options: ["fine", "sad", "hungry", "tired"]
                 },
                 {
                     id: 9,
                     type: "multiple-choice",
-                    question: "What is 'Please'?",
+                    question: "'تکایە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "تکایە", correct: true },
-                        { id: "opt2", text: "سوپاس", correct: false },
-                        { id: "opt3", text: "ببورە", correct: false }
+                        { id: "opt1", text: "Please", correct: true },
+                        { id: "opt2", text: "Thank you", correct: false },
+                        { id: "opt3", text: "Sorry", correct: false }
                     ]
                 },
                 {
                     id: 10,
                     type: "sentence-builder",
-                    question: "Translate: 'What is your name?'",
-                    sourceText: "What is your name?",
-                    correctSentence: ["ناوت", "چییە", "؟"],
-                    options: ["ناوت", "چییە", "؟", "کوێیە", "کەی"]
+                    question: "بە ئینگلیزی بنووسە: 'ناوت چییە؟'",
+                    sourceText: "ناوت چییە؟",
+                    correctSentence: ["What", "is", "your", "name?"],
+                    options: ["What", "is", "your", "name?", "How", "old"]
                 }
             ]
         },
@@ -507,11 +511,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Five'?",
+                    question: "'پێنج' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "پێنج", correct: true },
-                        { id: "opt2", text: "چوار", correct: false },
-                        { id: "opt3", text: "شەش", correct: false }
+                        { id: "opt1", text: "Five", correct: true },
+                        { id: "opt2", text: "Four", correct: false },
+                        { id: "opt3", text: "Six", correct: false }
                     ]
                 },
                 {
@@ -527,27 +531,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Count: 'One, Two, Three'",
-                    sourceText: "One, Two, Three",
-                    correctSentence: ["یەک", "،", "دوو", "،", "سێ"],
-                    options: ["یەک", "دوو", "سێ", "،", "چوار", "پێنج"]
+                    question: "بژمێرە بە ئینگلیزی: 'یەک، دوو، سێ'",
+                    sourceText: "یەک، دوو، سێ",
+                    correctSentence: ["One,", "Two,", "Three"],
+                    options: ["One,", "Two,", "Three", "Four", "Five"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'I have ___ apples' (3)",
-                    sentenceParts: ["___", "سێوم", "هەیە"],
-                    correctOption: "سێ",
-                    options: ["سێ", "دوو", "چوار", "پێنج"]
+                    question: "Complete: 'I have ___ apples' (٣)",
+                    sentenceParts: ["I have", "___", "apples"],
+                    correctOption: "three",
+                    options: ["three", "two", "four", "five"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Ten'?",
+                    question: "'دە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "دە", correct: true },
-                        { id: "opt2", text: "نۆ", correct: false },
-                        { id: "opt3", text: "یازدە", correct: false }
+                        { id: "opt1", text: "Ten", correct: true },
+                        { id: "opt2", text: "Nine", correct: false },
+                        { id: "opt3", text: "Eleven", correct: false }
                     ]
                 },
                 {
@@ -562,29 +566,29 @@ export const unit1: Unit = {
                 },
                 {
                     id: 7,
-                    type: "sentence-builder",
-                    question: "Count: 'Eight, Nine, Ten'",
-                    sourceText: "Eight, Nine, Ten",
-                    correctSentence: ["هەشت", "،", "نۆ", "،", "دە"],
-                    options: ["هەشت", "نۆ", "دە", "،", "حەوت", "یازدە"]
+                    type: "fill-blank",
+                    question: "Complete: 'Eight, ___, Ten'",
+                    sentenceParts: ["Eight,", "___,", "Ten"],
+                    correctOption: "Nine",
+                    options: ["Nine", "Seven", "Eleven", "Six"]
                 },
                 {
                     id: 8,
-                    type: "fill-blank",
-                    question: "Complete: '___ students' (15)",
-                    sentenceParts: ["___", "قوتابی"],
-                    correctOption: "پازدە",
-                    options: ["پازدە", "دە", "بیست", "یازدە"]
+                    type: "multiple-choice",
+                    question: "'بیست' بە ئینگلیزی چییە؟",
+                    options: [
+                        { id: "opt1", text: "Twenty", correct: true },
+                        { id: "opt2", text: "Ten", correct: false },
+                        { id: "opt3", text: "Thirty", correct: false }
+                    ]
                 },
                 {
                     id: 9,
-                    type: "multiple-choice",
-                    question: "What is 'Twenty'?",
-                    options: [
-                        { id: "opt1", text: "بیست", correct: true },
-                        { id: "opt2", text: "دە", correct: false },
-                        { id: "opt3", text: "سی", correct: false }
-                    ]
+                    type: "fill-blank",
+                    question: "Complete: 'There are ___ students' (١٥)",
+                    sentenceParts: ["There are", "___", "students"],
+                    correctOption: "fifteen",
+                    options: ["fifteen", "ten", "twenty", "eleven"]
                 },
                 {
                     id: 10,
@@ -606,11 +610,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Red'?",
+                    question: "'سوور' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "سوور", image: "🔴", correct: true },
-                        { id: "opt2", text: "شین", image: "🔵", correct: false },
-                        { id: "opt3", text: "سەوز", image: "🟢", correct: false }
+                        { id: "opt1", text: "Red", image: "🔴", correct: true },
+                        { id: "opt2", text: "Blue", image: "🔵", correct: false },
+                        { id: "opt3", text: "Green", image: "🟢", correct: false }
                     ]
                 },
                 {
@@ -626,27 +630,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'The apple is red'",
-                    sourceText: "The apple is red",
-                    correctSentence: ["سێوەکە", "سوورە"],
-                    options: ["سێوەکە", "سوورە", "شینە", "سەوزە"]
+                    question: "بە ئینگلیزی بنووسە: 'سێوەکە سوورە'",
+                    sourceText: "سێوەکە سوورە",
+                    correctSentence: ["The", "apple", "is", "red"],
+                    options: ["The", "apple", "is", "red", "blue", "green"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'The sky is ___' (blue)",
-                    sentenceParts: ["ئاسمان", "___"],
-                    correctOption: "شینە",
-                    options: ["شینە", "سوورە", "سەوزە", "زەردە"]
+                    question: "Complete: 'The sky is ___' (شین)",
+                    sentenceParts: ["The sky is", "___"],
+                    correctOption: "blue",
+                    options: ["blue", "red", "green", "yellow"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Black'?",
+                    question: "'ڕەش' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ڕەش", image: "⚫", correct: true },
-                        { id: "opt2", text: "سپی", image: "⚪", correct: false },
-                        { id: "opt3", text: "سوور", image: "🔴", correct: false }
+                        { id: "opt1", text: "Black", image: "⚫", correct: true },
+                        { id: "opt2", text: "White", image: "⚪", correct: false },
+                        { id: "opt3", text: "Red", image: "🔴", correct: false }
                     ]
                 },
                 {
@@ -662,27 +666,27 @@ export const unit1: Unit = {
                 {
                     id: 7,
                     type: "sentence-builder",
-                    question: "Translate: 'I like blue'",
-                    sourceText: "I like blue",
-                    correctSentence: ["من", "شینم", "خۆشدەوێت"],
-                    options: ["من", "شینم", "خۆشدەوێت", "سوورم", "ناخۆشەوێت"]
+                    question: "بە ئینگلیزی بنووسە: 'من شینم خۆشدەوێت'",
+                    sourceText: "من شینم خۆشدەوێت",
+                    correctSentence: ["I", "like", "blue"],
+                    options: ["I", "like", "blue", "red", "hate", "the"]
                 },
                 {
                     id: 8,
                     type: "fill-blank",
-                    question: "Complete: 'The grass is ___' (green)",
-                    sentenceParts: ["گیاکە", "___"],
-                    correctOption: "سەوزە",
-                    options: ["سەوزە", "زەردە", "شینە", "سوورە"]
+                    question: "Complete: 'The grass is ___' (سەوز)",
+                    sentenceParts: ["The grass is", "___"],
+                    correctOption: "green",
+                    options: ["green", "yellow", "blue", "red"]
                 },
                 {
                     id: 9,
                     type: "multiple-choice",
-                    question: "What is 'Big'?",
+                    question: "'گەورە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "گەورە", correct: true },
-                        { id: "opt2", text: "بچووک", correct: false },
-                        { id: "opt3", text: "مامناوەند", correct: false }
+                        { id: "opt1", text: "Big", correct: true },
+                        { id: "opt2", text: "Small", correct: false },
+                        { id: "opt3", text: "Medium", correct: false }
                     ]
                 },
                 {
@@ -705,11 +709,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Book'?",
+                    question: "'پەرتووک' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "پەرتووک", image: "📚", correct: true },
-                        { id: "opt2", text: "پێنووس", image: "✏️", correct: false },
-                        { id: "opt3", text: "تۆمار", image: "📒", correct: false }
+                        { id: "opt1", text: "Book", image: "📚", correct: true },
+                        { id: "opt2", text: "Pen", image: "✏️", correct: false },
+                        { id: "opt3", text: "Notebook", image: "📒", correct: false }
                     ]
                 },
                 {
@@ -725,27 +729,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'This is a book'",
-                    sourceText: "This is a book",
-                    correctSentence: ["ئەمە", "پەرتووکێکە"],
-                    options: ["ئەمە", "پەرتووکێکە", "پێنووسێکە", "نییە"]
+                    question: "بە ئینگلیزی بنووسە: 'ئەمە پەرتووکێکە'",
+                    sourceText: "ئەمە پەرتووکێکە",
+                    correctSentence: ["This", "is", "a", "book"],
+                    options: ["This", "is", "a", "book", "pen", "not"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'I have a ___' (pen)",
-                    sentenceParts: ["من", "___", "ێکم", "هەیە"],
-                    correctOption: "پێنووس",
-                    options: ["پێنووس", "پەرتووک", "ئاو", "نان"]
+                    question: "Complete: 'I have a ___' (پێنووس)",
+                    sentenceParts: ["I have a", "___"],
+                    correctOption: "pen",
+                    options: ["pen", "book", "water", "bread"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'School'?",
+                    question: "'قوتابخانە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "قوتابخانە", image: "🏫", correct: true },
-                        { id: "opt2", text: "ماڵ", image: "🏠", correct: false },
-                        { id: "opt3", text: "بازاڕ", image: "🏪", correct: false }
+                        { id: "opt1", text: "School", image: "🏫", correct: true },
+                        { id: "opt2", text: "House", image: "🏠", correct: false },
+                        { id: "opt3", text: "Shop", image: "🏪", correct: false }
                     ]
                 }
             ]
@@ -758,11 +762,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Cat'?",
+                    question: "'پشیلە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "پشیلە", image: "🐱", correct: true },
-                        { id: "opt2", text: "سەگ", image: "🐶", correct: false },
-                        { id: "opt3", text: "باڵندە", image: "🐦", correct: false }
+                        { id: "opt1", text: "Cat", image: "🐱", correct: true },
+                        { id: "opt2", text: "Dog", image: "🐶", correct: false },
+                        { id: "opt3", text: "Bird", image: "🐦", correct: false }
                     ]
                 },
                 {
@@ -778,27 +782,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'The dog is big'",
-                    sourceText: "The dog is big",
-                    correctSentence: ["سەگەکە", "گەورەیە"],
-                    options: ["سەگەکە", "گەورەیە", "بچووکە", "پشیلە"]
+                    question: "بە ئینگلیزی بنووسە: 'سەگەکە گەورەیە'",
+                    sourceText: "سەگەکە گەورەیە",
+                    correctSentence: ["The", "dog", "is", "big"],
+                    options: ["The", "dog", "is", "big", "small", "cat"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'The ___ flies' (bird)",
-                    sentenceParts: ["___", "دەفڕێت"],
-                    correctOption: "باڵندە",
-                    options: ["باڵندە", "سەگ", "ماسی", "پشیلە"]
+                    question: "Complete: 'The ___ flies' (باڵندە)",
+                    sentenceParts: ["The", "___", "flies"],
+                    correctOption: "bird",
+                    options: ["bird", "dog", "fish", "cat"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Fish'?",
+                    question: "'ماسی' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ماسی", image: "🐟", correct: true },
-                        { id: "opt2", text: "مریشک", image: "🐔", correct: false },
-                        { id: "opt3", text: "مانگا", image: "🐮", correct: false }
+                        { id: "opt1", text: "Fish", image: "🐟", correct: true },
+                        { id: "opt2", text: "Chicken", image: "🐔", correct: false },
+                        { id: "opt3", text: "Cow", image: "🐮", correct: false }
                     ]
                 }
             ]
@@ -811,11 +815,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Rice'?",
+                    question: "'برنج' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "برنج", image: "🍚", correct: true },
-                        { id: "opt2", text: "گۆشت", image: "🥩", correct: false },
-                        { id: "opt3", text: "نان", image: "🍞", correct: false }
+                        { id: "opt1", text: "Rice", image: "🍚", correct: true },
+                        { id: "opt2", text: "Meat", image: "🥩", correct: false },
+                        { id: "opt3", text: "Bread", image: "🍞", correct: false }
                     ]
                 },
                 {
@@ -831,27 +835,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'I eat chicken'",
-                    sourceText: "I eat chicken",
-                    correctSentence: ["من", "مریشک", "دەخۆم"],
-                    options: ["من", "مریشک", "دەخۆم", "دەخۆمەوە", "برنج"]
+                    question: "بە ئینگلیزی بنووسە: 'من مریشک دەخۆم'",
+                    sourceText: "من مریشک دەخۆم",
+                    correctSentence: ["I", "eat", "chicken"],
+                    options: ["I", "eat", "chicken", "drink", "rice", "meat"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: '___ is delicious' (Meat)",
-                    sentenceParts: ["___", "خۆشە"],
-                    correctOption: "گۆشت",
-                    options: ["گۆشت", "ئاو", "هێنک", "بیبەر"]
+                    question: "Complete: '___ is delicious' (گۆشت)",
+                    sentenceParts: ["___", "is delicious"],
+                    correctOption: "Meat",
+                    options: ["Meat", "Water", "Egg", "Pen"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Egg'?",
+                    question: "'هێلکە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "هێلکە", image: "🥚", correct: true },
-                        { id: "opt2", text: "پەنیر", image: "🧀", correct: false },
-                        { id: "opt3", text: "شیر", image: "🥛", correct: false }
+                        { id: "opt1", text: "Egg", image: "🥚", correct: true },
+                        { id: "opt2", text: "Cheese", image: "🧀", correct: false },
+                        { id: "opt3", text: "Milk", image: "🥛", correct: false }
                     ]
                 }
             ]
@@ -864,11 +868,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Run'?",
+                    question: "'ڕاکردن' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ڕاکردن", image: "🏃", correct: true },
-                        { id: "opt2", text: "پیاسەکردن", image: "🚶", correct: false },
-                        { id: "opt3", text: "دانیشتن", image: "🪑", correct: false }
+                        { id: "opt1", text: "Run", image: "🏃", correct: true },
+                        { id: "opt2", text: "Walk", image: "🚶", correct: false },
+                        { id: "opt3", text: "Sit", image: "🪑", correct: false }
                     ]
                 },
                 {
@@ -884,27 +888,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'I walk'",
-                    sourceText: "I walk",
-                    correctSentence: ["من", "دەڕۆم"],
-                    options: ["من", "دەڕۆم", "ڕادەکەم", "دەخەوم"]
+                    question: "بە ئینگلیزی بنووسە: 'من دەڕۆم'",
+                    sourceText: "من دەڕۆم",
+                    correctSentence: ["I", "walk"],
+                    options: ["I", "walk", "run", "sleep", "eat"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'He ___' (sleeps)",
-                    sentenceParts: ["ئەو", "___"],
-                    correctOption: "دەخەوێت",
-                    options: ["دەخەوێت", "دەخۆیت", "دەڕوات", "دەبینێت"]
+                    question: "Complete: 'He ___ every night' (نوستن)",
+                    sentenceParts: ["He", "___", "every night"],
+                    correctOption: "sleeps",
+                    options: ["sleeps", "eats", "runs", "reads"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Read'?",
+                    question: "'خوێندنەوە' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "خوێندنەوە", image: "📖", correct: true },
-                        { id: "opt2", text: "نووسین", image: "✍️", correct: false },
-                        { id: "opt3", text: "قسەکردن", image: "🗣️", correct: false }
+                        { id: "opt1", text: "Read", image: "📖", correct: true },
+                        { id: "opt2", text: "Write", image: "✍️", correct: false },
+                        { id: "opt3", text: "Speak", image: "🗣️", correct: false }
                     ]
                 }
             ]
@@ -917,11 +921,11 @@ export const unit1: Unit = {
                 {
                     id: 1,
                     type: "multiple-choice",
-                    question: "What is 'Water'?",
+                    question: "'ئاو' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "ئاو", image: "💧", correct: true },
-                        { id: "opt2", text: "نان", image: "🍞", correct: false },
-                        { id: "opt3", text: "شیر", image: "🥛", correct: false }
+                        { id: "opt1", text: "Water", image: "💧", correct: true },
+                        { id: "opt2", text: "Bread", image: "🍞", correct: false },
+                        { id: "opt3", text: "Milk", image: "🥛", correct: false }
                     ]
                 },
                 {
@@ -937,27 +941,27 @@ export const unit1: Unit = {
                 {
                     id: 3,
                     type: "sentence-builder",
-                    question: "Translate: 'I am fine'",
-                    sourceText: "I am fine",
-                    correctSentence: ["من", "باشم"],
-                    options: ["من", "باشم", "خراپم", "نەخۆشم"]
+                    question: "بە ئینگلیزی بنووسە: 'من باشم'",
+                    sourceText: "من باشم",
+                    correctSentence: ["I", "am", "fine"],
+                    options: ["I", "am", "fine", "sick", "tired", "happy"]
                 },
                 {
                     id: 4,
                     type: "fill-blank",
                     question: "Complete: 'One, Two, ___'",
-                    sentenceParts: ["یەک", "،", "دوو", "،", "___"],
-                    correctOption: "سێ",
-                    options: ["سێ", "چوار", "پێنج", "شەش"]
+                    sentenceParts: ["One, Two,", "___"],
+                    correctOption: "Three",
+                    options: ["Three", "Four", "Five", "Six"]
                 },
                 {
                     id: 5,
                     type: "multiple-choice",
-                    question: "What is 'Red'?",
+                    question: "'سوور' بە ئینگلیزی چییە؟",
                     options: [
-                        { id: "opt1", text: "سوور", image: "🔴", correct: true },
-                        { id: "opt2", text: "شین", image: "🔵", correct: false },
-                        { id: "opt3", text: "سەوز", image: "🟢", correct: false }
+                        { id: "opt1", text: "Red", image: "🔴", correct: true },
+                        { id: "opt2", text: "Blue", image: "🔵", correct: false },
+                        { id: "opt3", text: "Green", image: "🟢", correct: false }
                     ]
                 }
             ]

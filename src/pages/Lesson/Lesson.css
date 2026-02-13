@@ -2,7 +2,8 @@
    KURDLINGO LESSON - Premium Dark Design
    ============================================ */
 
-.lesson-page {
+.lesson-page,
+.lesson-view {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -219,9 +220,11 @@
 }
 
 .option-card.selected {
-    background: linear-gradient(145deg, #e8fff0 0%, #d0f8e0 100%);
-    border-color: #58cc02;
-    box-shadow: 0 5px 0 #46a302;
+    background: #ddf4ff;
+    /* Subtle Blue tint */
+    border-color: #84d8ff;
+    box-shadow: 0 5px 0 #1cb0f6;
+    /* Blue shadow */
 }
 
 @keyframes cardAppear {
@@ -237,21 +240,24 @@
 }
 
 .option-card.selected::after {
+    /* The circle background for checkmark */
     content: '';
     position: absolute;
     top: 14px;
     right: 14px;
     width: 26px;
     height: 26px;
-    background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-    border-radius: var(--radius-full);
+    background: #1cb0f6;
+    /* Blue key color */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .option-card.selected::before {
+    /* The checkmark symbol itself */
     content: '✓';
     position: absolute;
     top: 16px;
@@ -268,17 +274,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--color-surface-variant), var(--color-surface));
-    border-radius: var(--radius-md);
-    color: var(--color-primary);
-    transition: all var(--transition-fast);
-    box-shadow: var(--shadow-xs);
-}
-
-.option-card.selected .option-image {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    color: white;
-    box-shadow: var(--shadow-sm);
+    background: #f0f0f0;
+    /* Default neutral bg */
+    border-radius: 12px;
+    color: #3c3c3c;
+    transition: all 0.1s;
+    /* No shadow by default to keep it clean */
 }
 
 
@@ -708,7 +709,8 @@
 }
 
 .exercise-footer .btn {
-    min-width: 300px;
+    width: 100%;
+    max-width: 350px;
     font-size: 17px;
     font-weight: 700;
     padding: 18px 40px;
@@ -1507,6 +1509,468 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* ============================================
+   DARK BLUE MODE - Intermediate Lessons
+   ============================================ */
+
+.dark-blue-mode.lesson-view,
+.dark-blue-mode .lesson-page {
+    background: #0c1222 !important;
+    color: #e2e8f0;
+}
+
+.dark-blue-mode .lesson-header {
+    background: #111827 !important;
+    border-bottom-color: #3b82f6 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-blue-mode .close-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+    box-shadow: 0 3px 0 #0f172a;
+}
+
+.dark-blue-mode .close-btn:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #dc2626;
+    box-shadow: 0 3px 0 #b91c1c;
+}
+
+.dark-blue-mode .progress-bar-container {
+    background: #1e293b !important;
+}
+
+.dark-blue-mode .lives-counter {
+    color: #f87171;
+}
+
+.dark-blue-mode .exercise-question {
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .exercise-question small {
+    color: #94a3b8 !important;
+}
+
+/* Dark blue: Multiple choice options */
+.dark-blue-mode .option-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 5px 0 #0f172a !important;
+}
+
+.dark-blue-mode .option-btn:hover {
+    background: #1e3a5f !important;
+    border-color: #3b82f6 !important;
+}
+
+.dark-blue-mode .option-btn.selected {
+    background: #1e3a5f !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Dark blue: Sentence builder */
+.dark-blue-mode .sentence-zone {
+    background: #111827 !important;
+    border-color: #1e3a5f !important;
+}
+
+.dark-blue-mode .word-chip {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Dark blue: Fill blank */
+.dark-blue-mode .sentence-display {
+    background: #111827 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Dark blue: Typing exercise */
+.dark-blue-mode .typing-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .typing-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-blue-mode .typing-input::placeholder {
+    color: #64748b !important;
+}
+
+/* Dark blue: Feedback */
+.dark-blue-mode .feedback-sheet {
+    background: #111827 !important;
+    border-top-color: #334155 !important;
+}
+
+.dark-blue-mode .feedback-sheet.correct {
+    background: linear-gradient(135deg, #14532d 0%, #166534 100%) !important;
+}
+
+.dark-blue-mode .feedback-sheet.incorrect {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+}
+
+.dark-blue-mode .feedback-text h3 {
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .feedback-text p {
+    color: #cbd5e1 !important;
+}
+
+/* Dark blue: Completion screen */
+.dark-blue-mode .lesson-completed {
+    background: #0c1222 !important;
+}
+
+.dark-blue-mode .completion-content h1 {
+    color: #e2e8f0 !important;
+}
+
+/* Dark blue: Roleplay chat */
+.dark-blue-mode .roleplay-scenario {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%) !important;
+    border-color: #334155 !important;
+}
+
+.dark-blue-mode .roleplay-scenario p {
+    color: #94a3b8 !important;
+}
+
+.dark-blue-mode .chat-interface {
+    background: #111827 !important;
+    border-color: #1e293b !important;
+}
+
+.dark-blue-mode .chat-messages {
+    background: linear-gradient(180deg, #0c1222 0%, #111827 100%) !important;
+}
+
+.dark-blue-mode .chat-message.ai .message-bubble {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .chat-message.ai .message-avatar {
+    background: linear-gradient(135deg, #312e81 0%, #4338ca 100%) !important;
+}
+
+.dark-blue-mode .chat-message.user .message-avatar {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+}
+
+.dark-blue-mode .chat-message.user .message-bubble {
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+}
+
+.dark-blue-mode .message-name {
+    color: #64748b !important;
+}
+
+.dark-blue-mode .chat-input-area {
+    background: #111827 !important;
+    border-top-color: #1e293b !important;
+}
+
+.dark-blue-mode .chat-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .chat-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-blue-mode .chat-input::placeholder {
+    color: #64748b !important;
+}
+
+.dark-blue-mode .chat-send-btn {
+    background: #334155 !important;
+    color: #64748b !important;
+}
+
+.dark-blue-mode .chat-send-btn.active {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+.dark-blue-mode .chat-feedback.correct {
+    background: linear-gradient(135deg, #14532d 0%, #166534 100%) !important;
+    border-color: #22c55e !important;
+}
+
+.dark-blue-mode .chat-feedback.incorrect {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+    border-color: #ef4444 !important;
+}
+
+.dark-blue-mode .chat-feedback .correct-answer {
+    background: rgba(0, 0, 0, 0.3) !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .chat-hints {
+    background: #1e293b !important;
+}
+
+.dark-blue-mode .hints-label {
+    color: #94a3b8 !important;
+}
+
+.dark-blue-mode .hint-chip {
+    background: #111827 !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+/* ============================================
+   DARK BLUE MODE - Intermediate Lessons
+   ============================================ */
+
+.dark-blue-mode.lesson-view,
+.dark-blue-mode .lesson-page {
+    background: #0c1222 !important;
+    color: #e2e8f0;
+}
+
+.dark-blue-mode .lesson-header {
+    background: #111827 !important;
+    border-bottom-color: #3b82f6 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-blue-mode .close-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+    box-shadow: 0 3px 0 #0f172a;
+}
+
+.dark-blue-mode .close-btn:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #dc2626;
+    box-shadow: 0 3px 0 #b91c1c;
+}
+
+.dark-blue-mode .progress-bar-container {
+    background: #1e293b !important;
+}
+
+.dark-blue-mode .lives-counter {
+    color: #f87171;
+}
+
+.dark-blue-mode .exercise-question {
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .exercise-question small {
+    color: #94a3b8 !important;
+}
+
+/* Dark blue: Multiple choice options */
+.dark-blue-mode .option-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 5px 0 #0f172a !important;
+}
+
+.dark-blue-mode .option-btn:hover {
+    background: #1e3a5f !important;
+    border-color: #3b82f6 !important;
+}
+
+.dark-blue-mode .option-btn.selected {
+    background: #1e3a5f !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Dark blue: Sentence builder */
+.dark-blue-mode .sentence-zone {
+    background: #111827 !important;
+    border-color: #1e3a5f !important;
+}
+
+.dark-blue-mode .word-chip {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Dark blue: Fill blank */
+.dark-blue-mode .sentence-display {
+    background: #111827 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Dark blue: Typing exercise */
+.dark-blue-mode .typing-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .typing-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-blue-mode .typing-input::placeholder {
+    color: #64748b !important;
+}
+
+/* Dark blue: Feedback */
+.dark-blue-mode .feedback-sheet {
+    background: #111827 !important;
+    border-top-color: #334155 !important;
+}
+
+.dark-blue-mode .feedback-sheet.correct {
+    background: linear-gradient(135deg, #14532d 0%, #166534 100%) !important;
+}
+
+.dark-blue-mode .feedback-sheet.incorrect {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+}
+
+.dark-blue-mode .feedback-text h3 {
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .feedback-text p {
+    color: #cbd5e1 !important;
+}
+
+/* Dark blue: Completion screen */
+.dark-blue-mode .lesson-completed {
+    background: #0c1222 !important;
+}
+
+.dark-blue-mode .completion-content h1 {
+    color: #e2e8f0 !important;
+}
+
+/* Dark blue: Roleplay chat */
+.dark-blue-mode .roleplay-scenario {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%) !important;
+    border-color: #334155 !important;
+}
+
+.dark-blue-mode .roleplay-scenario p {
+    color: #94a3b8 !important;
+}
+
+.dark-blue-mode .chat-interface {
+    background: #111827 !important;
+    border-color: #1e293b !important;
+}
+
+.dark-blue-mode .chat-messages {
+    background: linear-gradient(180deg, #0c1222 0%, #111827 100%) !important;
+}
+
+.dark-blue-mode .chat-message.ai .message-bubble {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .chat-message.ai .message-avatar {
+    background: linear-gradient(135deg, #312e81 0%, #4338ca 100%) !important;
+}
+
+.dark-blue-mode .chat-message.user .message-avatar {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+}
+
+.dark-blue-mode .chat-message.user .message-bubble {
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+}
+
+.dark-blue-mode .message-name {
+    color: #64748b !important;
+}
+
+.dark-blue-mode .chat-input-area {
+    background: #111827 !important;
+    border-top-color: #1e293b !important;
+}
+
+.dark-blue-mode .chat-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .chat-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-blue-mode .chat-input::placeholder {
+    color: #64748b !important;
+}
+
+.dark-blue-mode .chat-send-btn {
+    background: #334155 !important;
+    color: #64748b !important;
+}
+
+.dark-blue-mode .chat-send-btn.active {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+.dark-blue-mode .chat-feedback.correct {
+    background: linear-gradient(135deg, #14532d 0%, #166534 100%) !important;
+    border-color: #22c55e !important;
+}
+
+.dark-blue-mode .chat-feedback.incorrect {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+    border-color: #ef4444 !important;
+}
+
+.dark-blue-mode .chat-feedback .correct-answer {
+    background: rgba(0, 0, 0, 0.3) !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-blue-mode .chat-hints {
+    background: #1e293b !important;
+}
+
+.dark-blue-mode .hints-label {
+    color: #94a3b8 !important;
+}
+
+.dark-blue-mode .hint-chip {
+    background: #111827 !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
 }
 
 /* ============================================

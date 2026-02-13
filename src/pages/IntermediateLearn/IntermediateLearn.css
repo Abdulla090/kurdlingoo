@@ -1,0 +1,822 @@
+/* =============================================================================
+   INTERMEDIATE LEARN PAGE - DARK BLUE PREMIUM THEME
+   Conversation-level learning with a premium dark UI
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   LEVEL TOGGLE HEADER
+   ----------------------------------------------------------------------------- */
+.int-level-header {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.int-level-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+}
+
+.int-level-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    color: #64748b;
+    letter-spacing: 0.02em;
+}
+
+.int-level-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+}
+
+.int-level-tab.active {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 12px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.int-level-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 24px;
+    color: #fbbf24;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    animation: badge-pulse 3s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 20px 4px rgba(251, 191, 36, 0.15);
+    }
+}
+
+/* -----------------------------------------------------------------------------
+   PAGE CONTAINER - Dark Blue Theme
+   ----------------------------------------------------------------------------- */
+.int-learn-page {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    min-height: 100vh;
+    align-items: start;
+    position: relative;
+
+    /* DARK BLUE THEME */
+    background: #0c1222;
+    color: #e2e8f0;
+}
+
+/* Top accent bar - blue gradient */
+.int-learn-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1e40af, #3b82f6, #8b5cf6, #06b6d4);
+    z-index: 1000;
+}
+
+/* Subtle ambient glow background */
+.int-learn-page::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+@media (max-width: 1024px) {
+    .int-learn-page {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .int-level-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .int-level-tabs {
+        justify-content: center;
+    }
+
+    .int-level-badge {
+        justify-content: center;
+    }
+}
+
+/* ----------------------------------------------------------------------------- 
+   MAIN CONTENT
+   ----------------------------------------------------------------------------- */
+.int-learn-main {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------------------------------- 
+   UNIT SECTION
+   ----------------------------------------------------------------------------- */
+.int-unit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+}
+
+/* ----------------------------------------------------------------------------- 
+   UNIT HEADER
+   ----------------------------------------------------------------------------- */
+.int-unit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 32px;
+    border-radius: 16px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+
+    box-shadow:
+        inset 0 4px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -6px 0 rgba(0, 0, 0, 0.25),
+        0 6px 0 rgba(0, 0, 0, 0.4),
+        0 12px 40px rgba(30, 64, 175, 0.3);
+
+    transition: box-shadow 0.15s ease;
+}
+
+/* Subtle glass shimmer overlay */
+.int-unit-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.int-unit-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 1;
+}
+
+.int-unit-info h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+}
+
+.int-unit-info p {
+    margin: 0;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+[dir="rtl"] .int-unit-info {
+    text-align: right;
+}
+
+.int-btn-guidebook {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.1s;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.int-btn-guidebook:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.int-btn-guidebook:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 600px) {
+    .int-unit-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px;
+        gap: 20px;
+    }
+
+    .int-unit-info {
+        align-items: center;
+    }
+
+    [dir="rtl"] .int-unit-info {
+        text-align: center;
+    }
+
+    .int-btn-guidebook {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ----------------------------------------------------------------------------- 
+   LEARNING PATH - Dark version
+   ----------------------------------------------------------------------------- */
+.int-learning-path {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+    gap: 24px;
+    position: relative;
+
+    background: #111827;
+    border-radius: 24px;
+    margin: 0 -10px;
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        inset 0 4px 8px rgba(0, 0, 0, 0.3),
+        0 6px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Decorative stars in the path background */
+.int-learning-path::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.15), transparent 50%),
+        radial-gradient(1px 1px at 80% 40%, rgba(255, 255, 255, 0.1), transparent 50%),
+        radial-gradient(1px 1px at 30% 70%, rgba(255, 255, 255, 0.12), transparent 50%),
+        radial-gradient(1px 1px at 60% 85%, rgba(255, 255, 255, 0.08), transparent 50%),
+        radial-gradient(1px 1px at 90% 15%, rgba(255, 255, 255, 0.1), transparent 50%),
+        radial-gradient(1px 1px at 50% 50%, rgba(59, 130, 246, 0.1), transparent 50%);
+    pointer-events: none;
+    border-radius: 24px;
+}
+
+/* ----------------------------------------------------------------------------- 
+   PATH NODE - Dark themed lesson buttons
+   ----------------------------------------------------------------------------- */
+.int-path-node {
+    width: 90px;
+    height: 90px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.int-path-node.right {
+    transform: translateX(70px);
+}
+
+.int-path-node.left {
+    transform: translateX(-70px);
+}
+
+[dir="rtl"] .int-path-node.right {
+    transform: translateX(-70px);
+}
+
+[dir="rtl"] .int-path-node.left {
+    transform: translateX(70px);
+}
+
+.int-path-node:hover:not(.locked) {
+    transform: none;
+}
+
+.int-path-node.right:hover:not(.locked) {
+    transform: translateX(70px);
+}
+
+.int-path-node.left:hover:not(.locked) {
+    transform: translateX(-70px);
+}
+
+[dir="rtl"] .int-path-node.right:hover:not(.locked) {
+    transform: translateX(-70px);
+}
+
+[dir="rtl"] .int-path-node.left:hover:not(.locked) {
+    transform: translateX(70px);
+}
+
+/* ----------------------------------------------------------------------------- 
+   NODE CIRCLE - Premium 3D Dark Button
+   ----------------------------------------------------------------------------- */
+.int-node-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+
+    background: var(--node-bg, rgba(255, 255, 255, 0.05));
+    color: var(--node-text, #6b7280);
+    border: none;
+
+    box-shadow:
+        inset 0 4px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -4px 2px rgba(0, 0, 0, 0.2),
+        0 8px 0 var(--node-shadow, #1a1a3a),
+        0 12px 20px rgba(0, 0, 0, 0.4);
+
+    transition: transform 0.15s cubic-bezier(0.3, 0.7, 0.4, 1),
+        box-shadow 0.15s cubic-bezier(0.3, 0.7, 0.4, 1),
+        filter 0.2s;
+
+    transform: translateY(0);
+}
+
+.int-node-circle svg,
+.int-node-circle span {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.3));
+    transition: transform 0.15s;
+}
+
+/* Hover */
+.int-path-node:hover:not(.locked) .int-node-circle {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+    box-shadow:
+        inset 0 4px 5px rgba(255, 255, 255, 0.2),
+        inset 0 -4px 5px rgba(0, 0, 0, 0.15),
+        0 10px 0 var(--node-shadow, #1a1a3a),
+        0 16px 30px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(59, 130, 246, 0.15);
+}
+
+.int-path-node:hover:not(.locked) .int-node-circle svg {
+    transform: scale(1.1);
+}
+
+/* Active */
+.int-path-node:active:not(.locked) .int-node-circle {
+    transform: translateY(8px);
+    box-shadow:
+        inset 0 6px 5px rgba(0, 0, 0, 0.2),
+        inset 0 -2px 2px rgba(255, 255, 255, 0.1),
+        0 0 0 var(--node-shadow, #1a1a3a),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+    filter: brightness(0.9);
+    transition: transform 0.05s ease-out, box-shadow 0.05s ease-out;
+}
+
+.int-path-node:active:not(.locked) .int-node-circle svg {
+    transform: scale(0.95) translateY(1px);
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
+}
+
+/* Locked */
+.int-path-node.locked {
+    cursor: default;
+}
+
+.int-path-node.locked .int-node-circle {
+    background: rgba(255, 255, 255, 0.03);
+    color: #3a3a5a;
+    box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.05),
+        0 4px 0 #1a1a2e;
+    transform: translateY(4px);
+    filter: none;
+}
+
+.int-path-node.locked:active .int-node-circle {
+    transform: translateY(4px);
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.05), 0 4px 0 #1a1a2e;
+}
+
+/* Current Pulse Ring */
+.int-path-node.current .int-node-circle::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 3px solid var(--node-accent, #3b82f6);
+    opacity: 0;
+    animation: int-pulse-ring 2s infinite;
+    z-index: -1;
+}
+
+@keyframes int-pulse-ring {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+.int-path-node.current {
+    z-index: 10;
+}
+
+.int-path-node.current .int-node-circle {
+    width: 84px;
+    height: 84px;
+}
+
+/* ----------------------------------------------------------------------------- 
+   CROWN, START BUBBLE, COMPLETED BADGE
+   ----------------------------------------------------------------------------- */
+.int-crown-badge {
+    position: absolute;
+    top: -42px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    background: transparent;
+    box-shadow: none;
+    width: auto;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+    pointer-events: none;
+}
+
+.int-completed-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 28px;
+    height: 28px;
+    background: #111827;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+.int-start-bubble {
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: #3b82f6;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 12px 30px rgba(0, 0, 0, 0.3);
+    z-index: 20;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    animation: int-float-bubble 2s ease-in-out infinite;
+}
+
+.int-start-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 14px;
+    height: 14px;
+    background: #1e293b;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+    border-right: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+@keyframes int-float-bubble {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-6px);
+    }
+}
+
+/* ----------------------------------------------------------------------------- 
+   TOOLTIP - Dark Glass
+   ----------------------------------------------------------------------------- */
+.int-node-tooltip {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    background: rgba(30, 41, 59, 0.95);
+    color: #e2e8f0;
+    padding: 10px 18px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(12px);
+}
+
+.int-node-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 14px;
+    height: 14px;
+    background: rgba(30, 41, 59, 0.95);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    border-right: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.int-path-node:hover .int-node-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    top: -70px;
+}
+
+/* ----------------------------------------------------------------------------- 
+   TROPHY NODE
+   ----------------------------------------------------------------------------- */
+.int-path-node.trophy-node {
+    width: 120px;
+    height: 120px;
+    margin-top: 40px;
+}
+
+.int-path-node.trophy-node .int-node-circle {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, rgba(251, 191, 36, 0.15) 0%, rgba(217, 119, 6, 0.2) 100%);
+    border: 2px solid rgba(251, 191, 36, 0.2);
+    box-shadow:
+        0 10px 0 rgba(0, 0, 0, 0.4),
+        0 16px 32px rgba(0, 0, 0, 0.3);
+}
+
+.int-path-node.trophy-node.completed .int-node-circle {
+    background: linear-gradient(145deg, #fde68a 0%, #fbbf24 50%, #d97706 100%);
+    animation: int-trophy-glow 2s ease-in-out infinite;
+}
+
+@keyframes int-trophy-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 10px 0 rgba(180, 83, 9, 0.6), 0 16px 32px rgba(217, 119, 6, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 10px 0 rgba(180, 83, 9, 0.6), 0 16px 48px rgba(251, 191, 36, 0.4), 0 0 50px rgba(251, 191, 36, 0.2);
+    }
+}
+
+/* ----------------------------------------------------------------------------- 
+   RIGHT SIDEBAR
+   ----------------------------------------------------------------------------- */
+.int-sidebar-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 32px;
+    z-index: 1;
+}
+
+@media (max-width: 1024px) {
+    .int-sidebar-right {
+        position: static;
+        order: -1;
+    }
+}
+
+/* ----------------------------------------------------------------------------- 
+   SIDEBAR CARDS - Dark Glass Panels
+   ----------------------------------------------------------------------------- */
+.int-glass-panel {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Blue accent strip */
+.int-glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1e40af, #3b82f6);
+}
+
+.int-glass-panel:nth-child(2)::before {
+    background: linear-gradient(90deg, #7c3aed, #a855f7);
+}
+
+.int-glass-panel:nth-child(3)::before {
+    background: linear-gradient(90deg, #0891b2, #06b6d4);
+}
+
+.int-glass-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3), 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.int-glass-panel h3 {
+    margin: 0 0 14px 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.int-stat-text {
+    color: #94a3b8 !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Info Card */
+.int-info-card {
+    text-align: center;
+}
+
+.int-info-card .int-info-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+}
+
+.int-info-card h3 {
+    text-transform: none;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.int-info-card p {
+    color: #94a3b8;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+}
+
+.int-difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #f87171;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+}
+
+/* Back to Beginner Card */
+.int-back-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ----------------------------------------------------------------------------- 
+   ANIMATIONS
+   ----------------------------------------------------------------------------- */
+@keyframes int-slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.int-unit-section {
+    animation: int-slideUp 0.5s ease-out backwards;
+}
+
+.int-unit-section:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.int-unit-section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.int-unit-section:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.int-unit-section:nth-child(4) {
+    animation-delay: 0.3s;
+}

@@ -506,22 +506,50 @@ const SpaceTypingGame = () => {
                         </p>
                     </div>
 
-                    <div className="stg-levels">
+                    <div className="stg-levels-path">
+                        <div className="stg-path-line" />
                         {gameLevels.map((level, i) => {
                             const hs = highScores[level.id];
+                            const isCompleted = !!hs;
+                            const isLocked = i > 0 && !highScores[gameLevels[i - 1].id];
+                            // If it's not locked and not completed, it's the current "next" level.
+                            // If all previous are completed, this is the frontier.
+                            const isCurrent = !isLocked && !isCompleted;
+
                             return (
-                                <button key={level.id} className="stg-level-card" onClick={() => startGame(level)}>
-                                    <div className="stg-level-num">{String(i + 1).padStart(2, '0')}</div>
-                                    <div className="stg-level-info">
-                                        <div className="stg-level-name">{isKu ? level.nameKu : level.name}</div>
-                                        <div className="stg-level-desc">{isKu ? level.descriptionKu : level.description}</div>
-                                        <div className="stg-level-meta">
-                                            <span>{level.words.length} {isKu ? 'وشە' : 'words'}</span>
-                                            <span>{level.speed < 0.6 ? (isKu ? 'هێواش' : 'Slow') : level.speed < 0.8 ? (isKu ? 'ناوەندی' : 'Medium') : (isKu ? 'خێرا' : 'Fast')}</span>
-                                            {hs ? <span className="stg-hs-badge"><Star size={10} /> {hs}</span> : null}
+                                <div key={level.id} className="stg-path-node-wrapper"
+                                    style={{ transform: `translateX(${i % 2 === 0 ? 25 : -25}px)` }}>
+                                    <button
+                                        className={`stg-level-node ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''} ${isCurrent ? 'current' : ''}`}
+                                        onClick={() => !isLocked && startGame(level)}
+                                        disabled={isLocked}
+                                    >
+                                        <div className="stg-level-node-content">
+                                            {isCompleted ? (
+                                                <Star fill="#78350f" size={28} />
+                                            ) : isLocked ? (
+                                                <div style={{ opacity: 0.5 }}><SpaceshipSvg /></div>
+                                            ) : (
+                                                <div style={{ transform: 'scale(1.2)' }}><SpaceshipSvg /></div>
+                                            )}
                                         </div>
-                                    </div>
-                                </button>
+
+                                        {/* Floating Info Popover */}
+                                        <div className="stg-node-info">
+                                            <div className="stg-node-title">{isKu ? level.nameKu : level.name}</div>
+                                            <div className="stg-node-desc">
+                                                {level.words.length} {isKu ? 'وشە' : 'words'} • {level.speed < 0.6 ? (isKu ? 'هێواش' : 'Slow') : level.speed < 0.8 ? (isKu ? 'ناوەندی' : 'Medium') : (isKu ? 'خێرا' : 'Fast')}
+                                            </div>
+                                        </div>
+
+                                        {/* High Score Badge */}
+                                        {hs ? (
+                                            <div className="stg-node-stars">
+                                                <Star size={8} fill="#fbbf24" strokeWidth={0} /> {hs}
+                                            </div>
+                                        ) : null}
+                                    </button>
+                                </div>
                             );
                         })}
                     </div>

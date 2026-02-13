@@ -127,6 +127,23 @@ const Learn: React.FC = () => {
 
     return (
         <div className="learn-page">
+            {/* ========== LEVEL TOGGLE ========== */}
+            <div className="level-toggle-header">
+                <div className="level-toggle-tabs">
+                    <button className="level-toggle-tab active">
+                        <Star size={18} weight="fill" />
+                        Beginner
+                    </button>
+                    <button
+                        className="level-toggle-tab"
+                        onClick={() => navigate('/intermediate')}
+                    >
+                        <Rocket size={18} weight="fill" />
+                        Intermediate
+                    </button>
+                </div>
+            </div>
+
             {/* ========== MAIN CONTENT ========== */}
             <div className="learn-main">
                 {units.map((unit, unitIndex) => {
@@ -185,33 +202,37 @@ const Learn: React.FC = () => {
                                         >
                                             <div
                                                 className="node-circle"
-                                                style={completed ? {
-                                                    background: theme.gradient,
-                                                    borderBottom: `8px solid ${theme.shadow}`,
-                                                    boxShadow: `0 4px 12px rgba(0,0,0,0.2)`
-                                                } : isCurrent ? {
-                                                    background: `linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%)`,
-                                                    borderBottom: `8px solid ${theme.color}`,
-                                                    boxShadow: `0 0 0 5px ${theme.color}20, 0 4px 15px ${theme.color}30`
-                                                } : {}}
+                                                style={{
+                                                    '--node-bg': isCurrent || completed ? theme.gradient : '#e5e7eb',
+                                                    '--node-shadow': isCurrent || completed ? theme.shadow : '#d1d5db',
+                                                    '--node-text': isCurrent || completed ? '#ffffff' : '#9ca3af',
+                                                    '--node-accent': theme.color
+                                                } as React.CSSProperties}
                                             >
                                                 {isLocked ? (
-                                                    <Lock size={32} weight="fill" color="#9ca3af" />
+                                                    <Lock size={32} weight="fill" color="var(--node-text)" />
                                                 ) : (
-                                                    <Icon size={36} weight="fill" color={completed ? '#ffffff' : theme.color} />
+                                                    <Icon size={36} weight="fill" color="var(--node-text)" />
                                                 )}
 
-                                                {/* Crown for current lesson */}
+                                                {/* START Bubble for current lesson */}
+                                                {isCurrent && (
+                                                    <div className="start-bubble" style={{ color: theme.shadow, borderColor: theme.shadow }}>
+                                                        {t('start') || 'START'}
+                                                    </div>
+                                                )}
+
+                                                {/* Crown sitting on top */}
                                                 {isCurrent && (
                                                     <div className="crown-badge">
-                                                        <Crown size={28} weight="fill" color="#fbbf24" />
+                                                        <Crown size={42} weight="fill" color="#fbbf24" style={{ filter: 'drop-shadow(0 2px 0 #b45309)' }} />
                                                     </div>
                                                 )}
 
                                                 {/* Checkmark for completed */}
                                                 {completed && (
                                                     <div className="completed-badge">
-                                                        <CheckCircle size={24} weight="fill" color="#ffffff" />
+                                                        <CheckCircle size={24} weight="fill" color={theme.color} />
                                                     </div>
                                                 )}
                                             </div>
