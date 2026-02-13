@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
     Star, ChatCircle, Briefcase, Stethoscope, Airplane, Lock,
-    CheckCircle, Crown, Trophy, BookOpenText, Fire, Lightning,
+    CheckCircle, Crown, Trophy, BookOpenText, Lightning,
     Rocket, GlobeHemisphereWest, Buildings
 } from '@phosphor-icons/react';
 import { useLanguage } from '../../context/LanguageContext';

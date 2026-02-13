@@ -6,7 +6,7 @@ import {
     MapPin, CloudSun, ForkKnife, Airplane, DeviceMobile, Briefcase,
     Stethoscope, CalendarCheck, ChatTeardrop, Bank, MusicNotes,
     GlobeHemisphereWest, Crown, Lock, CheckCircle, BookOpenText,
-    Fire, Lightning, Trophy, Rocket
+    Lightning, Trophy, Rocket
 } from '@phosphor-icons/react';
 import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';

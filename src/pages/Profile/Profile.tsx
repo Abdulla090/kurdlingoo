@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Flame, Zap, Plus, Settings, Type, BookOpen } from 'lucide-react';
 import Button from '../../components/Button/Button';
