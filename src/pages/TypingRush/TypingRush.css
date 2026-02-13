@@ -780,3 +780,106 @@
         font-size: 0.65rem;
     }
 }
+
+/* ========================================
+   HIDDEN INPUT — must stay in viewport for mobile keyboard
+   ======================================== */
+.tr-hidden-input {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: transparent;
+    caret-color: transparent;
+    z-index: 200;
+    font-size: 16px;
+    /* prevents iOS zoom */
+}
+
+/* ========================================
+   MOBILE KEYBOARD OPEN STATE
+   ======================================== */
+.tr-keyboard-open {
+    overflow: hidden;
+}
+
+.tr-keyboard-open .tr-hud {
+    padding: 4px 8px;
+    gap: 4px;
+}
+
+.tr-keyboard-open .tr-hud-stat {
+    font-size: 0.55rem;
+    padding: 2px 4px;
+    gap: 2px;
+}
+
+.tr-keyboard-open .tr-hud-stat svg {
+    width: 10px;
+    height: 10px;
+}
+
+.tr-keyboard-open .tr-hud-passage-name {
+    font-size: 0.5rem;
+}
+
+.tr-keyboard-open .tr-progress-bar {
+    height: 3px;
+}
+
+.tr-keyboard-open .tr-text-area {
+    padding: 0.5rem 0.5rem 0.5rem;
+}
+
+.tr-keyboard-open .tr-text-display {
+    font-size: 0.85rem;
+    line-height: 2;
+    padding: 0.6rem 0.8rem;
+    max-height: calc(100% - 10px);
+    overflow-y: auto;
+}
+
+.tr-keyboard-open .tr-start-hint {
+    font-size: 0.65rem;
+    top: 0.5rem;
+}
+
+/* Mobile tap hint */
+.tr-mobile-tap-hint {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(99, 102, 241, 0.12));
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    border-radius: 16px;
+    color: #a855f7;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+    animation: tr-tap-pulse 2s ease-in-out infinite;
+    backdrop-filter: blur(8px);
+}
+
+@keyframes tr-tap-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.05);
+    }
+}

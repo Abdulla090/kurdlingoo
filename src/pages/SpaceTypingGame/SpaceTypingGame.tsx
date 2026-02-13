@@ -6,6 +6,18 @@ import { gameLevels, GameLevel, SpaceWord } from '../../data/spaceGameWords';
 import { SpaceshipSvg, AsteroidSvg, PlanetSaturnSvg, PlanetEarthSvg, PlanetRedSvg, PlanetIceSvg, StarSvg } from './SpaceAssets';
 import './SpaceTypingGame.css';
 
+const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || ('ontouchstart' in window)
+        || (navigator.maxTouchPoints > 0);
+};
+
+
+
+const SHOT_SOUNDS = [
+    '/spaceship%20sound/2d_game_space_ship_f_%232-1770984748376.mp3',
+    '/spaceship%20sound/2d_game_space_ship_f_%233-1770984833213.mp3'
+];
 const ASSET_POOL = [
     { component: AsteroidSvg, scale: 0.85 },
     { component: AsteroidSvg, scale: 1.0 },
@@ -65,6 +77,9 @@ const SpaceTypingGame = () => {
     const navigate = useNavigate();
     const { language } = useLanguage();
     const isKu = language === 'ckb';
+    const [isMobile] = useState(isMobileDevice);
+    const [keyboardOpen, setKeyboardOpen] = useState(false);
+    const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
 
     // Core state
     const [gameState, setGameState] = useState<'menu' | 'playing' | 'results'>('menu');
@@ -109,6 +124,7 @@ const SpaceTypingGame = () => {
     const totalCharsTyped = useRef(0);
     const wordIndexRef = useRef(0);
     const scoreRef = useRef(0);
+    const uidRef = useRef(0);
 
     useEffect(() => { objectsRef.current = objects; }, [objects]);
     useEffect(() => { livesRef.current = lives; }, [lives]);
@@ -154,8 +170,15 @@ const SpaceTypingGame = () => {
         setShipAngle(0);
         gameStartTime.current = Date.now();
         totalCharsTyped.current = 0;
-        setTimeout(() => inputRef.current?.focus(), 150);
-    }, []);
+        setTimeout(() => {
+            if (inputRef.current) {
+                inputRef.current.focus();
+                if (isMobile) {
+                    inputRef.current.click();
+                }
+            }
+        }, 300);
+    }, [isMobile]);
 
     // ===== SPAWN =====
     const spawnObject = useCallback(() => {
@@ -191,15 +214,32 @@ const SpaceTypingGame = () => {
     }, [selectedLevel]);
 
     // ===== FIRE LASER =====
-    const fireLaser = useCallback((targetX: number, targetY: number) => {
+    const fireLaser = useCallback((obj: FallingObject) => {
         const shipX = window.innerWidth / 2;
         const shipY = window.innerHeight - 80;
+
+        // Predict future position after 300ms travel time
+        const TRAVEL_MS = 300;
+        const frames = TRAVEL_MS / 16.67;
+        // Target Y: obj.y + offset (80px to hit bottom of asset) + speed * frames
+        const predY = (obj.y + 80) + obj.speed * frames; // move down + offset to hit asset bottom
+
+        const futureTime = Date.now() + TRAVEL_MS;
+        const osc = Math.sin((futureTime / 1000) * obj.oscillationSpeed + obj.oscillationOffset);
+        const predX = obj.baseX + osc * obj.oscillationAmp; // oscillate x
+
+        // Play random shoot sound
+        const soundUrl = SHOT_SOUNDS[Math.floor(Math.random() * SHOT_SOUNDS.length)];
+        const audio = new Audio(soundUrl);
+        audio.volume = 0.4;
+        audio.play().catch(() => { }); // catch helper for strict autoplay policies
+
         setLasers(prev => [...prev, {
-            id: `laser-${Date.now()}-${Math.random()}`,
+            id: `laser-${++uidRef.current}`,
             startX: shipX,
             startY: shipY,
-            endX: targetX,
-            endY: targetY,
+            endX: predX,
+            endY: predY,
             createdAt: Date.now(),
         }]);
     }, []);
@@ -223,7 +263,7 @@ const SpaceTypingGame = () => {
             const angle = Math.random() * Math.PI * 2;
             const speed = 2 + Math.random() * 7;
             newP.push({
-                id: `p-${Date.now()}-${i}`,
+                id: `p-${++uidRef.current}-${i}`,
                 x: obj.x, y: obj.y,
                 color: colors[Math.floor(Math.random() * colors.length)],
                 vx: Math.cos(angle) * speed,
@@ -233,7 +273,7 @@ const SpaceTypingGame = () => {
             });
         }
         setParticles(prev => [...prev, ...newP]);
-        setScorePopups(prev => [...prev, { id: `sp-${Date.now()}`, x: obj.x, y: obj.y, value: points, createdAt: Date.now() }]);
+        setScorePopups(prev => [...prev, { id: `sp-${++uidRef.current}`, x: obj.x, y: obj.y, value: points, createdAt: Date.now() }]);
     }, [streak, maxStreak]);
 
     // ===== INPUT HANDLER =====
@@ -246,7 +286,7 @@ const SpaceTypingGame = () => {
             if (char.toLowerCase() === expected.toLowerCase()) {
                 totalCharsTyped.current++;
                 setAccuracy(a => ({ ...a, hits: a.hits + 1 }));
-                fireLaser(activeObj.x, activeObj.y);
+                fireLaser(activeObj);
 
                 setObjects(prev => prev.map(o => {
                     if (o.id !== activeObj.id) return o;
@@ -271,7 +311,7 @@ const SpaceTypingGame = () => {
                 setActiveId(target.id);
                 totalCharsTyped.current++;
                 setAccuracy(a => ({ ...a, hits: a.hits + 1 }));
-                fireLaser(target.x, target.y);
+                fireLaser(target);
 
                 setObjects(prev => prev.map(o => {
                     if (o.id !== target.id) return o;
@@ -345,8 +385,8 @@ const SpaceTypingGame = () => {
                 .filter(p => p.life > 0)
             );
 
-            // Lasers — die after 180ms
-            setLasers(prev => prev.filter(l => now - l.createdAt < 180));
+            // Lasers — die after 300ms (projectile travel time)
+            setLasers(prev => prev.filter(l => now - l.createdAt < 300));
 
             // Score popups
             setScorePopups(prev => prev.filter(sp => now - sp.createdAt < 1200));
@@ -393,7 +433,7 @@ const SpaceTypingGame = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameState, selectedLevel]);
 
-    // Keyboard
+    // Keyboard (desktop)
     useEffect(() => {
         if (gameState !== 'playing') return;
         const handler = (e: KeyboardEvent) => {
@@ -405,6 +445,40 @@ const SpaceTypingGame = () => {
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, [gameState, processInput]);
+
+    // Mobile input handler via hidden input's onInput
+    const handleMobileInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        const input = e.currentTarget;
+        const val = input.value;
+        if (val.length > 0) {
+            const lastChar = val[val.length - 1];
+            processInput(lastChar);
+            input.value = '';
+        }
+    }, [processInput]);
+
+    // Track mobile keyboard visibility via visualViewport
+    useEffect(() => {
+        if (!isMobile) return;
+        const vv = window.visualViewport;
+        if (!vv) return;
+
+        const onResize = () => {
+            const currentHeight = vv.height;
+            const fullHeight = window.innerHeight;
+            const kbOpen = fullHeight - currentHeight > 100;
+            setKeyboardOpen(kbOpen);
+            setViewportHeight(currentHeight);
+        };
+
+        vv.addEventListener('resize', onResize);
+        vv.addEventListener('scroll', onResize);
+        onResize();
+        return () => {
+            vv.removeEventListener('resize', onResize);
+            vv.removeEventListener('scroll', onResize);
+        };
+    }, [isMobile]);
 
     // ===== RENDER: MENU =====
     if (gameState === 'menu') {
@@ -514,8 +588,14 @@ const SpaceTypingGame = () => {
     const progress = selectedLevel ? (wordsCleared / selectedLevel.words.length) * 100 : 0;
 
     return (
-        <div className={`stg-root stg-playing ${screenFlash === 'hit' ? 'flash-hit' : ''} ${screenFlash === 'damage' ? 'flash-dmg' : ''}`}
-            onClick={() => inputRef.current?.focus()}
+        <div className={`stg-root stg-playing ${screenFlash === 'hit' ? 'flash-hit' : ''} ${screenFlash === 'damage' ? 'flash-dmg' : ''} ${keyboardOpen ? 'stg-keyboard-open' : ''}`}
+            style={keyboardOpen ? { height: `${viewportHeight}px` } : undefined}
+            onClick={() => {
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                    if (isMobile) inputRef.current.click();
+                }
+            }}
         >
             <div className="stg-starfield">
                 {bgStars.map(s => (
@@ -548,8 +628,8 @@ const SpaceTypingGame = () => {
                 </div>
             </header>
 
-            {streak > 2 && <div className="stg-streak" key={streak}>{streak}x {isKu ? 'زنجیرە' : 'STREAK'}</div>}
-            {wpm > 0 && <div className="stg-wpm">{wpm} WPM</div>}
+            {streak > 2 && !keyboardOpen && <div className="stg-streak" key={streak}>{streak}x {isKu ? 'زنجیرە' : 'STREAK'}</div>}
+            {wpm > 0 && !keyboardOpen && <div className="stg-wpm">{wpm} WPM</div>}
 
             {/* Game Canvas */}
             <div className="stg-canvas">
@@ -578,25 +658,15 @@ const SpaceTypingGame = () => {
                     );
                 })}
 
-                {/* LASER BEAMS */}
-                {lasers.map(l => {
-                    const dx = l.endX - l.startX;
-                    const dy = l.endY - l.startY;
-                    const length = Math.sqrt(dx * dx + dy * dy);
-                    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-                    const age = Date.now() - l.createdAt;
-                    const opacity = Math.max(0, 1 - age / 180);
-
-                    return (
-                        <div key={l.id} className="stg-laser" style={{
-                            left: l.startX,
-                            top: l.startY,
-                            width: length,
-                            transform: `rotate(${angle}deg)`,
-                            opacity,
-                        }} />
-                    );
-                })}
+                {/* LASER PROJECTILES */}
+                {lasers.map(l => (
+                    <div key={l.id} className="stg-laser-dot" style={{
+                        '--sx': `${l.startX}px`,
+                        '--sy': `${l.startY}px`,
+                        '--ex': `${l.endX}px`,
+                        '--ey': `${l.endY}px`,
+                    } as React.CSSProperties} />
+                ))}
 
                 {/* Particles */}
                 {particles.map(p => (
@@ -611,15 +681,38 @@ const SpaceTypingGame = () => {
             </div>
 
             {/* Spaceship — rotates toward target */}
-            <div className="stg-ship" style={{ transform: `translateX(-50%) rotate(${shipAngle}deg)` }}>
+            <div className={`stg-ship ${keyboardOpen ? 'stg-ship-kb' : ''}`} style={{ transform: `translateX(-50%) rotate(${shipAngle}deg)` }}>
                 <div className="stg-ship-body">
                     <SpaceshipSvg className="stg-ship-svg" />
                 </div>
             </div>
 
-            {/* Hidden input */}
-            <input ref={inputRef} type="text" className="stg-hidden-input"
-                autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
+            {/* Mobile tap prompt */}
+            {isMobile && gameState === 'playing' && !keyboardOpen && (
+                <div className="stg-mobile-tap-hint" onClick={() => { inputRef.current?.focus(); inputRef.current?.click(); }}>
+                    {isKu ? 'لێرە دابگرە بۆ تایپکردن' : 'Tap here to type'}
+                </div>
+            )}
+
+            {/* Hidden input — positioned properly for mobile keyboard trigger */}
+            <input
+                ref={inputRef}
+                type="text"
+                className="stg-hidden-input"
+                autoComplete="off"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="go"
+                inputMode="text"
+                onInput={handleMobileInput}
+                onBlur={() => {
+                    // Re-focus on mobile to keep keyboard open during gameplay
+                    if (isMobile && gameState === 'playing') {
+                        setTimeout(() => inputRef.current?.focus(), 100);
+                    }
+                }}
+            />
         </div>
     );
 };

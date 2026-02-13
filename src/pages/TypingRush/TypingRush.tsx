@@ -4,6 +4,12 @@ import { ArrowLeft, RotateCcw, Gauge, Crosshair, Timer, Trophy, ChevronRight, Ke
 import { useLanguage } from '../../context/LanguageContext';
 import './TypingRush.css';
 
+const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || ('ontouchstart' in window)
+        || (navigator.maxTouchPoints > 0);
+};
+
 // ===== PASSAGE DATA =====
 interface Passage {
     id: string;
@@ -78,6 +84,9 @@ const TypingRush = () => {
     const navigate = useNavigate();
     const { language } = useLanguage();
     const isKu = language === 'ckb';
+    const [isMobile] = useState(isMobileDevice);
+    const [keyboardOpen, setKeyboardOpen] = useState(false);
+    const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
 
     // Screens
     const [screen, setScreen] = useState<'menu' | 'playing' | 'results'>('menu');
@@ -106,6 +115,7 @@ const TypingRush = () => {
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const textDisplayRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // Start game
     const startGame = useCallback((passage: Passage) => {
@@ -122,7 +132,14 @@ const TypingRush = () => {
         setCorrectKeystrokes(0);
         startTimeRef.current = 0;
         if (timerRef.current) clearInterval(timerRef.current);
-    }, []);
+        setTimeout(() => {
+            if (inputRef.current) {
+                inputRef.current.focus();
+                if (isMobile) inputRef.current.click();
+            }
+            containerRef.current?.focus();
+        }, 300);
+    }, [isMobile]);
 
     // Timer
     useEffect(() => {
@@ -146,74 +163,119 @@ const TypingRush = () => {
         }
     }, [charIndex]);
 
-    // Keyboard handler
-    useEffect(() => {
+    // Process a single character input (shared by desktop keydown + mobile onInput)
+    const processChar = useCallback((key: string) => {
         if (screen !== 'playing' || isFinished || !selectedPassage) return;
+
+        // Start timer on first keystroke
+        if (!isStarted) {
+            setIsStarted(true);
+            startTimeRef.current = Date.now();
+        }
+
+        const expected = selectedPassage.text[charIndex];
+        const total = totalKeystrokes + 1;
+        setTotalKeystrokes(total);
+
+        if (key === expected) {
+            // Correct
+            const correct = correctKeystrokes + 1;
+            setCorrectKeystrokes(correct);
+            const nextIndex = charIndex + 1;
+            setCharIndex(nextIndex);
+
+            // Update WPM
+            const elapsed = (Date.now() - startTimeRef.current) / 60000;
+            if (elapsed > 0.02) setWpm(Math.round((correct / 5) / elapsed));
+
+            // Update accuracy
+            setAccuracy(Math.round((correct / total) * 100));
+
+            // Check if finished
+            if (nextIndex >= selectedPassage.text.length) {
+                setIsFinished(true);
+                const finalElapsed = (Date.now() - startTimeRef.current) / 60000;
+                const finalWpm = Math.round((correct / 5) / finalElapsed);
+                const finalAcc = Math.round((correct / total) * 100);
+                setWpm(finalWpm);
+                setAccuracy(finalAcc);
+
+                // Save high score
+                const prev = highScores[selectedPassage.id];
+                if (!prev || finalWpm > prev.wpm) {
+                    const newHS = { ...highScores, [selectedPassage.id]: { wpm: finalWpm, accuracy: finalAcc } };
+                    setHighScores(newHS);
+                    localStorage.setItem('tr-hs', JSON.stringify(newHS));
+                }
+
+                setTimeout(() => setScreen('results'), 800);
+            }
+        } else {
+            // Incorrect
+            setErrors(prev => new Set(prev).add(charIndex));
+            setAccuracy(Math.round((correctKeystrokes / total) * 100));
+        }
+    }, [screen, isFinished, selectedPassage, charIndex, isStarted, totalKeystrokes, correctKeystrokes, highScores]);
+
+    // Mobile input handler via hidden input's onInput
+    const handleMobileInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        const input = e.currentTarget;
+        const val = input.value;
+        if (val.length > 0) {
+            const lastChar = val[val.length - 1];
+            processChar(lastChar);
+            input.value = '';
+        }
+    }, [processChar]);
+
+    // Desktop keyboard handler
+    useEffect(() => {
+        if (screen !== 'playing' || isFinished) return;
 
         const handler = (e: KeyboardEvent) => {
             if (e.metaKey || e.ctrlKey || e.altKey) return;
             if (e.key === 'Escape') { setScreen('menu'); return; }
             if (e.key.length !== 1) return;
             e.preventDefault();
-
-            // Start timer on first keystroke
-            if (!isStarted) {
-                setIsStarted(true);
-                startTimeRef.current = Date.now();
-            }
-
-            const expected = selectedPassage.text[charIndex];
-            const total = totalKeystrokes + 1;
-            setTotalKeystrokes(total);
-
-            if (e.key === expected) {
-                // Correct
-                const correct = correctKeystrokes + 1;
-                setCorrectKeystrokes(correct);
-                const nextIndex = charIndex + 1;
-                setCharIndex(nextIndex);
-
-                // Update WPM
-                const elapsed = (Date.now() - startTimeRef.current) / 60000;
-                if (elapsed > 0.02) setWpm(Math.round((correct / 5) / elapsed));
-
-                // Update accuracy
-                setAccuracy(Math.round((correct / total) * 100));
-
-                // Check if finished
-                if (nextIndex >= selectedPassage.text.length) {
-                    setIsFinished(true);
-                    const finalElapsed = (Date.now() - startTimeRef.current) / 60000;
-                    const finalWpm = Math.round((correct / 5) / finalElapsed);
-                    const finalAcc = Math.round((correct / total) * 100);
-                    setWpm(finalWpm);
-                    setAccuracy(finalAcc);
-
-                    // Save high score
-                    const prev = highScores[selectedPassage.id];
-                    if (!prev || finalWpm > prev.wpm) {
-                        const newHS = { ...highScores, [selectedPassage.id]: { wpm: finalWpm, accuracy: finalAcc } };
-                        setHighScores(newHS);
-                        localStorage.setItem('tr-hs', JSON.stringify(newHS));
-                    }
-
-                    setTimeout(() => setScreen('results'), 800);
-                }
-            } else {
-                // Incorrect
-                setErrors(prev => new Set(prev).add(charIndex));
-                setAccuracy(Math.round((correctKeystrokes / total) * 100));
-            }
+            processChar(e.key);
         };
 
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, [screen, isFinished, selectedPassage, charIndex, isStarted, totalKeystrokes, correctKeystrokes, highScores]);
+    }, [screen, isFinished, processChar]);
 
     // Focus container on mount
     useEffect(() => {
-        if (screen === 'playing') containerRef.current?.focus();
-    }, [screen]);
+        if (screen === 'playing') {
+            containerRef.current?.focus();
+            if (isMobile && inputRef.current) {
+                inputRef.current.focus();
+            }
+        }
+    }, [screen, isMobile]);
+
+    // Track mobile keyboard visibility via visualViewport
+    useEffect(() => {
+        if (!isMobile) return;
+        const vv = window.visualViewport;
+        if (!vv) return;
+
+        const onResize = () => {
+            const currentHeight = vv.height;
+            const fullHeight = window.innerHeight;
+            const kbOpen = fullHeight - currentHeight > 100;
+            setKeyboardOpen(kbOpen);
+            setViewportHeight(currentHeight);
+        };
+
+        vv.addEventListener('resize', onResize);
+        vv.addEventListener('scroll', onResize);
+        onResize();
+        return () => {
+            vv.removeEventListener('resize', onResize);
+            vv.removeEventListener('scroll', onResize);
+        };
+    }, [isMobile]);
 
     // Format time
     const formatTime = (s: number) => {
@@ -339,7 +401,17 @@ const TypingRush = () => {
     const progress = (charIndex / text.length) * 100;
 
     return (
-        <div className="tr-root tr-playing" ref={containerRef} tabIndex={0}>
+        <div className={`tr-root tr-playing ${keyboardOpen ? 'tr-keyboard-open' : ''}`}
+            ref={containerRef}
+            tabIndex={0}
+            style={keyboardOpen ? { height: `${viewportHeight}px` } : undefined}
+            onClick={() => {
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                    if (isMobile) inputRef.current.click();
+                }
+            }}
+        >
             {/* HUD */}
             <header className="tr-hud">
                 <button className="tr-hud-back" onClick={() => setScreen('menu')}>
@@ -399,14 +471,40 @@ const TypingRush = () => {
             </div>
 
             {/* Live keyboard hint */}
-            {charIndex < text.length && (
+            {charIndex < text.length && !keyboardOpen && (
                 <div className="tr-next-key">
                     <span className="tr-next-label">{isKu ? 'دوای:' : 'Next:'}</span>
                     <span className="tr-next-char">
-                        {text[charIndex] === ' ' ? '⎵' : text[charIndex]}
+                        {text[charIndex] === ' ' ? '⎋' : text[charIndex]}
                     </span>
                 </div>
             )}
+
+            {/* Mobile tap prompt */}
+            {isMobile && screen === 'playing' && !keyboardOpen && (
+                <div className="tr-mobile-tap-hint" onClick={() => { inputRef.current?.focus(); inputRef.current?.click(); }}>
+                    {isKu ? 'لێرە دابگرە بۆ تایپکردن' : 'Tap here to type'}
+                </div>
+            )}
+
+            {/* Hidden input for mobile keyboard */}
+            <input
+                ref={inputRef}
+                type="text"
+                className="tr-hidden-input"
+                autoComplete="off"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="go"
+                inputMode="text"
+                onInput={handleMobileInput}
+                onBlur={() => {
+                    if (isMobile && screen === 'playing' && !isFinished) {
+                        setTimeout(() => inputRef.current?.focus(), 100);
+                    }
+                }}
+            />
         </div>
     );
 };

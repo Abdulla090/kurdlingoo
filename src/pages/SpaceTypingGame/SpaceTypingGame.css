@@ -65,15 +65,23 @@
     }
 }
 
-/* ===== HIDDEN INPUT ===== */
+/* ===== HIDDEN INPUT — must stay in viewport for mobile keyboard ===== */
 .stg-hidden-input {
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-    opacity: 0;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 1px;
     height: 1px;
-    pointer-events: none;
+    opacity: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: transparent;
+    caret-color: transparent;
+    z-index: 200;
+    font-size: 16px;
+    /* prevents iOS zoom */
 }
 
 /* ========================================
@@ -548,52 +556,48 @@
     z-index: 25;
 }
 
-/* ===== LASER BEAM ===== */
-.stg-laser {
-    position: absolute;
-    height: 3px;
-    transform-origin: 0 50%;
-    pointer-events: none;
-    z-index: 22;
-    background: linear-gradient(90deg, rgba(74, 222, 128, 0.9) 0%, rgba(56, 189, 248, 0.8) 40%, rgba(255, 255, 255, 0.95) 50%, rgba(56, 189, 248, 0.8) 60%, rgba(74, 222, 128, 0.3) 100%);
-    box-shadow: 0 0 6px rgba(74, 222, 128, 0.6), 0 0 14px rgba(56, 189, 248, 0.4), 0 0 30px rgba(74, 222, 128, 0.2);
-    border-radius: 2px;
-    animation: stg-laser-fire 0.18s ease-out forwards;
-}
-
-.stg-laser::before {
-    content: '';
-    position: absolute;
-    inset: -2px 0;
-    background: inherit;
-    filter: blur(4px);
-    opacity: 0.5;
-    border-radius: 4px;
-}
-
-.stg-laser::after {
-    content: '';
-    position: absolute;
-    right: -6px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 20%, rgba(74, 222, 128, 0.5) 60%, transparent 80%);
+/* ===== LASER PROJECTILE ===== */
+.stg-laser-dot {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
+    z-index: 25;
+    pointer-events: none;
+    background: #ffffff;
+    /* Intense glowing core with layered shadows for visibility */
+    box-shadow:
+        0 0 5px 2px #ffffff,
+        0 0 10px 4px #00ffff,
+        0 0 20px 8px #3b82f6;
+    animation: stg-projectile 0.3s linear forwards;
+    will-change: transform, opacity;
 }
 
-@keyframes stg-laser-fire {
+@keyframes stg-projectile {
     0% {
+        transform: translate3d(var(--sx), var(--sy), 0) scale(0.5);
         opacity: 1;
-        transform-origin: 0 50%;
     }
 
-    70% {
-        opacity: 0.8;
+    20% {
+        transform: translate3d(calc(var(--sx) + (var(--ex) - var(--sx)) * 0.2),
+                calc(var(--sy) + (var(--ey) - var(--sy)) * 0.2),
+                0) scale(1.2);
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate3d(calc(var(--sx) + (var(--ex) - var(--sx)) * 0.9),
+                calc(var(--sy) + (var(--ey) - var(--sy)) * 0.9),
+                0) scale(1.2);
     }
 
     100% {
+        transform: translate3d(var(--ex), var(--ey), 0) scale(0.5);
         opacity: 0;
     }
 }
@@ -970,5 +974,218 @@
 
     .stg-rstat-val {
         font-size: 1rem;
+    }
+}
+
+/* ========================================
+   MOBILE KEYBOARD OPEN STATE
+   ======================================== */
+.stg-keyboard-open {
+    overflow: hidden;
+}
+
+.stg-keyboard-open .stg-canvas {
+    height: calc(100% - 80px);
+    margin-top: 44px;
+}
+
+.stg-keyboard-open .stg-hud {
+    padding: 4px 10px;
+}
+
+.stg-keyboard-open .stg-hud-stat {
+    font-size: 0.55rem;
+    padding: 2px 4px;
+    gap: 2px;
+}
+
+.stg-keyboard-open .stg-hud-stat svg {
+    width: 10px;
+    height: 10px;
+}
+
+.stg-keyboard-open .stg-hud-level {
+    font-size: 0.5rem;
+}
+
+.stg-keyboard-open .stg-progress-bar {
+    height: 3px;
+}
+
+.stg-ship-kb {
+    bottom: 8px !important;
+    width: 44px !important;
+    height: 44px !important;
+}
+
+.stg-keyboard-open .stg-obj-label {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+}
+
+.stg-keyboard-open .stg-obj-trans {
+    font-size: 0.5rem;
+}
+
+.stg-keyboard-open .stg-obj-asset {
+    width: 32px;
+    height: 32px;
+}
+
+/* Mobile tap hint */
+.stg-mobile-tap-hint {
+    position: fixed;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(129, 140, 248, 0.12));
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 16px;
+    color: #38bdf8;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+    animation: stg-tap-pulse 2s ease-in-out infinite;
+    backdrop-filter: blur(8px);
+}
+
+@keyframes stg-tap-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+/* ============================================
+   DESKTOP VIEW (Level Page)
+   ============================================ */
+@media screen and (min-width: 1024px) {
+
+    /* Widen the menu container and switch to side-by-side layout */
+    .stg-menu-content {
+        max-width: 1200px;
+        padding: 4rem 2rem;
+        flex-direction: row;
+        align-items: center;
+        /* Vertically center the content */
+        justify-content: center;
+        gap: 5rem;
+        min-height: 100vh;
+    }
+
+    /* Back button positioning */
+    .stg-back-btn {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        margin: 0;
+        font-size: 1rem;
+        padding: 10px 24px;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* RTL Specific override if dir=rtl is set on parent */
+    [dir="rtl"] .stg-back-btn {
+        left: auto;
+        right: 2rem;
+    }
+
+    /* Left col: Hero Section (Title + Ship) */
+    .stg-menu-hero {
+        flex: 0 0 400px;
+        /* Fixed width for hero section */
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+
+    /* Center text in RTL */
+    [dir="rtl"] .stg-menu-hero {
+        text-align: right;
+    }
+
+    .stg-hero-ship {
+        width: 160px;
+        height: 160px;
+        margin: 0 0 2rem;
+        transform: rotate(15deg);
+    }
+
+    [dir="rtl"] .stg-hero-ship {
+        transform: rotate(-15deg);
+    }
+
+    .stg-menu-title {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+    }
+
+    .stg-menu-sub {
+        font-size: 1.3rem;
+        max-width: 100%;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Right col: Levels Grid */
+    .stg-levels {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns for levels */
+        gap: 20px;
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .stg-level-card {
+        padding: 24px;
+        gap: 20px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+    }
+
+    .stg-level-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.05);
+        /* Lighter on hover */
+        border-color: rgba(56, 189, 248, 0.3);
+        box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .stg-level-num {
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
+        border-radius: 18px;
+        background: rgba(56, 189, 248, 0.05);
+    }
+
+    .stg-level-name {
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+    }
+
+    .stg-level-desc {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+
+    .stg-level-meta {
+        font-size: 0.85rem;
     }
 }
