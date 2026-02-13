@@ -10,7 +10,7 @@ import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
 import {
     isLessonCompleted,
     isLessonUnlocked,
-    getUserStats,
+
     isUnitCompleted
 } from '../../utils/progressManager';
 import './IntermediateLearn.css';
@@ -31,7 +31,7 @@ const IntermediateLearn: React.FC = () => {
     const location = useLocation();
     const { t } = useLanguage();
     const [units, setUnits] = React.useState<Unit[]>([]);
-    const [userStats, setUserStats] = React.useState(getUserStats());
+
 
     // Icon mapping for intermediate lessons
     const getLessonIcon = (title: string) => {
@@ -67,12 +67,12 @@ const IntermediateLearn: React.FC = () => {
         };
 
         loadUnits();
-        setUserStats(getUserStats());
+
 
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
                 loadUnits();
-                setUserStats(getUserStats());
+
             }
         };
 
@@ -84,7 +84,7 @@ const IntermediateLearn: React.FC = () => {
 
         const handleFocus = () => {
             loadUnits();
-            setUserStats(getUserStats());
+
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -235,31 +235,6 @@ const IntermediateLearn: React.FC = () => {
 
             {/* ========== RIGHT SIDEBAR ========== */}
             <div className="int-sidebar-right">
-                {/* Stats Card */}
-                <div className="int-glass-panel">
-                    <h3>{t('myStats') || 'My Stats'}</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                            <Fire color="#ff9600" weight="fill" size={28} />
-                            <span className="int-stat-text">
-                                {userStats.streak} {t('dayStreak') || 'Day Streak'}
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                            <Lightning color="#ffc800" weight="fill" size={28} />
-                            <span className="int-stat-text">
-                                {userStats.totalXp} XP
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                            <CheckCircle color="#3b82f6" weight="fill" size={28} />
-                            <span className="int-stat-text">
-                                {userStats.lessonsCompleted} {t('lessonsCompleted') || 'Lessons'}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
                 {/* Challenge Info */}
                 <div className="int-glass-panel int-info-card">
                     <div className="int-info-icon">🎯</div>

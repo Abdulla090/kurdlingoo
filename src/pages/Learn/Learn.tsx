@@ -17,7 +17,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import {
     isLessonCompleted,
     isLessonUnlocked,
-    getUserStats,
+
     isUnitCompleted
 } from '../../utils/progressManager';
 import './Learn.css';
@@ -38,7 +38,7 @@ const Learn: React.FC = () => {
     const location = useLocation(); // Track location changes
     const { t } = useLanguage();
     const [units, setUnits] = React.useState<Unit[]>([]);
-    const [userStats, setUserStats] = React.useState(getUserStats());
+
 
     // Modern Phosphor Icon mapping
     const getLessonIcon = (title: string) => {
@@ -90,14 +90,13 @@ const Learn: React.FC = () => {
 
         loadUnits();
 
-        // Update stats
-        setUserStats(getUserStats());
+
 
         // Listen for visibility change (when user comes back to this tab)
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
                 loadUnits(); // Reload units when tab becomes visible
-                setUserStats(getUserStats());
+
             }
         };
 
@@ -111,7 +110,7 @@ const Learn: React.FC = () => {
         // Listen for focus (when window gains focus)
         const handleFocus = () => {
             loadUnits();
-            setUserStats(getUserStats());
+
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -260,57 +259,7 @@ const Learn: React.FC = () => {
 
             {/* ========== RIGHT SIDEBAR ========== */}
             <div className="sidebar-right">
-                {/* Stats Card */}
-                <div className="glass-panel">
-                    <h3>{t('myStats')}</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                            <Fire color="#ff9600" weight="fill" size={28} />
-                            <span className="stat-text">
-                                {userStats.streak} {t('dayStreak')}
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                            <Lightning color="#ffc800" weight="fill" size={28} />
-                            <span className="stat-text">
-                                {userStats.totalXp} XP
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                            <CheckCircle color="#22c55e" weight="fill" size={28} />
-                            <span className="stat-text">
-                                {userStats.lessonsCompleted} {t('lessonsCompleted') || 'Lessons'}
-                            </span>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Daily Quests Card */}
-                <div className="glass-panel">
-                    <h3>{t('dailyQuests')}</h3>
-                    <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <span className="quest-label">{t('earnXp')}</span>
-                            <span className="quest-value">
-                                {Math.min(userStats.totalXp, 50)}/50
-                            </span>
-                        </div>
-                        <div style={{
-                            height: '12px',
-                            background: 'rgba(0,0,0,0.06)',
-                            borderRadius: '12px',
-                            overflow: 'hidden'
-                        }}>
-                            <div style={{
-                                width: `${Math.min((userStats.totalXp / 50) * 100, 100)}%`,
-                                height: '100%',
-                                background: 'linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%)',
-                                borderRadius: '12px',
-                                transition: 'width 0.3s ease'
-                            }} />
-                        </div>
-                    </div>
-                </div>
 
                 {/* Space Typing Game Card */}
                 <div

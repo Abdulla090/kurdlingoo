@@ -1,11 +1,20 @@
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, Zap, Plus, Settings, Type } from 'lucide-react';
+import { Flame, Zap, Plus, Settings, Type, BookOpen } from 'lucide-react';
 import Button from '../../components/Button/Button';
 import { useLanguage, kurdishFonts } from '../../context/LanguageContext';
+import { getUserStats } from '../../utils/progressManager';
 import './Profile.css';
 
 const Profile = () => {
     const { t, kurdishFont, setKurdishFont } = useLanguage();
+    const [stats, setStats] = useState(getUserStats());
+
+    useEffect(() => {
+        const handleFocus = () => setStats(getUserStats());
+        window.addEventListener('focus', handleFocus);
+        return () => window.removeEventListener('focus', handleFocus);
+    }, []);
 
     return (
         <div className="profile-page">
@@ -17,8 +26,8 @@ const Profile = () => {
                     <h1>{t('you')}</h1>
                     <p className="profile-joined">{t('joined')} November 2025</p>
                     <div className="profile-stats-row">
-                        <span className="stat-badge"><Flame color="#ff9600" fill="#ff9600" /> 5</span>
-                        <span className="stat-badge"><Zap color="#ffc800" fill="#ffc800" /> 450 XP</span>
+                        <span className="stat-badge"><Flame color="#ff9600" fill="#ff9600" /> {stats.streak}</span>
+                        <span className="stat-badge"><Zap color="#ffc800" fill="#ffc800" /> {stats.totalXp} XP</span>
                     </div>
                 </div>
             </div>
@@ -28,15 +37,22 @@ const Profile = () => {
                 <div className="stat-card">
                     <Flame size={32} color="#ff9600" />
                     <div>
-                        <div className="stat-value">5</div>
+                        <div className="stat-value">{stats.streak}</div>
                         <div className="stat-label">{t('dayStreak')}</div>
                     </div>
                 </div>
                 <div className="stat-card">
                     <Zap size={32} color="#ffc800" />
                     <div>
-                        <div className="stat-value">450</div>
+                        <div className="stat-value">{stats.totalXp}</div>
                         <div className="stat-label">{t('totalXp')}</div>
+                    </div>
+                </div>
+                <div className="stat-card">
+                    <BookOpen size={32} color="#22c55e" />
+                    <div>
+                        <div className="stat-value">{stats.lessonsCompleted}</div>
+                        <div className="stat-label">{t('lessonsCompleted') || 'Lessons'}</div>
                     </div>
                 </div>
             </div>
@@ -51,7 +67,7 @@ const Profile = () => {
                 <div className="font-preview" style={{ fontFamily: kurdishFont }}>
                     کوردلینگۆ - فێربوونی زمانی کوردی
                 </div>
-                <select 
+                <select
                     className="font-selector"
                     value={kurdishFont}
                     onChange={(e) => setKurdishFont(e.target.value)}
