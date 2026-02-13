@@ -1748,8 +1748,25 @@
 
 .dark-blue-mode.lesson-view,
 .dark-blue-mode .lesson-page {
-    background: #0c1222 !important;
-    color: #e2e8f0;
+    background: #0f172a !important;
+    /* Slate-950 */
+    color: #f8fafc;
+}
+
+/* Fix "White Card" in dark mode */
+.dark-blue-mode .exercise-container {
+    background: #1e293b !important;
+    /* Slate-800 */
+    border-color: #334155 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Ensure text is readable */
+.dark-blue-mode .exercise-question,
+.dark-blue-mode h2,
+.dark-blue-mode h3,
+.dark-blue-mode p {
+    color: #f1f5f9 !important;
 }
 
 .dark-blue-mode .lesson-header {
@@ -2352,4 +2369,197 @@
 [dir="rtl"] .chat-message.user .message-bubble {
     border-bottom-right-radius: 18px;
     border-bottom-left-radius: 4px;
+}
+
+/* ============================================
+   DARK MODE OVERRIDES (Appended)
+   ============================================ */
+
+/* Dark blue: Options & Cards (Fixing white backgrounds) */
+.dark-blue-mode .option-btn,
+.dark-blue-mode .option-card,
+.dark-blue-mode .image-card,
+.dark-blue-mode .pair-card,
+.dark-blue-mode .match-card,
+.dark-blue-mode .dialogue-option,
+.dark-blue-mode .story-option,
+.dark-blue-mode .vocabulary-card {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 4px 0 #020617 !important;
+}
+
+.dark-blue-mode .option-btn:hover,
+.dark-blue-mode .option-card:hover,
+.dark-blue-mode .image-card:hover {
+    background: #1e3a8a !important;
+    border-color: #60a5fa !important;
+}
+
+/* Dark blue: Roleplay Chat Layout Fixes */
+.dark-blue-mode .roleplay-chat-container {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dark-blue-mode .roleplay-scenario {
+    background: #0f172a !important;
+    /* Very dark slate to stand out slightly or match page */
+    border: 1px solid #334155 !important;
+    margin: 16px;
+    /* Restore margin to prevent touching edges */
+    color: #f1f5f9 !important;
+    box-shadow: none !important;
+}
+
+.dark-blue-mode .roleplay-scenario p,
+.dark-blue-mode .roleplay-scenario span {
+    color: #f1f5f9 !important;
+}
+
+/* Make Chat Interface seamless with container */
+.dark-blue-mode .chat-interface {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Contain inner scroll */
+}
+
+.dark-blue-mode .chat-messages {
+    background: transparent !important;
+    padding: 20px !important;
+    /* Add padding back to prevent clipping */
+    padding-top: 10px !important;
+    flex: 1;
+}
+
+.dark-blue-mode .chat-input-area {
+    background: #0f172a !important;
+    /* Distinct dark background for input area */
+    border-top: 1px solid #334155 !important;
+    padding: 16px;
+    margin-top: auto;
+    /* Push to bottom */
+}
+
+.dark-blue-mode .chat-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+/* ============================================
+   GLOBAL DARK BLUE MODE FIXES (COMPREHENSIVE)
+   ============================================ */
+
+/* 1. Fix the Footer Background & Borders */
+.dark-blue-mode .exercise-footer {
+    background: #0f172a !important;
+    /* Slate-950 */
+    border-top: 1px solid #334155 !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 2. Fix Question/Instruction Boxes (White gradient removal) */
+.dark-blue-mode .exercise-question,
+.dark-blue-mode .source-text-bubble {
+    background: #1e293b !important;
+    /* Slate-800 */
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+/* 3. Fix Sentence Builder Areas */
+.dark-blue-mode .sentence-area {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-blue-mode .sentence-area:empty {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+.dark-blue-mode .word-bank {
+    background: #0f172a !important;
+    /* Darker than container */
+    border-color: #334155 !important;
+}
+
+/* 4. Fix Typing & Fill Blank Prompts */
+.dark-blue-mode .typing-prompt {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #334155 !important;
+}
+
+.dark-blue-mode .sentence-display {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+.dark-blue-mode .blank-space {
+    background: rgba(30, 41, 59, 0.5) !important;
+    color: #60a5fa !important;
+    border-bottom-color: #3b82f6 !important;
+}
+
+/* 5. Fix Image Content Backgrounds */
+.dark-blue-mode .image-content {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    box-shadow: none !important;
+}
+
+.dark-blue-mode .option-image {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+/* 6. Fix Global Text Visibility */
+.dark-blue-mode h1,
+.dark-blue-mode h2,
+.dark-blue-mode h3,
+.dark-blue-mode h4,
+.dark-blue-mode p,
+.dark-blue-mode span,
+.dark-blue-mode label,
+.dark-blue-mode .option-text,
+.dark-blue-mode .image-label,
+.dark-blue-mode .pair-card,
+.dark-blue-mode .word-chip {
+    color: #f1f5f9 !important;
+    /* White/Light Grey text */
+}
+
+/* 7. Button Adjustments in Footer */
+.dark-blue-mode .exercise-footer .btn {
+    box-shadow: 0 4px 0 #0f172a !important;
+    /* Darker shadow */
+    border-bottom: 4px solid #0f172a !important;
+}
+
+.dark-blue-mode .exercise-footer .btn:active {
+    box-shadow: none !important;
+    transform: translateY(4px) !important;
+}
+
+/* 8. Scrollbar for dark mode */
+.dark-blue-mode ::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+.dark-blue-mode ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
 }

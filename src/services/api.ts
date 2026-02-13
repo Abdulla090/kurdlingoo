@@ -1,6 +1,8 @@
-// Secure API client - All requests go through server-side proxy
-// The API key is NEVER exposed to the client
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// Initialize Gemini SDK with the API key from environment variables
+const API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY;
+const genAI = new GoogleGenerativeAI(API_KEY);
 const API_BASE = '/api';
 
 interface ChatMessage {
@@ -34,7 +36,8 @@ interface STTResponse {
 }
 
 /**
- * Send a chat message through the secure API proxy
+ * Send a chat message directly to Gemini API (Client-side)
+ * This bypasses the need for a backend proxy for development
  */
 export async function sendChatMessage(
     message: string,
@@ -42,31 +45,39 @@ export async function sendChatMessage(
     history: ChatMessage[] = []
 ): Promise<ChatResponse> {
     try {
-        const response = await fetch(`${API_BASE}/chat`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message,
-                systemPrompt,
-                history
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Chat request failed');
+        if (!API_KEY) {
+            throw new Error("Missing VITE_GOOGLE_AI_API_KEY in .env file");
         }
 
-        return data;
+        // Use Gemini 1.5 Flash for speed and cost effectiveness
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: systemPrompt
+        });
+
+        const chatSession = model.startChat({
+            history: history.map(msg => ({
+                role: msg.role === 'ai' ? 'model' : 'user', // Map 'ai' to 'model' for SDK
+                parts: msg.parts
+            })),
+            generationConfig: {
+                maxOutputTokens: 1000,
+            },
+        });
+
+        const result = await chatSession.sendMessage(message);
+        const responseText = result.response.text();
+
+        return {
+            response: responseText,
+            success: true
+        };
     } catch (error: any) {
-        console.error('Chat API Error:', error);
+        console.error('Gemini Client Error:', error);
         return {
             response: '',
             success: false,
-            error: error.message
+            error: error.message || 'Failed to generate response'
         };
     }
 }

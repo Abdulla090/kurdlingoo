@@ -4,8 +4,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     // UI Icons
     X, Check, Heart, Sparkles, RefreshCw, MessageCircle, MessageSquare, ChevronRight, // Lucide for UI
-    Settings, Play, Pause, RotateCcw
+    Settings, Play, Pause, RotateCcw, Loader2
 } from 'lucide-react';
+import { sendChatMessage } from '../../services/api';
 import {
     // Colorful Flat Icons (all verified exports)
     FcCheckmark, FcCancel, FcIdea, FcMindMap, FcClock, FcCalendar,
@@ -456,12 +457,65 @@ const ImageSelection = ({ exercise, onAnswer }) => {
 const TypingExercise = ({ exercise, onAnswer }) => {
     const { t } = useLanguage();
     const [input, setInput] = useState('');
+    const [isChecking, setIsChecking] = useState(false);
 
-    const checkAnswer = () => {
-        const normalize = (str) => str.trim().toLowerCase();
-        const isCorrect = normalize(input) === normalize(exercise.correctAnswer) ||
-            (exercise.acceptedAnswers && exercise.acceptedAnswers.some(ans => normalize(ans) === normalize(input)));
-        onAnswer(isCorrect);
+    const checkAnswer = async () => {
+        if (!input.trim() || isChecking) return;
+
+        setIsChecking(true);
+
+        // 1. Quick Local Check first to save API calls and reduce latency
+        const normalize = (str) => str ? str.trim().toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "") : "";
+        const normalizedInput = normalize(input);
+        const normalizedCorrect = normalize(exercise.correctAnswer);
+
+        const isExactMatch = normalizedInput === normalizedCorrect ||
+            (exercise.acceptedAnswers && exercise.acceptedAnswers.some(ans => normalize(ans) === normalizedInput));
+
+        if (isExactMatch) {
+            setIsChecking(false);
+            onAnswer(true);
+            return;
+        }
+
+        // 2. AI Semantic Check for near matches
+        try {
+            const prompt = `
+            You are an English language tutor checking a student's answer.
+            Question: "${exercise.question}"
+            ${exercise.textToTranslate ? `Translate this text: "${exercise.textToTranslate}"` : ''}
+            Expected Correct Answer: "${exercise.correctAnswer}"
+            Student's Answer: "${input}"
+
+            Is the student's answer correct in meaning and grammar? Be lenient with minor punctuation or capitalization differences.
+            Return ONLY a valid JSON object with no markdown formatting:
+            {
+                "isCorrect": boolean,
+                "feedback": "string explaining why it is correct or incorrect"
+            }
+            `;
+
+            const result = await sendChatMessage(prompt, "You are a helpful language tutor. You act as a strict JSON generator.");
+
+            let evaluation = { isCorrect: false };
+            try {
+                // Clean the response from markdown code blocks if present
+                const cleanJson = result.response.replace(/```json/g, '').replace(/```/g, '').trim();
+                evaluation = JSON.parse(cleanJson);
+            } catch (e) {
+                console.error("AI JSON Parse Error", e);
+                // Fallback to false if AI fails to parse
+            }
+
+            onAnswer(evaluation.isCorrect);
+
+        } catch (error) {
+            console.error("AI Check Error", error);
+            // Fallback to strict false if network/API fails
+            onAnswer(false);
+        } finally {
+            setIsChecking(false);
+        }
     };
 
     return (
@@ -476,6 +530,13 @@ const TypingExercise = ({ exercise, onAnswer }) => {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t('typeAnswer')}
                 rows={3}
+                disabled={isChecking}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        checkAnswer();
+                    }
+                }}
             />
             <div className="exercise-footer">
                 <Button
@@ -483,9 +544,16 @@ const TypingExercise = ({ exercise, onAnswer }) => {
                     size="lg"
                     fullWidth
                     onClick={checkAnswer}
-                    disabled={input.trim().length === 0}
+                    disabled={input.trim().length === 0 || isChecking}
                 >
-                    {t('check')}
+                    {isChecking ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Loader2 className="animate-spin" size={20} />
+                            {t('checking') || 'Checking...'}
+                        </div>
+                    ) : (
+                        t('check')
+                    )}
                 </Button>
             </div>
         </div>
@@ -989,19 +1057,13 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
 
     useEffect(() => {
         // Scroll to bottom when messages change
-        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages, isChecking]);
 
-    const normalizeText = (text: string): string => {
-        return text
-            .trim()
-            .toLowerCase()
-            .replace(/[؟?!.،,]/g, '')
-            .replace(/\s+/g, ' ');
-    };
-
-    const checkAnswer = () => {
-        if (!userInput.trim() || hasAnswered) return;
+    const checkAnswer = async () => {
+        if (!userInput.trim() || hasAnswered || isChecking) return;
 
         setIsChecking(true);
 
@@ -1009,80 +1071,82 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         const userMessage = { sender: 'user' as const, text: userInput, avatar: '👤', name: t('you') || 'You' };
         setMessages(prev => [...prev, userMessage]);
 
-        const normalizedInput = normalizeText(userInput);
-        const acceptableResponses = exercise.acceptableResponses || [];
-        const keywordsRequired = exercise.keywordsRequired || [];
+        try {
+            // Build conversation history for context
+            const historyText = messages.map(m => `${m.name || m.sender}: ${m.text}`).join('\n');
 
-        // Check if the response is acceptable
-        let isCorrect = false;
-        let matchedResponse = '';
+            const prompt = `
+            You are a roleplay partner in a language learning app.
+            Scenario: "${exercise.scenario}"
+            Question: "${exercise.question}"
+            
+            Conversation Context:
+            ${historyText}
+            
+            The user (You) just said: "${userInput}"
 
-        // Check exact matches first
-        for (const response of acceptableResponses) {
-            if (normalizeText(response) === normalizedInput) {
-                isCorrect = true;
-                matchedResponse = response;
-                break;
+            Is this a valid, intelligible, and appropriate response in English for this context?
+            Return ONLY a valid JSON object:
+            {
+                "isCorrect": boolean,
+                "feedback": "constructive feedback on grammar/politeness (keep it short)",
+                "aiResponse": "Your next response as the roleplay partner (only if user is correct)"
             }
-        }
+            `;
 
-        // If no exact match, check if all required keywords are present
-        if (!isCorrect && keywordsRequired.length > 0) {
-            const hasAllKeywords = keywordsRequired.every(keyword =>
-                normalizedInput.includes(normalizeText(keyword))
-            );
-            if (hasAllKeywords) {
-                isCorrect = true;
+            const result = await sendChatMessage(prompt, "You are a helpful language tutor. You act as a strict JSON generator.");
+
+            let evaluation = { isCorrect: false, feedback: "Could not evaluate.", aiResponse: "" };
+            try {
+                const cleanJson = result.response.replace(/```json/g, '').replace(/```/g, '').trim();
+                evaluation = JSON.parse(cleanJson);
+            } catch (e) {
+                console.error("AI JSON Parse Error", e);
+                // Fallback: assume correct if it's long enough, else false
+                evaluation.isCorrect = userInput.length > 3;
+                evaluation.feedback = evaluation.isCorrect ? "Good effort!" : "Please try to say more.";
             }
-        }
 
-        // If still no match, check for partial matches (at least 70% similarity)
-        if (!isCorrect) {
-            for (const response of acceptableResponses) {
-                const normalizedResponse = normalizeText(response);
-                const similarity = calculateSimilarity(normalizedInput, normalizedResponse);
-                if (similarity >= 0.7) {
-                    isCorrect = true;
-                    matchedResponse = response;
-                    break;
-                }
-            }
-        }
-
-        setTimeout(() => {
-            setIsChecking(false);
             setHasAnswered(true);
 
-            if (isCorrect) {
+            if (evaluation.isCorrect) {
                 setFeedback({
                     correct: true,
-                    message: t('greatResponse') || 'Great response! 🎉'
+                    message: evaluation.feedback || t('greatResponse') || 'Great response! 🎉'
                 });
-                // Add AI confirmation message
-                const confirmMessage = {
-                    sender: 'ai' as const,
-                    text: exercise.chatMessages?.find(m => m.sender === 'ai' && m.text.includes('confirm'))?.text || '✓ زۆر باشە!',
-                    avatar: exercise.chatMessages?.[0]?.avatar || '🤖',
-                    name: exercise.chatMessages?.[0]?.name || 'AI'
-                };
-                setMessages(prev => [...prev, confirmMessage]);
+
+                // Add AI response if provided
+                if (evaluation.aiResponse) {
+                    const aiMessage = {
+                        sender: 'ai' as const,
+                        text: evaluation.aiResponse,
+                        avatar: exercise.chatMessages?.[0]?.avatar || '🤖',
+                        name: exercise.chatMessages?.[0]?.name || 'AI'
+                    };
+                    setTimeout(() => {
+                        setMessages(prev => [...prev, aiMessage]);
+                    }, 600);
+                }
             } else {
                 setFeedback({
                     correct: false,
-                    message: t('tryAgainHint') || 'Not quite right.',
-                    correctAnswer: acceptableResponses[0] || ''
+                    message: evaluation.feedback || t('tryAgainHint') || 'Not quite right.',
+                    correctAnswer: exercise.acceptableResponses?.[0] || 'Try again'
                 });
             }
-        }, 800);
-    };
 
-    // Simple similarity calculation
-    const calculateSimilarity = (str1: string, str2: string): number => {
-        const words1 = str1.split(' ');
-        const words2 = str2.split(' ');
-        const allWords = new Set([...words1, ...words2]);
-        const matchingWords = words1.filter(w => words2.includes(w)).length;
-        return matchingWords / allWords.size;
+        } catch (error) {
+            console.error("AI Roleplay Error", error);
+            // Fallback to local check if API fails
+            const localCheck = exercise.acceptableResponses?.some(r => r.toLowerCase().includes(userInput.toLowerCase()));
+            setHasAnswered(true);
+            setFeedback({
+                correct: localCheck || false,
+                message: localCheck ? "Good job!" : "Could not verify with AI, but good effort.",
+            });
+        } finally {
+            setIsChecking(false);
+        }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -1097,7 +1161,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
     };
 
     return (
-        <div className="exercise-container roleplay-chat-container">
+        <div className="exercise-container roleplay-chat-container" style={{ display: 'flex', flexDirection: 'column', height: '100%', maxHeight: '600px' }}>
             <h2 className="exercise-question">{exercise.question}</h2>
 
             {/* Scenario description */}
@@ -1109,8 +1173,8 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
             )}
 
             {/* Chat interface */}
-            <div className="chat-interface">
-                <div className="chat-messages">
+            <div className="chat-interface" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                <div className="chat-messages" style={{ flex: 1, overflowY: 'auto' }}>
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`chat-message ${msg.sender}`}>
                             <div className="message-avatar">
@@ -1164,7 +1228,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             className="chat-input"
                             value={userInput}
                             onChange={(e) => setUserInput(e.target.value)}
-                            onKeyPress={handleKeyPress}
+                            onKeyDown={handleKeyPress}
                             placeholder={t('typeYourResponse') || 'Type your response here...'}
                             rows={2}
                             disabled={isChecking}
@@ -1174,11 +1238,11 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             onClick={checkAnswer}
                             disabled={!userInput.trim() || isChecking}
                         >
-                            <MessageCircle size={20} />
+                            {isChecking ? <Loader2 className="animate-spin" size={20} /> : <MessageCircle size={20} />}
                         </button>
                     </div>
                 ) : (
-                    <div className="exercise-footer">
+                    <div className="exercise-footer" style={{ position: 'sticky', bottom: 0 }}>
                         <Button
                             variant={feedback?.correct ? "success" : "danger"}
                             size="lg"
