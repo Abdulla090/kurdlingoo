@@ -17,7 +17,8 @@ export type ExerciseType =
     | 'emergency-phrases'
     | 'app-vocabulary'
     | 'tech-troubleshooting'
-    | 'roleplay-chat';
+    | 'roleplay-chat'
+    | 'pronunciation';
 
 export interface ExerciseOption {
     id?: string;
@@ -126,6 +127,16 @@ export interface Exercise {
     chatMessages?: ChatMessage[];
     acceptableResponses?: string[];
     keywordsRequired?: string[];
+    // Pronunciation exercise fields
+    targetWord?: string;
+    targetTranslation?: string;
+    pronunciation?: string;
+    expectedAnswer?: string;
+    acceptedAnswers?: string[];
+    speechLang?: string;
+    listenText?: string;
+    listenLang?: string;
+    image?: string;
 }
 
 export interface Lesson {

@@ -95,6 +95,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1161,7 +1162,7 @@
   transform: scale(1.1);
 }
 
-.exercise-question {
+.exercise-card .exercise-question {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.95rem;
   margin: 0;

@@ -585,7 +585,7 @@ export const unit1: Unit = {
                 {
                     id: 9,
                     type: "fill-blank",
-                    question: "Complete: 'There are ___ students' (١٥)",
+                    question: "'پازدە قوتابی هەن' — بە ئینگلیزی: 'There are ___ students'",
                     sentenceParts: ["There are", "___", "students"],
                     correctOption: "fifteen",
                     options: ["fifteen", "ten", "twenty", "eleven"]
@@ -660,7 +660,7 @@ export const unit1: Unit = {
                         { kurdish: "ڕەش", english: "Black" },
                         { kurdish: "سپی", english: "White" },
                         { kurdish: "قاوەیی", english: "Brown" },
-                        { kurdish: "پەمەیی", english: "Orange" }
+                        { kurdish: "نارنجی", english: "Orange" }
                     ]
                 },
                 {
@@ -722,8 +722,8 @@ export const unit1: Unit = {
                     pairs: [
                         { kurdish: "پەرتووک", english: "Book" },
                         { kurdish: "پێنووس", english: "Pen" },
-                        { kurdish: "تۆمار", english: "Notebook" },
-                        { kurdish: "کیسە", english: "Bag" }
+                        { kurdish: "تێنووس", english: "Notebook" },
+                        { kurdish: "جانتا", english: "Bag" }
                     ]
                 },
                 {
@@ -896,7 +896,7 @@ export const unit1: Unit = {
                 {
                     id: 4,
                     type: "fill-blank",
-                    question: "Complete: 'He ___ every night' (نوستن)",
+                    question: "'ئەو هەموو شەوێک دەخەوێت' — بە ئینگلیزی: 'He ___ every night'",
                     sentenceParts: ["He", "___", "every night"],
                     correctOption: "sleeps",
                     options: ["sleeps", "eats", "runs", "reads"]
@@ -963,6 +963,109 @@ export const unit1: Unit = {
                         { id: "opt2", text: "Blue", image: "🔵", correct: false },
                         { id: "opt3", text: "Green", image: "🟢", correct: false }
                     ]
+                }
+            ]
+        },
+        {
+            id: "l11",
+            title: "Pronunciation Practice",
+            icon: "🎤",
+            exercises: [
+                {
+                    id: 1,
+                    type: "pronunciation",
+                    question: "Say the English translation of this Kurdish word:",
+                    targetWord: "سڵاو",
+                    targetTranslation: "Hello",
+                    pronunciation: "Slaw",
+                    expectedAnswer: "hello",
+                    acceptedAnswers: ["hello", "hi", "hey there", "hey"],
+                    speechLang: "en-US",
+                    image: "👋"
+                },
+                {
+                    id: 2,
+                    type: "pronunciation",
+                    question: "Say the English translation:",
+                    targetWord: "بەیانی باش",
+                    targetTranslation: "Good morning",
+                    pronunciation: "Bayani bash",
+                    expectedAnswer: "good morning",
+                    acceptedAnswers: ["good morning"],
+                    speechLang: "en-US",
+                    image: "🌅"
+                },
+                {
+                    id: 3,
+                    type: "pronunciation",
+                    question: "How do you say this in English?",
+                    targetWord: "ئێوارە باش",
+                    targetTranslation: "Good evening",
+                    pronunciation: "Ewara bash",
+                    expectedAnswer: "good evening",
+                    acceptedAnswers: ["good evening"],
+                    speechLang: "en-US",
+                    image: "🌆"
+                },
+                {
+                    id: 4,
+                    type: "pronunciation",
+                    question: "Say the English translation:",
+                    targetWord: "سوپاس",
+                    targetTranslation: "Thank you",
+                    pronunciation: "Supas",
+                    expectedAnswer: "thank you",
+                    acceptedAnswers: ["thank you", "thanks", "thank you very much"],
+                    speechLang: "en-US",
+                    image: "🙏"
+                },
+                {
+                    id: 5,
+                    type: "pronunciation",
+                    question: "What color is this in English?",
+                    targetWord: "سوور",
+                    targetTranslation: "Red",
+                    pronunciation: "Soor",
+                    expectedAnswer: "red",
+                    acceptedAnswers: ["red"],
+                    speechLang: "en-US",
+                    image: "🔴"
+                },
+                {
+                    id: 6,
+                    type: "pronunciation",
+                    question: "Say the number in English:",
+                    targetWord: "پێنج",
+                    targetTranslation: "Five",
+                    pronunciation: "Penj",
+                    expectedAnswer: "five",
+                    acceptedAnswers: ["five", "5"],
+                    speechLang: "en-US",
+                    image: "5️⃣"
+                },
+                {
+                    id: 7,
+                    type: "pronunciation",
+                    question: "What animal is this? Say it in English:",
+                    targetWord: "پشیلە",
+                    targetTranslation: "Cat",
+                    pronunciation: "Pshela",
+                    expectedAnswer: "cat",
+                    acceptedAnswers: ["cat", "a cat", "the cat", "kitty"],
+                    speechLang: "en-US",
+                    image: "🐱"
+                },
+                {
+                    id: 8,
+                    type: "pronunciation",
+                    question: "Say this greeting in English:",
+                    targetWord: "شەو باش",
+                    targetTranslation: "Good night",
+                    pronunciation: "Shaw bash",
+                    expectedAnswer: "good night",
+                    acceptedAnswers: ["good night", "goodnight"],
+                    speechLang: "en-US",
+                    image: "🌙"
                 }
             ]
         }

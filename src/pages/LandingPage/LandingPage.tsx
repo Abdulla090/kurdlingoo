@@ -1,300 +1,224 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-    Sparkles,
-    Zap,
-    Globe,
-    Star,
-    Users,
-    Menu,
-    X,
-    MessageCircle,
-    BookOpen,
-    Trophy,
-    ArrowRight
-} from 'lucide-react';
+import { Globe, Menu, X, ArrowRight, Zap, MessageCircle, Gamepad2 } from 'lucide-react';
 import './LandingPage.css';
 import { useLanguage } from '../../context/LanguageContext';
 import mascotImg from '../../assets/mascot.png';
+import appMockup from '../../assets/app_mockup.png';
+import SpotlightCard from '../../components/ReactBits/SpotlightCard';
 
-const LandingPage: React.FC = () => {
-    const { language, toggleLanguage, isRTL } = useLanguage();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+const fade = {
+    hidden: { opacity: 0, y: 16 },
+    show: (d: number) => ({ opacity: 1, y: 0, transition: { delay: d * 0.08, duration: 0.55, ease: [0.25, 0.4, 0.25, 1] } }),
+};
+const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] } },
+};
 
-    // Explicitly handle RTL for the entire page wrapper based on language
-    const dir = isRTL ? 'rtl' : 'ltr';
+export default function LandingPage() {
+    const { language, toggleLanguage } = useLanguage();
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
-    const fadeInUp = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-    };
-
-    const staggerContainer = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
+    useEffect(() => {
+        const fn = () => setScrolled(window.scrollY > 10);
+        window.addEventListener('scroll', fn, { passive: true });
+        return () => window.removeEventListener('scroll', fn);
+    }, []);
 
     return (
-        <div className="landing-page">
-            {/* Navbar */}
-            <nav className="lp-navbar">
-                <div className="lp-navbar-content">
-                    <Link to="/" className="lp-logo">
-                        <div className="lp-logo-icon">
-                            {/* Using mascot as logo icon if small enough, or just emoji/icon */}
-                            <img src={mascotImg} alt="KurdLingo" style={{ height: '100%', objectFit: 'contain' }} />
-                        </div>
+        <div className="lp">
+            {/* ─── Nav ─── */}
+            <nav className={`lp-nav${scrolled ? ' is-scrolled' : ''}`}>
+                <div className="lp-nav-inner">
+                    <Link to="/" className="lp-brand">
+                        <img src={mascotImg} alt="" className="lp-brand-icon" />
                         <span>KurdLingo</span>
                     </Link>
 
-                    {/* Desktop Ctrls */}
-                    <div className="lp-nav-links hidden-mobile">
-                        <Link to="/features" className="lp-nav-link">Features</Link>
-                        <Link to="/method" className="lp-nav-link">Method</Link>
-                        <Link to="/reviews" className="lp-nav-link">Reviews</Link>
-                        <Link to="/leaderboard" className="lp-nav-link">Community</Link>
+                    <div className="lp-links">
+                        <a href="#features">Features</a>
+                        <a href="#product">Product</a>
+                        <Link to="/leaderboard">Community</Link>
                     </div>
 
-                    <div className="lp-nav-actions">
-                        <button className="btn btn-ghost hidden-mobile" onClick={toggleLanguage}>
-                            <Globe size={20} style={{ marginInlineEnd: 8 }} />
-                            {language === 'en' ? 'EN' : 'CKB'}
+                    <div className="lp-nav-end">
+                        <button className="lp-lang" onClick={toggleLanguage}>
+                            <Globe size={14} /> {language === 'en' ? 'EN' : 'کوردی'}
                         </button>
-
-                        <Link to="/login" className="btn btn-ghost hidden-mobile" style={{ fontWeight: 800 }}>
-                            Log in
-                        </Link>
-                        <Link to="/learn" className="btn btn-primary">
-                            Get Started
-                        </Link>
-
-                        {/* Mobile Menu Toggle */}
-                        <button
-                            className="btn btn-ghost md:hidden"
-                            style={{ display: 'none' }}
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        >
-                            {isMenuOpen ? <X /> : <Menu />}
+                        <Link to="/login" className="lp-nav-login">Log in</Link>
+                        <Link to="/learn" className="lp-nav-start">Start Free →</Link>
+                        <button className="lp-burger" onClick={() => setMenuOpen(v => !v)}>
+                            {menuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
                     </div>
                 </div>
+
+                {menuOpen && (
+                    <motion.div className="lp-mob" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
+                        <a href="#product" onClick={() => setMenuOpen(false)}>Product</a>
+                        <Link to="/leaderboard" onClick={() => setMenuOpen(false)}>Community</Link>
+                        <Link to="/learn" className="lp-mob-cta" onClick={() => setMenuOpen(false)}>Start Learning →</Link>
+                    </motion.div>
+                )}
             </nav>
 
-            {/* Hero Section */}
-            <header className="lp-hero">
-                <motion.div
-                    className="lp-hero-content"
-                    initial="hidden"
-                    animate="visible"
-                    variants={staggerContainer}
-                >
-                    <motion.div variants={fadeInUp} className="lp-badge">
-                        <Star size={16} fill="#ffc800" color="#ffc800" style={{ marginInlineEnd: 8 }} />
-                        <span>#1 Kurdish Learning App</span>
-                    </motion.div>
+            {/* ─── Hero ─── */}
+            <section className="lp-hero">
+                <div className="lp-hero-glow" />
 
-                    <motion.h1 variants={fadeInUp} className="lp-headline">
-                        The free, fun, and effective way to learn Kurdish!
-                    </motion.h1>
-
-                    <motion.p variants={fadeInUp} className="lp-subheadline">
-                        Learning with KurdLingo is fun, and research shows that it works! With quick, bite-sized lessons, you’ll earn points and unlock new levels while gaining real-world communication skills.
+                <motion.div className="lp-hero-content" initial="hidden" animate="show">
+                    <motion.p variants={fade} custom={0} className="lp-hero-tag">
+                        The free Kurdish learning platform
                     </motion.p>
 
-                    <motion.div variants={fadeInUp} className="lp-hero-buttons">
-                        <Link to="/learn" className="btn btn-3d-action" style={{ padding: '0 40px', display: 'flex', alignItems: 'center', height: '60px', fontWeight: '800', textDecoration: 'none', fontSize: '1.2rem', minWidth: '200px', justifyContent: 'center' }}>
-                            GET STARTED
+                    <motion.h1 variants={fade} custom={1} className="lp-hero-h">
+                        Learn Kurdish.<br />
+                        <span className="lp-hero-dim">Completely free.</span>
+                    </motion.h1>
+
+                    <motion.p variants={fade} custom={2} className="lp-hero-sub">
+                        AI-powered lessons, real conversations, and gamified progress — all in 5 minutes a day.
+                    </motion.p>
+
+                    <motion.div variants={fade} custom={3} className="lp-hero-ctas">
+                        <Link to="/learn" className="lp-btn-primary">
+                            Get Started <ArrowRight size={16} strokeWidth={2.5} />
                         </Link>
+                        <Link to="/learn" className="lp-btn-ghost">See how it works</Link>
                     </motion.div>
                 </motion.div>
 
                 <motion.div
                     className="lp-hero-visual"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 0.4, 0.25, 1] }}
                 >
-                    {/* Using the Mascot Image prominently like Duolingo */}
-                    <img
-                        src={mascotImg}
-                        alt="KurdLingo Mascot"
-                        style={{
-                            width: '100%',
-                            maxWidth: '450px',
-                            height: 'auto',
-                            filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.1))'
-                        }}
-                    />
+                    <img src={mascotImg} alt="KurdLingo mascot" className="lp-hero-mascot" />
                 </motion.div>
-            </header>
+            </section>
 
-            {/* Features Icons Strip */}
-            <div style={{ borderTop: '2px solid var(--lp-border)', borderBottom: '2px solid var(--lp-border)', padding: '60px 0', background: 'white' }}>
-                <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '40px', padding: '0 24px' }}>
-
-                    <div style={{ textAlign: 'center', maxWidth: '250px' }}>
-                        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-                            <Trophy size={48} color="#ffc800" /> {/* Gold */}
-                        </div>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '10px', color: 'var(--lp-text-title)' }}>Gamified Learning</h3>
-                        <p style={{ color: 'var(--lp-text-body)' }}>Earn points, unlock levels, and compete on the leaderboard.</p>
+            {/* ─── Metrics ─── */}
+            <section className="lp-metrics">
+                <div className="lp-metrics-inner">
+                    <div className="lp-metric">
+                        <span className="lp-metric-val">50+</span>
+                        <span className="lp-metric-label">Interactive lessons</span>
                     </div>
-
-                    <div style={{ textAlign: 'center', maxWidth: '250px' }}>
-                        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-                            <Sparkles size={48} color="#58cc02" /> {/* Green */}
-                        </div>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '10px', color: 'var(--lp-text-title)' }}>Effective Methods</h3>
-                        <p style={{ color: 'var(--lp-text-body)' }}>Research-backed lessons to help you retain what you learn.</p>
+                    <div className="lp-metric-sep" />
+                    <div className="lp-metric">
+                        <span className="lp-metric-val">1,200+</span>
+                        <span className="lp-metric-label">Active learners</span>
                     </div>
-
-                    <div style={{ textAlign: 'center', maxWidth: '250px' }}>
-                        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-                            <MessageCircle size={48} color="#1cb0f6" /> {/* Blue */}
-                        </div>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '10px', color: 'var(--lp-text-title)' }}>Speak Confidently</h3>
-                        <p style={{ color: 'var(--lp-text-body)' }}>Practice listening and speaking with interactive exercises.</p>
-                    </div>
-                </div>
-            </div>
-
-
-            {/* Bento / Detailed Features */}
-            <section className="lp-section">
-                <div className="lp-section-header">
-                    <h2 className="lp-section-title">Why you'll love learning with KurdLingo</h2>
-                </div>
-
-                <div className="lp-bento-grid">
-                    {/* Card 1 */}
-                    <div className="bento-card">
-                        <div className="bento-icon">
-                            <Zap size={40} color="#ffc800" />
-                        </div>
-                        <div className="bento-content">
-                            <h3>Effective & Efficient</h3>
-                            <p>Our courses effectively and efficiently teach reading, listening, and speaking skills.</p>
-                        </div>
-                    </div>
-
-                    {/* Card 2 */}
-                    <div className="bento-card">
-                        <div className="bento-icon">
-                            <Users size={40} color="#58cc02" />
-                        </div>
-                        <div className="bento-content">
-                            <h3>Personalized Learning</h3>
-                            <p>Combining the best of AI and language science, lessons are tailored to help you learn at just the right level.</p>
-                        </div>
-                    </div>
-
-                    {/* Card 3 */}
-                    <div className="bento-card">
-                        <div className="bento-icon">
-                            <BookOpen size={40} color="#1cb0f6" />
-                        </div>
-                        <div className="bento-content">
-                            <h3>Stay Motivated</h3>
-                            <p>We make it easy to form a habit of language learning with game-like features, fun challenges, and reminders.</p>
-                        </div>
+                    <div className="lp-metric-sep" />
+                    <div className="lp-metric">
+                        <span className="lp-metric-val">98%</span>
+                        <span className="lp-metric-label">Satisfaction</span>
                     </div>
                 </div>
             </section>
 
-            {/* Phone Mockup Section (Replaces abstract one) */}
-            <section style={{ maxWidth: '1000px', margin: '0 auto 100px', display: 'flex', alignItems: 'center', gap: '80px', padding: '0 24px', flexDirection: dir === 'rtl' ? 'row-reverse' : 'row' }}>
-                <div style={{ flex: 1 }}>
-                    <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '20px', lineHeight: 1.2, color: 'var(--lp-text-title)' }}>
-                        Boost your learning with Super KurdLingo
-                    </h2>
-                    <p style={{ fontSize: '1.2rem', color: 'var(--lp-text-body)', marginBottom: '32px' }}>
-                        Learning a language on KurdLingo is completely free, but you can remove ads and support free education with Super.
+            {/* ─── Features ─── */}
+            <section className="lp-section" id="features">
+                <motion.div className="lp-sec-head" variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                    <h2>Why learners choose KurdLingo</h2>
+                    <p>Built for people who actually want to speak Kurdish — not just study it.</p>
+                </motion.div>
+
+                <div className="lp-features">
+                    {[
+                        {
+                            icon: <Zap size={22} strokeWidth={2} />,
+                            title: 'Adaptive lessons',
+                            desc: 'Every session adjusts to your level. You always learn at the right difficulty.',
+                        },
+                        {
+                            icon: <MessageCircle size={22} strokeWidth={2} />,
+                            title: 'AI conversations',
+                            desc: 'Practice real dialogues with AI roleplay scenarios. Not flashcards — real speech.',
+                        },
+                        {
+                            icon: <Gamepad2 size={22} strokeWidth={2} />,
+                            title: 'Learn by playing',
+                            desc: 'Space Typing, NeuroMatch, Typing Rush. Games that build real vocabulary fast.',
+                        },
+                    ].map((f, i) => (
+                        <motion.div key={i} variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
+                            <SpotlightCard className="lp-fcard" spotlightColor="rgba(88, 204, 2, 0.08)">
+                                <div className="lp-fcard-icon">{f.icon}</div>
+                                <h3>{f.title}</h3>
+                                <p>{f.desc}</p>
+                            </SpotlightCard>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ─── Product ─── */}
+            <section className="lp-product" id="product">
+                <motion.div className="lp-product-text" variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                    <p className="lp-eyebrow">Product</p>
+                    <h2>Designed to keep you going</h2>
+                    <p className="lp-product-desc">
+                        Streaks, XP, leaderboards, and a guidebook for every lesson.
+                        Everything works together so you never lose momentum.
                     </p>
-                    <Link to="/shop" style={{ color: 'var(--lp-primary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', textDecoration: 'none' }}>
-                        LEARN MORE ABOUT SUPER <ArrowRight size={20} />
+                    <Link to="/learn" className="lp-text-link">
+                        Explore the platform <ArrowRight size={14} strokeWidth={2.5} />
                     </Link>
-                </div>
-                <div style={{ flex: 0.8, display: 'flex', justifyContent: 'center' }}>
-                    {/* Simpler graphic representation */}
-                    <div style={{ width: '300px', height: '500px', background: 'white', border: '4px solid #e5e5e5', borderRadius: '40px', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-                        <div style={{ height: '60px', background: '#58cc02', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800 }}>LESSON COMPLETED!</div>
-                        <div style={{ padding: '40px 20px', textAlign: 'center' }}>
-                            <div style={{ fontSize: '80px', marginBottom: '20px' }}>🎯</div>
-                            <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#3c3c3c' }}>Perfect Lesson!</h3>
-                            <div style={{ marginTop: '40px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
-                                <div style={{ padding: '10px 20px', background: '#ffc800', borderRadius: '12px', color: 'white', fontWeight: 800 }}>
-                                    +10 XP
-                                </div>
-                                <div style={{ padding: '10px 20px', background: '#1cb0f6', borderRadius: '12px', color: 'white', fontWeight: 800 }}>
-                                    +5 Gems
-                                </div>
-                            </div>
-                        </div>
-                        <div style={{ position: 'absolute', bottom: '20px', left: '20px', right: '20px' }}>
-                            <div style={{ background: '#58cc02', color: 'white', padding: '16px', borderRadius: '16px', fontWeight: 800, textAlign: 'center', borderBottom: '4px solid #46a302' }}>CONTINUE</div>
-                        </div>
-                    </div>
-                </div>
+                </motion.div>
+
+                <motion.div className="lp-product-img" variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                    <img src={appMockup} alt="KurdLingo app" />
+                </motion.div>
             </section>
 
-            {/* CTA */}
+            {/* ─── CTA ─── */}
             <section className="lp-cta">
-                <div className="lp-cta-content">
-                    <h2>Ready to start your journey?</h2>
-                    <Link to="/learn" className="btn btn-cta-white" style={{ height: '60px', padding: '0 40px', fontSize: '1.2rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', borderRadius: '16px' }}>
-                        START LEARNING
+                <motion.div className="lp-cta-inner" variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                    <h2>Start learning Kurdish today</h2>
+                    <p>Free forever. No credit card. No catch.</p>
+                    <Link to="/learn" className="lp-btn-primary lp-btn-lg">
+                        Get Started <ArrowRight size={16} strokeWidth={2.5} />
                     </Link>
-                </div>
+                </motion.div>
             </section>
 
-            {/* Footer */}
+            {/* ─── Footer ─── */}
             <footer className="lp-footer">
-                <div className="footer-grid">
-                    <div className="footer-brand">
-                        <div className="lp-logo" style={{ marginBottom: '16px' }}>
+                <div className="lp-footer-inner">
+                    <div className="lp-footer-brand">
+                        <Link to="/" className="lp-brand">
+                            <img src={mascotImg} alt="" className="lp-brand-icon" />
                             <span>KurdLingo</span>
-                        </div>
-                        <p style={{ color: '#777' }}>The mission of KurdLingo is to make the Kurdish language accessible to everyone.</p>
+                        </Link>
+                        <p>Making Kurdish accessible to everyone.</p>
                     </div>
-
-                    <div className="footer-col">
-                        <h4 style={{ fontWeight: 800, marginBottom: '20px', color: '#3c3c3c' }}>About</h4>
-                        <ul className="footer-links" style={{ listStyle: 'none', padding: 0 }}>
-                            <li style={{ marginBottom: '12px' }}><Link to="/courses" style={{ color: '#777', textDecoration: 'none' }}>Courses</Link></li>
-                            <li style={{ marginBottom: '12px' }}><Link to="/mission" style={{ color: '#777', textDecoration: 'none' }}>Mission</Link></li>
-                            <li style={{ marginBottom: '12px' }}><Link to="/team" style={{ color: '#777', textDecoration: 'none' }}>Team</Link></li>
-                        </ul>
+                    <div className="lp-footer-col">
+                        <h4>Product</h4>
+                        <Link to="/learn">Lessons</Link>
+                        <Link to="/dictionary">Dictionary</Link>
+                        <Link to="/shop">Shop</Link>
                     </div>
-
-                    <div className="footer-col">
-                        <h4 style={{ fontWeight: 800, marginBottom: '20px', color: '#3c3c3c' }}>Product</h4>
-                        <ul className="footer-links" style={{ listStyle: 'none', padding: 0 }}>
-                            <li style={{ marginBottom: '12px' }}><Link to="/super" style={{ color: '#777', textDecoration: 'none' }}>Super KurdLingo</Link></li>
-                            <li style={{ marginBottom: '12px' }}><Link to="/schools" style={{ color: '#777', textDecoration: 'none' }}>KurdLingo for Schools</Link></li>
-                        </ul>
+                    <div className="lp-footer-col">
+                        <h4>Community</h4>
+                        <Link to="/leaderboard">Leaderboard</Link>
+                        <Link to="/quests">Quests</Link>
                     </div>
-
-                    <div className="footer-col">
-                        <h4 style={{ fontWeight: 800, marginBottom: '20px', color: '#3c3c3c' }}>Help</h4>
-                        <ul className="footer-links" style={{ listStyle: 'none', padding: 0 }}>
-                            <li style={{ marginBottom: '12px' }}><Link to="/guidelines" style={{ color: '#777', textDecoration: 'none' }}>Guidelines</Link></li>
-                            <li style={{ marginBottom: '12px' }}><Link to="/faq" style={{ color: '#777', textDecoration: 'none' }}>FAQ</Link></li>
-                        </ul>
+                    <div className="lp-footer-col">
+                        <h4>Company</h4>
+                        <Link to="/">About</Link>
+                        <Link to="/">Contact</Link>
                     </div>
                 </div>
-
-                <div className="footer-bottom">
-                    <div style={{ textAlign: 'center', marginTop: '60px', color: '#afafaf', fontSize: '0.8rem' }}>© 2024 KurdLingo</div>
+                <div className="lp-footer-bot">
+                    <span>© 2024 KurdLingo</span>
                 </div>
             </footer>
         </div>
     );
-};
-
-export default LandingPage;
+}

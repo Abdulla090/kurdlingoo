@@ -334,6 +334,9 @@ const Lesson = () => {
                 {currentExercise.type === 'story-completion' && (
                     <StoryCompletion exercise={currentExercise} onAnswer={handleAnswer} />
                 )}
+                {currentExercise.type === 'pronunciation' && (
+                    <PronunciationExercise exercise={currentExercise} onAnswer={handleAnswer} />
+                )}
             </main>
 
             {feedback && (
@@ -678,8 +681,9 @@ const MatchPairs = ({ exercise, onAnswer }) => {
                         key={idx}
                         className={`pair-card ${selected.includes(item) ? 'selected' : ''} ${matched.includes(item.id) ? 'matched' : ''} ${selected.length === 2 && selected.includes(item) && !matched.includes(item.id) ? 'wrong' : ''}`}
                         onClick={() => handleSelect(item)}
+                        dir="auto"
                     >
-                        {item.text}
+                        <span dir="auto">{item.text}</span>
                     </button>
                 ))}
             </div>
@@ -1264,6 +1268,346 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                     ))}
                 </div>
             )}
+        </div>
+    );
+};
+
+// ============================================
+// PRONUNCIATION EXERCISE - Voice Game
+// ============================================
+const PronunciationExercise = ({ exercise, onAnswer }) => {
+    const { t } = useLanguage();
+    const [status, setStatus] = useState('idle'); // idle | listening | processing | correct | incorrect | error | unsupported
+    const [transcript, setTranscript] = useState('');
+    const [attempts, setAttempts] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const recognitionRef = useRef(null);
+    const statusRef = useRef('idle');
+
+    // Keep statusRef in sync
+    useEffect(() => {
+        statusRef.current = status;
+    }, [status]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (recognitionRef.current) {
+                try { recognitionRef.current.abort(); } catch (e) { }
+            }
+            window.speechSynthesis?.cancel();
+        };
+    }, []);
+
+    // Check browser support
+    useEffect(() => {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) {
+            setStatus('unsupported');
+        }
+    }, []);
+
+    // Simple string similarity (Dice coefficient)
+    const similarity = (s1, s2) => {
+        const a = s1.toLowerCase().trim().replace(/[^\w\s]/g, '');
+        const b = s2.toLowerCase().trim().replace(/[^\w\s]/g, '');
+        if (a === b) return 1;
+        if (a.length < 2 || b.length < 2) return a === b ? 1 : 0;
+
+        const bigrams = new Map();
+        for (let i = 0; i < a.length - 1; i++) {
+            const bigram = a.substring(i, i + 2);
+            bigrams.set(bigram, (bigrams.get(bigram) || 0) + 1);
+        }
+
+        let intersect = 0;
+        for (let i = 0; i < b.length - 1; i++) {
+            const bigram = b.substring(i, i + 2);
+            const count = bigrams.get(bigram) || 0;
+            if (count > 0) {
+                bigrams.set(bigram, count - 1);
+                intersect++;
+            }
+        }
+
+        return (2.0 * intersect) / (a.length + b.length - 2);
+    };
+
+    // Play the target word using TTS
+    const speakWord = () => {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        setIsPlaying(true);
+
+        const utterance = new SpeechSynthesisUtterance(exercise.listenText || exercise.targetTranslation);
+        utterance.lang = exercise.listenLang || 'en-US';
+        utterance.rate = 0.85;
+        utterance.pitch = 1;
+        utterance.onend = () => setIsPlaying(false);
+        utterance.onerror = () => setIsPlaying(false);
+        window.speechSynthesis.speak(utterance);
+    };
+
+    // Start speech recognition
+    const startListening = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            setStatus('unsupported');
+            return;
+        }
+
+        if (recognitionRef.current) {
+            try { recognitionRef.current.abort(); } catch (e) { }
+        }
+
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+        recognition.lang = exercise.speechLang || 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 5;
+
+        recognition.onstart = () => {
+            setStatus('listening');
+            setTranscript('');
+        };
+
+        recognition.onresult = (event) => {
+            const results = event.results[0];
+            const expected = (exercise.expectedAnswer || exercise.targetTranslation).toLowerCase().trim();
+            const accepted = (exercise.acceptedAnswers || []).map(a => a.toLowerCase().trim());
+
+            let bestMatch = '';
+            let bestScore = 0;
+
+            // Check all alternative transcriptions for best match
+            for (let i = 0; i < results.length; i++) {
+                const alt = results[i].transcript.toLowerCase().trim();
+
+                // Exact match
+                if (alt === expected || accepted.includes(alt)) {
+                    bestMatch = alt;
+                    bestScore = 1;
+                    break;
+                }
+
+                // Fuzzy match
+                const score = similarity(alt, expected);
+                // Also check against accepted answers
+                const acceptedScore = Math.max(0, ...accepted.map(a => similarity(alt, a)));
+                const finalScore = Math.max(score, acceptedScore);
+
+                if (finalScore > bestScore) {
+                    bestScore = finalScore;
+                    bestMatch = alt;
+                }
+            }
+
+            setTranscript(bestMatch || results[0].transcript);
+            setStatus('processing');
+
+            const isCorrect = bestScore >= 0.6;
+
+            setTimeout(() => {
+                setStatus(isCorrect ? 'correct' : 'incorrect');
+                setAttempts(prev => prev + 1);
+            }, 800);
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            if (event.error === 'no-speech') {
+                setStatus('idle');
+            } else if (event.error === 'not-allowed') {
+                setStatus('error');
+            } else {
+                setStatus('idle');
+            }
+        };
+
+        recognition.onend = () => {
+            if (statusRef.current === 'listening') {
+                setStatus('idle');
+            }
+        };
+
+        try {
+            recognition.start();
+        } catch (e) {
+            setStatus('error');
+        }
+    };
+
+    const handleRetry = () => {
+        setStatus('idle');
+        setTranscript('');
+    };
+
+    const handleContinue = () => {
+        onAnswer(status === 'correct');
+    };
+
+    const handleSkip = () => {
+        onAnswer(true); // Skip counts as pass for unsupported browsers
+    };
+
+    return (
+        <div className="exercise-container pronunciation-exercise">
+            <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
+
+            {/* Target Word Card */}
+            <div className="pronunciation-card">
+                {exercise.image && (
+                    <div className="pronunciation-emoji">
+                        <IconRenderer emoji={exercise.image} size={64} />
+                    </div>
+                )}
+
+                <div className="pronunciation-target" dir="auto">
+                    {exercise.targetWord}
+                </div>
+
+                {exercise.pronunciation && (
+                    <div className="pronunciation-phonetic">
+                        /{exercise.pronunciation}/
+                    </div>
+                )}
+
+                <div className="pronunciation-meaning">
+                    {exercise.targetTranslation}
+                </div>
+
+                <button
+                    className={`pronunciation-listen-btn ${isPlaying ? 'playing' : ''}`}
+                    onClick={speakWord}
+                    type="button"
+                    disabled={isPlaying}
+                >
+                    {isPlaying ? (
+                        <>
+                            <span className="listen-icon">🔊</span>
+                            <span>Playing...</span>
+                        </>
+                    ) : (
+                        <>
+                            <span className="listen-icon">🔊</span>
+                            <span>Listen</span>
+                        </>
+                    )}
+                </button>
+            </div>
+
+            {/* Mic Area */}
+            <div className={`pronunciation-mic-area ${status}`}>
+                {/* IDLE - Show mic button */}
+                {status === 'idle' && (
+                    <button className="pronunciation-mic-btn" onClick={startListening} type="button">
+                        <div className="mic-circle">
+                            <span className="mic-emoji">🎤</span>
+                        </div>
+                        <span className="mic-label">Tap to Speak</span>
+                    </button>
+                )}
+
+                {/* LISTENING - Animated pulse */}
+                {status === 'listening' && (
+                    <div className="pronunciation-listening">
+                        <div className="pulse-container">
+                            <div className="pulse-wave"></div>
+                            <div className="pulse-wave delay-1"></div>
+                            <div className="pulse-wave delay-2"></div>
+                            <div className="mic-circle active">
+                                <span className="mic-emoji">🎤</span>
+                            </div>
+                        </div>
+                        <span className="listening-label">Listening...</span>
+                        <div className="sound-bars">
+                            <div className="bar"></div>
+                            <div className="bar"></div>
+                            <div className="bar"></div>
+                            <div className="bar"></div>
+                            <div className="bar"></div>
+                            <div className="bar"></div>
+                            <div className="bar"></div>
+                        </div>
+                    </div>
+                )}
+
+                {/* PROCESSING */}
+                {status === 'processing' && (
+                    <div className="pronunciation-processing">
+                        <Loader2 className="animate-spin" size={40} color="#1cb0f6" />
+                        <span>Analyzing pronunciation...</span>
+                    </div>
+                )}
+
+                {/* CORRECT */}
+                {status === 'correct' && (
+                    <div className="pronunciation-result correct">
+                        <div className="result-badge correct">
+                            <Check size={32} />
+                        </div>
+                        <h3>Perfect! 🎉</h3>
+                        <p className="you-said">You said: <strong>"{transcript}"</strong></p>
+                    </div>
+                )}
+
+                {/* INCORRECT */}
+                {status === 'incorrect' && (
+                    <div className="pronunciation-result incorrect">
+                        <div className="result-badge incorrect">
+                            <X size={32} />
+                        </div>
+                        <h3>Not quite right</h3>
+                        <p className="you-said">You said: <strong>"{transcript}"</strong></p>
+                        <p className="expected-answer">
+                            Expected: <strong>"{exercise.expectedAnswer || exercise.targetTranslation}"</strong>
+                        </p>
+                    </div>
+                )}
+
+                {/* ERROR - Mic permission denied */}
+                {status === 'error' && (
+                    <div className="pronunciation-result error">
+                        <div className="result-badge error">⚠️</div>
+                        <h3>Microphone Blocked</h3>
+                        <p>Please allow microphone access in your browser settings and try again.</p>
+                    </div>
+                )}
+
+                {/* UNSUPPORTED - Browser doesn't support speech */}
+                {status === 'unsupported' && (
+                    <div className="pronunciation-result error">
+                        <div className="result-badge error">🌐</div>
+                        <h3>Not Supported</h3>
+                        <p>Speech recognition is not available in this browser. Try Chrome or Edge for voice features.</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Footer Actions */}
+            <div className="exercise-footer">
+                {status === 'correct' && (
+                    <Button variant="success" size="lg" fullWidth onClick={handleContinue}>
+                        {t('continue')}
+                    </Button>
+                )}
+                {status === 'incorrect' && attempts < 3 && (
+                    <Button variant="primary" size="lg" fullWidth onClick={handleRetry}>
+                        🎤 Try Again ({3 - attempts} left)
+                    </Button>
+                )}
+                {status === 'incorrect' && attempts >= 3 && (
+                    <Button variant="danger" size="lg" fullWidth onClick={handleContinue}>
+                        {t('continue')}
+                    </Button>
+                )}
+                {(status === 'error' || status === 'unsupported') && (
+                    <Button variant="primary" size="lg" fullWidth onClick={handleSkip}>
+                        Skip Exercise
+                    </Button>
+                )}
+            </div>
         </div>
     );
 };
