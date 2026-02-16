@@ -173,7 +173,7 @@ const TypingRush = () => {
             startTimeRef.current = Date.now();
         }
 
-        const expected = selectedPassage.text[charIndex];
+        const expected = selectedPassage.text[charIndex].toLowerCase();
         const total = totalKeystrokes + 1;
         setTotalKeystrokes(total);
 
@@ -397,7 +397,7 @@ const TypingRush = () => {
     // ===== PLAYING =====
     if (!selectedPassage) return null;
 
-    const text = selectedPassage.text;
+    const text = selectedPassage.text.toLowerCase();
     const progress = (charIndex / text.length) * 100;
 
     return (
