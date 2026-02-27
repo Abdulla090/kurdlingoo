@@ -34,7 +34,7 @@ const RolePlayChat: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const { transcript, isListening, startListening, stopListening, error: speechError } = useSpeechRecognition();
-    const { speak, stop: stopSpeaking } = useTextToSpeech();
+    const { speak, prepareAndSpeak, stop: stopSpeaking } = useTextToSpeech();
 
     // Scroll to bottom whenever messages change
     useEffect(() => {
@@ -45,33 +45,40 @@ const RolePlayChat: React.FC = () => {
     useEffect(() => {
         if (!scenario) return;
 
-        // Initialize with the AI's first message
-        const initialAI: Message = {
-            role: 'ai' as const,
-            text: scenario.initialMessage,
-            timestamp: new Date(),
-            avatar: scenario.image
-        };
-        setMessages([initialAI]);
-
         // Add initial message to history
         setChatHistory([{
             role: 'model',
             parts: [{ text: scenario.initialMessage }]
         }]);
 
-
-        speak(scenario.initialMessage, undefined, {
-            aiName: scenario.aiName,
-            gender: scenario.gender,
-            tone: scenario.tone
-        });
+        // Use prepareAndSpeak: show message only when audio is ready
+        setIsTyping(true);
+        prepareAndSpeak(
+            scenario.initialMessage,
+            () => {
+                // onReady: audio is fetched, show the message now
+                const initialAI: Message = {
+                    role: 'ai' as const,
+                    text: scenario.initialMessage,
+                    timestamp: new Date(),
+                    avatar: scenario.image
+                };
+                setMessages([initialAI]);
+                setIsTyping(false);
+            },
+            undefined,
+            {
+                aiName: scenario.aiName,
+                gender: scenario.gender,
+                tone: scenario.tone
+            }
+        );
 
         return () => {
             stopSpeaking();
             stopListening();
         };
-    }, [scenario, navigate, speak, stopSpeaking, stopListening]);
+    }, [scenario, navigate, prepareAndSpeak, stopSpeaking, stopListening]);
 
     // Handle incoming transcript when speech ends
     useEffect(() => {
@@ -139,20 +146,11 @@ const RolePlayChat: React.FC = () => {
 
         try {
             // Use secure API - no API key exposed!
-            const result = await sendChatMessage(text, scenario.systemPrompt, newHistory);
+            const result = await sendChatMessage(text, scenario.systemPrompt, chatHistory);
 
             if (result.success && result.response) {
                 const attachment = getVisualAttachment(result.response, scenario.id);
                 const currentAvatar = getAvatarForEmotion(result.response, scenario.image, scenario.id);
-
-                const aiMsg: Message = {
-                    role: 'ai',
-                    text: result.response,
-                    timestamp: new Date(),
-                    image: attachment,
-                    avatar: currentAvatar
-                };
-                setMessages(prev => [...prev, aiMsg]);
 
                 // Update history with AI response
                 setChatHistory([...newHistory, {
@@ -160,18 +158,34 @@ const RolePlayChat: React.FC = () => {
                     parts: [{ text: result.response }]
                 }]);
 
-                speak(result.response, undefined, {
-                    aiName: scenario.aiName,
-                    gender: scenario.gender,
-                    tone: scenario.tone
-                });
+                // Use prepareAndSpeak: keep typing indicator until audio is ready
+                await prepareAndSpeak(
+                    result.response,
+                    () => {
+                        // onReady: audio is fetched, show the message now
+                        const aiMsg: Message = {
+                            role: 'ai',
+                            text: result.response,
+                            timestamp: new Date(),
+                            image: attachment,
+                            avatar: currentAvatar
+                        };
+                        setMessages(prev => [...prev, aiMsg]);
+                        setIsTyping(false);
+                    },
+                    undefined,
+                    {
+                        aiName: scenario.aiName,
+                        gender: scenario.gender,
+                        tone: scenario.tone
+                    }
+                );
             } else {
                 throw new Error(result.error || 'Failed to get response');
             }
         } catch (err) {
             console.error("Chat API Error:", err);
             setMessages(prev => [...prev, { role: 'ai', text: "I'm sorry, I'm having trouble connecting right now. Let's try again in a moment.", timestamp: new Date() }]);
-        } finally {
             setIsTyping(false);
         }
     };

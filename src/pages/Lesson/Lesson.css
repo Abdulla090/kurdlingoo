@@ -2079,7 +2079,7 @@
     box-shadow: var(--shadow-md);
 }
 
-.chat-messages {
+.chat-interface .chat-messages {
     max-height: 350px;
     min-height: 200px;
     overflow-y: auto;
