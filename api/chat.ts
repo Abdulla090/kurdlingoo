@@ -12,6 +12,18 @@ interface ChatRequest {
 }
 
 export default async function handler(request: Request) {
+    // Handle CORS preflight
+    if (request.method === 'OPTIONS') {
+        return new Response(null, {
+            status: 204,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
+        });
+    }
+
     // Only allow POST requests
     if (request.method !== 'POST') {
         return new Response(JSON.stringify({ error: 'Method not allowed' }), {
@@ -39,7 +51,12 @@ export default async function handler(request: Request) {
             systemInstruction: systemPrompt
         });
 
-        const chat = model.startChat({ history });
+        const chat = model.startChat({
+            history,
+            generationConfig: {
+                maxOutputTokens: 1000,
+            },
+        });
         const result = await chat.sendMessage(message);
         const responseText = result.response.text();
 

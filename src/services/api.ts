@@ -1,9 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// Initialize Gemini SDK with the API key from environment variables
-const API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY;
-const genAI = new GoogleGenerativeAI(API_KEY);
-
+/**
+ * API Service - Routes all requests through Vercel serverless functions
+ * API keys are kept secure on the server side, never exposed to the client.
+ */
 
 interface ChatMessage {
     role: string;
@@ -36,8 +34,7 @@ interface STTResponse {
 }
 
 /**
- * Send a chat message directly to Gemini API (Client-side)
- * This bypasses the need for a backend proxy for development
+ * Send a chat message through the secure server-side API proxy
  */
 export async function sendChatMessage(
     message: string,
@@ -45,16 +42,6 @@ export async function sendChatMessage(
     history: ChatMessage[] = []
 ): Promise<ChatResponse> {
     try {
-        if (!API_KEY) {
-            throw new Error("Missing VITE_GOOGLE_AI_API_KEY in .env file");
-        }
-
-        // Use Gemini 2.5 Flash for speed and cost effectiveness
-        const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash",
-            systemInstruction: systemPrompt
-        });
-
         // Filter out leading model messages - Gemini requires first message to be 'user'
         const mappedHistory = history.map(msg => ({
             role: (msg.role === 'ai' || msg.role === 'model') ? 'model' : 'user',
@@ -65,22 +52,28 @@ export async function sendChatMessage(
             mappedHistory.shift();
         }
 
-        const chatSession = model.startChat({
-            history: mappedHistory,
-            generationConfig: {
-                maxOutputTokens: 1000,
-            },
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message,
+                systemPrompt,
+                history: mappedHistory
+            })
         });
 
-        const result = await chatSession.sendMessage(message);
-        const responseText = result.response.text();
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || data.details || 'Chat request failed');
+        }
 
         return {
-            response: responseText,
+            response: data.response,
             success: true
         };
     } catch (error: any) {
-        console.error('Gemini Client Error:', error);
+        console.error('Chat API Error:', error);
         return {
             response: '',
             success: false,
@@ -101,33 +94,21 @@ export async function requestTTS(
     } = {}
 ): Promise<TTSResponse> {
     try {
-        if (!API_KEY) throw new Error("Missing VITE_GOOGLE_AI_API_KEY in .env file");
-
-        const response = await fetch(
-            `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    input: { text },
-                    voice: {
-                        languageCode: options.languageCode || 'en-US',
-                        name: options.voiceName || 'en-US-Studio-O',
-                        ssmlGender: options.ssmlGender || 'FEMALE'
-                    },
-                    audioConfig: {
-                        audioEncoding: 'MP3',
-                        speakingRate: 0.95,
-                        pitch: 0
-                    }
-                })
-            }
-        );
+        const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                text,
+                languageCode: options.languageCode || 'en-US',
+                voiceName: options.voiceName || 'en-US-Studio-O',
+                ssmlGender: options.ssmlGender || 'FEMALE'
+            })
+        });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error?.message || 'TTS request failed');
+            throw new Error(data.error || 'TTS request failed');
         }
 
         return {
@@ -146,7 +127,7 @@ export async function requestTTS(
 
 /**
  * Request Gemini Voice TTS through the secure API proxy
- * This uses Gemini's native voice generation capabilities
+ * Uses Gemini's native voice generation capabilities
  */
 export async function requestGeminiVoice(
     text: string,
@@ -157,66 +138,21 @@ export async function requestGeminiVoice(
     }
 ): Promise<GeminiVoiceResponse> {
     try {
-        if (!API_KEY) throw new Error("Missing VITE_GOOGLE_AI_API_KEY in .env file");
-
-        // Map each scenario character to a consistent Gemini prebuilt voice
-        const voiceNameMap: Record<string, string> = {
-            // Male voices
-            'Sam': 'Puck',           // Upbeat - fits friendly barista
-            'Julian': 'Orus',        // Firm - fits sophisticated waiter
-            'Dr. Miller': 'Charon',  // Informative - fits experienced doctor
-            'Officer Miller': 'Fenrir', // Excitable/Firm - fits security officer
-            'David': 'Iapetus',      // Clear - fits tech support
-            'Omar': 'Enceladus',     // Breathy - fits charismatic merchant
-            'Alex': 'Aoede',         // Breezy - fits adventurous photographer (female)
-            // Female voices
-            'Elena': 'Leda',         // Youthful - fits professional receptionist
-            'Sarah': 'Algieba',      // Smooth - fits HR manager
-            'Chloe': 'Zephyr',       // Bright - fits bubbly fashionista
-        };
-
-        const voiceName = voice?.aiName ? (voiceNameMap[voice.aiName] || 'Kore') : 'Kore';
-
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${API_KEY}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text }]
-                    }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: {
-                            voiceConfig: {
-                                prebuiltVoiceConfig: {
-                                    voiceName
-                                }
-                            }
-                        }
-                    }
-                })
-            }
-        );
+        const response = await fetch('/api/gemini-voice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, voice })
+        });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error?.message || 'Gemini Voice request failed');
-        }
-
-        const inlineData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData;
-        const audioContent = inlineData?.data;
-        const mimeType = inlineData?.mimeType || 'audio/wav';
-
-        if (!audioContent) {
-            throw new Error('No audio content received from Gemini');
+            throw new Error(data.error || 'Gemini Voice request failed');
         }
 
         return {
-            audioContent,
-            mimeType,
+            audioContent: data.audioContent,
+            mimeType: data.mimeType || 'audio/wav',
             success: true
         };
     } catch (error: any) {
@@ -238,34 +174,20 @@ export async function requestSTT(
     mimeType: string = 'audio/wav'
 ): Promise<STTResponse> {
     try {
-        if (!API_KEY) throw new Error("Missing VITE_GOOGLE_AI_API_KEY in .env file");
-
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [
-                            { text: "Transcribe this audio clip exactly. If it's English, provide the English text. If it's silence or noise, return an empty string." },
-                            { inlineData: { mimeType, data: audioBase64 } }
-                        ]
-                    }]
-                })
-            }
-        );
+        const response = await fetch('/api/stt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ audioBase64, mimeType })
+        });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error?.message || 'STT request failed');
+            throw new Error(data.error || 'STT request failed');
         }
 
-        const transcript = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
         return {
-            transcript,
+            transcript: data.transcript,
             success: true
         };
     } catch (error: any) {
@@ -382,4 +304,3 @@ export function blobToBase64(blob: Blob): Promise<string> {
         reader.readAsDataURL(blob);
     });
 }
-

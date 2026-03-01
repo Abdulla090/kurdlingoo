@@ -13,6 +13,18 @@ interface GeminiVoiceRequest {
 }
 
 export default async function handler(request: Request) {
+    // Handle CORS preflight
+    if (request.method === 'OPTIONS') {
+        return new Response(null, {
+            status: 204,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
+        });
+    }
+
     if (request.method !== 'POST') {
         return new Response(JSON.stringify({ error: 'Method not allowed' }), {
             status: 405,
@@ -32,21 +44,42 @@ export default async function handler(request: Request) {
             });
         }
 
-        const persona = voice
-            ? `[Voice: ${voice.aiName}, a ${voice.gender} with a ${voice.tone} tone] `
-            : "[Voice: A natural-sounding native English speaker] ";
+        // Map each scenario character to a consistent Gemini prebuilt voice
+        const voiceNameMap: Record<string, string> = {
+            // Male voices
+            'Sam': 'Puck',           // Upbeat - fits friendly barista
+            'Julian': 'Orus',        // Firm - fits sophisticated waiter
+            'Dr. Miller': 'Charon',  // Informative - fits experienced doctor
+            'Officer Miller': 'Fenrir', // Excitable/Firm - fits security officer
+            'David': 'Iapetus',      // Clear - fits tech support
+            'Omar': 'Enceladus',     // Breathy - fits charismatic merchant
+            'Alex': 'Aoede',         // Breezy - fits adventurous photographer (female)
+            // Female voices
+            'Elena': 'Leda',         // Youthful - fits professional receptionist
+            'Sarah': 'Algieba',      // Smooth - fits HR manager
+            'Chloe': 'Zephyr',       // Bright - fits bubbly fashionista
+        };
+
+        const voiceName = voice?.aiName ? (voiceNameMap[voice.aiName] || 'Kore') : 'Kore';
 
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-tts:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{
-                        parts: [{ text: persona + text }]
+                        parts: [{ text }]
                     }],
                     generationConfig: {
-                        responseMimeType: "audio/wav",
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: {
+                                    voiceName
+                                }
+                            }
+                        }
                     }
                 })
             }
@@ -54,6 +87,7 @@ export default async function handler(request: Request) {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
+            console.error('Gemini Voice API error response:', JSON.stringify(errorData));
             return new Response(JSON.stringify({
                 error: 'Gemini Voice TTS failed',
                 details: errorData
@@ -64,7 +98,9 @@ export default async function handler(request: Request) {
         }
 
         const data = await response.json();
-        const audioContent = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        const inlineData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+        const audioContent = inlineData?.data;
+        const mimeType = inlineData?.mimeType || 'audio/wav';
 
         if (!audioContent) {
             return new Response(JSON.stringify({ error: 'No audio content received' }), {
@@ -75,7 +111,7 @@ export default async function handler(request: Request) {
 
         return new Response(JSON.stringify({
             audioContent,
-            mimeType: 'audio/wav',
+            mimeType,
             success: true
         }), {
             status: 200,
