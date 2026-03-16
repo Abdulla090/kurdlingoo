@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
@@ -52,7 +53,20 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
                     >
                         {({ isActive }) => (
                             <>
-                                <div className="nav-icon-hi">
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="sidebar-active-pill"
+                                        className="nav-item-active-bg"
+                                        initial={false}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 400,
+                                            damping: 25,
+                                            mass: 0.8
+                                        }}
+                                    />
+                                )}
+                                <div className="nav-icon-hi" style={{ position: 'relative' }}>
                                     <HugeiconsIcon
                                         icon={item.icon}
                                         size={22}

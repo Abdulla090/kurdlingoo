@@ -23,6 +23,8 @@ const AVAILABLE_AVATARS = [
 
 export const openProfileModal = () => window.dispatchEvent(new Event('open-profile-modal'));
 
+let authCheckInProgress = false;
+
 const ProfileSetupModal: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -35,21 +37,36 @@ const ProfileSetupModal: React.FC = () => {
 
     useEffect(() => {
         const checkProfile = async () => {
-            const { data } = await insforge.auth.getCurrentSession();
+            if (authCheckInProgress) return;
+            authCheckInProgress = true;
             
-            if (data?.session?.user) {
-                // Try fetching specific profile fields
-                const { data: profile } = await insforge.auth.getProfile(data.session.user.id);
+            try {
+                const { data, error } = await insforge.auth.getCurrentSession();
                 
-                // If profile missing essential data like name or avatar, pop up!
-                const safeProfile = profile as any;
-                const profileName = safeProfile?.name || safeProfile?.profile?.name;
-                const profileAvatar = safeProfile?.avatar_url || safeProfile?.profile?.avatar_url;
-                
-                if (!profileName || !profileAvatar) {
-                    setIsOpen(true);
+                // If the session fetch throws an error (e.g. 401 unauthorized because they are logged out)
+                if (error || !data?.session?.user) {
+                    setLoading(false);
+                    authCheckInProgress = false;
+                    return;
                 }
+
+                if (data?.session?.user) {
+                    // Try fetching specific profile fields
+                    const { data: profile } = await insforge.auth.getProfile(data.session.user.id);
+                    
+                    // If profile missing essential data like name or avatar, pop up!
+                    const safeProfile = profile as any;
+                    const profileName = safeProfile?.name || safeProfile?.profile?.name;
+                    const profileAvatar = safeProfile?.avatar_url || safeProfile?.profile?.avatar_url;
+                    
+                    if (!profileName || !profileAvatar) {
+                        setIsOpen(true);
+                    }
+                }
+            } catch (err) {
+                console.error("Profile check error:", err);
             }
+            authCheckInProgress = false;
             setLoading(false);
         };
         

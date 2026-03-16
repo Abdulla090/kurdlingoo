@@ -2,14 +2,14 @@
 
 # 🟠 KurdLingo
 
-### The Modern Kurdish Language Learning Platform
+### The Modern English Language Learning Platform for Kurds
 
 [![Live App](https://img.shields.io/badge/▶_Live_App-kurdlingo.vercel.app-FF9600?style=for-the-badge&logo=vercel&logoColor=white)](https://kurdlingo.vercel.app)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
 
-**Learn Kurdish Sorani — completely free.** AI-powered lessons, real conversations,<br/>gamified progress, and interactive mini-games — all in 5 minutes a day.
+**Learn English — completely free.** AI-powered lessons, real conversations,<br/>gamified progress, and interactive mini-games — all in 5 minutes a day.
 
 ---
 
@@ -19,9 +19,9 @@
 
 ## ⚡ Overview
 
-KurdLingo is a full-featured, gamified language learning web app built for **Kurdish Sorani** learners worldwide. Inspired by the best in language-tech (Duolingo, Memrise), it combines adaptive AI with structured lessons, interactive games, and a vibrant community leaderboard — all wrapped in a premium, mobile-first interface.
+KurdLingo is a full-featured, gamified language learning web app built for Kurdish speakers to learn **English** worldwide. Inspired by the best in language-tech (Duolingo, Memrise), it combines adaptive AI with structured lessons, interactive games, and a vibrant community leaderboard — all wrapped in a premium, mobile-first interface.
 
-> 🎯 **Mission:** Make Kurdish language education accessible, engaging, and free for everyone.
+> 🎯 **Mission:** Make English language education accessible, engaging, and free for everyone.
 
 <br/>
 
@@ -30,12 +30,12 @@ KurdLingo is a full-featured, gamified language learning web app built for **Kur
 | Feature | Description |
 |---------|-------------|
 | 🧠 **AI-Powered Lessons** | Adaptive sessions that adjust difficulty to your level in real-time |
-| 💬 **AI Roleplay Chat** | Practice real Kurdish conversations with AI-driven scenario dialogues |
-| 🚀 **Space Typing Game** | Defend your spaceship by typing falling Kurdish words before they crash |
-| ⚡ **Typing Rush** | Speed-type full Kurdish passages with WPM tracking and accuracy scoring |
+| 💬 **AI Roleplay Chat** | Practice real English conversations with AI-driven scenario dialogues |
+| 🚀 **Space Typing Game** | Defend your spaceship by typing falling English words before they crash |
+| ⚡ **Typing Rush** | Speed-type full English passages with WPM tracking and accuracy scoring |
 | 🧩 **NeuroMatch** | Memory card-matching game to reinforce vocabulary retention |
 | 📖 **Interactive Guidebook** | Comprehensive grammar and culture guides for every lesson unit |
-| 📚 **Kurdish Dictionary** | Built-in searchable dictionary with translations and examples |
+| 📚 **English-Kurdish Dictionary** | Built-in searchable dictionary with translations and examples |
 | 🏆 **Leaderboard** | Compete with other learners globally on XP and streaks |
 | 🎯 **Daily Quests** | Complete daily challenges to earn bonus XP and maintain streaks |
 | 🛒 **Shop** | Spend earned gems on power-ups, streak freezes, and cosmetics |
@@ -97,7 +97,7 @@ src/
 │   ├── RolePlayHub/     # AI conversation scenarios hub
 │   ├── RolePlayChat/    # Real-time AI roleplay chat
 │   ├── Guidebook/       # Grammar & culture guides
-│   ├── BookDictionary/  # Searchable Kurdish dictionary
+│   ├── BookDictionary/  # Searchable English-Kurdish dictionary
 │   ├── Leaderboard/     # Global XP leaderboard
 │   ├── Quests/          # Daily quest system
 │   ├── Shop/            # In-app gem shop
@@ -120,7 +120,7 @@ src/
 | 🎮 Mini-Games | **3** |
 | 👥 Active Learners | **1,200+** |
 | ⭐ Satisfaction Rate | **98%** |
-| 🌍 Languages Supported | **Kurdish Sorani · English** |
+| 🌍 Languages Taught | **English (for Kurdish speakers)** |
 
 </div>
 

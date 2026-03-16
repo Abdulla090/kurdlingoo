@@ -45,7 +45,7 @@
 }
 
 .level-toggle-tab.active {
-    background: linear-gradient(135deg, #ff9600 0%, #cc7800 100%);
+    background: linear-gradient(135deg, #ff9600 0%, #FF6A00 100%);
     color: #ffffff;
     box-shadow:
         0 4px 12px rgba(255, 150, 0, 0.3),
@@ -761,7 +761,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #ff9600, #cc7800);
+    background: linear-gradient(90deg, #ff9600, #FF6A00);
 }
 
 /* Different colors for different cards */

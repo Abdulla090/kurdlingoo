@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
     Home01Icon,
@@ -14,6 +15,9 @@ import {
 } from '@hugeicons/core-free-icons';
 import { useLanguage } from '../../context/LanguageContext';
 import './Layout.css';
+
+// Framer motion shared transition spec
+const springTransition = { type: "spring" as const, stiffness: 400, damping: 25, mass: 0.8 };
 
 const BottomNav = () => {
     const { t } = useLanguage();
@@ -60,12 +64,13 @@ const BottomNav = () => {
                 </div>
             )}
 
-            <nav className="bottom-nav">
+        <nav className="bottom-nav">
                 {/* Left Side: Dictionary, Roleplay */}
                 <div className="bottom-nav-group">
                     <NavLink to="/dictionary" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`} onClick={() => setShowMore(false)}>
                         {({ isActive }) => (
                             <>
+                                {isActive && <motion.div layoutId="bottom-nav-pill" className="bottom-nav-active-pill" initial={false} transition={springTransition} />}
                                 <HugeiconsIcon icon={Book04Icon} size={26} color={isActive ? '#e07600' : '#9ca3af'} strokeWidth={isActive ? 2 : 1.75} />
                                 <span className="nav-label" style={{ color: isActive ? '#e07600' : '#9ca3af' }}>{t('dictionary')}</span>
                             </>
@@ -75,6 +80,7 @@ const BottomNav = () => {
                     <NavLink to="/roleplay" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`} onClick={() => setShowMore(false)}>
                         {({ isActive }) => (
                             <>
+                                {isActive && <motion.div layoutId="bottom-nav-pill" className="bottom-nav-active-pill" initial={false} transition={springTransition} />}
                                 <HugeiconsIcon icon={MessageMultiple02Icon} size={26} color={isActive ? '#e07600' : '#9ca3af'} strokeWidth={isActive ? 2 : 1.75} />
                                 <span className="nav-label" style={{ color: isActive ? '#e07600' : '#9ca3af' }}>{t('roleplay') || 'Role-Play'}</span>
                             </>
@@ -96,6 +102,7 @@ const BottomNav = () => {
                     <NavLink to="/profile" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`} onClick={() => setShowMore(false)}>
                         {({ isActive }) => (
                             <>
+                                {isActive && <motion.div layoutId="bottom-nav-pill" className="bottom-nav-active-pill" initial={false} transition={springTransition} />}
                                 <HugeiconsIcon icon={UserCircle02Icon} size={26} color={isActive ? '#e07600' : '#9ca3af'} strokeWidth={isActive ? 2 : 1.75} />
                                 <span className="nav-label" style={{ color: isActive ? '#e07600' : '#9ca3af' }}>{t('profile')}</span>
                             </>

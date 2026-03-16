@@ -133,6 +133,25 @@
     border: 3px solid #e0e0e0;
 }
 
+.question-visual-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    animation: fadeInDown 0.4s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .exercise-question {
     font-size: 26px;
     font-weight: 700;
@@ -197,6 +216,12 @@
     animation: cardAppear 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
     position: relative;
     box-shadow: 0 5px 0 #c8c8c8;
+}
+
+.option-card.text-only {
+    justify-content: center;
+    padding: 24px;
+    min-height: 80px;
 }
 
 .option-card:nth-child(1) {
@@ -276,6 +301,14 @@
     z-index: 1;
 }
 
+@media (max-width: 768px) {
+    .option-card.selected::before,
+    .option-card.selected::after {
+        content: none;
+        display: none;
+    }
+}
+
 .option-image {
     width: 64px;
     height: 64px;
@@ -326,6 +359,12 @@
     animation: cardAppear 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
     position: relative;
     box-shadow: 0 5px 0 #c8c8c8;
+}
+
+.image-card.text-only {
+    justify-content: center;
+    padding: 24px;
+    min-height: 80px;
 }
 
 .image-card:nth-child(1) {
@@ -418,6 +457,37 @@
     font-size: 1.1rem;
 }
 
+.sentence-tts-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+}
+
+[dir="rtl"] .sentence-tts-btn {
+    right: auto;
+    left: 8px;
+}
+
+.sentence-tts-btn:hover {
+    transform: scale(1.15);
+    background: #ddf4ff;
+}
+
+.sentence-tts-btn:active {
+    transform: scale(0.95);
+}
+
 .sentence-area:not(:empty) {
     border-style: solid;
     border-color: #ff9600;
@@ -501,16 +571,27 @@
 .word-chip.selected {
     background: #ff9600;
     color: white;
-    border-color: #cc7800;
-    box-shadow: 0 4px 0 #995a00;
+    border-color: #FF6A00;
+    box-shadow: 0 4px 0 #cc5500;
 }
 
+/* Ghost slot — word has been selected; the slot stays but looks empty/sunken */
 .word-chip.used {
-    opacity: 0.35;
-    cursor: not-allowed;
+    background: transparent;
+    border: 3px dashed #b0b0b0;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+    cursor: default;
     transform: none;
-    box-shadow: none;
+    pointer-events: none;
 }
+.word-chip.used:hover {
+    background: transparent;
+    border-color: #b0b0b0;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+    transform: none;
+    color: transparent;
+}
+
 
 @keyframes chipAppear {
     from {

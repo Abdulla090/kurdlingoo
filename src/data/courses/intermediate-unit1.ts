@@ -3,19 +3,19 @@ import { Unit } from '../../types';
 export const intermediateUnit1: Unit = {
     id: 'int-unit-1',
     title: 'یەکەمین یەکە - ئاستی ناوەندی',
-    description: 'Real-life conversations & challenging dialogue exercises',
+    description: 'Speak like a native! This unit is 100% voice-based. No typing needed.',
     guidebook: {
-        introduction: 'Welcome to the Intermediate level! Here you will practice real-life conversations in English. Each lesson focuses on a specific scenario you might encounter in daily life. You will build full sentences, respond to dialogue prompts, and handle challenging situations — all in English!',
+        introduction: 'Welcome to the Intermediate level! Here you will practice real-life conversations in English using ONLY your voice. Every exercise uses Speech-to-Text (STT). Grab your microphone and get ready to speak naturally!',
         sections: [
             {
                 id: 'int-overview',
-                title: '📖 Intermediate Overview',
-                content: 'This unit focuses on practical English conversations. You will learn how to handle real situations like checking into a hotel, ordering food, visiting a doctor, interviewing for a job, and navigating an airport.'
+                title: '📖 Conversational Speech',
+                content: 'This unit focuses entirely on practical English speaking. You will physically speak to handle real situations like checking into a hotel, ordering food, visiting a doctor, interviewing for a job, and navigating an airport.'
             },
             {
                 id: 'int-tips',
-                title: '💡 Tips for Success',
-                content: 'Read each conversation carefully. Pay attention to polite expressions, formal vs informal language, and context clues. Try to think about what you would say in each situation before looking at the options.'
+                title: '💡 Tips for Voice STT',
+                content: 'Speak clearly into your device. Don\'t rush your words. Pay attention to polite expressions. You don\'t need to type anything!'
             }
         ],
         keyPhrases: [
@@ -34,90 +34,124 @@ export const intermediateUnit1: Unit = {
             icon: '🏨',
             exercises: [
                 {
-                    type: 'roleplay-chat',
-                    question: 'You arrive at a hotel. Complete the check-in conversation with the receptionist.',
-                    scenario: 'Hotel Check-in',
-                    chatMessages: [
-                        { sender: 'ai', text: 'Good evening! Welcome to Grand Hotel. Do you have a reservation?', name: 'Receptionist', avatar: '👩‍💼' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['Yes, I have a reservation', 'Yes I have a reservation under', 'I have a reservation', 'Yes, my name is'],
-                    keywordsRequired: ['reservation', 'yes']
+                    id: 1,
+                    type: 'pronunciation',
+                    question: 'Reply to the Receptionist using your voice:',
+                    targetWord: 'Receptionist: "Good evening! Welcome. Do you have a reservation?"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'yes i have a reservation',
+                    acceptedAnswers: ['yes i have a reservation', 'yes i have a reservation under', 'i have a reservation', 'yes my name is', 'yes i do'],
+                    speechLang: 'en-US',
+                    image: '🏨'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'The receptionist says: "Your room is on the 5th floor. Here is your key card." What is the most polite response?',
-                    options: [
-                        { text: 'Thank you very much. What time is breakfast?', correct: true },
-                        { text: 'Give me the key.', correct: false },
-                        { text: 'OK.', correct: false },
-                        { text: 'I already know that.', correct: false }
-                    ]
+                    id: 2,
+                    type: 'pronunciation',
+                    question: 'Speak the most polite response:',
+                    targetWord: 'Your room is on the 5th floor. Here is your key.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'thank you very much what time is breakfast',
+                    acceptedAnswers: ['thank you very much what time is breakfast', 'thank you what time is breakfast', 'thanks what time is breakfast'],
+                    speechLang: 'en-US',
+                    image: '🗣️'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "من جێگام پاراستووە بۆ دوو شەو"',
-                    sourceText: 'من جێگام پاراستووە بۆ دوو شەو',
-                    correctSentence: ['I', 'have', 'a', 'reservation', 'for', 'two', 'nights'],
-                    options: ['I', 'have', 'a', 'reservation', 'for', 'two', 'nights', 'room', 'three', 'morning']
+                    id: 3,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'من جێگام پاراستووە بۆ دوو شەو',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i have a reservation for two nights',
+                    acceptedAnswers: ['i have a reservation for two nights', 'i booked for two nights', 'i made a reservation for two nights'],
+                    speechLang: 'en-US',
+                    image: '🗣️'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete the sentence: "Could I get a room with a ___ view, please?"',
-                    sentenceParts: ['Could I get a room with a', '___', 'view, please?'],
-                    correctOption: 'sea',
-                    options: ['sea', 'table', 'book', 'chair']
+                    id: 4,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "sea":',
+                    targetWord: 'Could I get a room with a ___ view, please?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'could i get a room with a sea view please',
+                    acceptedAnswers: ['could i get a room with a sea view please', 'can i get a room with a sea view please', 'could i get a room with sea view please'],
+                    speechLang: 'en-US',
+                    image: '🌊'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: '"What time is check-out?" — What does "check-out" mean?',
-                    options: [
-                        { text: 'The time you must leave the hotel', correct: true },
-                        { text: 'The time breakfast starts', correct: false },
-                        { text: 'The price of the room', correct: false },
-                        { text: 'The hotel address', correct: false }
-                    ]
+                    id: 5,
+                    type: 'pronunciation',
+                    question: 'Speak the definition of "check-out":',
+                    targetWord: 'What does "check-out" mean at a hotel?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'the time you must leave',
+                    acceptedAnswers: ['the time you must leave', 'the time you have to leave', 'when you must leave the hotel', 'the time you leave'],
+                    speechLang: 'en-US',
+                    image: '🕒'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "ئایا Wi-Fi لە ژوورەکەدا هەیە؟"',
-                    sourceText: 'ئایا Wi-Fi لە ژوورەکەدا هەیە؟',
-                    correctSentence: ['Is', 'there', 'Wi-Fi', 'in', 'the', 'room?'],
-                    options: ['Is', 'there', 'Wi-Fi', 'in', 'the', 'room?', 'Where', 'has', 'hotel', 'lobby']
+                    id: 6,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'ئایا Wi-Fi لە ژوورەکەدا هەیە؟',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'is there wi fi in the room',
+                    acceptedAnswers: ['is there wifi in the room', 'is there wi-fi in the room', 'do you have wifi in the room'],
+                    speechLang: 'en-US',
+                    image: '📶'
                 },
                 {
-                    type: 'roleplay-chat',
-                    question: 'The receptionist tells you there is a problem with your room. Respond politely.',
-                    scenario: 'Room Issue',
-                    chatMessages: [
-                        { sender: 'ai', text: 'I\'m sorry, but the room you booked is not available right now. We can upgrade you to a suite at no extra charge. Would that be okay?', name: 'Receptionist', avatar: '👩‍💼' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['That would be great, thank you', 'Yes, that sounds wonderful', 'Sure, I appreciate that', 'That works for me, thanks'],
-                    keywordsRequired: ['thank', 'yes']
+                    id: 7,
+                    type: 'pronunciation',
+                    question: 'Reply to the Receptionist using your voice:',
+                    targetWord: 'We can upgrade you to a suite. Is that okay?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'that would be great thank you',
+                    acceptedAnswers: ['that would be great thank you', 'that sounds wonderful', 'yes please', 'that is great thanks'],
+                    speechLang: 'en-US',
+                    image: '👩‍💼'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "I would like to ___ my stay for one more night."',
-                    sentenceParts: ['I would like to', '___', 'my stay for one more night.'],
-                    correctOption: 'extend',
-                    options: ['extend', 'delete', 'forget', 'break']
+                    id: 8,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "extend":',
+                    targetWord: 'I would like to ___ my stay for one night.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i would like to extend my stay for one night',
+                    acceptedAnswers: ['i would like to extend my stay for one night', 'i want to extend my stay for one night'],
+                    speechLang: 'en-US',
+                    image: '📅'
                 },
                 {
-                    type: 'typing',
-                    question: 'Type in English: How do you ask for a wake-up call at 7 AM?',
-                    correctAnswer: 'Could I get a wake-up call at 7 AM?',
-                    hints: ['Could I get a', 'wake-up call', 'at 7 AM?']
+                    id: 9,
+                    type: 'pronunciation',
+                    question: 'Ask the receptionist using your voice:',
+                    targetWord: 'Ask for a wake-up call at 7 AM.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'could i get a wake up call at 7 am',
+                    acceptedAnswers: ['could i get a wake up call at 7 am', 'could i get a wake up call at seven a m', 'can i have a wake up call at seven'],
+                    speechLang: 'en-US',
+                    image: '⏰'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'Which phrase is the MOST formal way to request extra towels?',
-                    options: [
-                        { text: 'Would it be possible to get some extra towels, please?', correct: true },
-                        { text: 'Give me towels.', correct: false },
-                        { text: 'I want towels now.', correct: false },
-                        { text: 'Towels!', correct: false }
-                    ]
+                    id: 10,
+                    type: 'pronunciation',
+                    question: 'Speak the most formal way to ask for towels:',
+                    targetWord: 'Request extra towels politely.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'would it be possible to get some extra towels please',
+                    acceptedAnswers: ['would it be possible to get some extra towels please', 'could i get some extra towels please', 'can i have some extra towels please'],
+                    speechLang: 'en-US',
+                    image: '🛁'
                 }
             ]
         },
@@ -129,90 +163,124 @@ export const intermediateUnit1: Unit = {
             icon: '🍽️',
             exercises: [
                 {
-                    type: 'roleplay-chat',
-                    question: 'You are at a restaurant. The waiter approaches your table. Start ordering.',
-                    scenario: 'Restaurant Ordering',
-                    chatMessages: [
-                        { sender: 'ai', text: 'Good evening! Are you ready to order, or would you like a few more minutes?', name: 'Waiter', avatar: '🧑‍🍳' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['Yes, I am ready to order', 'I would like to order please', 'Yes, I\'d like to start with', 'Could I have'],
-                    keywordsRequired: ['order', 'like']
+                    id: 1,
+                    type: 'pronunciation',
+                    question: 'Reply to the waiter using your voice:',
+                    targetWord: 'Waiter: "Are you ready to order?"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'yes i am ready to order',
+                    acceptedAnswers: ['yes i am ready to order', 'yes i would like to order', 'yes i am ready', 'i am ready to order'],
+                    speechLang: 'en-US',
+                    image: '🧑‍🍳'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "دەمەوێت شتێکی بێ گۆشت داوا بکەم"',
-                    sourceText: 'دەمەوێت شتێکی بێ گۆشت داوا بکەم',
-                    correctSentence: ['I', 'would', 'like', 'to', 'order', 'something', 'vegetarian'],
-                    options: ['I', 'would', 'like', 'to', 'order', 'something', 'vegetarian', 'meat', 'drink', 'expensive']
+                    id: 2,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'دەمەوێت شتێکی بێ گۆشت داوا بکەم',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i would like to order something vegetarian',
+                    acceptedAnswers: ['i would like to order something vegetarian', 'i want to order something vegetarian', 'i would like something vegetarian'],
+                    speechLang: 'en-US',
+                    image: '🥗'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'The waiter asks: "How would you like your steak?" What does this mean?',
-                    options: [
-                        { text: 'How cooked do you want it (rare, medium, well-done)?', correct: true },
-                        { text: 'What color plate do you want?', correct: false },
-                        { text: 'How many steaks do you want?', correct: false },
-                        { text: 'Do you like steak?', correct: false }
-                    ]
+                    id: 3,
+                    type: 'pronunciation',
+                    question: 'Speak the meaning of this question:',
+                    targetWord: '"How would you like your steak?"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'how cooked do you want it',
+                    acceptedAnswers: ['how cooked do you want it', 'what temperature do you want it cooked', 'how do you want it cooked', 'rare medium or well done'],
+                    speechLang: 'en-US',
+                    image: '🥩'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "Could we have the ___, please? We are ready to pay."',
-                    sentenceParts: ['Could we have the', '___', ', please? We are ready to pay.'],
-                    correctOption: 'bill',
-                    options: ['bill', 'food', 'table', 'door']
+                    id: 4,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "bill":',
+                    targetWord: 'Could we have the ___, please? We are ready to pay.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'could we have the bill please we are ready to pay',
+                    acceptedAnswers: ['could we have the bill please we are ready to pay', 'could we have the bill please'],
+                    speechLang: 'en-US',
+                    image: '🧾'
                 },
                 {
-                    type: 'roleplay-chat',
-                    question: 'You received the wrong order. Politely tell the waiter.',
-                    scenario: 'Wrong Order',
-                    chatMessages: [
-                        { sender: 'ai', text: 'Here is your grilled chicken with salad. Enjoy your meal!', name: 'Waiter', avatar: '🧑‍🍳' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['Excuse me, I think there has been a mistake', 'Sorry, but I ordered the fish', 'I\'m sorry, this isn\'t what I ordered', 'Excuse me, I believe I ordered something different'],
-                    keywordsRequired: ['sorry', 'ordered']
+                    id: 5,
+                    type: 'pronunciation',
+                    question: 'Reply using your voice:',
+                    targetWord: 'The waiter brought chicken instead of fish.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'excuse me i think there has been a mistake',
+                    acceptedAnswers: ['excuse me i think there has been a mistake', 'excuse me i ordered the fish', 'i am sorry i think there is a mistake'],
+                    speechLang: 'en-US',
+                    image: '🍗'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "ئایا ئەتوانن ئاوێکی تازەم بۆ بهێنن؟"',
-                    sourceText: 'ئایا ئەتوانن ئاوێکی تازەم بۆ بهێنن؟',
-                    correctSentence: ['Could', 'you', 'bring', 'me', 'a', 'glass', 'of', 'water?'],
-                    options: ['Could', 'you', 'bring', 'me', 'a', 'glass', 'of', 'water?', 'give', 'take', 'cup', 'milk']
+                    id: 6,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'ئایا ئەتوانن ئاوێکی تازەم بۆ بهێنن؟',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'could you bring me a glass of water',
+                    acceptedAnswers: ['could you bring me a glass of water', 'can you bring me a glass of water', 'could i have a glass of water'],
+                    speechLang: 'en-US',
+                    image: '💧'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'What does "I have a food allergy" mean?',
-                    options: [
-                        { text: 'Some foods make me sick and I cannot eat them', correct: true },
-                        { text: 'I do not like the food', correct: false },
-                        { text: 'The food is too expensive', correct: false },
-                        { text: 'I am not hungry', correct: false }
-                    ]
+                    id: 7,
+                    type: 'pronunciation',
+                    question: 'Speak the meaning of this phrase:',
+                    targetWord: '"I have a food allergy"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'some foods make me sick',
+                    acceptedAnswers: ['some foods make me sick', 'i get sick from some foods', 'i cannot eat some foods'],
+                    speechLang: 'en-US',
+                    image: '⚠️'
                 },
                 {
-                    type: 'typing',
-                    question: 'Type in English: How do you politely ask for the menu?',
-                    correctAnswer: 'Could I see the menu, please?',
-                    hints: ['Could I', 'see the menu', 'please?']
+                    id: 8,
+                    type: 'pronunciation',
+                    question: 'Politely ask the waiter using your voice:',
+                    targetWord: 'Ask for the menu.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'could i see the menu please',
+                    acceptedAnswers: ['could i see the menu please', 'can i see the menu please', 'would you bring the menu please'],
+                    speechLang: 'en-US',
+                    image: '📖'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "I am ___ to nuts, so please be careful."',
-                    sentenceParts: ['I am', '___', 'to nuts, so please be careful.'],
-                    correctOption: 'allergic',
-                    options: ['allergic', 'happy', 'friendly', 'going']
+                    id: 9,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "allergic":',
+                    targetWord: 'I am ___ to nuts, so please be careful.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am allergic to nuts so please be careful',
+                    acceptedAnswers: ['i am allergic to nuts so please be careful', 'i am allergic to nuts'],
+                    speechLang: 'en-US',
+                    image: '🥜'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'Which is the correct way to leave a compliment about the food?',
-                    options: [
-                        { text: 'The food was absolutely delicious! Please give my compliments to the chef.', correct: true },
-                        { text: 'The food is OK I guess.', correct: false },
-                        { text: 'I ate it.', correct: false },
-                        { text: 'Chef, come here!', correct: false }
-                    ]
+                    id: 10,
+                    type: 'pronunciation',
+                    question: 'Speak this compliment loudly:',
+                    targetWord: 'Leave a big compliment for the chef.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'the food was absolutely delicious please give my compliments to the chef',
+                    acceptedAnswers: ['the food was absolutely delicious please give my compliments to the chef', 'the food was delicious give my compliments to the chef'],
+                    speechLang: 'en-US',
+                    image: '👨‍🍳'
                 }
             ]
         },
@@ -224,90 +292,124 @@ export const intermediateUnit1: Unit = {
             icon: '🏥',
             exercises: [
                 {
-                    type: 'roleplay-chat',
-                    question: 'You are at the doctor\'s office. The doctor asks what is wrong. Describe your symptoms.',
-                    scenario: "Doctor's Office",
-                    chatMessages: [
-                        { sender: 'ai', text: 'Hello! What brings you in today? Can you tell me what symptoms you have been experiencing?', name: 'Doctor', avatar: '👨‍⚕️' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['I have had a headache and fever for three days', 'I have been feeling sick with a sore throat', 'I have been having stomach pain since yesterday', 'I feel dizzy and I have a cough'],
-                    keywordsRequired: ['have', 'feel']
+                    id: 1,
+                    type: 'pronunciation',
+                    question: 'Reply to the Doctor using your voice:',
+                    targetWord: 'Doctor: "What symptoms are you experiencing?"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i have had a headache and fever',
+                    acceptedAnswers: ['i have had a headache and fever', 'i have a headache and a fever', 'my head hurts and i have a fever'],
+                    speechLang: 'en-US',
+                    image: '👨‍⚕️'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "سێ ڕۆژە تاو و سەرئێشەم هەیە"',
-                    sourceText: 'سێ ڕۆژە تاو و سەرئێشەم هەیە',
-                    correctSentence: ['I', 'have', 'had', 'a', 'fever', 'and', 'headache', 'for', 'three', 'days'],
-                    options: ['I', 'have', 'had', 'a', 'fever', 'and', 'headache', 'for', 'three', 'days', 'two', 'cold', 'arm']
+                    id: 2,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'سێ ڕۆژە تاو و سەرئێشەم هەیە',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i have had a fever and headache for three days',
+                    acceptedAnswers: ['i have had a fever and headache for three days', 'i have had a headache and fever for 3 days', 'i am sick for 3 days'],
+                    speechLang: 'en-US',
+                    image: '🤒'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'The doctor says: "I\'m going to prescribe you some antibiotics. Take one pill twice a day." What should you do?',
-                    options: [
-                        { text: 'Take one antibiotic pill in the morning and one in the evening', correct: true },
-                        { text: 'Take two pills at once in the morning', correct: false },
-                        { text: 'Take one pill only when you feel sick', correct: false },
-                        { text: 'Do not take any pills', correct: false }
-                    ]
+                    id: 3,
+                    type: 'pronunciation',
+                    question: 'Speak the meaning aloud:',
+                    targetWord: '"Take one pill twice a day." What does it mean?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'take one pill in the morning and one in the evening',
+                    acceptedAnswers: ['take one pill in the morning and one in the evening', 'take two pills a day', 'one in the morning one in the evening'],
+                    speechLang: 'en-US',
+                    image: '💊'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "I am ___ to penicillin, so I cannot take that medicine."',
-                    sentenceParts: ['I am', '___', 'to penicillin, so I cannot take that medicine.'],
-                    correctOption: 'allergic',
-                    options: ['allergic', 'addicted', 'attracted', 'attached']
+                    id: 4,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "allergic":',
+                    targetWord: 'I am ___ to penicillin, so I cannot take that medicine.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am allergic to penicillin so i cannot take that medicine',
+                    acceptedAnswers: ['i am allergic to penicillin so i cannot take that medicine', 'i am allergic to penicillin'],
+                    speechLang: 'en-US',
+                    image: '🛑'
                 },
                 {
-                    type: 'roleplay-chat',
-                    question: 'The doctor recommends rest. Ask about when you can return to work.',
-                    scenario: 'Recovery Questions',
-                    chatMessages: [
-                        { sender: 'ai', text: 'You have the flu. I recommend you stay home and rest for at least a week. Drink plenty of fluids.', name: 'Doctor', avatar: '👨‍⚕️' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['When can I go back to work?', 'How long until I recover?', 'Will I need a sick note for my employer?', 'Should I come back for a follow-up?'],
-                    keywordsRequired: ['when', 'can']
+                    id: 5,
+                    type: 'pronunciation',
+                    question: 'Ask the Doctor using your voice:',
+                    targetWord: 'You need to ask when you can return to work.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'when can i go back to work',
+                    acceptedAnswers: ['when can i go back to work', 'when can i return to work', 'when should i go back to work'],
+                    speechLang: 'en-US',
+                    image: '🏢'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "ئایا پێویستە دووبارە بگەڕێمەوە بۆ پشکنین؟"',
-                    sourceText: 'ئایا پێویستە دووبارە بگەڕێمەوە بۆ پشکنین؟',
-                    correctSentence: ['Do', 'I', 'need', 'to', 'come', 'back', 'for', 'a', 'follow-up?'],
-                    options: ['Do', 'I', 'need', 'to', 'come', 'back', 'for', 'a', 'follow-up?', 'go', 'leave', 'stay', 'appointment']
+                    id: 6,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'ئایا پێویستە دووبارە بگەڕێمەوە بۆ پشکنین؟',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'do i need to come back for a follow up',
+                    acceptedAnswers: ['do i need to come back for a follow up', 'should i follow up', 'do i need another appointment'],
+                    speechLang: 'en-US',
+                    image: '📆'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'What does "over-the-counter medicine" mean?',
-                    options: [
-                        { text: 'Medicine you can buy without a prescription', correct: true },
-                        { text: 'Medicine that is on sale', correct: false },
-                        { text: 'Medicine you get only in hospitals', correct: false },
-                        { text: 'Medicine from another country', correct: false }
-                    ]
+                    id: 7,
+                    type: 'pronunciation',
+                    question: 'Speak the definition of this term:',
+                    targetWord: '"Over-the-counter medicine"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'medicine you can buy without a prescription',
+                    acceptedAnswers: ['medicine you can buy without a prescription', 'medicine without a prescription', 'you do not need a prescription for it'],
+                    speechLang: 'en-US',
+                    image: '🏥'
                 },
                 {
-                    type: 'typing',
-                    question: 'Type in English: Tell the doctor you have had a sore throat for two days.',
-                    correctAnswer: 'I have had a sore throat for two days.',
-                    hints: ['I have had', 'a sore throat', 'for two days']
+                    id: 8,
+                    type: 'pronunciation',
+                    question: 'Tell the doctor your symptoms:',
+                    targetWord: 'Tell the doctor you had a sore throat for two days.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i have had a sore throat for two days',
+                    acceptedAnswers: ['i have had a sore throat for two days', 'my throat has been sore for two days', 'i got a sore throat two days ago'],
+                    speechLang: 'en-US',
+                    image: '🗣️'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "The doctor wrote me a ___ for some pain medication."',
-                    sentenceParts: ['The doctor wrote me a', '___', 'for some pain medication.'],
-                    correctOption: 'prescription',
-                    options: ['prescription', 'letter', 'story', 'recipe']
+                    id: 9,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "prescription":',
+                    targetWord: 'The doctor wrote me a ___ for some pain medication.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'the doctor wrote me a prescription for some pain medication',
+                    acceptedAnswers: ['the doctor wrote me a prescription for some pain medication', 'he wrote me a prescription'],
+                    speechLang: 'en-US',
+                    image: '📝'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'Which sentence correctly describes your symptoms?',
-                    options: [
-                        { text: 'I have been feeling nauseous and I lost my appetite since yesterday.', correct: true },
-                        { text: 'My stomach is angry at me since morning.', correct: false },
-                        { text: 'I have a broken appetite from yesterday.', correct: false },
-                        { text: 'Food does not want me today.', correct: false }
-                    ]
+                    id: 10,
+                    type: 'pronunciation',
+                    question: 'Speak the clearest sentence describing your symptoms:',
+                    targetWord: 'Describe your sickness well.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i have been feeling nauseous and lost my appetite',
+                    acceptedAnswers: ['i have been feeling nauseous and lost my appetite', 'i feel nauseous and lost my appetite', 'i have no appetite and feel nauseous'],
+                    speechLang: 'en-US',
+                    image: '🤢'
                 }
             ]
         },
@@ -319,90 +421,124 @@ export const intermediateUnit1: Unit = {
             icon: '💼',
             exercises: [
                 {
-                    type: 'roleplay-chat',
-                    question: 'You are in a job interview. The interviewer asks you to introduce yourself.',
-                    scenario: 'Job Interview',
-                    chatMessages: [
-                        { sender: 'ai', text: 'Welcome! Please take a seat. So, tell me a little about yourself and why you are interested in this position.', name: 'Interviewer', avatar: '👩‍💼' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['Thank you. I am a graduate with experience in', 'I have been working in this field for', 'My name is and I have years of experience', 'I am passionate about this role because'],
-                    keywordsRequired: ['experience', 'I']
+                    id: 1,
+                    type: 'pronunciation',
+                    question: 'Reply to the Interviewer using your voice:',
+                    targetWord: 'Interviewer: "Tell me a little about yourself."',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am a graduate with experience',
+                    acceptedAnswers: ['i am a graduate with experience', 'my name is and i am a graduate', 'i have experience in this field'],
+                    speechLang: 'en-US',
+                    image: '👩‍💼'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "من پێنج ساڵ ئەزموونم هەیە لەم بوارەدا"',
-                    sourceText: 'من پێنج ساڵ ئەزموونم هەیە لەم بوارەدا',
-                    correctSentence: ['I', 'have', 'five', 'years', 'of', 'experience', 'in', 'this', 'field'],
-                    options: ['I', 'have', 'five', 'years', 'of', 'experience', 'in', 'this', 'field', 'three', 'job', 'company', 'like']
+                    id: 2,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'من پێنج ساڵ ئەزموونم هەیە لەم بوارەدا',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i have five years of experience in this field',
+                    acceptedAnswers: ['i have five years of experience in this field', 'i got 5 years of experience in this field', 'i have 5 years experience'],
+                    speechLang: 'en-US',
+                    image: '📈'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: '"What is your greatest weakness?" — What is the BEST way to answer this common interview question?',
-                    options: [
-                        { text: 'I sometimes focus too much on details, but I am working on managing my time better.', correct: true },
-                        { text: 'I have no weaknesses.', correct: false },
-                        { text: 'I am always late to work.', correct: false },
-                        { text: 'I do not like working with other people.', correct: false }
-                    ]
+                    id: 3,
+                    type: 'pronunciation',
+                    question: 'Answer the classic interview question:',
+                    targetWord: 'What is your greatest weakness?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i focus too much on details but i am working on it',
+                    acceptedAnswers: ['i focus too much on details but i am working on it', 'i sometimes focus too much on details', 'i work too hard on details'],
+                    speechLang: 'en-US',
+                    image: '🎯'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "I am a ___ player and I enjoy collaborating with others."',
-                    sentenceParts: ['I am a', '___', 'player and I enjoy collaborating with others.'],
-                    correctOption: 'team',
-                    options: ['team', 'game', 'ball', 'solo']
+                    id: 4,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "team":',
+                    targetWord: 'I am a ___ player and I enjoy collaborating with others.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am a team player and i enjoy collaborating with others',
+                    acceptedAnswers: ['i am a team player and i enjoy collaborating with others', 'i am a team player'],
+                    speechLang: 'en-US',
+                    image: '🤝'
                 },
                 {
-                    type: 'roleplay-chat',
-                    question: 'The interviewer asks about your salary expectations.',
-                    scenario: 'Salary Discussion',
-                    chatMessages: [
-                        { sender: 'ai', text: 'The position comes with competitive benefits. What are your salary expectations for this role?', name: 'Interviewer', avatar: '👩‍💼' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['Based on my experience and the market rate, I would expect', 'I am open to discussing a fair compensation', 'I believe a salary in the range of', 'Could you share the budget for this position?'],
-                    keywordsRequired: ['salary', 'experience']
+                    id: 5,
+                    type: 'pronunciation',
+                    question: 'Reply using your voice:',
+                    targetWord: 'Interviewer: "What are your salary expectations?"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am open to discussing a fair compensation',
+                    acceptedAnswers: ['i am open to discussing a fair compensation', 'i am open to discuss a fair salary', 'what is the budget for this position'],
+                    speechLang: 'en-US',
+                    image: '💰'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "من دەتوانم لەژێر فشاردا باش کار بکەم"',
-                    sourceText: 'من دەتوانم لەژێر فشاردا باش کار بکەم',
-                    correctSentence: ['I', 'can', 'work', 'well', 'under', 'pressure'],
-                    options: ['I', 'can', 'work', 'well', 'under', 'pressure', 'over', 'badly', 'play', 'without']
+                    id: 6,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'من دەتوانم لەژێر فشاردا باش کار بکەم',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i can work well under pressure',
+                    acceptedAnswers: ['i can work well under pressure', 'i work well under pressure', 'i am good at working under pressure'],
+                    speechLang: 'en-US',
+                    image: '⏱️'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'At the end of an interview, which question shows genuine interest in the company?',
-                    options: [
-                        { text: 'What does a typical day look like for someone in this role?', correct: true },
-                        { text: 'How many vacation days do I get?', correct: false },
-                        { text: 'Can I leave early on Fridays?', correct: false },
-                        { text: 'When do I start?', correct: false }
-                    ]
+                    id: 7,
+                    type: 'pronunciation',
+                    question: 'Ask a strong question at the end of the interview:',
+                    targetWord: 'Show interest in the company!',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'what does a typical day look like for someone in this role',
+                    acceptedAnswers: ['what does a typical day look like for someone in this role', 'what does a typical day look like', 'can you tell me about a typical day'],
+                    speechLang: 'en-US',
+                    image: '❓'
                 },
                 {
-                    type: 'typing',
-                    question: 'Type in English: Thank the interviewer at the end of the interview.',
-                    correctAnswer: 'Thank you for your time. I look forward to hearing from you.',
-                    hints: ['Thank you for your time', 'I look forward to', 'hearing from you']
+                    id: 8,
+                    type: 'pronunciation',
+                    question: 'Thank the interviewer politely:',
+                    targetWord: 'Say your goodbyes.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'thank you for your time i look forward to hearing from you',
+                    acceptedAnswers: ['thank you for your time i look forward to hearing from you', 'thank you for your time', 'thanks for your time i look forward to hearing from you'],
+                    speechLang: 'en-US',
+                    image: '👋'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "I am very ___ about this opportunity and eager to contribute."',
-                    sentenceParts: ['I am very', '___', 'about this opportunity and eager to contribute.'],
-                    correctOption: 'excited',
-                    options: ['excited', 'bored', 'confused', 'scared']
+                    id: 9,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "excited":',
+                    targetWord: 'I am very ___ about this opportunity.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am very excited about this opportunity',
+                    acceptedAnswers: ['i am very excited about this opportunity', 'i am excited about this opportunity'],
+                    speechLang: 'en-US',
+                    image: '😄'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'What does "I will follow up with you next week" mean in an interview context?',
-                    options: [
-                        { text: 'The interviewer will contact you again next week with updates', correct: true },
-                        { text: 'You need to follow the interviewer home', correct: false },
-                        { text: 'The job starts next week', correct: false },
-                        { text: 'You failed the interview', correct: false }
-                    ]
+                    id: 10,
+                    type: 'pronunciation',
+                    question: 'Speak the meaning of this phrase:',
+                    targetWord: '"I will follow up with you next week"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'the interviewer will contact you again next week',
+                    acceptedAnswers: ['the interviewer will contact you again next week', 'they will contact me next week', 'i will get an email next week'],
+                    speechLang: 'en-US',
+                    image: '✉️'
                 }
             ]
         },
@@ -414,90 +550,124 @@ export const intermediateUnit1: Unit = {
             icon: '✈️',
             exercises: [
                 {
-                    type: 'roleplay-chat',
-                    question: 'You are at immigration control. The officer asks you questions. Answer them.',
-                    scenario: 'Immigration Control',
-                    chatMessages: [
-                        { sender: 'ai', text: 'Passport please. What is the purpose of your visit, and how long will you be staying?', name: 'Immigration Officer', avatar: '👮' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['I am here on vacation for two weeks', 'I am visiting for tourism, staying for ten days', 'I am here for business, I will stay for one week', 'I am visiting family for three weeks'],
-                    keywordsRequired: ['here', 'for']
+                    id: 1,
+                    type: 'pronunciation',
+                    question: 'Reply to the Immigration Officer:',
+                    targetWord: 'Officer: "What is the purpose of your visit?"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i am here on vacation for two weeks',
+                    acceptedAnswers: ['i am here on vacation for two weeks', 'i am here for business', 'i am visiting family for three weeks', 'i am here for tourism'],
+                    speechLang: 'en-US',
+                    image: '👮'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "رێچکەی بالاڕۆکەم لەلایەلای B، دەروازەی ١٢ ـیە"',
-                    sourceText: 'ئەم فڕۆکەیە لە تێرمیناڵ B، دەروازەی ١٢ یە',
-                    correctSentence: ['My', 'flight', 'is', 'at', 'Terminal', 'B,', 'Gate', '12'],
-                    options: ['My', 'flight', 'is', 'at', 'Terminal', 'B,', 'Gate', '12', 'A,', '7', 'bus', 'train', 'car']
+                    id: 2,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'فڕۆکەکەم لە تێرمیناڵ B، دەروازەی ١٢ یە',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'my flight is at terminal b gate twelve',
+                    acceptedAnswers: ['my flight is at terminal b gate twelve', 'my flight is at terminal b gate 12'],
+                    speechLang: 'en-US',
+                    image: '🛂'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: '"Your flight has been delayed by 3 hours." What should you do?',
-                    options: [
-                        { text: 'Go to the airline\'s information desk and ask about rebooking or compensation.', correct: true },
-                        { text: 'Leave the airport immediately.', correct: false },
-                        { text: 'Ignore the announcement and go to the gate.', correct: false },
-                        { text: 'Start arguing loudly at the counter.', correct: false }
-                    ]
+                    id: 3,
+                    type: 'pronunciation',
+                    question: 'Speak the correct action to take:',
+                    targetWord: 'Flight delayed 3 hours. What do you say?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'i need to ask about rebooking or compensation',
+                    acceptedAnswers: ['i need to ask about rebooking or compensation', 'can i ask about rebooking', 'i want to ask about compensation'],
+                    speechLang: 'en-US',
+                    image: '⏳'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "Excuse me, where is the ___ claim area? I need to pick up my suitcase."',
-                    sentenceParts: ['Excuse me, where is the', '___', 'claim area? I need to pick up my suitcase.'],
-                    correctOption: 'baggage',
-                    options: ['baggage', 'ticket', 'passport', 'boarding']
+                    id: 4,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "baggage":',
+                    targetWord: 'Excuse me, where is the ___ claim area?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'excuse me where is the baggage claim area',
+                    acceptedAnswers: ['excuse me where is the baggage claim area', 'where is the baggage claim area'],
+                    speechLang: 'en-US',
+                    image: '🧳'
                 },
                 {
-                    type: 'roleplay-chat',
-                    question: 'Your luggage is lost. Talk to the airline desk to report it.',
-                    scenario: 'Lost Luggage',
-                    chatMessages: [
-                        { sender: 'ai', text: 'Hello, how can I help you today?', name: 'Airline Staff', avatar: '👩‍✈️' },
-                        { sender: 'user', text: '', name: 'You', avatar: '🧑' }
-                    ],
-                    acceptableResponses: ['My luggage did not arrive on the belt', 'I cannot find my suitcase from flight', 'My baggage seems to be missing', 'I have been waiting but my bag has not come'],
-                    keywordsRequired: ['luggage', 'missing']
+                    id: 5,
+                    type: 'pronunciation',
+                    question: 'Report your lost bag to the counter:',
+                    targetWord: 'Your luggage is lost.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'my luggage did not arrive on the belt',
+                    acceptedAnswers: ['my luggage did not arrive on the belt', 'i cannot find my suitcase', 'my bag is missing', 'my luggage is missing'],
+                    speechLang: 'en-US',
+                    image: '👜'
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'بە ئینگلیزی بنووسە: "ئایا دەتوانم جێگام لە فڕۆکەکەدا بگۆڕم؟"',
-                    sourceText: 'ئایا دەتوانم جێگام لە فڕۆکەکەدا بگۆڕم؟',
-                    correctSentence: ['Can', 'I', 'change', 'my', 'seat', 'on', 'the', 'flight?'],
-                    options: ['Can', 'I', 'change', 'my', 'seat', 'on', 'the', 'flight?', 'buy', 'sell', 'take', 'bus', 'room']
+                    id: 6,
+                    type: 'pronunciation',
+                    question: 'Translate and speak in English:',
+                    targetWord: 'ئایا دەتوانم جێگام لە فڕۆکەکەدا بگۆڕم؟',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'can i change my seat on the flight',
+                    acceptedAnswers: ['can i change my seat on the flight', 'can i change my seat', 'could i change my seat on the plane'],
+                    speechLang: 'en-US',
+                    image: '💺'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'What does "boarding pass" mean?',
-                    options: [
-                        { text: 'The document that allows you to get on the airplane', correct: true },
-                        { text: 'A type of passport', correct: false },
-                        { text: 'A receipt from a restaurant', correct: false },
-                        { text: 'A hotel key card', correct: false }
-                    ]
+                    id: 7,
+                    type: 'pronunciation',
+                    question: 'Speak the definition of this word:',
+                    targetWord: '"Boarding pass"',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'the document that allows you to get on the airplane',
+                    acceptedAnswers: ['the document that allows you to get on the airplane', 'the pass to get on the plane', 'your flight ticket'],
+                    speechLang: 'en-US',
+                    image: '🎫'
                 },
                 {
-                    type: 'typing',
-                    question: 'Type in English: Ask someone at the airport where Gate 15 is.',
-                    correctAnswer: 'Excuse me, could you tell me where Gate 15 is?',
-                    hints: ['Excuse me', 'could you tell me', 'where Gate 15 is?']
+                    id: 8,
+                    type: 'pronunciation',
+                    question: 'Ask a worker using your voice:',
+                    targetWord: 'Ask where Gate 15 is.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'excuse me could you tell me where gate 15 is',
+                    acceptedAnswers: ['excuse me could you tell me where gate 15 is', 'excuse me could you tell me where gate fifteen is', 'where is gate 15 please'],
+                    speechLang: 'en-US',
+                    image: '🗺️'
                 },
                 {
-                    type: 'fill-blank',
-                    question: 'Complete: "Passengers are now ___ for Flight KR205 to London."',
-                    sentenceParts: ['Passengers are now', '___', 'for Flight KR205 to London.'],
-                    correctOption: 'boarding',
-                    options: ['boarding', 'flying', 'driving', 'swimming']
+                    id: 9,
+                    type: 'pronunciation',
+                    question: 'Complete the sentence aloud by adding "boarding":',
+                    targetWord: 'Passengers are now ___ for Flight KR205.',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'passengers are now boarding for flight k r 2 0 5',
+                    acceptedAnswers: ['passengers are now boarding for flight k r 205', 'passengers are now boarding for flight 205', 'passengers are now boarding'],
+                    speechLang: 'en-US',
+                    image: '🧍'
                 },
                 {
-                    type: 'multiple-choice',
-                    question: 'The announcement says: "This is the final call for Flight KR205." What does this mean?',
-                    options: [
-                        { text: 'This is the last chance to board — they are about to close the gate.', correct: true },
-                        { text: 'The flight has been cancelled.', correct: false },
-                        { text: 'You need to call someone about the flight.', correct: false },
-                        { text: 'The flight will depart tomorrow.', correct: false }
-                    ]
+                    id: 10,
+                    type: 'pronunciation',
+                    question: 'Speak the meaning of this announcement:',
+                    targetWord: '"This is the final call for Flight KR205." What does it mean?',
+                    targetTranslation: '',
+                    pronunciation: '',
+                    expectedAnswer: 'this is the last chance to board',
+                    acceptedAnswers: ['this is the last chance to board', 'it is the final chance to board', 'we are about to close the gate'],
+                    speechLang: 'en-US',
+                    image: '📢'
                 }
             ]
         }

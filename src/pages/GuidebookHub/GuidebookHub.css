@@ -1,0 +1,167 @@
+/* GuidebookHub.css - Sleek Modern Design */
+
+.guidebook-hub {
+    min-height: 100vh;
+    padding: 3rem 1.5rem 6rem;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: var(--font-sans);
+    direction: rtl; /* Kurdish Layout */
+}
+
+.hub-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.hub-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(255,150,0,0.1) 0%, rgba(255,106,0,0.15) 100%);
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(255, 106, 0, 0.15);
+}
+
+.hub-header h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ff9600 0%, #FF6A00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hub-header p {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.hub-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.hub-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.hub-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.hub-card-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.hub-card-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--unit-color, var(--color-primary)), var(--unit-color-dark, var(--color-primary-dark)));
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.hub-card-content h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.hub-card-content p {
+    margin: 0.35rem 0 0;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.hub-card-arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+.hub-card:hover .hub-card-arrow {
+    background: var(--unit-color, var(--color-primary));
+    border-color: var(--unit-color, var(--color-primary));
+    color: white;
+    transform: translateX(-4px); /* assuming RTL, move left */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 600px) {
+    .hub-header {
+        margin-bottom: 2.5rem;
+    }
+    .hub-header h1 {
+        font-size: 2.25rem;
+    }
+    .hub-header p {
+        font-size: 1rem;
+    }
+    .hub-card {
+        padding: 1.25rem;
+    }
+    .hub-card-left {
+        gap: 1rem;
+    }
+    .hub-card-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.5rem;
+        border-radius: 1rem;
+    }
+    .hub-card-content h2 {
+        font-size: 1.15rem;
+    }
+    .hub-card-content p {
+        font-size: 0.9rem;
+    }
+    .hub-card-arrow {
+        width: 36px;
+        height: 36px;
+    }
+    .hub-icon-wrapper {
+        width: 64px;
+        height: 64px;
+    }
+}

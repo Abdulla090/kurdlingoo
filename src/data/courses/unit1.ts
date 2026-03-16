@@ -272,13 +272,15 @@ export const unit1: Unit = {
                 },
                 {
                     id: 7,
-                    type: "multiple-choice",
-                    question: "'سڵاو' بە ئینگلیزی چۆن دەوترێت؟",
-                    options: [
-                        { id: "opt1", text: "Hello", correct: true },
-                        { id: "opt2", text: "Thank you", correct: false },
-                        { id: "opt3", text: "Yes", correct: false }
-                    ]
+                    type: "pronunciation",
+                    question: "Say the English translation of this Kurdish word:",
+                    targetWord: "سڵاو",
+                    targetTranslation: "Hello",
+                    pronunciation: "həˈloʊ",
+                    expectedAnswer: "hello",
+                    acceptedAnswers: ["hello", "hi", "hey"],
+                    speechLang: "en-US",
+                    image: "👋"
                 },
                 {
                     id: 8,
@@ -361,13 +363,15 @@ export const unit1: Unit = {
                 },
                 {
                     id: 6,
-                    type: "multiple-choice",
-                    question: "'شیر' بە ئینگلیزی چییە؟",
-                    options: [
-                        { id: "opt1", text: "Milk", image: "🥛", correct: true },
-                        { id: "opt2", text: "Tea", image: "☕", correct: false },
-                        { id: "opt3", text: "Water", image: "💧", correct: false }
-                    ]
+                    type: "pronunciation",
+                    question: "Say the English translation:",
+                    targetWord: "شیر",
+                    targetTranslation: "Milk",
+                    pronunciation: "mɪlk",
+                    expectedAnswer: "milk",
+                    acceptedAnswers: ["milk"],
+                    speechLang: "en-US",
+                    image: "🥛"
                 },
                 {
                     id: 7,
@@ -403,6 +407,18 @@ export const unit1: Unit = {
                         { id: "opt2", text: "Milk", image: "🥛", correct: false },
                         { id: "opt3", text: "Coffee", image: "☕", correct: false }
                     ]
+                },
+                {
+                    id: 11,
+                    type: "pronunciation",
+                    question: "Speak the full sentence:",
+                    targetWord: "من کوڕم",
+                    targetTranslation: "I am a boy",
+                    pronunciation: "aɪ æm ə bɔɪ",
+                    expectedAnswer: "i am a boy",
+                    acceptedAnswers: ["i am a boy", "i'm a boy"],
+                    speechLang: "en-US",
+                    image: "👦"
                 }
             ]
         },

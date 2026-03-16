@@ -64,6 +64,7 @@
 }
 
 .nav-item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -72,11 +73,12 @@
     color: #4b4b4b;
     font-weight: 700;
     font-size: 15px;
-    transition: all 0.1s;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     border: 2px solid transparent;
     cursor: pointer;
     text-decoration: none;
     background: transparent;
+    isolation: isolate;
 }
 
 .sidebar.collapsed .nav-item {
@@ -92,10 +94,17 @@
 
 .nav-item.active {
     color: #e07600;
-    background: #fff4e6;
     border-color: transparent;
-    border-left: 3px solid #ff9600;
     font-weight: 700;
+}
+
+.nav-item-active-bg {
+    position: absolute;
+    inset: 0;
+    background: #fff4e6;
+    border-radius: 12px;
+    border-left: 3px solid #ff9600;
+    z-index: -1;
 }
 
 /* HugeIcons flat icon wrapper */
@@ -114,6 +123,8 @@
     font-weight: 600;
     color: #4b4b4b;
     text-decoration: none;
+    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
 }
 
 /* App-Style Colorful Icons */
@@ -141,7 +152,7 @@
 .nav-icon-wrapper.yellow { background: linear-gradient(135deg, #ffc800 0%, #cca000 100%); color: white; box-shadow: 0 4px 0 #a38000; }
 .nav-icon-wrapper.red { background: linear-gradient(135deg, #ff4b4b 0%, #cc3c3c 100%); color: white; box-shadow: 0 4px 0 #a33030; }
 .nav-icon-wrapper.teal { background: linear-gradient(135deg, #00cd9c 0%, #00a47d 100%); color: white; box-shadow: 0 4px 0 #008364; }
-.nav-icon-wrapper.orange { background: linear-gradient(135deg, #ff9600 0%, #cc7800 100%); color: white; box-shadow: 0 4px 0 #a36000; }
+.nav-icon-wrapper.orange { background: linear-gradient(135deg, #ff9600 0%, #FF6A00 100%); color: white; box-shadow: 0 4px 0 #E65A00; }
 .nav-icon-wrapper.gray { background: linear-gradient(135deg, #e5e5e5 0%, #c4c4c4 100%); color: #666; box-shadow: 0 4px 0 #999999; }
 
 .nav-icon-inner, .nav-icon-mobile {
@@ -262,7 +273,7 @@
 
 /* Active (selected home page) State */
 .bottom-nav-home-btn.active {
-    background: linear-gradient(135deg, #ff9600 0%, #cc7800 100%);
+    background: linear-gradient(135deg, #ff9600 0%, #FF6A00 100%);
     border: 4px solid #fff;
     box-shadow: 0 8px 24px rgba(255, 150, 0, 0.4);
 }
@@ -292,6 +303,8 @@
 
 /* Nav Item */
 .bottom-nav-item {
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -300,7 +313,7 @@
     padding: 8px 10px;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
-    transition: all 0.15s;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     /* ensure min width for touch targets */
     min-width: 54px;
 }
@@ -310,6 +323,21 @@
     transform: scale(0.95);
 }
 
+.bottom-nav-item.active {
+    color: #ff9600;
+}
+.bottom-nav-item.active .nav-label {
+    color: #ff9600;
+}
+
+.bottom-nav-active-pill {
+    position: absolute;
+    inset: 4px;
+    background: #fff4e6;
+    border-radius: 12px;
+    z-index: -1;
+}
+
 /* Label */
 .nav-label {
     font-size: 11px;
@@ -317,6 +345,7 @@
     color: #9ca3af;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Small screens tweaks */

@@ -1,66 +1,78 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ChevronLeft, BookOpen } from 'lucide-react';
 import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { ColorfulIcon } from '../../components/ColorfulIcon/ColorfulIcon';
+
+import './GuidebookHub.css';
 
 const GuidebookHub = () => {
     const navigate = useNavigate();
     const units = [unit1, unit2, unit3, unit4];
 
+    // Helper map to assign the exact bright sleek colors used in your project theme
+    const getUnitColors = (unitId: string) => {
+        const colors: Record<string, { color: string; dark: string }> = {
+            'unit-1': { color: '#ff9600', dark: '#FF6A00' }, // Full Orange
+            'unit-2': { color: '#1cb0f6', dark: '#0c8fd6' }, // Blue
+            'unit-3': { color: '#ff4b4b', dark: '#d33131' }, // Red
+            'unit-4': { color: '#ce82ff', dark: '#a560ff' }  // Purple
+        };
+        return colors[unitId] || { color: '#ff9600', dark: '#FF6A00' };
+    };
+
+    const getUnitEmoji = (unitId: string) => {
+        const emojis: Record<string, string> = {
+            'unit-1': '🏁',
+            'unit-2': '🗣️',
+            'unit-3': '💼',
+            'unit-4': '🏦',
+            'unit-5': '⚡'
+        };
+        return emojis[unitId] || '📖';
+    };
+
     return (
-        <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--color-text)' }}>Guidebooks</h1>
-            <div style={{ display: 'grid', gap: '1.5rem' }}>
-                {units.map((unit, index) => (
-                    <div
-                        key={unit.id}
-                        onClick={() => navigate(`/guidebook/${unit.id}`)}
-                        style={{
-                            background: 'white',
-                            border: '2px solid var(--color-border)',
-                            borderRadius: 'var(--radius-xl)',
-                            padding: '1.5rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            cursor: 'pointer',
-                            transition: 'transform 0.2s, box-shadow 0.2s',
-                            boxShadow: '0 4px 0 var(--color-border)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 6px 0 var(--color-border)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 4px 0 var(--color-border)';
-                        }}
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                            <div style={{
-                                width: '60px',
-                                height: '60px',
-                                background: 'var(--color-primary)',
-                                borderRadius: 'var(--radius-lg)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'white',
-                                fontSize: '1.5rem',
-                                fontWeight: 'bold'
-                            }}>
-                                {index + 1}
+        <div className="guidebook-hub">
+            <div className="hub-header">
+                <div className="hub-icon-wrapper">
+                    <BookOpen size={40} color="#FF6A00" />
+                </div>
+                <h1>ڕێبەری وانەکان</h1>
+                <p>پێداچوونەوە بە وشەکان، ڕێزمان، و ئەو تێبینیانەی کە لە هەر بەشێکدا هەیە بۆ بەهێزکردنی فێربوونەکەت.</p>
+            </div>
+
+            <div className="hub-grid">
+                {units.map((unit) => {
+                    const { color, dark } = getUnitColors(unit.id);
+                    
+                    return (
+                        <div
+                            key={unit.id}
+                            className="hub-card"
+                            onClick={() => navigate(`/guidebook/${unit.id}`)}
+                            style={{
+                                '--unit-color': color,
+                                '--unit-color-dark': dark
+                            } as React.CSSProperties}
+                        >
+                            <div className="hub-card-left">
+                                <div className="hub-card-icon" style={{ background: 'transparent', width: 'auto' }}>
+                                    <ColorfulIcon emoji={getUnitEmoji(unit.id)} size={48} />
+                                </div>
+                                <div className="hub-card-content">
+                                    <h2>{unit.title}</h2>
+                                    <p>{unit.description}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 style={{ margin: 0, fontSize: '1.25rem' }}>{unit.title}</h2>
-                                <p style={{ margin: '0.25rem 0 0', color: 'var(--color-text-secondary)' }}>{unit.description}</p>
+                            <div className="hub-card-arrow">
+                                <ChevronLeft size={24} strokeWidth={2.5} />
                             </div>
                         </div>
-                        <ArrowRight color="var(--color-border)" />
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

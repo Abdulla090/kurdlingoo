@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     // UI Icons
     X, Check, Heart, Sparkles, RefreshCw, MessageCircle, MessageSquare, ChevronRight, // Lucide for UI
-    Settings, Play, Pause, RotateCcw, Loader2
+    Settings, Play, Pause, RotateCcw, Loader2, Volume2
 } from 'lucide-react';
 import { sendChatMessage } from '../../services/api';
 import {
@@ -385,17 +385,29 @@ const MultipleChoice = ({ exercise, onAnswer }) => {
         setSelected(null);
     }, [exercise.id, exercise.question]);
 
+    // If options have images, find the correct one's emoji to display as a visual prompt.
+    // This makes the game harder — the emoji is shown as the question, not on the cards.
+    const hasImages = exercise.options.some(o => o.image);
+    const correctOption = exercise.options.find(o => o.correct);
+    const questionEmoji = hasImages && correctOption?.image ? correctOption.image : null;
+
     return (
         <div className="exercise-container">
+            {/* Large visual prompt — shown once above the question, not on each card */}
+            {questionEmoji && (
+                <div className="question-visual-prompt">
+                    <IconRenderer emoji={questionEmoji} size={96} />
+                </div>
+            )}
             <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
             <div className="options-grid">
                 {shuffledOptions.map((opt, idx) => (
                     <div
                         key={idx}
-                        className={`option-card ${selected === opt ? 'selected' : ''}`}
+                        className={`option-card text-only ${selected === opt ? 'selected' : ''}`}
                         onClick={() => setSelected(opt)}
                     >
-                        {opt.image && <div className="option-image"><IconRenderer emoji={opt.image} size={48} /></div>}
+                        {/* No emoji on individual cards — forces real knowledge */}
                         <div className="option-text" dir="auto">{opt.text}</div>
                     </div>
                 ))}
@@ -427,17 +439,27 @@ const ImageSelection = ({ exercise, onAnswer }) => {
         setSelected(null);
     }, [exercise.id, exercise.question]);
 
+    // Show the correct item's emoji as the visual prompt — not on each card.
+    const correctOption = exercise.options.find(o => o.correct);
+    const questionEmoji = correctOption?.image;
+
     return (
         <div className="exercise-container">
+            {/* One large emoji displayed as the 'object to identify' */}
+            {questionEmoji && (
+                <div className="question-visual-prompt">
+                    <IconRenderer emoji={questionEmoji} size={96} />
+                </div>
+            )}
             <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
-            <div className="image-grid">
+            {/* Cards show text only — no emoji clues */}
+            <div className="image-grid text-only-grid">
                 {shuffledOptions.map((opt, idx) => (
                     <div
                         key={idx}
-                        className={`image-card ${selected === opt ? 'selected' : ''}`}
+                        className={`image-card text-only ${selected === opt ? 'selected' : ''}`}
                         onClick={() => setSelected(opt)}
                     >
-                        <div className="image-content"><IconRenderer emoji={opt.image} size={64} /></div>
                         <div className="image-label">{opt.text}</div>
                     </div>
                 ))}
@@ -565,32 +587,58 @@ const TypingExercise = ({ exercise, onAnswer }) => {
 
 const SentenceBuilder = ({ exercise, onAnswer }) => {
     const { t } = useLanguage();
-    const [sentence, setSentence] = useState([]);
-    const [availableWords, setAvailableWords] = useState(() => shuffleArray([...exercise.options]));
+    // shuffledWords: the fixed order of words in the bank (never changes)
+    const [shuffledWords] = useState(() => shuffleArray([...exercise.options]));
+    // selectedIndices: ordered list of bank indices that are currently selected
+    const [selectedIndices, setSelectedIndices] = useState([]);
 
     useEffect(() => {
-        setAvailableWords(shuffleArray([...exercise.options]));
-        setSentence([]);
+        setSelectedIndices([]);
     }, [exercise.id, exercise.question]);
 
-    const addToSentence = (word) => {
-        setSentence([...sentence, word]);
-        setAvailableWords(availableWords.filter((w, i) => i !== availableWords.indexOf(word)));
+    // Toggle a word from the bank on/off
+    const toggleWord = (bankIndex) => {
+        if (selectedIndices.includes(bankIndex)) {
+            // Deselect — remove from selected list
+            setSelectedIndices(selectedIndices.filter(i => i !== bankIndex));
+        } else {
+            // Select — add to end of selected list
+            setSelectedIndices([...selectedIndices, bankIndex]);
+        }
     };
 
-    const removeFromSentence = (word) => {
-        setSentence(sentence.filter((w, i) => i !== sentence.indexOf(word)));
-        setAvailableWords([...availableWords, word]);
+    // Remove a word from the answer area (deselect by its position in selectedIndices)
+    const removeFromSentence = (posInSentence) => {
+        setSelectedIndices(selectedIndices.filter((_, i) => i !== posInSentence));
     };
 
     const checkAnswer = () => {
+        const sentence = selectedIndices.map(i => shuffledWords[i]);
         const isCorrect = JSON.stringify(sentence) === JSON.stringify(exercise.correctSentence);
         onAnswer(isCorrect);
     };
 
-    // Detect if the target sentence is English (LTR) or Kurdish (RTL)
     const isEnglishSentence = /[a-zA-Z]/.test(exercise.correctSentence[0]);
     const sentenceDir = isEnglishSentence ? 'ltr' : 'rtl';
+    const sentence = selectedIndices.map(i => shuffledWords[i]);
+
+    const handleSpeak = (e) => {
+        // Stop it from deselecting words if clicking near them
+        e.stopPropagation();
+        if ('speechSynthesis' in window && sentence.length > 0) {
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            
+            const textToSpeak = sentence.join(' ');
+            if (textToSpeak.trim()) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                // Ensure it speaks English as requested
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+    };
 
     return (
         <div className="exercise-container">
@@ -599,20 +647,43 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
                 {exercise.sourceText}
             </div>
 
-            <div className="sentence-area" dir={sentenceDir}>
-                {sentence.map((word, idx) => (
-                    <button key={idx} className="word-chip" onClick={() => removeFromSentence(word)}>
+            {/* Answer area — shows selected words in order; click to deselect */}
+            <div className="sentence-area" dir={sentenceDir} style={{ position: 'relative' }}>
+                {/* Voice button in the corner to read the sentence */}
+                {sentence.length > 0 && (
+                    <button 
+                        className="sentence-tts-btn" 
+                        onClick={handleSpeak}
+                        title="Speak sentence"
+                        aria-label="Speak sentence in English"
+                    >
+                        <Volume2 size={20} color="#1cb0f6" />
+                    </button>
+                )}
+                {sentence.map((word, pos) => (
+                    <button key={pos} className="word-chip selected" onClick={() => removeFromSentence(pos)}>
                         {word}
                     </button>
                 ))}
             </div>
 
+            {/* Word bank — all words stay fixed; selected ones show as ghost placeholders */}
             <div className="word-bank" dir={sentenceDir}>
-                {availableWords.map((word, idx) => (
-                    <button key={idx} className="word-chip bank" onClick={() => addToSentence(word)}>
-                        {word}
-                    </button>
-                ))}
+                {shuffledWords.map((word, bankIndex) => {
+                    const isUsed = selectedIndices.includes(bankIndex);
+                    return (
+                        <button
+                            key={bankIndex}
+                            className={`word-chip bank ${isUsed ? 'used' : ''}`}
+                            onClick={() => !isUsed && toggleWord(bankIndex)}
+                            disabled={isUsed}
+                            aria-hidden={isUsed}
+                        >
+                            {/* When used, show nothing (ghost slot). Text is invisible but width preserved */}
+                            <span style={{ visibility: isUsed ? 'hidden' : 'visible' }}>{word}</span>
+                        </button>
+                    );
+                })}
             </div>
 
             <div className="exercise-footer">
@@ -629,6 +700,7 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
         </div>
     );
 };
+
 
 const MatchPairs = ({ exercise, onAnswer }) => {
     const { t } = useLanguage();
@@ -1339,7 +1411,7 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
         window.speechSynthesis.cancel();
         setIsPlaying(true);
 
-        const utterance = new SpeechSynthesisUtterance(exercise.listenText || exercise.targetTranslation);
+        const utterance = new SpeechSynthesisUtterance(exercise.listenText || exercise.targetTranslation || exercise.targetWord);
         utterance.lang = exercise.listenLang || 'en-US';
         utterance.rate = 0.85;
         utterance.pitch = 1;
@@ -1473,9 +1545,11 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
                     </div>
                 )}
 
-                <div className="pronunciation-meaning">
-                    {exercise.targetTranslation}
-                </div>
+                {exercise.targetTranslation && (
+                    <div className="pronunciation-meaning">
+                        {exercise.targetTranslation}
+                    </div>
+                )}
 
                 <button
                     className={`pronunciation-listen-btn ${isPlaying ? 'playing' : ''}`}

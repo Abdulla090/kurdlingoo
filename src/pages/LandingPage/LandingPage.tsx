@@ -15,20 +15,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function LandingPage() {
     const navigate = useNavigate();
-    const { user } = useUser();
-    
-    useEffect(() => {
-        if (user) {
-            navigate('/learn', { replace: true });
-        }
-    }, [user, navigate]);
-
+    const { user, isLoaded } = useUser();
     const [scrolled, setScrolled] = useState(false);
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem('lp-theme');
         if (saved) return saved === 'dark';
         return window.matchMedia('(prefers-color-scheme: dark)').matches;
     });
+
+    // If already logged in, redirect immediately to app
+    useEffect(() => {
+        if (isLoaded && user) {
+            navigate('/learn', { replace: true });
+        }
+    }, [user, isLoaded, navigate]);
+
+    // Smart navigation: logged-in users go to app, others go to login
+    const handleStart = () => {
+        if (user) {
+            navigate('/learn');
+        } else {
+            navigate('/login');
+        }
+    };
 
     // Navbar scroll
     useEffect(() => {
@@ -42,8 +51,9 @@ export default function LandingPage() {
         localStorage.setItem('lp-theme', darkMode ? 'dark' : 'light');
     }, [darkMode]);
 
-    // GSAP animations
+    // GSAP animations — only run when loaded and user is NOT logged in
     useEffect(() => {
+        if (!isLoaded || user) return; // don't animate if we're about to redirect
         const ctx = gsap.context(() => {
             // Hero entrance — these play immediately on load (no ScrollTrigger)
             gsap.from('.lp-hero__badge', { opacity: 0, y: 30, duration: 0.8, delay: 0.2 });
@@ -73,9 +83,7 @@ export default function LandingPage() {
             ];
 
             revealSections.forEach(({ trigger, targets }) => {
-                // Set initial state
                 gsap.set(targets, { opacity: 0, y: 40 });
-                // Animate on scroll
                 ScrollTrigger.create({
                     trigger,
                     start: 'top 90%',
@@ -105,7 +113,10 @@ export default function LandingPage() {
         });
 
         return () => ctx.revert();
-    }, []);
+    }, [isLoaded, user]);
+
+    // While auth state is loading, show nothing to prevent flash
+    if (!isLoaded) return null;
 
     return (
         <div className={`lp ${darkMode ? 'lp--dark' : 'lp--light'}`}>
@@ -128,10 +139,10 @@ export default function LandingPage() {
                         >
                             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
-                        <button className="lp-btn lp-btn--ghost" onClick={() => navigate('/login')}>
-                            چوونەژوورەوە
+                        <button className="lp-btn lp-btn--ghost" onClick={handleStart}>
+                            {user ? 'داشبۆرد' : 'چوونەژوورەوە'}
                         </button>
-                        <button className="lp-btn lp-btn--solid" onClick={() => navigate('/login')}>
+                        <button className="lp-btn lp-btn--solid" onClick={handleStart}>
                             دەستپێبکە
                         </button>
                     </div>
@@ -160,7 +171,7 @@ export default function LandingPage() {
                                 لەگەڵ کوردلینگۆ بە ڕێگای وانەی ئینتەراکتیڤ، ڕۆڵگێڕان لەگەڵ زیرەکی دەستکرد و یاری — زمانی ئینگلیزی و زمانەکانی تر فێر بە بەکەیفترین شێوە.
                             </p>
                             <div className="lp-hero__ctas">
-                                <button className="lp-hero__primary" onClick={() => navigate('/login')}>
+                                <button className="lp-hero__primary" onClick={handleStart}>
                                     <ArrowLeft size={18} />
                                     دەستپێکردنی خۆڕایی
                                 </button>
@@ -488,7 +499,7 @@ export default function LandingPage() {
                         <p className="lp-cta__desc">
                             ئێستا بە خۆڕایی دەستپێبکە و ببە بە یەکێک لە هەزاران فێرخوازی کوردلینگۆ
                         </p>
-                        <button className="lp-cta__button" onClick={() => navigate('/login')}>
+                        <button className="lp-cta__button" onClick={handleStart}>
                             <ArrowLeft size={18} />
                             دەستپێبکە — خۆڕاییە
                         </button>

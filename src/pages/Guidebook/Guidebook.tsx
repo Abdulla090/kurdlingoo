@@ -8,6 +8,7 @@ import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { ColorfulIcon } from '../../components/ColorfulIcon/ColorfulIcon';
 import './Guidebook.css';
 
 const Guidebook = () => {
@@ -15,6 +16,19 @@ const Guidebook = () => {
     const navigate = useNavigate();
     const [unit, setUnit] = useState(null);
     const { speak } = useTextToSpeech();
+
+    // Helper to separate emoji from text for 3D icon replacement
+    const splitEmoji = (text: string) => {
+        if (!text) return { emoji: '', text: '' };
+        const match = text.match(/^([\s\p{Extended_Pictographic}]+)(.*)/u);
+        if (match) {
+            return {
+                emoji: match[1].trim(),
+                text: match[2].trim()
+            };
+        }
+        return { emoji: '', text };
+    };
 
     useEffect(() => {
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
@@ -55,8 +69,8 @@ const Guidebook = () => {
     const unitColors = {
         'unit-1': {
             primary: '#ff9600',
-            primaryDark: '#cc7800',
-            gradient: 'linear-gradient(135deg, #ff9600 0%, #cc7800 100%)',
+            primaryDark: '#FF6A00',
+            gradient: 'linear-gradient(135deg, #ff9600 0%, #FF6A00 100%)',
             light: '#fff8eb',
             accent: '#ffedd5'
         },
@@ -121,7 +135,11 @@ const Guidebook = () => {
                             ))}
                             <Volume2 size={16} className="speech-hint" />
                         </div>
-                        <div className="arrow-divider">⬇️ vs ⬇️</div>
+                        <div className="arrow-divider">
+                            <ColorfulIcon emoji="⬇️" size={24} />
+                            <span style={{ fontSize: '0.9rem', opacity: 0.5, margin: '0 0.5rem' }}>vs</span>
+                            <ColorfulIcon emoji="⬇️" size={24} />
+                        </div>
                         <div className="sentence-row kurdish">
                             {visual.data.kurdish.map((part, i) => (
                                 <div key={i} className="word-block" style={{ borderColor: part.color }}>
@@ -139,7 +157,7 @@ const Guidebook = () => {
                             <div key={i} className="pronoun-card clickable" onClick={() => speak(item.english, undefined, undefined, true)}>
                                 <div className="p-english">{item.english} <Volume2 size={12} className="card-voice-hint" /></div>
                                 <div className="p-kurdish">{item.kurdish}</div>
-                                <div className="p-icon">{item.icon}</div>
+                                <div className="p-icon"><ColorfulIcon emoji={item.icon} size={40} /></div>
                             </div>
                         ))}
                     </div>
@@ -173,7 +191,7 @@ const Guidebook = () => {
                                         opacity: 0.5 + (i * 0.2)
                                     }}
                                 >
-                                    {item.icon}
+                                    <ColorfulIcon emoji={item.icon} size={24 + (i * 12)} />
                                 </div>
                                 <div className="comp-text">
                                     <span className="comp-eng">{item.english} <Volume2 size={10} /></span>
@@ -210,7 +228,7 @@ const Guidebook = () => {
                                 className={`chat-bubble ${msg.speaker === 'A' ? 'left' : 'right'} clickable`}
                                 onClick={() => speak(msg.english, undefined, undefined, true)}
                             >
-                                <div className="chat-avatar">{msg.avatar}</div>
+                                <div className="chat-avatar"><ColorfulIcon emoji={msg.avatar} size={36} /></div>
                                 <div className="chat-content">
                                     <div className="chat-english">{msg.english} <Volume2 size={12} /></div>
                                     <div className="chat-kurdish">{msg.kurdish}</div>
@@ -224,22 +242,30 @@ const Guidebook = () => {
         }
     };
 
-    // Helper to render content sections
     const renderSection = (section, index) => {
+        const { emoji, text: titleText } = splitEmoji(section.title);
+        
+        // Define fallback icons if no emoji in title
+        const getIcon = () => {
+             if (emoji) return emoji;
+             if (section.id === 'pronunciation') return "🔊";
+             if (section.id === 'grammar') return "💡";
+             if (section.id === 'culture') return "🌍";
+             if (section.id === 'vocabulary') return "⭐";
+             return "📖";
+        };
+
         return (
             <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`guide-card ${section.type || ''}`}
             >
                 <div className="card-header">
-                    {section.id === 'pronunciation' && <Volume2 className="card-icon" />}
-                    {section.id === 'grammar' && <Info className="card-icon" />}
-                    {section.id === 'culture' && <Globe className="card-icon" />}
-                    {section.id === 'vocabulary' && <Star className="card-icon" />}
-                    <h2>{section.title}</h2>
+                    <ColorfulIcon emoji={getIcon()} size={32} className="card-icon" />
+                    <h2>{titleText || section.title}</h2>
                 </div>
 
                 <div className="card-content">
@@ -318,7 +344,7 @@ const Guidebook = () => {
                         <h1>{unit.title} Guidebook</h1>
                         <p>{unit.description}</p>
                     </motion.div>
-                    <BookOpen size={64} className="hero-icon" />
+                    <ColorfulIcon emoji="📖" size={80} className="hero-icon" />
                 </div>
                 <div className="hero-wave">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -357,7 +383,7 @@ const Guidebook = () => {
                 {guidebook.keyPhrases && guidebook.keyPhrases.length > 0 && (
                     <section className="phrases-section">
                         <div className="section-header">
-                            <Star className="section-icon" />
+                            <ColorfulIcon emoji="⭐" size={40} className="section-icon" />
                             <h2>Key Phrases</h2>
                         </div>
                         <div className="phrases-grid">
