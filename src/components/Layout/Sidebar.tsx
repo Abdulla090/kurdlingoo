@@ -15,7 +15,7 @@ import {
     Login01Icon,
 } from '@hugeicons/core-free-icons';
 import { useLanguage } from '../../context/LanguageContext';
-import { SignedIn, SignedOut, UserButton, SignInButton } from '@insforge/react';
+import { SignedIn, SignedOut, UserButton, SignInButton } from '../../context/AuthContext';
 import './Layout.css';
 
 interface SidebarProps {

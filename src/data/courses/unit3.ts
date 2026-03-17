@@ -145,12 +145,12 @@ export const unit3: Unit = {
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Restaurant" in Kurdish?',
+                    question: 'How do you say "چێشتخانە" in English?',
                     options: [
-                        { text: 'چێشتخانە', image: '🍽️', correct: true },
-                        { text: 'چایخانە', image: '☕', correct: false },
-                        { text: 'نانەواخانە', image: '🍞', correct: false },
-                        { text: 'خواردن', image: '🍴', correct: false }
+                        { text: 'Restaurant', image: '🍽️', correct: true },
+                        { text: 'Cafe', image: '☕', correct: false },
+                        { text: 'Bakery', image: '🍞', correct: false },
+                        { text: 'Kitchen', image: '🍳', correct: false }
                     ]
                 },
                 {
@@ -164,72 +164,73 @@ export const unit3: Unit = {
                     ]
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'Translate: "I would like to order food"',
-                    sourceText: 'I would like to order food',
-                    correctSentence: ['من', 'دەمەوێت', 'خواردن', 'داوا', 'بکەم'],
-                    options: ['من', 'دەمەوێت', 'خواردن', 'داوا', 'بکەم', 'بخۆم', 'بکڕم']
+                    type: 'pronunciation',
+                    question: 'Use your voice to say this sentence in English:',
+                    targetWord: 'I would like to order traditional food',
+                    targetTranslation: 'من حەزدەکەم خواردنی کوردەواری داوا بکەم',
+                    expectedAnswer: 'I would like to order traditional food',
+                    speechLang: 'en-US',
+                    hints: ['I', 'would', 'like', 'to', 'order']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "This food is very ___" (delicious)',
-                    sentenceParts: ['ئەم', 'خواردنە', 'زۆر', '___'],
-                    correctOption: 'تامدارە',
-                    options: ['تامدارە', 'گرانە', 'هەرزانە', 'گەرمە']
+                    question: 'Complete: "This traditional food is extremely ___" (تامدارە)',
+                    sentenceParts: ['This', 'traditional', 'food', 'is', 'extremely', '___'],
+                    correctOption: 'delicious',
+                    options: ['delicious', 'expensive', 'cheap', 'hot']
                 },
                 {
-                    type: 'vocabulary-grid',
-                    question: 'Match Kurdish dishes with their descriptions',
-                    items: [
-                        { kurdish: 'دۆلمە', english: 'Stuffed vegetables', image: '🫑' },
-                        { kurdish: 'کوبە', english: 'Meat & bulgur balls', image: '🥙' },
-                        { kurdish: 'بریانی', english: 'Rice dish', image: '🍚' },
-                        { kurdish: 'کەباب', english: 'Grilled meat', image: '🍖' }
+                    type: 'match-pairs',
+                    question: 'Match the Kurdish dish to its description',
+                    pairs: [
+                        { kurdish: '🫑 دۆلمە', english: 'Stuffed vegetables' },
+                        { kurdish: '🥙 کوبە', english: 'Meat & bulgur balls' },
+                        { kurdish: '🍚 بریانی', english: 'Rice dish' },
+                        { kurdish: '🍖 کەباب', english: 'Grilled meat' }
                     ]
                 },
                 {
                     type: 'roleplay-chat',
-                    question: 'Order food at a restaurant in Kurdish!',
-                    scenario: '🍽️ You are at a Kurdish restaurant. The waiter is taking your order. Order your favorite dish!',
+                    question: 'Use your voice to order food in English!',
+                    scenario: '🍽️ You are at a restaurant. The waiter is taking your order. Use the microphone to order your food in English.',
                     chatMessages: [
-                        { sender: 'ai', text: 'سڵاو و بەخێربێیت! ئەم چێشتخانەیە ناوبانگی کەبابەکانمانە. چی حەزدەکەیت فەرمان بدەیت؟', avatar: '🧑‍🍳', name: 'گارسۆن' },
-                        { sender: 'ai', text: 'confirm: زۆر باش! ئێستا دەینێم بۆت. نۆشی گیانت!', avatar: '🧑‍🍳', name: 'گارسۆن' }
+                        { sender: 'ai', text: 'Hello, welcome to our restaurant! What would you like to order today?', avatar: '🧑‍🍳', name: 'Waiter' },
+                        { sender: 'ai', text: 'confirm: Great choice! I will prepare that for you right away.', avatar: '🧑‍🍳', name: 'Waiter' }
                     ],
                     acceptableResponses: [
-                        'من کەباب و بریانیم دەوێت',
-                        'کەبابێکم دەوێت',
-                        'دەمەوێت کەباب بخۆم',
-                        'من دۆلمەم دەوێت',
-                        'بریانی و سەڵاتە دەوێم'
+                        'I would like to order a kebab please',
+                        'Can I get a pizza',
+                        'I want a burger',
+                        'I would like some traditional food'
                     ],
-                    keywordsRequired: ['دەوێت'],
-                    hints: ['kebab', 'biryani', 'dolma', 'want']
+                    keywordsRequired: ['like', 'want', 'please', 'can'],
+                    hints: ['I would like', 'Can I get', 'please']
                 },
                 {
                     type: 'conversation',
-                    question: 'Complete the restaurant dialogue',
+                    question: 'Complete the restaurant dialogue in English',
                     dialogue: [
-                        { speaker: 'Waiter', text: 'سڵاو! چیتان دەوێت؟' },
-                        { speaker: 'You', text: '___', options: ['من کەباب و بریانیم دەوێت', 'باشم', 'سپاس'] },
-                        { speaker: 'Waiter', text: 'باشە، چیتان دەوێت بخۆنەوە؟' },
-                        { speaker: 'You', text: '___', options: ['دۆغم دەوێت', 'نەخێر', 'خوا حافیز'] }
+                        { speaker: 'Waiter', text: 'Hello! Are you ready to order?' },
+                        { speaker: 'You', text: '___', options: ['Yes, we would like to order', 'We are good', 'Thank you no'] },
+                        { speaker: 'Waiter', text: 'Excellent. And what would you like to drink?' },
+                        { speaker: 'You', text: '___', options: ['Two glasses of water please', 'No', 'Goodbye'] }
                     ],
-                    correctOptions: ['من کەباب و بریانیم دەوێت', 'دۆغم دەوێت']
+                    correctOptions: ['Yes, we would like to order', 'Two glasses of water please']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "The bill, please"',
-                    correctAnswer: 'حیسابەکە تکایە',
-                    hints: ['حیساب', 'تکایە']
+                    question: 'Type in English: "حیسابەکە تکایە"',
+                    correctAnswer: 'The bill please',
+                    hints: ['The', 'bill', 'please']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'How do you say "Breakfast"?',
+                    question: 'How do you say "نانی بەیانی" (Breakfast)?',
                     options: [
-                        { text: 'تایبەت', image: '🍳', correct: true },
-                        { text: 'نانی نیوەڕۆ', image: '🍱', correct: false },
-                        { text: 'شێوانە', image: '🍽️', correct: false },
-                        { text: 'خواردن', image: '🍴', correct: false }
+                        { text: 'Breakfast', image: '🍳', correct: true },
+                        { text: 'Lunch', image: '🍱', correct: false },
+                        { text: 'Dinner', image: '🍽️', correct: false },
+                        { text: 'Food', image: '🍴', correct: false }
                     ]
                 },
                 {
@@ -243,18 +244,20 @@ export const unit3: Unit = {
                     ]
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'Translate: "I am vegetarian"',
-                    sourceText: 'I am vegetarian',
-                    correctSentence: ['من', 'ڕووەکخۆرم'],
-                    options: ['من', 'ڕووەکخۆرم', 'گۆشتخۆرم', 'برسیمە', 'تێرم']
+                    type: 'pronunciation',
+                    question: 'Use your voice to say this sentence in English:',
+                    targetWord: 'I am vegetarian, do you have meatless food?',
+                    targetTranslation: 'من ڕووەکخۆرم، ئایا خواردنی بێ گۆشتتان هەیە؟',
+                    expectedAnswer: 'I am vegetarian do you have meatless food',
+                    speechLang: 'en-US',
+                    hints: ['I', 'am', 'vegetarian', 'do', 'you', 'have']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Do you have ___ food?" (spicy)',
-                    sentenceParts: ['ئایا', 'خواردنی', '___', 'تان', 'هەیە', '؟'],
-                    correctOption: 'تیژ',
-                    options: ['تیژ', 'شیرین', 'سوور', 'ترش']
+                    question: 'Complete in English: "ئایا خواردنی تیژتان هەیە؟"',
+                    sentenceParts: ['Do', 'you', 'have', '___', 'food?'],
+                    correctOption: 'spicy',
+                    options: ['spicy', 'sweet', 'sour', 'bitter']
                 },
                 {
                     type: 'cultural-note',
@@ -268,19 +271,21 @@ export const unit3: Unit = {
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Bill" in Kurdish?',
+                    question: 'What is "پارەدان" or "حیساب" in a restaurant?',
                     options: [
-                        { text: 'حیساب', image: '🧾', correct: true },
-                        { text: 'پارە', image: '💵', correct: false },
-                        { text: 'مێز', image: '🪑', correct: false }
+                        { text: 'The bill', image: '🧾', correct: true },
+                        { text: 'Money', image: '💵', correct: false },
+                        { text: 'Table', image: '🪑', correct: false }
                     ]
                 },
                 {
-                    type: 'sentence-builder',
-                    question: 'Translate: "The tea is hot"',
-                    sourceText: 'The tea is hot',
-                    correctSentence: ['چایەکە', 'گەرمە'],
-                    options: ['چایەکە', 'گەرمە', 'ساردە', 'خۆشە']
+                    type: 'pronunciation',
+                    question: 'Use your voice to translate: "چایەکە زۆر گەرمە"',
+                    targetWord: 'The tea is very hot',
+                    targetTranslation: 'چایەکە زۆر گەرمە',
+                    expectedAnswer: 'The tea is very hot',
+                    speechLang: 'en-US',
+                    hints: ['The', 'tea', 'is', 'very', 'hot']
                 },
                 {
                     type: 'match-pairs', question: 'Match the pairs',

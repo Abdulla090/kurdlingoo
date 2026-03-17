@@ -1,43 +1,36 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-// Phosphor Icons - Modern 2025 icons with fill variants
 import {
     Star, ChatCircle, Hash, Palette, Clock, UsersThree, ShoppingCart,
-    MapPin, CloudSun, ForkKnife, Airplane, DeviceMobile, Briefcase,
-    Stethoscope, CalendarCheck, ChatTeardrop, Bank, MusicNotes,
-    GlobeHemisphereWest, Crown, Lock, CheckCircle, BookOpenText,
-    Lightning, Trophy, Rocket
+    MapPin, CloudSun, ForkKnife, Lock, CheckCircle, Crown, Trophy,
+    BookOpenText, Lightning, Rocket
 } from '@phosphor-icons/react';
-import { unit1 } from '../../data/courses/unit1';
-import { unit2 } from '../../data/courses/unit2';
 import { useLanguage } from '../../context/LanguageContext';
+import { unit3 } from '../../data/courses/unit3';
+import { unit4 } from '../../data/courses/unit4';
+import { unit5 } from '../../data/courses/unit5';
 import {
     isLessonCompleted,
     isLessonUnlocked,
-
     isUnitCompleted
 } from '../../utils/progressManager';
-import './Learn.css';
-
+import './ElementaryLearn.css';
+import '../Learn/Learn.css'; // Share the core path styles
 import { Unit } from '../../types';
 
-// Unit color schemes
+// Green / teal theme for Elementary level
 const UNIT_THEMES = [
-    { gradient: 'linear-gradient(135deg, #ff9600 0%, #cc7800 100%)', color: '#ff9600', shadow: '#cc7800' }, // Primary Orange Theme
-    { gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#3b82f6', shadow: '#1d4ed8' },
-    { gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: '#ef4444', shadow: '#b91c1c' },
-    { gradient: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)', color: '#a855f7', shadow: '#7c3aed' },
-    { gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#f59e0b', shadow: '#b45309' }, // Gold for Challenge
+    { gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#10b981', shadow: '#065f46' },
+    { gradient: 'linear-gradient(135deg, #0891b2 0%, #0e7490 100%)', color: '#06b6d4', shadow: '#155e75' },
+    { gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)', color: '#22c55e', shadow: '#14532d' },
 ];
 
-const Learn: React.FC = () => {
+const ElementaryLearn: React.FC = () => {
     const navigate = useNavigate();
-    const location = useLocation(); // Track location changes
+    const location = useLocation();
     const { t } = useLanguage();
     const [units, setUnits] = React.useState<Unit[]>([]);
 
-
-    // Modern Phosphor Icon mapping
     const getLessonIcon = (title: string) => {
         if (!title) return Star;
         const lower = title.toLowerCase();
@@ -50,65 +43,36 @@ const Learn: React.FC = () => {
         if (lower.includes('shop') || lower.includes('بازاڕ')) return ShoppingCart;
         if (lower.includes('direction') || lower.includes('ئاڕاستە')) return MapPin;
         if (lower.includes('weather') || lower.includes('کەش')) return CloudSun;
-        if (lower.includes('food') || lower.includes('dining') || lower.includes('خواردن')) return ForkKnife;
-        if (lower.includes('travel') || lower.includes('گەشت')) return Airplane;
-        if (lower.includes('tech') || lower.includes('تەکنە')) return DeviceMobile;
-        if (lower.includes('business') || lower.includes('work') || lower.includes('کار')) return Briefcase;
-        if (lower.includes('health') || lower.includes('تەندروست')) return Stethoscope;
-        if (lower.includes('appointment') || lower.includes('مۆڵەت')) return CalendarCheck;
-        if (lower.includes('opinion') || lower.includes('بۆچوون')) return ChatTeardrop;
-        if (lower.includes('bank') || lower.includes('بانک')) return Bank;
-        if (lower.includes('culture') || lower.includes('کەلتوور')) return GlobeHemisphereWest;
-        if (lower.includes('holiday') || lower.includes('جەژن')) return MusicNotes;
-        if (lower.includes('neuromatch') || lower.includes('match')) return Lightning;
+        if (lower.includes('food') || lower.includes('dish') || lower.includes('خواردن')) return ForkKnife;
         return Star;
     };
 
     React.useEffect(() => {
-        // Load units from localStorage OR fallback to default units
         const loadUnits = () => {
-            const savedUnits = localStorage.getItem('kurdlingo-units');
+            const savedUnits = localStorage.getItem('kurdlingo-elementary-units');
             if (savedUnits) {
                 try {
                     const parsed = JSON.parse(savedUnits);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         setUnits(parsed);
-                        console.log('✅ Loaded units from localStorage:', parsed.length, 'units');
                         return;
                     }
                 } catch (e) {
-                    console.error('Error parsing saved units:', e);
+                    console.error('Error parsing saved elementary units:', e);
                 }
             }
-            // Fallback to default units
-            setUnits([unit1, unit2]);
-            console.log('📚 Using default beginner units');
+            setUnits([unit3, unit4, unit5]);
         };
 
         loadUnits();
 
-
-
-        // Listen for visibility change (when user comes back to this tab)
         const handleVisibilityChange = () => {
-            if (document.visibilityState === 'visible') {
-                loadUnits(); // Reload units when tab becomes visible
-
-            }
+            if (document.visibilityState === 'visible') loadUnits();
         };
-
-        // Listen for storage changes (from other tabs)
         const handleStorageChange = (e: StorageEvent) => {
-            if (e.key === 'kurdlingo-units') {
-                loadUnits();
-            }
+            if (e.key === 'kurdlingo-elementary-units') loadUnits();
         };
-
-        // Listen for focus (when window gains focus)
-        const handleFocus = () => {
-            loadUnits();
-
-        };
+        const handleFocus = () => loadUnits();
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
         window.addEventListener('storage', handleStorageChange);
@@ -119,26 +83,26 @@ const Learn: React.FC = () => {
             window.removeEventListener('storage', handleStorageChange);
             window.removeEventListener('focus', handleFocus);
         };
-    }, [location.key]); // Re-run when navigating back to this page
+    }, [location.key]);
 
     return (
-        <div className="learn-page">
-            {/* ========== LEVEL TOGGLE ========== */}
-            <div className="level-toggle-header">
-                <div className="level-toggle-tabs">
-                    <button className="level-toggle-tab active">
+        <div className="elem-page">
+            {/* Level Toggle Header */}
+            <div className="elem-level-header">
+                <div className="elem-level-tabs">
+                    <button
+                        className="elem-level-tab"
+                        onClick={() => navigate('/learn')}
+                    >
                         <Star size={18} weight="fill" />
                         Beginner
                     </button>
-                    <button
-                        className="level-toggle-tab"
-                        onClick={() => navigate('/elementary')}
-                    >
+                    <button className="elem-level-tab active">
                         <Lightning size={18} weight="fill" />
                         Elementary
                     </button>
                     <button
-                        className="level-toggle-tab"
+                        className="elem-level-tab"
                         onClick={() => navigate('/intermediate')}
                     >
                         <Rocket size={18} weight="fill" />
@@ -147,34 +111,33 @@ const Learn: React.FC = () => {
                 </div>
             </div>
 
-            {/* ========== MAIN CONTENT ========== */}
-            <div className="learn-main">
+            {/* Main Content */}
+            <div className="elem-main">
                 {units.map((unit, unitIndex) => {
                     const theme = UNIT_THEMES[unitIndex % UNIT_THEMES.length];
 
                     return (
-                        <div className="unit-section" key={unit.id}>
+                        <div className="elem-unit-section" key={unit.id}>
                             {/* Unit Header */}
                             <div
                                 className="unit-header"
                                 style={{ background: theme.gradient }}
                             >
                                 <div className="unit-info">
-                                    <h2>{unit.title}</h2>
-                                    <p>{unit.description}</p>
+                                    <h2 style={{color: '#ffffff'}}>{unit.title}</h2>
+                                    <p style={{color: '#ffffff'}}>{unit.description}</p>
                                 </div>
                                 <button
                                     className="btn-guidebook"
                                     onClick={() => navigate(`/guidebook/${unit.id}`)}
                                 >
                                     <BookOpenText size={20} weight="fill" />
-                                    {t('guidebook')}
+                                    <span style={{color: '#ffffff'}}>{t('guidebook') || 'GUIDEBOOK'}</span>
                                 </button>
                             </div>
 
                             {/* Learning Path */}
                             <div className="learning-path">
-                                {/* Lesson Nodes */}
                                 {unit.lessons.map((lesson, index) => {
                                     const Icon = getLessonIcon(lesson.title);
                                     const completed = isLessonCompleted(lesson.id);
@@ -182,12 +145,10 @@ const Learn: React.FC = () => {
                                     const isCurrent = unlocked && !completed;
                                     const isLocked = !unlocked;
 
-                                    // Zigzag: 0=center, 1=right, 2=center, 3=left
                                     let positionClass = '';
                                     if (index % 4 === 1) positionClass = 'right';
                                     if (index % 4 === 3) positionClass = 'left';
 
-                                    // Next node position for connector direction
                                     const nextIndex = index + 1;
                                     let nextPositionClass = '';
                                     if (nextIndex < unit.lessons.length) {
@@ -200,10 +161,7 @@ const Learn: React.FC = () => {
                                         if (isLocked) e.preventDefault();
                                     };
 
-                                    const lessonPath = lesson.type === 'game' && lesson.gameId === 'neuromatch'
-                                        ? '/neuromatch'
-                                        : `/lesson/${lesson.id}`;
-
+                                    const lessonPath = `/lesson/${lesson.id}`;
                                     const isLastLesson = index === unit.lessons.length - 1;
 
                                     return (
@@ -229,21 +187,18 @@ const Learn: React.FC = () => {
                                                         <Icon size={36} weight="fill" color="var(--node-text)" />
                                                     )}
 
-                                                    {/* START Bubble for current lesson */}
                                                     {isCurrent && (
                                                         <div className="start-bubble" style={{ color: theme.shadow, borderColor: theme.shadow }}>
-                                                            {t('start') || 'START'}
+                                                            <span style={{color: '#ffffff'}}>{t('start') || 'START'}</span>
                                                         </div>
                                                     )}
 
-                                                    {/* Crown sitting on top */}
                                                     {isCurrent && (
                                                         <div className="crown-badge">
                                                             <Crown size={42} weight="fill" color="#fbbf24" style={{ filter: 'drop-shadow(0 2px 0 #b45309)' }} />
                                                         </div>
                                                     )}
 
-                                                    {/* Checkmark for completed */}
                                                     {completed && (
                                                         <div className="completed-badge">
                                                             <CheckCircle size={24} weight="fill" color={theme.color} />
@@ -253,22 +208,17 @@ const Learn: React.FC = () => {
 
                                                 <div className="node-tooltip">{lesson.title}</div>
                                             </Link>
-                                            {/* SVG Snake-curve connector to next node */}
+
+                                            {/* Snake connector */}
                                             {!isLastLesson && (() => {
-                                                // Detect RTL — nodes flip via CSS [dir="rtl"] rules
                                                 const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
                                                 const flip = isRTL ? -1 : 1;
-
-                                                // Positions relative to center (0): right=+70, left=-70 (flipped in RTL)
                                                 const fromX = (positionClass === 'right' ? 70 : positionClass === 'left' ? -70 : 0) * flip;
                                                 const toPos = nextPositionClass || 'center';
                                                 const toX = (toPos === 'right' ? 70 : toPos === 'left' ? -70 : 0) * flip;
-
-                                                // SVG viewBox: center at x=100, so offsets are 100+pos
                                                 const x1 = 100 + fromX;
                                                 const x2 = 100 + toX;
                                                 const svgH = 60;
-                                                // Smooth S-curve using cubic bezier
                                                 const d = `M ${x1},0 C ${x1},${svgH * 0.55} ${x2},${svgH * 0.45} ${x2},${svgH}`;
 
                                                 return (
@@ -278,23 +228,9 @@ const Learn: React.FC = () => {
                                                         preserveAspectRatio="none"
                                                         style={{ '--snake-color': theme.color } as React.CSSProperties}
                                                     >
-                                                        {/* Background track (always visible) */}
-                                                        <path
-                                                            d={d}
-                                                            fill="none"
-                                                            stroke="#d1d5db"
-                                                            strokeWidth="5"
-                                                            strokeLinecap="round"
-                                                        />
-                                                        {/* Active overlay (green when completed) */}
+                                                        <path d={d} fill="none" stroke="#d1d5db" strokeWidth="5" strokeLinecap="round" />
                                                         {completed && (
-                                                            <path
-                                                                d={d}
-                                                                fill="none"
-                                                                stroke={theme.color}
-                                                                strokeWidth="5"
-                                                                strokeLinecap="round"
-                                                            />
+                                                            <path d={d} fill="none" stroke={theme.color} strokeWidth="5" strokeLinecap="round" />
                                                         )}
                                                     </svg>
                                                 );
@@ -309,7 +245,7 @@ const Learn: React.FC = () => {
                                         <Trophy
                                             size={56}
                                             weight="fill"
-                                            color={isUnitCompleted(unit.lessons) ? "#fbbf24" : "#d4d4d4"}
+                                            color={isUnitCompleted(unit.lessons) ? '#fbbf24' : '#d4d4d4'}
                                         />
                                     </div>
                                 </div>
@@ -319,98 +255,52 @@ const Learn: React.FC = () => {
                 })}
             </div>
 
-            {/* ========== RIGHT SIDEBAR ========== */}
-            <div className="sidebar-right">
-
-
-                {/* Space Typing Game Card */}
-                <div
-                    className="glass-panel space-game-card"
-                    onClick={() => navigate('/space-game')}
-                    style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 150, 0, 0.2)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '';
-                    }}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                        <div style={{
-                            width: '48px',
-                            height: '48px',
-                            borderRadius: '12px',
-                            background: 'linear-gradient(135deg, #1a1a3a 0%, #0a0a1a 100%)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <Rocket size={28} weight="fill" color="#ff9600" />
-                        </div>
-                        <div>
-                            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>🚀 Space Typing</h3>
-                            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                                {t('practice') || 'Practice'} 🌟
-                            </p>
-                        </div>
-                    </div>
-                    <p style={{
-                        fontSize: '0.85rem',
-                        color: 'var(--color-text-secondary)',
-                        margin: 0,
-                        lineHeight: 1.4
-                    }}>
-                        Type words to destroy falling space objects!
+            {/* Right Sidebar */}
+            <div className="elem-sidebar-right">
+                <div className="elem-glass-panel elem-info-card">
+                    <div className="elem-info-icon">🌱</div>
+                    <h3>Elementary Level</h3>
+                    <p>
+                        Build on your beginner skills! Learn vocabulary for everyday situations
+                        like food, shopping, weather, directions, and more.
                     </p>
+                    <div className="elem-difficulty-badge">
+                        <span>⚡ Intermediate Difficulty</span>
+                    </div>
                 </div>
 
-                {/* Typing Rush Game Card */}
                 <div
-                    className="glass-panel space-game-card"
-                    onClick={() => navigate('/typing-rush')}
-                    style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                    className="elem-glass-panel elem-back-card"
+                    onClick={() => navigate('/learn')}
+                    style={{ cursor: 'pointer' }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(168, 85, 247, 0.2)';
+                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.3)';
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'translateY(0)';
                         e.currentTarget.style.boxShadow = '';
                     }}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <div style={{
-                            width: '48px',
-                            height: '48px',
-                            borderRadius: '12px',
-                            background: 'linear-gradient(135deg, #2d1a4e 0%, #1a0a2e 100%)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
+                            width: '48px', height: '48px', borderRadius: '12px',
+                            background: 'linear-gradient(135deg, #ff9600 0%, #cc7800 100%)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}>
-                            <Lightning size={28} weight="fill" color="#a855f7" />
+                            <Star size={28} weight="fill" color="#fff" />
                         </div>
                         <div>
-                            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Typing Rush</h3>
+                            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Beginner Level</h3>
                             <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                                Speed Test
+                                Go back to basics
                             </p>
                         </div>
                     </div>
-                    <p style={{
-                        fontSize: '0.85rem',
-                        color: 'var(--color-text-secondary)',
-                        margin: 0,
-                        lineHeight: 1.4
-                    }}>
-                        Type full paragraphs as fast as you can!
-                    </p>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Learn;
+export default ElementaryLearn;

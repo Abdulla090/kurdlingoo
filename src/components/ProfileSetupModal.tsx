@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { insforge } from '../lib/insforge';
+import { supabase } from '../lib/supabase';
+import { useUser } from '../context/AuthContext';
 import { Translate, CheckCircle } from '@phosphor-icons/react';
 import './ProfileSetupModal.css';
 
@@ -23,8 +24,6 @@ const AVAILABLE_AVATARS = [
 
 export const openProfileModal = () => window.dispatchEvent(new Event('open-profile-modal'));
 
-let authCheckInProgress = false;
-
 const ProfileSetupModal: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -35,51 +34,45 @@ const ProfileSetupModal: React.FC = () => {
     const [name, setName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState(AVAILABLE_AVATARS[0]);
 
-    useEffect(() => {
-        const checkProfile = async () => {
-            if (authCheckInProgress) return;
-            authCheckInProgress = true;
-            
-            try {
-                const { data, error } = await insforge.auth.getCurrentSession();
-                
-                // If the session fetch throws an error (e.g. 401 unauthorized because they are logged out)
-                if (error || !data?.session?.user) {
-                    setLoading(false);
-                    authCheckInProgress = false;
-                    return;
-                }
+    // Load existing profile data into form fields
+    const loadExistingProfile = (u: typeof user) => {
+        if (!u) return;
+        const metadata = u.user_metadata || {};
+        const existingName = metadata.name || metadata.profile?.name || '';
+        const existingAvatar = metadata.avatar_url || metadata.profile?.avatar_url || AVAILABLE_AVATARS[0];
+        setName(existingName);
+        setSelectedAvatar(existingAvatar);
+    };
 
-                if (data?.session?.user) {
-                    // Try fetching specific profile fields
-                    const { data: profile } = await insforge.auth.getProfile(data.session.user.id);
-                    
-                    // If profile missing essential data like name or avatar, pop up!
-                    const safeProfile = profile as any;
-                    const profileName = safeProfile?.name || safeProfile?.profile?.name;
-                    const profileAvatar = safeProfile?.avatar_url || safeProfile?.profile?.avatar_url;
-                    
-                    if (!profileName || !profileAvatar) {
-                        setIsOpen(true);
-                    }
-                }
-            } catch (err) {
-                console.error("Profile check error:", err);
-            }
-            authCheckInProgress = false;
-            setLoading(false);
+    const { user, isLoaded } = useUser();
+
+    useEffect(() => {
+        const checkProfile = () => {
+             if (!isLoaded || !user) {
+                  setLoading(false);
+                  return;
+             }
+             const metadata = user.user_metadata || {};
+             const profileName = metadata.name || metadata.profile?.name;
+             const profileAvatar = metadata.avatar_url || metadata.profile?.avatar_url;
+             
+             if (!profileName || !profileAvatar) {
+                 loadExistingProfile(user);
+                 setIsOpen(true);
+             }
+             setLoading(false);
         };
         
         checkProfile();
 
         const handleOpen = () => {
-            setIsOpen(true);
             setIsDismissable(true);
-            checkProfile(); // Reload data when manually opened
+            loadExistingProfile(user); // Always pre-fill with current data
+            setIsOpen(true);
         };
         window.addEventListener('open-profile-modal', handleOpen);
         return () => window.removeEventListener('open-profile-modal', handleOpen);
-    }, []);
+    }, [user, isLoaded]);
 
     const handleSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -90,10 +83,22 @@ const ProfileSetupModal: React.FC = () => {
             return;
         }
 
-        const { error } = await insforge.auth.setProfile({
-            name: name.trim(),
-            avatar_url: selectedAvatar
+        const { data: { user: currentUser }, error } = await supabase.auth.updateUser({
+            data: {
+                name: name.trim(),
+                avatar_url: selectedAvatar
+            }
         });
+
+        // Also persist to profiles table so the Leaderboard and other queries can read name/avatar
+        if (!error && currentUser) {
+            await supabase.from('profiles').upsert({
+                id: currentUser.id,
+                name: name.trim(),
+                username: name.trim(),
+                avatar_url: selectedAvatar,
+            }, { onConflict: 'id' });
+        }
 
         if (!error) {
             setIsOpen(false);

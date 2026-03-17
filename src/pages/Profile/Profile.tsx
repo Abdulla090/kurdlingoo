@@ -4,8 +4,8 @@ import { Flame, Zap, Plus, Settings, Type, BookOpen, User, Edit2, LogOut } from 
 import Button from '../../components/Button/Button';
 import { kurdishFonts, useLanguage } from '../../context/LanguageContext';
 import { getUserStats } from '../../utils/progressManager';
-import { useUser, SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton } from '@insforge/react';
-import { insforge } from '../../lib/insforge';
+import { useUser, SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabase';
 import { openProfileModal } from '../../components/ProfileSetupModal';
 import './Profile.css';
 
@@ -17,13 +17,13 @@ const Profile = () => {
 
     const fetchProfile = useCallback(async () => {
         if (!user) return;
-        const { data: profile } = await insforge.auth.getProfile(user.id);
-        const safeProfile = (profile as any)?.profile || profile;
+        const profile = user.user_metadata;
+        const safeProfile = profile?.profile || profile;
         if (safeProfile && (safeProfile.name || safeProfile.avatar_url)) {
             setDbProfile(safeProfile);
         } else {
             // Fallback to database
-            const { data } = await insforge.database
+            const { data } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', user.id)

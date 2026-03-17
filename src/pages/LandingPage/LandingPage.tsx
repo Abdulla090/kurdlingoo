@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '@insforge/react';
+import { useUser } from '../../context/AuthContext';
 import {
     Bot, Flame, BookOpen, Gamepad2, Mic, BookText,
     GraduationCap, Landmark, Laptop, Smartphone, Globe,

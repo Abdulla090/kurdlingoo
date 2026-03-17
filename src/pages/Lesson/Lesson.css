@@ -4,7 +4,8 @@
 
 .lesson-page,
 .lesson-view {
-    min-height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     background: var(--color-background);
@@ -118,19 +119,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 16px;
+    overflow-y: auto;
 }
 
 .exercise-container {
     max-width: 720px;
     width: 100%;
+    max-height: 100%;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 24px 20px;
     animation: fadeIn 0.3s ease;
     background: #ffffff;
-    border-radius: 24px;
-    box-shadow: 0 8px 0 #b8b8b8, 0 12px 40px rgba(0, 0, 0, 0.15);
-    border: 3px solid #e0e0e0;
+    border-radius: 20px;
+    box-shadow: 0 4px 0 #b8b8b8, 0 12px 40px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
 }
 
 .question-visual-prompt {

@@ -1,21 +1,17 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/global.css'
 import App from './App'
 
 import { LanguageProvider } from './context/LanguageContext';
-import { InsforgeProvider } from '@insforge/react';
-import { insforge } from './lib/insforge';
+import { AuthProvider } from './context/AuthContext';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element not found');
 
 createRoot(rootElement).render(
-  <StrictMode>
-    <InsforgeProvider client={insforge}>
+    <AuthProvider>
       <LanguageProvider>
         <App />
       </LanguageProvider>
-    </InsforgeProvider>
-  </StrictMode>,
+    </AuthProvider>
 )

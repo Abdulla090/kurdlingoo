@@ -111,6 +111,13 @@ const IntermediateLearn: React.FC = () => {
                         Beginner
                     </button>
                     <button
+                        className="int-level-tab"
+                        onClick={() => navigate('/elementary')}
+                    >
+                        <Lightning size={18} weight="fill" />
+                        Elementary
+                    </button>
+                    <button
                         className="int-level-tab active"
                     >
                         <Rocket size={18} weight="fill" />

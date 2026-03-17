@@ -7,8 +7,8 @@
 /* ===== BASE ===== */
 .tr-root {
     width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
     font-family: 'Outfit', system-ui, sans-serif;
     color: #e2e8f0;
     background: #030712;
@@ -27,6 +27,7 @@
    ======================================== */
 .tr-menu-screen {
     overflow-y: auto;
+    height: 100dvh;
 }
 
 .tr-menu-content {
@@ -177,8 +178,8 @@
 .tr-playing {
     display: flex;
     flex-direction: column;
-    height: 100vh;
     height: 100dvh;
+    overflow: hidden;
 }
 
 /* HUD */
@@ -435,8 +436,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .tr-results-panel {

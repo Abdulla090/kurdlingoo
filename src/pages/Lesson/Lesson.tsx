@@ -1252,7 +1252,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
 
         const recognition = new SpeechRecognition();
         recognitionRef.current = recognition;
-        recognition.lang = exercise.speechLang || 'ku-IQ';
+        recognition.lang = exercise.speechLang || 'en-US';
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
@@ -1576,6 +1576,18 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
             window.speechSynthesis?.cancel();
         };
     }, []);
+
+    // Reset state whenever exercise changes (fixes auto-success on subsequent questions)
+    useEffect(() => {
+        setStatus('idle');
+        setTranscript('');
+        setAttempts(0);
+        setIsPlaying(false);
+        if (recognitionRef.current) {
+            try { recognitionRef.current.abort(); } catch (e) { }
+        }
+        window.speechSynthesis?.cancel();
+    }, [exercise.id, exercise.question]);
 
     // Check browser support
     useEffect(() => {

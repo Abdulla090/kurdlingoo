@@ -20,6 +20,7 @@ import NeuroMatch from './pages/NeuroMatch/NeuroMatch';
 import TypingRush from './pages/TypingRush/TypingRush';
 import BookDictionary from './pages/BookDictionary/BookDictionary';
 import IntermediateLearn from './pages/IntermediateLearn/IntermediateLearn';
+import ElementaryLearn from './pages/ElementaryLearn/ElementaryLearn';
 import Layout from './components/Layout/Layout';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
@@ -35,6 +36,7 @@ const AnimatedRoutes = () => {
 
         {/* Main App Routes with Sidebar Layout - Layout already has PageTransition for его children */}
         <Route path="/learn" element={<Layout><Learn /></Layout>} />
+        <Route path="/elementary" element={<Layout><ElementaryLearn /></Layout>} />
         <Route path="/intermediate" element={<Layout><IntermediateLearn /></Layout>} />
         <Route path="/guidebook-hub" element={<Layout><GuidebookHub /></Layout>} />
         <Route path="/leaderboard" element={<Layout><Leaderboard /></Layout>} />

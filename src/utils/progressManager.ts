@@ -1,5 +1,7 @@
 // Progress Manager - Handles lesson completion and progression
-// Production-ready with localStorage persistence
+// Production-ready with localStorage acting as cache and Supabase syncing
+
+import { supabase } from '../lib/supabase';
 
 export interface LessonProgress {
     lessonId: string;
@@ -40,7 +42,13 @@ export const getUserProgress = (): UserProgress => {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-            return JSON.parse(stored);
+            const parsed = JSON.parse(stored);
+            return {
+                ...defaultProgress,
+                ...parsed,
+                units: parsed.units || {},
+                lessonsCompleted: parsed.lessonsCompleted || {}
+            };
         }
     } catch (error) {
         console.error('Error reading progress from localStorage:', error);
@@ -49,13 +57,66 @@ export const getUserProgress = (): UserProgress => {
 };
 
 /**
- * Save user progress to localStorage
+ * Save user progress to localStorage and trigger async push to DB
  */
 export const saveUserProgress = (progress: UserProgress): void => {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        syncUserProgressToDb(progress); // Async background push
     } catch (error) {
         console.error('Error saving progress to localStorage:', error);
+    }
+};
+
+/**
+ * Sync progress from localStorage to Supabase Profile table
+ */
+export const syncUserProgressToDb = async (progress: UserProgress) => {
+    try {
+        // Use getUser() instead of getSession() to avoid lock contention
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return; // Ignore if not logged in
+
+        // Calculate total completed lessons
+        const completedLessons = Object.keys(progress.lessonsCompleted || {}).length;
+
+        // Push to database
+        await supabase
+            .from('profiles')
+            .update({
+                xp: progress.totalXp,
+                current_streak: progress.currentStreak,
+                lessons_completed: completedLessons,
+                user_progress: progress,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', user.id);
+            
+    } catch (err) {
+        console.error('Failed to sync progress to DB:', err);
+    }
+};
+
+/**
+ * Download progress from DB to LocalStorage (invoke on app load / login)
+ */
+export const loadUserProgressFromDb = async (userId: string) => {
+    if (!userId) return;
+    try {
+        const { data } = await supabase
+            .from('profiles')
+            .select('user_progress, xp, current_streak')
+            .eq('id', userId)
+            .single();
+
+        if (data?.user_progress) {
+            // Save DB state to localstorage for fast synchronous reads
+            const dbProgress = data.user_progress as UserProgress;
+            // Overwrite local progress completely with cloud values to prevent sync issues
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dbProgress));
+        }
+    } catch (err) {
+        console.error('Failed to load progress from DB:', err);
     }
 };
 

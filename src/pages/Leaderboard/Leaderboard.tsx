@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { insforge } from '../../lib/insforge';
-import { useUser } from '@insforge/react';
+import { supabase } from '../../lib/supabase';
+import { useUser } from '../../context/AuthContext';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { UserCircle02Icon } from '@hugeicons/core-free-icons';
 
@@ -12,7 +12,7 @@ const Leaderboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        insforge.database
+        supabase
             .from('profiles')
             .select('*')
             .order('xp', { ascending: false })
@@ -21,10 +21,13 @@ const Leaderboard = () => {
                 if (data) {
                     const loadedUsers = data.map((p: any, index: number) => {
                         let nameVal = 'KurdLearner';
-                        if (p.username) {
-                            // Strip @domain
+                        if (p.name) {
+                            // Prefer the saved display name
+                            nameVal = p.name;
+                        } else if (p.username) {
+                            // Strip @domain from email-style usernames
                             nameVal = p.username.includes('@') ? p.username.split('@')[0] : p.username;
-                            // Remove common number suffixes if derived from email for cleaner look
+                            // Remove trailing numbers for cleaner display
                             nameVal = nameVal.replace(/[0-9]+$/, '');
                             // Capitalize first letter
                             nameVal = nameVal.charAt(0).toUpperCase() + nameVal.slice(1);
