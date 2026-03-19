@@ -193,7 +193,7 @@
 
 .main-content {
     flex: 1;
-    padding-bottom: 80px;
+    padding-bottom: 0;
     transition: margin-inline-start var(--transition-normal);
     min-height: 100vh;
 }
@@ -209,8 +209,8 @@
     right: 0;
     background: #fff;
     border-top: 1px solid #e5e5e5;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
-    display: flex;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    display: none;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;

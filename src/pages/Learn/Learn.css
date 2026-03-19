@@ -260,6 +260,7 @@
     padding: 50px 20px;
     gap: 24px;
     position: relative;
+    overflow: hidden;
 
     /* White card background for contrast */
     background: #ffffff;
