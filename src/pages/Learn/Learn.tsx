@@ -13,6 +13,7 @@ import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
 import { unit5 } from '../../data/courses/unit5';
+import { unit6 } from '../../data/courses/unit6';
 import { useLanguage } from '../../context/LanguageContext';
 import {
     isLessonCompleted,
@@ -84,7 +85,7 @@ const Learn: React.FC = () => {
                 }
             }
             // Fallback to default units
-            setUnits([unit1, unit2, unit3, unit4, unit5]);
+            setUnits([unit1, unit2, unit3, unit4, unit5, unit6]);
             console.log('📚 Using default units');
         };
 

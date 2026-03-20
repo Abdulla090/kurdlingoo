@@ -8,6 +8,8 @@ import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { unit5 } from '../../data/courses/unit5';
+import { unit6 } from '../../data/courses/unit6';
 import { ColorfulIcon } from '../../components/ColorfulIcon/ColorfulIcon';
 import './Guidebook.css';
 
@@ -32,7 +34,7 @@ const Guidebook = () => {
 
     useEffect(() => {
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
-        const defaultUnits = [unit1, unit2, unit3, unit4];
+        const defaultUnits = [unit1, unit2, unit3, unit4, unit5, unit6];
 
         let allUnits;
         if (savedUnits) {

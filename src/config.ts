@@ -1,2 +1,2 @@
-export const INSFORGE_BASE_URL = 'https://k5xke53t.us-east.insforge.app';
-export const INSFORGE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3OC0xMjM0LTU2NzgtOTBhYi1jZGVmMTIzNDU2NzgiLCJlbWFpbCI6ImFub25AaW5zZm9yZ2UuY29tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MzA0NjR9.R93wKXUycglkjkyYQstVJjlZEffNbkEXS1VDP1LOPng';
+export const SUPABASE_URL = 'https://xoiexytawfnvttwmuaxg.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaWV4eXRhd2ZudnR0d211YXhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NjkzMTAsImV4cCI6MjA4OTM0NTMxMH0.B1TdpVh9qEtEM4u06D2cISWfvYF-S66_ePzywlqxQAM';

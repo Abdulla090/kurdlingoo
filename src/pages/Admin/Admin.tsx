@@ -7,6 +7,8 @@ import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { unit5 } from '../../data/courses/unit5';
+import { unit6 } from '../../data/courses/unit6';
 import type { Unit, Lesson, Exercise, Guidebook } from '../../types';
 
 const Admin = () => {
@@ -28,7 +30,7 @@ const Admin = () => {
         if (savedUnits) {
             setUnits(JSON.parse(savedUnits));
         } else {
-            setUnits([unit1, unit2, unit3, unit4] as Unit[]);
+            setUnits([unit1, unit2, unit3, unit4, unit5, unit6] as Unit[]);
         }
     }, []);
 
@@ -404,7 +406,7 @@ const Admin = () => {
     const resetToDefaults = () => {
         if (confirm('Are you sure you want to reset all data to defaults? This cannot be undone!')) {
             localStorage.removeItem('kurdlingo-units');
-            setUnits([unit1, unit2, unit3, unit4]);
+            setUnits([unit1, unit2, unit3, unit4, unit5, unit6]);
             setSelectedUnit(null);
             setSelectedLesson(null);
             setEditMode(null);

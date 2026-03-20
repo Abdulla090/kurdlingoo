@@ -4,13 +4,15 @@ import { unit1 } from '../../data/courses/unit1';
 import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
+import { unit5 } from '../../data/courses/unit5';
+import { unit6 } from '../../data/courses/unit6';
 import { ColorfulIcon } from '../../components/ColorfulIcon/ColorfulIcon';
 
 import './GuidebookHub.css';
 
 const GuidebookHub = () => {
     const navigate = useNavigate();
-    const units = [unit1, unit2, unit3, unit4];
+    const units = [unit1, unit2, unit3, unit4, unit5, unit6];
 
     // Helper map to assign the exact bright sleek colors used in your project theme
     const getUnitColors = (unitId: string) => {
@@ -18,7 +20,9 @@ const GuidebookHub = () => {
             'unit-1': { color: '#ff9600', dark: '#FF6A00' }, // Full Orange
             'unit-2': { color: '#1cb0f6', dark: '#0c8fd6' }, // Blue
             'unit-3': { color: '#ff4b4b', dark: '#d33131' }, // Red
-            'unit-4': { color: '#ce82ff', dark: '#a560ff' }  // Purple
+            'unit-4': { color: '#ce82ff', dark: '#a560ff' }, // Purple
+            'unit-5': { color: '#f59e0b', dark: '#b45309' }, // Gold
+            'unit-6': { color: '#2dd4bf', dark: '#0f766e' }  // Teal
         };
         return colors[unitId] || { color: '#ff9600', dark: '#FF6A00' };
     };
@@ -29,7 +33,8 @@ const GuidebookHub = () => {
             'unit-2': '🗣️',
             'unit-3': '💼',
             'unit-4': '🏦',
-            'unit-5': '⚡'
+            'unit-5': '⚡',
+            'unit-6': '🎤'
         };
         return emojis[unitId] || '📖';
     };

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     MagnifyingGlass, ArrowLeft, BookmarkSimple, SpeakerHigh, 
-    Lightbulb, CaretRight, X, CheckCircle
+    Lightbulb, CaretRight, X
 } from '@phosphor-icons/react';
 import useTextToSpeech from '../../hooks/useTextToSpeech';
 import { bookDictionaryData } from '../../data/bookDictionaryData';
@@ -22,25 +22,20 @@ interface MappedWord {
   synonyms: string[];
   antonyms: string[];
   mnemonic: string;
+  categoryId: string;
+  categoryName: string;
 }
 
-interface QuizQuestion {
-    id: string;
-    type: 'translate' | 'audio' | 'meaning' | 'fill-in-blank';
-    questionText: string;
-    options: string[];
-    correctAnswer: string;
-    audioText?: string;
-    sentenceParts?: { before: string; after: string; fallback: string };
-}
+
 
 const BookDictionary: React.FC = () => {
     const navigate = useNavigate();
     const { speak } = useTextToSpeech();
 
-    const [view, setView] = useState<'list' | 'detail' | 'quiz'>('list');
+    const [view, setView] = useState<'list' | 'detail'>('list');
     const [selectedWord, setSelectedWord] = useState<MappedWord | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
     const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -66,19 +61,27 @@ const BookDictionary: React.FC = () => {
                 }],
                 synonyms: [], 
                 antonyms: [],
-                mnemonic: `A common phrase to use when talking about ${cat.name.english.toLowerCase()}.`
+                mnemonic: `A common phrase to use when talking about ${cat.name.english.toLowerCase()}.`,
+                categoryId: cat.id,
+                categoryName: cat.name.english
             }))
         );
     }, []);
 
     const filteredWords = useMemo(() => {
-        if (!searchTerm.trim()) return allWords.slice(0, 15); // Show recent 15 when empty
+        let base = allWords;
+        if (selectedCategory !== 'all') {
+            base = base.filter(w => w.categoryId === selectedCategory);
+        }
+        
+        if (!searchTerm.trim()) return selectedCategory === 'all' ? base.slice(0, 15) : base;
+
         const lowerSearched = searchTerm.toLowerCase();
-        return allWords.filter(w => 
+        return base.filter(w => 
             w.word.toLowerCase().includes(lowerSearched) || 
             w.defs[0].meaning.toLowerCase().includes(lowerSearched)
         );
-    }, [searchTerm, allWords]);
+    }, [searchTerm, selectedCategory, allWords]);
 
     // Helpers
     const showToast = (msg: string) => {
@@ -140,6 +143,26 @@ const BookDictionary: React.FC = () => {
                     )}
                 </div>
             </header>
+            
+            <div className="category-pills-row" style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '0 20px 16px', scrollbarWidth: 'none' }}>
+                <button 
+                   className={`pill-chip ${selectedCategory === 'all' ? 'pill-active' : ''}`} 
+                   onClick={() => setSelectedCategory('all')}
+                   style={{ background: selectedCategory === 'all' ? 'var(--color-primary)' : 'var(--color-surface-variant)', color: selectedCategory === 'all' ? '#fff' : 'inherit', whiteSpace: 'nowrap' }}
+                >
+                   All Terms
+                </button>
+                {bookDictionaryData.map(c => (
+                    <button 
+                       key={c.id}
+                       className={`pill-chip ${selectedCategory === c.id ? 'pill-active' : ''}`}
+                       onClick={() => setSelectedCategory(c.id)}
+                       style={{ background: selectedCategory === c.id ? 'var(--color-primary)' : 'var(--color-surface-variant)', color: selectedCategory === c.id ? '#fff' : 'inherit', whiteSpace: 'nowrap' }}
+                    >
+                       {c.name.english}
+                    </button>
+                ))}
+            </div>
 
             <div className="list-scroll-area">
                 <div className="list-section-label">
@@ -152,12 +175,12 @@ const BookDictionary: React.FC = () => {
                             className={`word-row ${selectedWord?.id === w.id ? 'selected' : ''}`} 
                             onClick={() => { setSelectedWord(w); setView('detail'); }}
                         >
-                            <div className="row-content">
+                            <div className="row-content" dir="ltr" style={{ textAlign: 'left' }}>
                                 <div className="row-head">
                                     <span className="row-word serif-font">{w.word}</span>
                                     <span className="row-meta">{w.pos} • {w.phonetic}</span>
                                 </div>
-                                <span className="row-preview">{w.defs[0].meaning}</span>
+                                <span className="row-preview" dir="rtl" style={{ textAlign: 'right', display: 'block' }}>{w.defs[0].meaning}</span>
                             </div>
                             <div className="row-right">
                                 <div className="difficulty-dots">
@@ -231,10 +254,12 @@ const BookDictionary: React.FC = () => {
                                         <span className="def-num">{idx + 1}.</span>
                                         <span className="def-text">{def.meaning}</span>
                                     </div>
-                                    <div className="def-ex">
-                                        <p className="ex-text">{def.ex}</p>
-                                        <p className="ex-trans">{def.trans}</p>
-                                    </div>
+                                    {def.ex !== selectedWord.word && (
+                                        <div className="def-ex">
+                                            <p className="ex-text">{def.ex}</p>
+                                            <p className="ex-trans">{def.trans}</p>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -296,9 +321,6 @@ const BookDictionary: React.FC = () => {
                 </div>
 
                 <div className="bottom-bar">
-                    <button className="btn-primary" onClick={() => setView('quiz')}>
-                        Practice this word
-                    </button>
                     <button className="btn-outline" onClick={() => {
                         toggleBookmark(selectedWord.id);
                         if (!savedWords.has(selectedWord.id)) showToast("Added to deck!");
@@ -315,11 +337,7 @@ const BookDictionary: React.FC = () => {
             {renderSidebar()}
             
             <div className={`modern-dict-main ${view === 'list' ? 'mobile-hidden' : ''}`}>
-                {view === 'quiz' && selectedWord ? (
-                    <QuizScreen word={selectedWord} allWords={allWords} onBack={() => setView('detail')} speak={speak} />
-                ) : (
-                    renderDetail()
-                )}
+                {renderDetail()}
 
                 <AnimatePresence>
                     {toastMessage && (
@@ -339,204 +357,6 @@ const BookDictionary: React.FC = () => {
 };
 
 
-// -----------------------------------------------------------------------------
-// QUIZ SCREEN COMPONENT
-// -----------------------------------------------------------------------------
-const QuizScreen = ({ word, allWords, onBack, speak }: { word: MappedWord, allWords: MappedWord[], onBack: () => void, speak: (text: string, onEnd?: () => void) => void }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [score, setScore] = useState(0);
-    const [isFinished, setIsFinished] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
 
-    // Generate questions once on mount
-    const questions: QuizQuestion[] = useMemo(() => {
-        const getWrongOptions = (correct: string, type: 'kurdish' | 'english') => {
-            const others = allWords.filter(w => (type === 'kurdish' ? w.defs[0].meaning : w.word) !== correct);
-            const shuffled = others.sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, 3).map(w => type === 'kurdish' ? w.defs[0].meaning : w.word);
-        };
-
-        // Audio Question: What do you hear?
-        const q1: QuizQuestion = {
-            id: 'q1',
-            type: 'audio',
-            questionText: 'What do you hear?',
-            correctAnswer: word.defs[0].meaning,
-            audioText: word.word, 
-            options: [word.defs[0].meaning, ...getWrongOptions(word.defs[0].meaning, 'kurdish')].sort(() => 0.5 - Math.random())
-        };
-
-        // Usage / Fill in blank
-        const rawSentence = word.defs[0].ex;
-        const regex = new RegExp(`(${word.word})`, 'i');
-        const parts = rawSentence.split(regex);
-        let before = "", after = "", fallback = "";
-        if (parts.length >= 3) {
-            before = parts[0];
-            after = parts.slice(2).join("");
-        } else {
-            fallback = rawSentence; // word not perfectly matched
-        }
-
-        const q2: QuizQuestion = {
-            id: 'q2',
-            type: 'fill-in-blank',
-            questionText: 'Complete the sentence:',
-            correctAnswer: word.word,
-            sentenceParts: { before, after, fallback },
-            options: [word.word, ...getWrongOptions(word.word, 'english')].sort(() => 0.5 - Math.random())
-        };
-
-        // Translation
-        const q3: QuizQuestion = {
-            id: 'q3',
-            type: 'translate',
-            questionText: `How do you say "${word.defs[0].meaning}"?`,
-            correctAnswer: word.word,
-            options: [word.word, ...getWrongOptions(word.word, 'english')].sort(() => 0.5 - Math.random())
-        };
-        
-        return [q1, q2, q3];
-    }, [word, allWords]);
-
-    const currentQ = questions[currentIndex];
-
-    const handleOptionSelect = (option: string) => {
-        if (selectedOption) return; // Prevent double clicking
-        setSelectedOption(option);
-        if (option === currentQ.correctAnswer) {
-            setScore(s => s + 1);
-        }
-    };
-
-    const handleNext = () => {
-        if (currentIndex < questions.length - 1) {
-            setCurrentIndex(i => i + 1);
-            setSelectedOption(null);
-        } else {
-            setIsFinished(true);
-        }
-    };
-
-    if (isFinished) {
-        return (
-            <div className="quiz-screen">
-                <div className="quiz-final">
-                    <div className="final-icon">
-                        <CheckCircle size={48} weight="fill" />
-                    </div>
-                    <h2 className="final-title">Good job!</h2>
-                    <p className="final-score">You scored {score} / {questions.length}</p>
-                    
-                    <div className="final-actions">
-                        <button className="btn-primary" onClick={() => {
-                            setCurrentIndex(0);
-                            setScore(0);
-                            setSelectedOption(null);
-                            setIsFinished(false);
-                        }}>Try again</button>
-                        <button className="btn-outline" onClick={onBack}>Back to word</button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="quiz-screen">
-            <header className="quiz-header">
-                <button className="icon-btn" onClick={onBack} style={{ marginLeft: '-8px' }}>
-                    <X size={24} weight="bold" />
-                </button>
-                <div className="quiz-progress">
-                    {currentIndex + 1} / {questions.length}
-                </div>
-                <div style={{ width: 40 }}></div> {/* placeholder for balance */}
-            </header>
-
-            <div className="quiz-content">
-                <h2 className="quiz-question">
-                    {currentQ.questionText}
-                </h2>
-
-                {currentQ.type === 'audio' && (
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-                        <button 
-                            className="listen-btn" 
-                            style={{ margin: 0, padding: '16px 32px', fontSize: '1.2rem' }}
-                            onClick={() => {
-                                setIsPlaying(true);
-                                speak(currentQ.audioText || '', () => setIsPlaying(false));
-                            }}
-                        >
-                            <SpeakerHigh size={28} weight={isPlaying ? "fill" : "bold"} />
-                            <div className={`waveform ${isPlaying ? 'playing' : ''}`}>
-                                <div className="bar"></div>
-                                <div className="bar"></div>
-                                <div className="bar"></div>
-                                <div className="bar"></div>
-                            </div>
-                        </button>
-                    </div>
-                )}
-
-                {currentQ.type === 'fill-in-blank' && currentQ.sentenceParts && (
-                    <div style={{ textAlign: 'center', marginBottom: '32px', fontSize: '1.4rem', lineHeight: 1.6 }}>
-                        {currentQ.sentenceParts.fallback ? (
-                            <>
-                                {currentQ.sentenceParts.fallback}
-                                <br/>
-                                <span style={{ color: 'var(--primary-dark)', fontWeight: 'bold' }}>(______)</span>
-                            </>
-                        ) : (
-                            <>
-                                <span>{currentQ.sentenceParts.before}</span>
-                                <span style={{ display: 'inline-block', borderBottom: '3px solid var(--text-muted)', width: '80px', margin: '0 8px' }}>
-                                    {selectedOption && selectedOption === currentQ.correctAnswer && (
-                                        <span style={{ color: 'var(--primary-dark)', fontWeight: 'bold' }}>{selectedOption}</span>
-                                    )}
-                                </span>
-                                <span>{currentQ.sentenceParts.after}</span>
-                            </>
-                        )}
-                    </div>
-                )}
-
-                <div className="quiz-options">
-                    {currentQ.options.map((opt, i) => {
-                        let statusClass = '';
-                        if (selectedOption) {
-                            if (opt === currentQ.correctAnswer) statusClass = 'correct';
-                            else if (opt === selectedOption) statusClass = 'incorrect';
-                        }
-                        
-                        return (
-                            <button 
-                                key={i} 
-                                className={`quiz-option ${statusClass}`}
-                                onClick={() => handleOptionSelect(opt)}
-                                disabled={selectedOption !== null}
-                            >
-                                {opt}
-                            </button>
-                        );
-                    })}
-                </div>
-            </div>
-
-            <div className="quiz-footer">
-                <button 
-                    className="btn-primary" 
-                    style={{ width: '100%', opacity: selectedOption ? 1 : 0.5, maxWidth: '600px', margin: '0 auto' }}
-                    disabled={!selectedOption}
-                    onClick={handleNext}
-                >
-                    {currentIndex === questions.length - 1 ? 'Finish' : 'Next'}
-                </button>
-            </div>
-        </div>
-    );
-};
 
 export default BookDictionary;

@@ -58,7 +58,9 @@
 
 .title-group h1 {
     font-size: 1.75rem;
-    font-weight: 600;
+    font-weight: 900; /* Bold */
+    color: #ffffff !important; /* White */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     margin: 0;
     line-height: 1.2;
 }
@@ -67,7 +69,8 @@
     font-size: 0.9375rem;
     opacity: 0.85;
     margin: 0.375rem 0 0 0;
-    font-weight: 500;
+    font-weight: 400; /* Not bold */
+    color: #ffffff; /* White */
 }
 
 .hero-icon {

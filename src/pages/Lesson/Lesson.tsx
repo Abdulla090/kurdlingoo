@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     // UI Icons
     X, Check, Heart, Sparkles, RefreshCw, MessageCircle, MessageSquare, ChevronRight, // Lucide for UI
-    Settings, Play, Pause, RotateCcw, Loader2, Volume2
+    Settings, Play, Pause, RotateCcw, Loader2, Volume2, Mic
 } from 'lucide-react';
 import { sendChatMessage } from '../../services/api';
 import {
@@ -29,6 +29,7 @@ import { unit2 } from '../../data/courses/unit2';
 import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
 import { unit5 } from '../../data/courses/unit5';
+import { unit6 } from '../../data/courses/unit6';
 import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
 import { completeLesson, isLessonUnlocked } from '../../utils/progressManager';
 import Button from '../../components/Button/Button';
@@ -128,7 +129,7 @@ const Lesson = () => {
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
 
         // 2. Use saved units or fallback to default imports
-        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5, intermediateUnit1];
+        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1];
 
         // 3. Find lesson in the determined units
         let foundLesson = null;
@@ -1198,7 +1199,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         };
     }, []);
 
-    // TTS helper - speak text using Gemini or fallback
+    // TTS helper - speak text using Gemini or fallback to browser Web Speech API
     const speakText = async (text: string) => {
         try {
             const { requestGeminiVoice, playBase64Audio } = await import('../../services/api');
@@ -1207,8 +1208,9 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                 await playBase64Audio(result.audioContent, result.mimeType || 'audio/wav');
                 return;
             }
-        } catch (e) {
-            console.warn('Gemini TTS failed, using fallback:', e);
+            // Gemini failed silently — fall through to browser TTS below
+        } catch (_e) {
+            // Gemini TTS unavailable (404 in local dev, CORS, etc.) — use browser TTS
         }
         // Fallback: Web Speech API
         if ('speechSynthesis' in window) {
@@ -1229,7 +1231,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         if (isCheckingRef.current || hasAnsweredRef.current || isTranscribing) return;
 
         if (isRecording) {
-            // Stop recording
+            // Stop recording manually
             setIsRecording(false);
             if (recognitionRef.current) {
                 try { recognitionRef.current.stop(); } catch (e) { }
@@ -1252,36 +1254,72 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
 
         const recognition = new SpeechRecognition();
         recognitionRef.current = recognition;
-        recognition.lang = exercise.speechLang || 'ku-IQ';
-        recognition.continuous = false;
-        recognition.interimResults = false;
+        recognition.lang = exercise.speechLang || 'en-US';
+        recognition.continuous = true; // MUST be true so it doesn't stop on pause
+        recognition.interimResults = true;
         recognition.maxAlternatives = 1;
 
+        let accumulatedTranscript = '';
+        let latestSpoken = '';
+
+        setIsRecording(true); // Set synchronously to avoid double clicks
+        setSpokenText('');
+
         recognition.onstart = () => {
-            setIsRecording(true);
-            setSpokenText('');
+             // State is already set
         };
 
         recognition.onresult = (event: any) => {
-            const result = event.results[0][0].transcript;
-            setSpokenText(result);
-            setIsRecording(false);
-            setIsTranscribing(false);
-            submitAnswer(result);
+            let interim = '';
+            let finalStr = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalStr += event.results[i][0].transcript + ' ';
+                } else {
+                    interim += event.results[i][0].transcript;
+                }
+            }
+            accumulatedTranscript += finalStr;
+            latestSpoken = accumulatedTranscript + interim;
+            setSpokenText(latestSpoken);
         };
 
         recognition.onerror = (event: any) => {
-            console.error('Speech recognition error:', event.error);
+            // 'no-speech' on continuous mode just means a brief silence — ignore it and keep going
+            if (event.error === 'no-speech') {
+                // Don't stop — browser will auto-restart on continuous=true
+                return;
+            }
+            if (event.error === 'aborted') {
+                // Manual abort (user stopped), don't show error
+                return;
+            }
+            if (event.error === 'network') {
+                // Google's STT servers unreachable (common on localhost or restricted networks).
+                // Silently stop — the onend handler will submit whatever was captured.
+                setIsRecording(false);
+                setIsTranscribing(false);
+                return;
+            }
+            // Real error — stop and show message
             setIsRecording(false);
             setIsTranscribing(false);
-            if (event.error !== 'no-speech' && event.error !== 'aborted') {
-                setVoiceError(t('couldNotHear') || 'Could not hear you. Please try again.');
-            }
+            setVoiceError(t('couldNotHear') || 'Could not hear you. Please try again.');
         };
 
         recognition.onend = () => {
+            const wasRecording = isRecording;
             setIsRecording(false);
             setIsTranscribing(false);
+            
+            // If we have text gathered, submit it
+            if (latestSpoken.trim()) {
+                submitAnswer(latestSpoken.trim());
+            } else if (accumulatedTranscript.trim()) {
+                submitAnswer(accumulatedTranscript.trim());
+            }
+            // If continuous mode ended unexpectedly with no text AND we haven't stopped manually,
+            // do NOT auto-restart (avoid infinite loops). User taps again if needed.
         };
 
         try {
@@ -1499,7 +1537,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                                     disabled={isChecking || isTranscribing}
                                 >
                                     <div className={`voice-mic-circle ${isRecording ? 'active' : ''}`}>
-                                        <span className="voice-mic-emoji">🎤</span>
+                                        <Mic size={28} strokeWidth={2} />
                                     </div>
                                     {isRecording && (
                                         <div className="voice-pulse-rings">

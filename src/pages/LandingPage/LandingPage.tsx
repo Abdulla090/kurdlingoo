@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '@insforge/react';
+import { useUser } from '../../context/AuthContext';
 import {
     Bot, Flame, BookOpen, Gamepad2, Mic, BookText,
     GraduationCap, Landmark, Laptop, Smartphone, Globe,
@@ -30,13 +30,9 @@ export default function LandingPage() {
         }
     }, [user, isLoaded, navigate]);
 
-    // Smart navigation: logged-in users go to app, others go to login
+    // Smart navigation: User wants start buttons to strictly navigate to /login
     const handleStart = () => {
-        if (user) {
-            navigate('/learn');
-        } else {
-            navigate('/login');
-        }
+        navigate('/login');
     };
 
     // Navbar scroll

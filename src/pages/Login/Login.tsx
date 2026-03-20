@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { insforge } from '../../lib/insforge';
+import { supabase } from '../../lib/supabase';
 import { Eye, EyeSlash, EnvelopeSimple, LockKey, Translate } from '@phosphor-icons/react';
+import { useUser } from '../../context/AuthContext';
 import './Login.css';
 
 const Login: React.FC = () => {
@@ -11,13 +12,21 @@ const Login: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { user, isLoaded } = useUser();
+
+    // Auto-redirect to dashboard if already logged in
+    useEffect(() => {
+        if (isLoaded && user) {
+            navigate('/learn', { replace: true });
+        }
+    }, [user, isLoaded, navigate]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
-        const { data, error } = await insforge.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
@@ -37,9 +46,16 @@ const Login: React.FC = () => {
         setLoading(true);
         setError('');
         
-        const { error } = await insforge.auth.signInWithOAuth({
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const redirectTo = isLocalhost
+            ? window.location.origin + '/learn'
+            : 'https://kurdlingo.vercel.app/learn';
+
+        const { error } = await supabase.auth.signInWithOAuth({
             provider,
-            redirectTo: window.location.origin + '/learn'
+            options: {
+                redirectTo
+            }
         });
 
         if (error) {

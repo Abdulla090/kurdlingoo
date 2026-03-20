@@ -4,9 +4,10 @@ import { Flame, Zap, Plus, Settings, Type, BookOpen, User, Edit2, LogOut } from 
 import Button from '../../components/Button/Button';
 import { kurdishFonts, useLanguage } from '../../context/LanguageContext';
 import { getUserStats } from '../../utils/progressManager';
-import { useUser, SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton } from '@insforge/react';
-import { insforge } from '../../lib/insforge';
+import { supabase } from '../../lib/supabase';
+import { useUser, SignedIn, SignedOut } from '../../context/AuthContext';
 import { openProfileModal } from '../../components/ProfileSetupModal';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const Profile = () => {
@@ -14,22 +15,12 @@ const Profile = () => {
     const [stats, setStats] = useState(getUserStats());
     const { user, isLoaded } = useUser();
     const [dbProfile, setDbProfile] = useState<any>(null);
+    const navigate = useNavigate();
 
     const fetchProfile = useCallback(async () => {
         if (!user) return;
-        const { data: profile } = await insforge.auth.getProfile(user.id);
-        const safeProfile = (profile as any)?.profile || profile;
-        if (safeProfile && (safeProfile.name || safeProfile.avatar_url)) {
-            setDbProfile(safeProfile);
-        } else {
-            // Fallback to database
-            const { data } = await insforge.database
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
-            if (data) setDbProfile(data);
-        }
+        const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        if (profile) setDbProfile(profile);
     }, [user]);
 
     useEffect(() => {
@@ -57,9 +48,9 @@ const Profile = () => {
                     <h2>{t('profile') || 'Profile'}</h2>
                     <p>You need to be signed in to save progress and customize your profile.</p>
                     <div className="auth-buttons">
-                        <SignInButton />
-                        <span className="auth-separator">or</span>
-                        <SignUpButton />
+                        <button onClick={() => navigate('/login')} className="sidebar-btn sidebar-signin">
+                           Log In / Sign Up
+                        </button>
                     </div>
                 </div>
             </SignedOut>
@@ -159,13 +150,11 @@ const Profile = () => {
                         </div>
                     </section>
                     
-                    <div className="sign-out-container">
-                        <SignOutButton>
-                            <div className="sign-out-trigger">
-                                <LogOut size={20} />
-                                <span>Sign Out</span>
-                            </div>
-                        </SignOutButton>
+                    <div className="sign-out-container" style={{ cursor: 'pointer' }} onClick={async () => { await supabase.auth.signOut(); navigate('/login'); }}>
+                        <div className="sign-out-trigger">
+                            <LogOut size={20} />
+                            <span>Sign Out</span>
+                        </div>
                     </div>
                 </div>
             </SignedIn>

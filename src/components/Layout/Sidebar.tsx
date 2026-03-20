@@ -14,8 +14,10 @@ import {
     ArrowLeft01Icon,
     Login01Icon,
 } from '@hugeicons/core-free-icons';
+import { supabase } from '../../lib/supabase';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { SignedIn, SignedOut, UserButton, SignInButton } from '@insforge/react';
+import { SignedIn, SignedOut, useUser } from '../../context/AuthContext';
 import './Layout.css';
 
 interface SidebarProps {
@@ -25,6 +27,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
     const { t } = useLanguage();
+    const navigate = useNavigate(); // Added useNavigate hook
 
     const navItems = [
         { icon: Home01Icon, label: t('learn'), path: '/learn' },
@@ -82,18 +85,20 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
 
                 <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: '16px' }}>
                     <SignedIn>
-                        <div className="nav-item" style={{ cursor: 'default' }}>
-                            <UserButton />
+                        <div className="nav-item" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }}>
+                            <div className="nav-icon-hi">
+                                <HugeiconsIcon icon={UserCircle02Icon} size={22} color="#6b7280" strokeWidth={1.75} />
+                            </div>
                             {!isCollapsed && <span className="nav-label-hi" style={{ marginLeft: 8 }}>Account</span>}
                         </div>
                     </SignedIn>
                     <SignedOut>
-                        <div className="nav-item">
+                        <div className="nav-item" onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>
                             <div className="nav-icon-hi">
                                 <HugeiconsIcon icon={Login01Icon} size={22} color="#6b7280" strokeWidth={1.75} />
                             </div>
                             {!isCollapsed && (
-                                <span className="nav-label-hi"><SignInButton /></span>
+                                <span className="nav-label-hi">وەک میوان</span>
                             )}
                         </div>
                     </SignedOut>

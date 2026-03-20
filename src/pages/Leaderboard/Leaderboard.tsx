@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { insforge } from '../../lib/insforge';
-import { useUser } from '@insforge/react';
+import { supabase } from '../../lib/supabase';
+import { useUser } from '../../context/AuthContext';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { UserCircle02Icon } from '@hugeicons/core-free-icons';
 
@@ -12,7 +12,7 @@ const Leaderboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        insforge.database
+        supabase
             .from('profiles')
             .select('*')
             .order('xp', { ascending: false })

@@ -69,7 +69,13 @@ export async function sendChatMessage(
             })
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            const rawText = await response.text();
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch (e) {
+            data = { error: `Invalid server response (${response.status}). Likely rate limit or missing endpoint.` };
+        }
 
         if (!response.ok) {
             throw new Error(data.error || data.details || 'Chat request failed');
@@ -100,7 +106,13 @@ export async function evalChatMessage(message: string): Promise<EvalResponse> {
             body: JSON.stringify({ message })
         });
         
-        const data = await response.json();
+        let data;
+        try {
+            const rawText = await response.text();
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch (e) {
+            data = { error: `Invalid server response (${response.status}). Likely rate limit or missing endpoint.` };
+        }
         
         if (!response.ok) {
             throw new Error(data.error || 'Eval request failed');
@@ -143,7 +155,13 @@ export async function requestTTS(
             })
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            const rawText = await response.text();
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch (e) {
+            data = { error: `Invalid server response (${response.status}). Likely rate limit or missing endpoint.` };
+        }
 
         if (!response.ok) {
             throw new Error(data.error || 'TTS request failed');
@@ -182,7 +200,13 @@ export async function requestGeminiVoice(
             body: JSON.stringify({ text, voice })
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            const rawText = await response.text();
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch (e) {
+            data = { error: `Invalid server response (${response.status}). Likely rate limit or missing endpoint.` };
+        }
 
         if (!response.ok) {
             throw new Error(data.error || 'Gemini Voice request failed');
@@ -218,7 +242,13 @@ export async function requestSTT(
             body: JSON.stringify({ audioBase64, mimeType })
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            const rawText = await response.text();
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch (e) {
+            data = { error: `Invalid server response (${response.status}). Likely rate limit or missing endpoint.` };
+        }
 
         if (!response.ok) {
             throw new Error(data.error || 'STT request failed');

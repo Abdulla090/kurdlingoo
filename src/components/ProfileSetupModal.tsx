@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { insforge } from '../lib/insforge';
+import { supabase } from '../lib/supabase';
+import { useUser } from '../context/AuthContext';
 import { Translate, CheckCircle } from '@phosphor-icons/react';
+import { X, Camera, Check } from 'lucide-react';
 import './ProfileSetupModal.css';
 
 const AVAILABLE_AVATARS = [
@@ -34,34 +36,31 @@ const ProfileSetupModal: React.FC = () => {
     // User data states
     const [name, setName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState(AVAILABLE_AVATARS[0]);
+    const { user, isLoaded } = useUser();
 
     useEffect(() => {
         const checkProfile = async () => {
-            if (authCheckInProgress) return;
+            if (authCheckInProgress || !isLoaded) return;
             authCheckInProgress = true;
             
             try {
-                const { data, error } = await insforge.auth.getCurrentSession();
-                
-                // If the session fetch throws an error (e.g. 401 unauthorized because they are logged out)
-                if (error || !data?.session?.user) {
+                // Wait for the context to confirm if we possess a user instead of fetching blindly
+                if (!user) {
                     setLoading(false);
                     authCheckInProgress = false;
                     return;
                 }
 
-                if (data?.session?.user) {
-                    // Try fetching specific profile fields
-                    const { data: profile } = await insforge.auth.getProfile(data.session.user.id);
-                    
-                    // If profile missing essential data like name or avatar, pop up!
-                    const safeProfile = profile as any;
-                    const profileName = safeProfile?.name || safeProfile?.profile?.name;
-                    const profileAvatar = safeProfile?.avatar_url || safeProfile?.profile?.avatar_url;
-                    
-                    if (!profileName || !profileAvatar) {
-                        setIsOpen(true);
-                    }
+                // If logged in, fetch specific profile fields
+                const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+                
+                // If profile missing essential data like name or avatar, pop up!
+                const safeProfile = profile as any;
+                const profileName = safeProfile?.name || safeProfile?.profile?.name;
+                const profileAvatar = safeProfile?.avatar_url || safeProfile?.profile?.avatar_url;
+                
+                if (!profileName || !profileAvatar) {
+                    setIsOpen(true);
                 }
             } catch (err) {
                 console.error("Profile check error:", err);
@@ -79,7 +78,7 @@ const ProfileSetupModal: React.FC = () => {
         };
         window.addEventListener('open-profile-modal', handleOpen);
         return () => window.removeEventListener('open-profile-modal', handleOpen);
-    }, []);
+    }, [user, isLoaded]);
 
     const handleSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -90,11 +89,25 @@ const ProfileSetupModal: React.FC = () => {
             return;
         }
 
-        const { error } = await insforge.auth.setProfile({
-            name: name.trim(),
-            avatar_url: selectedAvatar
+        // Note: For Supabase, the actual profile update is usually an upsert on a custom profile table, not setProfile().
+        // For standard auth metadata:
+        const { error } = await supabase.auth.updateUser({
+            data: {
+                name: name,
+                avatar_url: selectedAvatar
+            }
         });
-
+        
+        // Also update the 'profiles' table if it exists
+        if (user) {
+            await supabase.from('profiles').upsert({
+                id: user.id,
+                name: name,
+                avatar_url: selectedAvatar,
+                updated_at: new Date().toISOString()
+            });
+        }
+        
         if (!error) {
             setIsOpen(false);
             window.dispatchEvent(new Event('focus')); // Triggers profile update via existing listener
