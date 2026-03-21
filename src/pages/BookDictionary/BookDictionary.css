@@ -42,6 +42,7 @@
     min-height: 100vh;
     font-family: 'Inter', system-ui, sans-serif;
     color: var(--text-main);
+    overflow: hidden; /* Critical: prevent horizontal scroll on mobile */
 }
 
 /* Sidebar List */
@@ -66,49 +67,63 @@
     background: var(--bg-page);
     min-height: 100vh;
     position: relative;
-    padding-bottom: 120px; /* Space for sticky bottom bar */
+    padding-bottom: 120px;
+    /* Space for sticky bottom bar */
 }
 
 /* Mobile overrides — full single-column experience */
 @media (max-width: 768px) {
     .modern-dict-wrapper {
-        flex-direction: column;
-        min-height: 100svh;
-        overflow-x: hidden;
-    }
-
-    /* Sidebar becomes full page on mobile */
-    .modern-dict-sidebar {
-        width: 100%;
-        flex-shrink: 0;
-        border-right: none;
-        border-bottom: none;
-        height: auto;
-        min-height: 100svh;
+        /* Switch from side-by-side to a single stacked container */
+        display: block;
         position: relative;
-        overflow: hidden;
+        width: 100vw;
+        max-width: 100vw;
+        min-height: 100svh;
+        overflow: hidden; /* Hard clip — zero horizontal scroll */
     }
 
-    /* Detail panel also full page */
+    /* Each panel takes the full viewport on mobile */
+    .modern-dict-sidebar,
     .modern-dict-main {
-        width: 100%;
+        width: 100vw;
+        max-width: 100vw;
         min-height: 100svh;
         height: auto;
-        padding-bottom: 80px;
+        border: none;
+        box-sizing: border-box;
     }
 
-    /* Hide whichever panel isn't active */
+    /* Sidebar: scroll within itself, pad bottom for nav */
+    .modern-dict-sidebar {
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-bottom: 90px;
+    }
+
+    /* Detail panel on mobile */
+    .modern-dict-main {
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-bottom: 90px;
+    }
+
+    /* Hide whichever panel isn't active — completely removed from flow */
     .mobile-hidden {
         display: none !important;
     }
 
-    /* Make sure list scroll area fills the screen on mobile */
+    /* List scroll area fills available vertical space */
     .list-scroll-area {
-        max-height: calc(100svh - 180px);
+        flex: 1;
+        max-height: calc(100svh - 200px);
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
-    /* Word rows — give more breathing room on mobile */
+    /* Word rows — more breathing room on mobile */
     .word-row {
         padding: 14px 16px;
     }
@@ -121,10 +136,12 @@
         font-size: 0.85rem;
     }
 
-    /* Category pills — horizontal scroll */
+    /* Category pills — horizontal scroll without overflowing page */
     .category-pills-row {
         -webkit-overflow-scrolling: touch;
         padding-bottom: 12px !important;
+        overflow-x: auto;
+        max-width: 100%;
     }
 
     /* Detail view header */
@@ -273,9 +290,11 @@
     transition: background 0.1s;
 }
 
-.word-row:active, .word-row.selected {
+.word-row:active,
+.word-row.selected {
     background: #F9FAFB;
 }
+
 .word-row.selected {
     border-left: 4px solid var(--primary);
     padding-left: 16px;
@@ -431,7 +450,7 @@
     font-weight: 600;
     color: var(--primary-dark);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.2s;
     margin-bottom: 24px;
 }
@@ -460,13 +479,26 @@
     animation: wave 0.8s ease-in-out infinite alternate;
 }
 
-.waveform.playing .bar:nth-child(2) { animation-delay: 0.2s; }
-.waveform.playing .bar:nth-child(3) { animation-delay: 0.4s; }
-.waveform.playing .bar:nth-child(4) { animation-delay: 0.6s; }
+.waveform.playing .bar:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.waveform.playing .bar:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.waveform.playing .bar:nth-child(4) {
+    animation-delay: 0.6s;
+}
 
 @keyframes wave {
-    0% { height: 4px; }
-    100% { height: 16px; }
+    0% {
+        height: 4px;
+    }
+
+    100% {
+        height: 16px;
+    }
 }
 
 .freq-label {
@@ -485,12 +517,14 @@
     width: 100%;
 }
 
-.def-card, .syn-card, .diff-card {
+.def-card,
+.syn-card,
+.diff-card {
     background: var(--bg-card);
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
-    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .def-item {
@@ -626,7 +660,8 @@
 
 /* Sticky Bottom Bar */
 .bottom-bar {
-    position: absolute; /* Using absolute inside the relative modern-dict-main */
+    position: absolute;
+    /* Using absolute inside the relative modern-dict-main */
     bottom: 0;
     left: 0;
     right: 0;
@@ -637,7 +672,7 @@
     flex-direction: column;
     gap: 12px;
     z-index: 50;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
 }
 
 @media (min-width: 769px) {

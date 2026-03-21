@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     // UI Icons
-    X, Check, Heart, Sparkles, RefreshCw, MessageCircle, MessageSquare, ChevronRight, // Lucide for UI
-    Settings, Play, Pause, RotateCcw, Loader2, Volume2, Mic
+    X, Check, Heart, Sparkles, RefreshCw, ChevronRight,
+    Settings, Play, Pause, RotateCcw, Loader2, Volume2, Mic, MicOff, CheckCircle2, XCircle
 } from 'lucide-react';
 import { sendChatMessage } from '../../services/api';
 import {
@@ -274,7 +274,7 @@ const Lesson = () => {
             }}
             role="main"
         >
-            <header className="lesson-header" role="banner">
+            <header className="lesson-header" role="banner" style={{ borderBottomColor: 'var(--unit-color)' }}>
                 <button
                     className="close-btn"
                     onClick={() => navigate(isIntermediateLesson ? '/intermediate' : '/learn')}
@@ -290,7 +290,7 @@ const Lesson = () => {
                     aria-valuemax={100}
                     aria-label={`Lesson progress: ${Math.round(progress)}%`}
                 >
-                    <div className="progress-bar-fill" style={{ width: `${progress}%`, background: 'var(--unit-color)' }}></div>
+                    <div className="progress-bar-fill" style={{ width: `${progress}%`, background: `linear-gradient(90deg, var(--unit-color-light, #ffb44d), var(--unit-color), var(--unit-color-dark))` }}></div>
                 </div>
                 <div className="lives-counter" aria-label={`${lives} lives remaining`}>
                     <Heart fill="#ff4b4b" color="#ff4b4b" size={24} aria-hidden="true" />
@@ -350,14 +350,19 @@ const Lesson = () => {
                                 <div className="feedback-icon incorrect"><X size={24} /></div>
                             )}
                             <div className="feedback-text">
-                                <h3>{feedback === 'correct' ? t('correct') : t('incorrect')}</h3>
+                                <h3>{feedback === 'correct' ? (t('correct') || '✓ دروستە!') : (t('incorrect') || '✗ هەڵەیە!')}</h3>
                                 {feedback === 'incorrect' && (
-                                    <p>{t('correctSolution')} {
-                                        currentExercise.correctSentence ? JSON.stringify(currentExercise.correctSentence) :
-                                            currentExercise.correctOption ? currentExercise.correctOption :
-                                                currentExercise.correctAnswer ? currentExercise.correctAnswer : // For typing
-                                                    "..."
-                                    }</p>
+                                    <p>{t('correctSolution') || 'وەڵامی دروست:'} {' '}
+                                        <strong>
+                                        {currentExercise.correctSentence
+                                            ? currentExercise.correctSentence.join(' ')
+                                            : currentExercise.correctOption
+                                            ? currentExercise.correctOption
+                                            : currentExercise.correctAnswer
+                                            ? currentExercise.correctAnswer
+                                            : '...'}
+                                        </strong>
+                                    </p>
                                 )}
                             </div>
                         </div>
@@ -366,7 +371,7 @@ const Lesson = () => {
                             size="lg"
                             onClick={handleContinue}
                         >
-                            {t('continue')}
+                            {t('continue') || 'بەردەوامبە'}
                         </Button>
                     </div>
                 </div>
@@ -617,29 +622,25 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
         const sentence = selectedIndices.map(i => shuffledWords[i]);
         const isCorrect = JSON.stringify(sentence) === JSON.stringify(exercise.correctSentence);
         
-        // Speak the correct sentence aloud via TTS when checking
+        // Speak the correct sentence aloud via browser TTS (male voice)
         const correctText = exercise.correctSentence.join(' ');
-        if (correctText && /[a-zA-Z]/.test(correctText)) {
-            // Use Gemini TTS first, fallback to Web Speech API
-            (async () => {
-                try {
-                    const { requestGeminiVoice, playBase64Audio } = await import('../../services/api');
-                    const result = await requestGeminiVoice(correctText);
-                    if (result.success && result.audioContent) {
-                        await playBase64Audio(result.audioContent, result.mimeType || 'audio/wav');
-                        return;
-                    }
-                } catch (e) {
-                    // fallback
-                }
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(correctText);
-                    utterance.lang = 'en-US';
-                    utterance.rate = 0.9;
-                    window.speechSynthesis.speak(utterance);
-                }
-            })();
+        if (correctText && /[a-zA-Z]/.test(correctText) && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(correctText);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.92;
+            utterance.pitch = 0.9;
+            const voices = window.speechSynthesis.getVoices();
+            const en = voices.filter(v => v.lang.startsWith('en'));
+            const maleVoice =
+                en.find(v => v.name.toLowerCase().includes('male')) ||
+                en.find(v => v.name.includes('Microsoft David')) ||
+                en.find(v => v.name.includes('Microsoft Mark')) ||
+                en.find(v => v.name.includes('Daniel')) ||
+                en.find(v => v.name.includes('Google')) ||
+                en[0];
+            if (maleVoice) utterance.voice = maleVoice;
+            window.speechSynthesis.speak(utterance);
         }
         
         onAnswer(isCorrect);
@@ -659,9 +660,19 @@ const SentenceBuilder = ({ exercise, onAnswer }) => {
             const textToSpeak = sentence.join(' ');
             if (textToSpeak.trim()) {
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                // Ensure it speaks English as requested
                 utterance.lang = 'en-US';
-                utterance.rate = 0.9;
+                utterance.rate = 0.92;
+                utterance.pitch = 0.9;
+                const voices = window.speechSynthesis.getVoices();
+                const en = voices.filter(v => v.lang.startsWith('en'));
+                const maleVoice =
+                    en.find(v => v.name.toLowerCase().includes('male')) ||
+                    en.find(v => v.name.includes('Microsoft David')) ||
+                    en.find(v => v.name.includes('Microsoft Mark')) ||
+                    en.find(v => v.name.includes('Daniel')) ||
+                    en.find(v => v.name.includes('Google')) ||
+                    en[0];
+                if (maleVoice) utterance.voice = maleVoice;
                 window.speechSynthesis.speak(utterance);
             }
         }
@@ -759,14 +770,15 @@ const MatchPairs = ({ exercise, onAnswer }) => {
 
         if (newSelected.length === 2) {
             const [first, second] = newSelected;
-            if (first.pairId === second.id) {
-                setMatched([...matched, first.id, second.id]);
+            if (first.pairId === second.id || second.pairId === first.id) {
+                const newMatched = [...matched, first.id, second.id];
+                setMatched(newMatched);
                 setSelected([]);
-                if (matched.length + 2 === exercise.pairs.length * 2) {
-                    setTimeout(() => onAnswer(true), 500);
+                if (newMatched.length >= exercise.pairs.length * 2) {
+                    setTimeout(() => onAnswer(true), 600);
                 }
             } else {
-                setTimeout(() => setSelected([]), 1000);
+                setTimeout(() => setSelected([]), 900);
             }
         }
     };
@@ -828,10 +840,10 @@ const FillBlank = ({ exercise, onAnswer }) => {
                     variant={selected ? "primary" : "disabled"}
                     size="lg"
                     fullWidth
-                    onClick={() => selected && onAnswer(selected === exercise.correctOption)}
+                    onClick={() => selected && onAnswer(selected.toLowerCase().trim() === exercise.correctOption.toLowerCase().trim())}
                     disabled={!selected}
                 >
-                    {t('check')}
+                    {t('check') || 'پشکنین'}
                 </Button>
             </div>
         </div>
@@ -1212,13 +1224,24 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         } catch (_e) {
             // Gemini TTS unavailable (404 in local dev, CORS, etc.) — use browser TTS
         }
-        // Fallback: Web Speech API
+        // Fallback: Web Speech API (male voice)
         if ('speechSynthesis' in window) {
             return new Promise<void>((resolve) => {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
-                utterance.rate = 0.9;
+                utterance.rate = 0.92;
+                utterance.pitch = 0.9;
+                const voices = window.speechSynthesis.getVoices();
+                const en = voices.filter(v => v.lang.startsWith('en'));
+                const maleVoice =
+                    en.find(v => v.name.toLowerCase().includes('male')) ||
+                    en.find(v => v.name.includes('Microsoft David')) ||
+                    en.find(v => v.name.includes('Microsoft Mark')) ||
+                    en.find(v => v.name.includes('Daniel')) ||
+                    en.find(v => v.name.includes('Google')) ||
+                    en[0];
+                if (maleVoice) utterance.voice = maleVoice;
                 utterance.onend = () => resolve();
                 utterance.onerror = () => resolve();
                 window.speechSynthesis.speak(utterance);
@@ -1516,18 +1539,22 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             className={`voice-replay-btn ${isSpeakingAI ? 'playing' : ''}`}
                             onClick={replayAIMessage}
                             disabled={isSpeakingAI}
-                            title="Replay AI message"
+                            title={t('replayMessage') || 'دووبارە گوێبگرە'}
                             type="button"
+                            aria-label="Replay AI message"
                         >
-                            <Volume2 size={20} />
+                            <Volume2 size={22} />
                         </button>
 
                         {/* Main mic button */}
                         <div className="voice-mic-wrapper">
                             {isTranscribing || isChecking ? (
                                 <div className="voice-processing">
-                                    <Loader2 className="animate-spin" size={28} />
-                                    <span>{isTranscribing ? (t('transcribing') || 'Processing voice...') : (t('checking') || 'Checking...')}</span>
+                                    <Loader2 className="animate-spin" size={32} />
+                                    <span>{isTranscribing
+                                        ? (t('transcribing') || 'پرۆسێسکردنی دەنگ...')
+                                        : (t('checking') || 'پشکنین...')}
+                                    </span>
                                 </div>
                             ) : (
                                 <button
@@ -1535,9 +1562,13 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                                     onClick={toggleRecording}
                                     type="button"
                                     disabled={isChecking || isTranscribing}
+                                    aria-label={isRecording ? 'Stop recording' : 'Start recording'}
                                 >
                                     <div className={`voice-mic-circle ${isRecording ? 'active' : ''}`}>
-                                        <Mic size={28} strokeWidth={2} />
+                                        {isRecording
+                                            ? <MicOff size={28} strokeWidth={2} />
+                                            : <Mic size={28} strokeWidth={2} />
+                                        }
                                     </div>
                                     {isRecording && (
                                         <div className="voice-pulse-rings">
@@ -1548,18 +1579,24 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                                     )}
                                 </button>
                             )}
-                            <span className="voice-mic-label">
+                            <span className={`voice-mic-label ${isRecording ? 'recording' : ''}`}>
                                 {isRecording
-                                    ? (t('tapToStop') || 'Tap to stop')
-                                    : (t('tapToSpeak') || 'Tap to speak')}
+                                    ? (t('tapToStop') || 'تکلیک بکە بۆ وەستان 🛑')
+                                    : (t('tapToSpeak') || 'صدایت مکن ✌️')}
                             </span>
+                            {/* Show live transcript while recording */}
+                            {isRecording && spokenText && (
+                                <div className="voice-live-transcript">
+                                    {spokenText}
+                                </div>
+                            )}
                             {voiceError && (
                                 <span className="voice-error-msg">{voiceError}</span>
                             )}
                         </div>
 
                         {/* Spacer for symmetry */}
-                        <div style={{ width: 44 }} />
+                        <div style={{ width: 48 }} />
                     </div>
                 ) : (
                     <div className="exercise-footer" style={{ position: 'sticky', bottom: 0 }}>
@@ -1569,7 +1606,7 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                             fullWidth
                             onClick={handleContinue}
                         >
-                            {t('continue')}
+                            {t('continue') || 'بەردەوامبە'}
                         </Button>
                     </div>
                 )}
@@ -1771,63 +1808,67 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
         <div className="exercise-container pronunciation-exercise">
             <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
 
-            {/* Target Word Card */}
+            {/* Target Word Card - Premium Design */}
             <div className="pronunciation-card">
                 {exercise.image && (
                     <div className="pronunciation-emoji">
-                        <IconRenderer emoji={exercise.image} size={64} />
+                        <IconRenderer emoji={exercise.image} size={72} />
                     </div>
                 )}
 
-                <div className="pronunciation-target" dir="auto">
+                {/* Kurdish source word */}
+                <div className="pronunciation-target" dir="rtl">
                     {exercise.targetWord}
                 </div>
 
+                {/* English translation - big and prominent */}
+                {exercise.targetTranslation && (
+                    <div className="pronunciation-english-word">
+                        {exercise.targetTranslation}
+                    </div>
+                )}
+
+                {/* IPA Phonetic */}
                 {exercise.pronunciation && (
                     <div className="pronunciation-phonetic">
                         /{exercise.pronunciation}/
                     </div>
                 )}
 
-                {exercise.targetTranslation && (
-                    <div className="pronunciation-meaning">
-                        {exercise.targetTranslation}
-                    </div>
-                )}
-
+                {/* Listen button */}
                 <button
                     className={`pronunciation-listen-btn ${isPlaying ? 'playing' : ''}`}
                     onClick={speakWord}
                     type="button"
                     disabled={isPlaying}
+                    aria-label="Listen to pronunciation"
                 >
-                    {isPlaying ? (
-                        <>
-                            <span className="listen-icon">🔊</span>
-                            <span>Playing...</span>
-                        </>
-                    ) : (
-                        <>
-                            <span className="listen-icon">🔊</span>
-                            <span>Listen</span>
-                        </>
-                    )}
+                    <Volume2 size={20} />
+                    <span>{isPlaying ? (t('playing') || 'گوێگرتن...') : (t('listen') || '🔊 گوێبگرە')}</span>
                 </button>
             </div>
 
-            {/* Mic Area */}
+            {/* Mic Area - Premium Voice UI */}
             <div className={`pronunciation-mic-area ${status}`}>
-                {/* IDLE - Show mic button */}
+
+                {/* IDLE - Beautiful mic button */}
                 {status === 'idle' && (
-                    <button className="pronunciation-mic-btn" onClick={startListening} type="button">
-                        <div className="mic-circle">
-                            <span className="mic-emoji">🎤</span>
-                        </div>
-                        <span className="mic-label">Tap to Speak</span>
-                    </button>
+                    <div className="pron-idle-state">
+                        <button className="pronunciation-mic-btn" onClick={startListening} type="button" aria-label="Start speaking">
+                            <div className="mic-circle">
+                                <Mic size={40} strokeWidth={1.5} color="white" />
+                            </div>
+                            <span className="mic-label">{t('tapToSpeak') || 'بکلیک بکە و بخوێنەرەوە'}</span>
+                        </button>
+                        {attempts > 0 && (
+                            <div className="pron-attempts-badge">
+                                {t('attemptsLeft') || 'هەوڵی ماوە'}: {3 - attempts}
+                            </div>
+                        )}
+                    </div>
                 )}
 
-                {/* LISTENING - Animated pulse */}
+                {/* LISTENING - Professional animated state */}
                 {status === 'listening' && (
                     <div className="pronunciation-listening">
                         <div className="pulse-container">
@@ -1835,10 +1876,10 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
                             <div className="pulse-wave delay-1"></div>
                             <div className="pulse-wave delay-2"></div>
                             <div className="mic-circle active">
-                                <span className="mic-emoji">🎤</span>
+                                <Mic size={40} strokeWidth={1.5} color="white" />
                             </div>
                         </div>
-                        <span className="listening-label">Listening...</span>
+                        <span className="listening-label">{t('listening') || '🎤 گوێگرتن...'}</span>
                         <div className="sound-bars">
                             <div className="bar"></div>
                             <div className="bar"></div>
@@ -1848,25 +1889,33 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
                             <div className="bar"></div>
                             <div className="bar"></div>
                         </div>
+                        <p className="pron-instruction">{t('speakClearly') || 'ئاشکرا بخوێنەرەوە...'}</p>
                     </div>
                 )}
 
                 {/* PROCESSING */}
                 {status === 'processing' && (
                     <div className="pronunciation-processing">
-                        <Loader2 className="animate-spin" size={40} color="#1cb0f6" />
-                        <span>Analyzing pronunciation...</span>
+                        <div className="processing-ring">
+                            <Loader2 className="animate-spin" size={48} />
+                        </div>
+                        <span>{t('analyzing') || 'شیکردنەوەی دەنگ...'}</span>
                     </div>
                 )}
 
-                {/* CORRECT */}
+                {/* CORRECT - Celebration */}
                 {status === 'correct' && (
                     <div className="pronunciation-result correct">
                         <div className="result-badge correct">
-                            <Check size={32} />
+                            <CheckCircle2 size={40} />
                         </div>
-                        <h3>Perfect! 🎉</h3>
-                        <p className="you-said">You said: <strong>"{transcript}"</strong></p>
+                        <h3>{t('perfect') || '🎉 نایاب!'}</h3>
+                        {transcript && (
+                            <div className="you-said-card">
+                                <span className="you-said-label">{t('youSaid') || 'تۆت گوت'}:</span>
+                                <span className="you-said-text">"{transcript}"</span>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -1874,13 +1923,19 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
                 {status === 'incorrect' && (
                     <div className="pronunciation-result incorrect">
                         <div className="result-badge incorrect">
-                            <X size={32} />
+                            <XCircle size={40} />
                         </div>
-                        <h3>Not quite right</h3>
-                        <p className="you-said">You said: <strong>"{transcript}"</strong></p>
-                        <p className="expected-answer">
-                            Expected: <strong>"{exercise.expectedAnswer || exercise.targetTranslation}"</strong>
-                        </p>
+                        <h3>{t('notQuiteRight') || 'دروست نییە'}</h3>
+                        {transcript && (
+                            <div className="you-said-card wrong">
+                                <span className="you-said-label">{t('youSaid') || 'تۆت گوت'}:</span>
+                                <span className="you-said-text">"{transcript}"</span>
+                            </div>
+                        )}
+                        <div className="expected-card">
+                            <span className="expected-label">{t('expected') || 'دروست'}:</span>
+                            <span className="expected-text">"{exercise.expectedAnswer || exercise.targetTranslation}"</span>
+                        </div>
                     </div>
                 )}
 
@@ -1888,17 +1943,17 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
                 {status === 'error' && (
                     <div className="pronunciation-result error">
                         <div className="result-badge error">⚠️</div>
-                        <h3>Microphone Blocked</h3>
-                        <p>Please allow microphone access in your browser settings and try again.</p>
+                        <h3>{t('micBlocked') || 'مایکرۆفۆن گیرایەوە'}</h3>
+                        <p>{t('allowMic') || 'تکایە مایکرۆفۆن لە ڕێکخستنەکانت ڕێگا پێبدە.'}</p>
                     </div>
                 )}
 
-                {/* UNSUPPORTED - Browser doesn't support speech */}
+                {/* UNSUPPORTED */}
                 {status === 'unsupported' && (
                     <div className="pronunciation-result error">
                         <div className="result-badge error">🌐</div>
-                        <h3>Not Supported</h3>
-                        <p>Speech recognition is not available in this browser. Try Chrome or Edge for voice features.</p>
+                        <h3>{t('notSupported') || 'پشتگیری نەکراوە'}</h3>
+                        <p>{t('useChromeForVoice') || 'تکایە Chrome یان Edge بەکاربهێنە بۆ تایبەتمەندییەکانی دەنگ.'}</p>
                     </div>
                 )}
             </div>
@@ -1907,22 +1962,23 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
             <div className="exercise-footer">
                 {status === 'correct' && (
                     <Button variant="success" size="lg" fullWidth onClick={handleContinue}>
-                        {t('continue')}
+                        {t('continue') || 'بەردەوامبە'}
                     </Button>
                 )}
                 {status === 'incorrect' && attempts < 3 && (
                     <Button variant="primary" size="lg" fullWidth onClick={handleRetry}>
-                        🎤 Try Again ({3 - attempts} left)
+                        <Mic size={18} style={{ marginRight: 8 }} />
+                        {t('tryAgain') || 'دووبارە هەوڵبدە'} ({3 - attempts} {t('left') || 'ماوە'})
                     </Button>
                 )}
                 {status === 'incorrect' && attempts >= 3 && (
                     <Button variant="danger" size="lg" fullWidth onClick={handleContinue}>
-                        {t('continue')}
+                        {t('continue') || 'بەردەوامبە'}
                     </Button>
                 )}
                 {(status === 'error' || status === 'unsupported') && (
                     <Button variant="primary" size="lg" fullWidth onClick={handleSkip}>
-                        Skip Exercise
+                        {t('skipExercise') || 'تێپەڕێنی تەمرین'}
                     </Button>
                 )}
             </div>

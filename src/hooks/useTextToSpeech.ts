@@ -1,120 +1,84 @@
 import { useCallback } from 'react';
-import { requestGeminiVoice, playBase64Audio, stopBase64Audio } from '../services/api';
-
-const audioCache = new Map<string, { audioContent: string, mimeType: string }>();
 
 /**
- * useTextToSpeech - Custom hook for Text-to-Speech
- * Prioritizes Gemini 2.5 Flash Voice (State-of-the-Art native audio).
+ * Pick the best available male English voice.
+ * Priority: any voice with "male" in name → Microsoft David/Mark → Daniel → Google → first en-* voice.
+ */
+function pickMaleVoice(): SpeechSynthesisVoice | null {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    const en = voices.filter(v => v.lang.startsWith('en'));
+
+    return (
+        en.find(v => v.name.toLowerCase().includes('male')) ||
+        en.find(v => v.name.includes('Google UK English Male')) ||
+        en.find(v => v.name.includes('Microsoft David')) ||
+        en.find(v => v.name.includes('Microsoft Mark')) ||
+        en.find(v => v.name.includes('Daniel')) ||
+        en.find(v => v.name.includes('Google')) ||
+        en[0] ||
+        null
+    );
+}
+
+/**
+ * Core browser TTS function — always uses the male voice, never Gemini.
+ */
+function browserSpeak(text: string, onEnd?: () => void): void {
+    if (!('speechSynthesis' in window)) { onEnd?.(); return; }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.92;
+    utterance.pitch = 0.9; // slightly lower pitch = more masculine
+
+    // Voices may not be loaded on first call — try immediately, then retry after voices load
+    const trySetVoice = () => {
+        const v = pickMaleVoice();
+        if (v) utterance.voice = v;
+    };
+    trySetVoice();
+    if (!utterance.voice) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            trySetVoice();
+            window.speechSynthesis.onvoiceschanged = null;
+        };
+    }
+
+    if (onEnd) utterance.onend = onEnd;
+    window.speechSynthesis.speak(utterance);
+}
+
+/**
+ * useTextToSpeech — Custom hook for Text-to-Speech.
+ *
+ * Uses browser Web Speech API ONLY (male voice).
+ * Gemini TTS is intentionally NOT used here.
+ * Gemini TTS remains only in RoleplayChat (its own `speakText` function).
  */
 const useTextToSpeech = () => {
     /**
-     * prepareAndSpeak - Fetches TTS audio first, then calls onReady right before playback.
-     * This ensures the message text doesn't appear until audio is about to play.
+     * prepareAndSpeak — Calls onReady() then speaks via browser TTS.
+     * (signature kept compatible with old API so callers don't need changes)
      */
-    const prepareAndSpeak = useCallback(async (
+    const prepareAndSpeak = useCallback((
         text: string,
         onReady: () => void,
         onEnd?: () => void,
-        voice?: { aiName: string, gender: string, tone: string },
-        forceNative: boolean = false
+        _voice?: unknown,
+        _forceNative?: boolean
     ) => {
-        try {
-            if (!forceNative) {
-                const cacheKey = `${text}_${voice?.aiName || ''}_${voice?.gender || ''}_${voice?.tone || ''}`;
-                
-                let audioData: { audioContent: string, mimeType: string } | null = null;
-                
-                if (audioCache.has(cacheKey)) {
-                    audioData = audioCache.get(cacheKey)!;
-                } else {
-                    // 1. Fetch audio from Gemini TTS
-                    const result = await requestGeminiVoice(text, voice);
-                    if (result.success && result.audioContent) {
-                        audioData = { audioContent: result.audioContent, mimeType: result.mimeType || 'audio/wav' };
-                        audioCache.set(cacheKey, audioData);
-                    }
-                }
-
-                if (audioData) {
-                    // 2. Audio is ready - show the message NOW
-                    onReady();
-
-                    // 3. Play the audio
-                    try {
-                        await playBase64Audio(audioData.audioContent, audioData.mimeType);
-                    } catch (playError) {
-                        console.warn('Audio playback failed:', playError);
-                    }
-                    if (onEnd) onEnd();
-                    return;
-                }
-            }
-        } catch (error) {
-            console.warn('Gemini TTS failed:', error);
-        }
-
-        // Fallback: show message immediately and use Web Speech API
         onReady();
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.9;
-            const voices = window.speechSynthesis.getVoices();
-            const enVoice = voices.find(v => v.lang.startsWith('en-') && (v.name.includes('Google') || v.name.includes('Premium')));
-            if (enVoice) utterance.voice = enVoice;
-            if (onEnd) utterance.onend = onEnd;
-            window.speechSynthesis.speak(utterance);
-        }
+        browserSpeak(text, onEnd);
     }, []);
 
-    /**
-     * speak - Simple speak that shows message immediately (for re-play button, etc.)
-     */
-    const speak = useCallback(async (text: string, onEnd?: () => void, voice?: { aiName: string, gender: string, tone: string }, forceNative: boolean = false) => {
-        try {
-            if (!forceNative) {
-                const cacheKey = `${text}_${voice?.aiName || ''}_${voice?.gender || ''}_${voice?.tone || ''}`;
-                
-                let audioData: { audioContent: string, mimeType: string } | null = null;
-                
-                if (audioCache.has(cacheKey)) {
-                    audioData = audioCache.get(cacheKey)!;
-                } else {
-                    const result = await requestGeminiVoice(text, voice);
-                    if (result.success && result.audioContent) {
-                        audioData = { audioContent: result.audioContent, mimeType: result.mimeType || 'audio/wav' };
-                        audioCache.set(cacheKey, audioData);
-                    }
-                }
-
-                if (audioData) {
-                    await playBase64Audio(audioData.audioContent, audioData.mimeType);
-                    if (onEnd) onEnd();
-                    return;
-                }
-            }
-        } catch (error) {
-            console.warn('Gemini TTS failed:', error);
-        }
-
-        // Fallback to Web Speech API
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.9;
-            const voices = window.speechSynthesis.getVoices();
-            const enVoice = voices.find(v => v.lang.startsWith('en-') && (v.name.includes('Google') || v.name.includes('Premium')));
-            if (enVoice) utterance.voice = enVoice;
-            if (onEnd) utterance.onend = onEnd;
-            window.speechSynthesis.speak(utterance);
-        }
+    /** speak — Immediate, fire-and-forget */
+    const speak = useCallback((text: string, onEnd?: () => void) => {
+        browserSpeak(text, onEnd);
     }, []);
 
+    /** stop — Cancel any active speech */
     const stop = useCallback(() => {
-        stopBase64Audio();
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
         }

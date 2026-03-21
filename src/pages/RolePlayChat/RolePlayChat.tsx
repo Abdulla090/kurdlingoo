@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { rolePlayScenarios } from '../../data/rolePlayScenarios';
-import { sendChatMessage, evalChatMessage } from '../../services/api';
+import { sendChatMessage, evalChatMessage, requestGeminiVoice, playBase64Audio, stopBase64Audio } from '../../services/api';
 import useSpeechRecognition from '../../hooks/useSpeechRecognition';
-import useTextToSpeech from '../../hooks/useTextToSpeech';
 import { useLanguage } from '../../context/LanguageContext';
 import { Mic, Send, ArrowLeft, Play, Square, Star } from 'lucide-react';
 import './RolePlayChat.css';
@@ -38,7 +37,48 @@ const RolePlayChat: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const { transcript, isListening, startListening, stopListening, error: speechError } = useSpeechRecognition();
-    const { speak, prepareAndSpeak, stop: stopSpeaking } = useTextToSpeech();
+
+    // Gemini TTS cache for roleplay voices
+    const geminiCache = useRef<Map<string, { audioContent: string; mimeType: string }>>(new Map());
+
+    const geminiSpeak = useCallback(async (
+        text: string,
+        voice?: { aiName: string; gender: string; tone: string },
+        onDone?: () => void
+    ) => {
+        try {
+            const cacheKey = `${text}_${voice?.aiName || ''}`;
+            let audioData = geminiCache.current.get(cacheKey);
+            if (!audioData) {
+                const result = await requestGeminiVoice(text, voice);
+                if (result.success && result.audioContent) {
+                    audioData = { audioContent: result.audioContent, mimeType: result.mimeType || 'audio/wav' };
+                    geminiCache.current.set(cacheKey, audioData);
+                }
+            }
+            if (audioData) {
+                await playBase64Audio(audioData.audioContent, audioData.mimeType);
+                onDone?.();
+                return;
+            }
+        } catch (_e) { /* fall through */ }
+        // Browser TTS fallback (male voice)
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.lang = 'en-US'; utt.rate = 0.92; utt.pitch = 0.9;
+            const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+            const maleV = voices.find(v => v.name.toLowerCase().includes('male')) || voices[0];
+            if (maleV) utt.voice = maleV;
+            if (onDone) utt.onend = onDone;
+            window.speechSynthesis.speak(utt);
+        }
+    }, []);
+
+    const stopSpeaking = useCallback(() => {
+        stopBase64Audio();
+        window.speechSynthesis?.cancel();
+    }, []);
 
     // Scroll to bottom whenever messages change
     useEffect(() => {
@@ -55,35 +95,29 @@ const RolePlayChat: React.FC = () => {
             parts: [{ text: scenario.initialMessage }]
         }]);
 
-        // Use prepareAndSpeak: show message only when audio is ready
+        // Speak greeting and then show the initial message
         setIsTyping(true);
-        prepareAndSpeak(
-            scenario.initialMessage,
-            () => {
-                // onReady: audio is fetched, show the message now
-                const initialAI: Message = {
-                    id: `msg-initial`,
-                    role: 'ai' as const,
-                    text: scenario.initialMessage,
-                    timestamp: new Date(),
-                    avatar: scenario.image
-                };
-                setMessages([initialAI]);
-                setIsTyping(false);
-            },
-            undefined,
-            {
-                aiName: scenario.aiName,
-                gender: scenario.gender,
-                tone: scenario.tone
-            }
-        );
+        (async () => {
+            await geminiSpeak(
+                scenario.initialMessage,
+                { aiName: scenario.aiName, gender: scenario.gender, tone: scenario.tone },
+            );
+            const initialAI: Message = {
+                id: `msg-initial`,
+                role: 'ai' as const,
+                text: scenario.initialMessage,
+                timestamp: new Date(),
+                avatar: scenario.image
+            };
+            setMessages([initialAI]);
+            setIsTyping(false);
+        })();
 
         return () => {
             stopSpeaking();
             stopListening();
         };
-    }, [scenario, navigate, prepareAndSpeak, stopSpeaking, stopListening]);
+    }, [scenario, navigate, geminiSpeak, stopSpeaking, stopListening]);
 
     // Handle incoming transcript when speech ends
     useEffect(() => {
@@ -177,29 +211,21 @@ const RolePlayChat: React.FC = () => {
                     parts: [{ text: result.response }]
                 }]);
 
-                // Use prepareAndSpeak: keep typing indicator until audio is ready
-                await prepareAndSpeak(
+                // Speak AI response with Gemini TTS
+                await geminiSpeak(
                     result.response,
-                    () => {
-                        // onReady: audio is fetched, show the message now
-                        const aiMsg: Message = {
-                            id: `msg-${Date.now()}-ai`,
-                            role: 'ai',
-                            text: result.response,
-                            timestamp: new Date(),
-                            image: attachment,
-                            avatar: currentAvatar
-                        };
-                        setMessages(prev => [...prev, aiMsg]);
-                        setIsTyping(false);
-                    },
-                    undefined,
-                    {
-                        aiName: scenario.aiName,
-                        gender: scenario.gender,
-                        tone: scenario.tone
-                    }
+                    { aiName: scenario.aiName, gender: scenario.gender, tone: scenario.tone }
                 );
+                const aiMsg: Message = {
+                    id: `msg-${Date.now()}-ai`,
+                    role: 'ai',
+                    text: result.response,
+                    timestamp: new Date(),
+                    image: attachment,
+                    avatar: currentAvatar
+                };
+                setMessages(prev => [...prev, aiMsg]);
+                setIsTyping(false);
             } else {
                 throw new Error(result.error || 'Failed to get response');
             }
@@ -273,7 +299,7 @@ const RolePlayChat: React.FC = () => {
                             <div className="bubble-meta">
                                 {msg.role === 'ai' && (
                                     <>
-                                        <button className="re-speak-btn" onClick={() => speak(msg.text, undefined, {
+                                        <button className="re-speak-btn" onClick={() => geminiSpeak(msg.text, {
                                             aiName: scenario.aiName,
                                             gender: scenario.gender,
                                             tone: scenario.tone
