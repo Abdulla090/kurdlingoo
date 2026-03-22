@@ -20,6 +20,7 @@ import NeuroMatch from './pages/NeuroMatch/NeuroMatch';
 import TypingRush from './pages/TypingRush/TypingRush';
 import BookDictionary from './pages/BookDictionary/BookDictionary';
 import IntermediateLearn from './pages/IntermediateLearn/IntermediateLearn';
+import Eltis from './pages/Eltis/Eltis';
 import Layout from './components/Layout/Layout';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
@@ -54,6 +55,7 @@ const AnimatedRoutes = () => {
         <Route path="/typing-rush" element={<PageTransition><TypingRush /></PageTransition>} />
         <Route path="/dictionary" element={<Layout><BookDictionary /></Layout>} />
         <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+        <Route path="/eltis" element={<PageTransition><Eltis /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );

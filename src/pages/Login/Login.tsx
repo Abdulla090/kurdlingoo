@@ -46,10 +46,7 @@ const Login: React.FC = () => {
         setLoading(true);
         setError('');
         
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const redirectTo = isLocalhost
-            ? window.location.origin + '/learn'
-            : 'https://kurdlingo.vercel.app/learn';
+        const redirectTo = window.location.origin + '/learn';
 
         const { error } = await supabase.auth.signInWithOAuth({
             provider,

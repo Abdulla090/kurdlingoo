@@ -1,30 +1,170 @@
 @import './variables.css';
 
-/* Import Inter font for clean typography */
+/* ── Fonts ─────────────────────────────────────────────────────────────────
+   rule: type-font-display-swap — always swap so text is never invisible
+   ──────────────────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Kurdish Font - Default Rabar_039 loaded dynamically */
+/* Kurdish Font */
 :root {
-    --font-kurdish: 'Rabar_039';
+  --font-kurdish: 'Rabar_039';
 }
 
-/* Kurdish text class - use this for all Kurdish language content */
+/* ── Box Model Reset ──────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Root Typography Settings ─────────────────────────────────────────────
+   rule: type-antialiased-on-retina
+   rule: type-opentype-contextual-alternates (calt always on)
+   rule: type-optical-sizing-auto
+   ──────────────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  font-optical-sizing: auto;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  font-size: 16px;
+  font-weight: 400;
+
+  /* rule: type-antialiased-on-retina */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  /* rule: type-opentype-contextual-alternates */
+  font-feature-settings: "calt" 1, "kern" 1;
+
+  /* rule: type-text-wrap-pretty — reduces orphans in body copy */
+  text-wrap: pretty;
+
+  overflow-x: hidden;
+}
+
+/* ── Headings ─────────────────────────────────────────────────────────────
+   rule: type-text-wrap-balance-headings — even line lengths
+   ──────────────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+
+  /* rule: type-text-wrap-balance-headings */
+  text-wrap: balance;
+
+  /* rule: type-no-font-synthesis */
+  font-synthesis: none;
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); }
+h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); }
+h3 { font-size: clamp(1.1rem, 2.5vw, 1.35rem); }
+
+p {
+  color: var(--color-text-secondary);
+  /* rule: type-text-wrap-pretty */
+  text-wrap: pretty;
+}
+
+/* ── Interactive elements baseline ──────────────────────────────────────── */
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: inherit;
+  color: inherit;
+  /* rule: ux-fitts-target-size — min 44px touch target on mobile */
+  min-height: 44px;
+  /* rule: physics-active-state — all buttons get scale on active */
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+button:active {
+  /* rule: physics-active-state — 0.96 is in the safe 0.95-1.05 range */
+  transform: scale(0.96);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  text-underline-offset: 3px;         /* rule: type-underline-offset */
+  text-decoration-skip-ink: auto;
+}
+
+/* ── Focus States — Accessibility ──────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Labels — uppercase letter-spacing ─────────────────────────────────────
+   rule: type-letter-spacing-uppercase
+   ──────────────────────────────────────────────────────────────────────── */
+.label,
+.badge,
+[class*="-label"],
+[class*="-badge"] {
+  letter-spacing: 0.05em;
+}
+
+/* ── Numbers — tabular for data alignment ──────────────────────────────────
+   rule: type-tabular-nums-for-data
+   ──────────────────────────────────────────────────────────────────────── */
+.tabular-nums,
+.score,
+.timer,
+.counter,
+.progress-value,
+[class*="-score"],
+[class*="-timer"],
+[class*="-pts"],
+[class*="-xp"] {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ── Selection ──────────────────────────────────────────────────────────────
+   rule: native-selection-styling
+   ──────────────────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(255, 150, 0, 0.25);
+  color: #fff;
+}
+
+/* ── Placeholder ────────────────────────────────────────────────────────────
+   rule: native-placeholder-styling
+   ──────────────────────────────────────────────────────────────────────── */
+::placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 1;
+}
+
+/* ── Kurdish Text ────────────────────────────────────────────────────────── */
 .kurdish-text {
-    font-family: var(--font-kurdish), 'Vazirmatn', sans-serif;
-    direction: rtl;
-    line-height: 1.8;
+  font-family: var(--font-kurdish), 'Vazirmatn', sans-serif;
+  direction: rtl;
+  line-height: 1.8;
 }
 
 :root[dir="rtl"] {
-    --font-family-base: var(--font-kurdish), 'Vazirmatn', sans-serif;
-    --font-family-display: var(--font-kurdish), 'Vazirmatn', sans-serif;
+  --font-family-base: var(--font-kurdish), 'Vazirmatn', sans-serif;
+  --font-family-display: var(--font-kurdish), 'Vazirmatn', sans-serif;
 }
 
-body[dir="rtl"] {
-    font-family: var(--font-family-base);
-}
+body[dir="rtl"] { font-family: var(--font-family-base); }
 
-/* For RTL layout when language is Kurdish */
 [dir="rtl"] .exercise-question,
 [dir="rtl"] .option-text,
 [dir="rtl"] .sentence-word,
@@ -34,201 +174,115 @@ body[dir="rtl"] {
 [dir="rtl"] .audio-text,
 [dir="rtl"] .matching-item,
 [dir="rtl"] .feedback-message {
-    font-family: var(--font-kurdish), 'Vazirmatn', sans-serif;
+  font-family: var(--font-kurdish), 'Vazirmatn', sans-serif;
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* Bulletproof Global Fix for Punctuation in mixed RTL/LTR texts */
+/* Punctuation fix in mixed scripts */
 p, span, h1, h2, h3, h4, h5, h6, div, label, button, input {
-    unicode-bidi: plaintext;
+  unicode-bidi: plaintext;
 }
 
-html {
-    scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    font-family: var(--font-family-base);
-    background: var(--color-background);
-    color: var(--color-text);
-    line-height: 1.6;
-    font-size: 16px;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    overflow-x: hidden;
-}
-
-/* Typography Scale */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--color-text);
-}
-
-h1 { font-size: 2rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.25rem; }
-
-p {
-    color: var(--color-text-secondary);
-}
-
-button {
-    font-family: inherit;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: inherit;
-    color: inherit;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Focus States - Accessibility */
-:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-button:focus-visible,
-a:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-}
-
-/* Selection */
-::selection {
-    background: var(--color-primary-50);
-    color: var(--color-primary-dark);
-}
-
-/* Utility Classes */
+/* ── Utilities ────────────────────────────────────────────────────────────── */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
 }
 
 .flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.text-center {
-    text-align: center;
-}
+.text-center { text-align: center; }
+.hidden { display: none; }
 
-.hidden {
-    display: none;
-}
-
-/* Glass effect - Premium */
+/* Glass effect */
 .glass {
-    background: rgba(32, 47, 54, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
+  background: rgba(32, 47, 54, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border-alpha);
+  box-shadow: var(--shadow-2);
 }
 
-.dark-mode .glass {
-    background: rgba(30, 41, 59, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* Premium scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
+/* ── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track {
-    background: var(--color-surface-variant);
-    border-radius: var(--radius-full);
+  background: var(--color-surface-variant);
+  border-radius: var(--radius-full);
 }
-
 ::-webkit-scrollbar-thumb {
-    background: var(--color-divider);
-    border-radius: var(--radius-full);
-    border: 2px solid var(--color-surface-variant);
+  background: var(--color-divider);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-surface-variant);
 }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-tertiary); }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-text-tertiary);
-}
-
-/* Core Animations - Refined */
+/* ── Core Keyframes ────────────────────────────────────────────────────────
+   rule: easing-entrance-ease-out  → ease-out for enters
+   rule: easing-exit-ease-in       → ease-in for exits
+   rule: timing-under-300ms        → all ≤ 280ms
+   ──────────────────────────────────────────────────────────────────────── */
 @keyframes fadeIn {
-    from { 
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
 @keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes scaleOut {
+  /* rule: easing-exit-ease-in — exits build momentum before departure */
+  from { opacity: 1; transform: scale(1);    }
+  to   { opacity: 0; transform: scale(0.96); }
 }
 
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+  0%, 100% { opacity: 1;   }
+  50%       { opacity: 0.5; }
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
+  /* rule: timing-under-300ms */
+  0%, 100% { transform: translateX(0);  }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px);  }
 }
 
-/* Reduced motion */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes popIn {
+  /* spring-like via cubic-bezier: rule: physics-spring-for-overshoot */
+  0%   { opacity: 0; transform: scale(0.8);    }
+  70%  { opacity: 1; transform: scale(1.03);   }
+  100% { opacity: 1; transform: scale(1);      }
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

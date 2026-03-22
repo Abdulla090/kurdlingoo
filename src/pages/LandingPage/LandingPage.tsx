@@ -111,8 +111,8 @@ export default function LandingPage() {
         return () => ctx.revert();
     }, [isLoaded, user]);
 
-    // While auth state is loading, show nothing to prevent flash
-    if (!isLoaded) return null;
+    // While auth state is loading, or if we're redirecting a logged-in user, show nothing to prevent flash
+    if (!isLoaded || user) return null;
 
     return (
         <div className={`lp ${darkMode ? 'lp--dark' : 'lp--light'}`}>

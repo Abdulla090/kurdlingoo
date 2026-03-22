@@ -402,3 +402,43 @@ export function blobToBase64(blob: Blob): Promise<string> {
         reader.readAsDataURL(blob);
     });
 }
+
+// ─── MULTI-SPEAKER TTS ───────────────────────────────────────────────────────
+interface MultiTTSTurn { speaker: string; line: string; }
+interface MultiTTSSpeaker { speaker: string; voice: string; }
+
+export interface MultiTTSResponse {
+    audioContent: string;
+    mimeType: string;
+    success: boolean;
+    error?: string;
+}
+
+/**
+ * Generate multi-speaker Gemini TTS audio where each character has a
+ * pinned, never-changing voice. Returns base64 WAV ready for playback.
+ */
+export async function requestMultiTTS(
+    turns: MultiTTSTurn[],
+    speakerVoices: MultiTTSSpeaker[]
+): Promise<MultiTTSResponse> {
+    try {
+        const response = await fetch('/api/gemini-multitts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ turns, speakerVoices })
+        });
+        let data: any;
+        try {
+            const raw = await response.text();
+            data = raw ? JSON.parse(raw) : {};
+        } catch {
+            data = { error: `Invalid response (${response.status})` };
+        }
+        if (!response.ok) throw new Error(data.error || 'Multi-TTS request failed');
+        return { audioContent: data.audioContent, mimeType: data.mimeType, success: true };
+    } catch (error: any) {
+        return { audioContent: '', mimeType: '', success: false, error: error.message };
+    }
+}
+

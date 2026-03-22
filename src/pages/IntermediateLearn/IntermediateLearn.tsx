@@ -7,10 +7,10 @@ import {
 } from '@phosphor-icons/react';
 import { useLanguage } from '../../context/LanguageContext';
 import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
+import { intermediateUnit2 } from '../../data/courses/intermediate-unit2';
 import {
     isLessonCompleted,
     isLessonUnlocked,
-
     isUnitCompleted
 } from '../../utils/progressManager';
 import './IntermediateLearn.css';
@@ -72,7 +72,7 @@ const IntermediateLearn: React.FC = () => {
                 }
             }
             // Fallback to default intermediate units
-            setUnits([intermediateUnit1]);
+            setUnits([intermediateUnit1, intermediateUnit2]);
         };
 
         loadUnits();

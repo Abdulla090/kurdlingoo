@@ -1,134 +1,189 @@
 :root {
   /* ============================================
-     DUOLINGO NATIVE DESIGN SYSTEM
-     Exact colors from Duolingo's design
+     KURDLINGO DESIGN SYSTEM — v4
+     Follows userinterface-wiki v3.0 rules
      ============================================ */
 
-  /* Brand Colors - Primary Orange */
+  /* ── Brand Colors ─────────────────────────────── */
   --color-primary: #ff9600;
   --color-primary-dark: #cc7800;
   --color-primary-light: #ffb44d;
   --color-primary-50: rgba(255, 150, 0, 0.15);
-  --color-primary-surface: rgba(255, 150, 0, 0.1);
+  --color-primary-surface: rgba(255, 150, 0, 0.10);
 
-  /* Achievements & Streaks */
+  /* ── Achievements & Streaks ────────────────────── */
   --color-gold: #ff9600;
   --color-gold-dark: #cd7900;
   --color-gold-light: #ffc800;
-  
-  /* Duolingo Blue - for links/info */
+
+  /* ── Accent Colors ─────────────────────────────── */
+  --color-accent: #1cb0f6;          /* Duolingo Blue */
   --color-accent-blue: #1cb0f6;
   --color-accent-blue-dark: #1899d6;
   --color-info-bg: rgba(28, 176, 246, 0.15);
-  
-  /* Duolingo Red - for errors/hearts */
+
+  --color-secondary: #ff4b4b;       /* Duolingo Red */
+  --color-secondary-dark: #ea2b2b;
   --color-accent-red: #ff4b4b;
   --color-accent-red-dark: #ea2b2b;
   --color-error-bg: rgba(255, 75, 75, 0.15);
 
-  /* Duolingo's Exact Gray Scale */
+  /* ── Text ──────────────────────────────────────── */
   --color-text: #ffffff;
+  --color-text-main: #ffffff;
   --color-text-secondary: #afafaf;
   --color-text-tertiary: #777777;
   --color-text-light: #777777;
-  
-  /* Backgrounds */
+  --color-text-inverse: #13131a;
+
+  /* ── Surfaces ──────────────────────────────────── */
   --color-background: #131f24;
   --color-surface: #202f36;
   --color-surface-variant: #18282e;
   --color-surface-elevated: #202f36;
-  
-  /* Borders - Duolingo uses #37464f consistently in dark mode */
-  --color-border: #37464f;
+
+  /* ── Borders — semi-transparent for adaptability
+     rule: visual-border-alpha-colors ────────────── */
+  --color-border: rgba(55, 70, 79, 1);
+  --color-border-alpha: rgba(255, 255, 255, 0.08);
   --color-divider: #37464f;
 
-  /* Semantic */
-  --color-success: #ff9600;
+  /* ── Semantic ──────────────────────────────────── */
+  --color-success: #58cc02;
+  --color-success-dark: #46a302;
   --color-error: #ff4b4b;
   --color-warning: #ff9600;
   --color-info: #1cb0f6;
 
-  /* Typography - Modern Sans Stack */
+  /* ── Typography ────────────────────────────────── */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-display: 'Inter', -apple-system, sans-serif;
   --font-kurdish: 'Rabar_039', 'Vazirmatn', sans-serif;
 
-  /* Spacing Scale */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
-  --spacing-3xl: 64px;
+  /* ── Spacing Scale (4-based, consistent)
+     rule: visual-consistent-spacing-scale ───────── */
+  --spacing-1:  4px;
+  --spacing-2:  8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
 
-  /* Border Radius - Refined */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
+  /* Legacy aliases */
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-2xl: var(--spacing-12);
+  --spacing-3xl: var(--spacing-16);
+
+  /* ── Border Radius ─────────────────────────────── */
+  --radius-xs:  4px;
+  --radius-sm:  6px;
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 18px;
   --radius-2xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows - Layered Depth System */
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-  
-  /* Focus & Interactive Shadows */
+  /* ── Elevation / Shadow Scale
+     rule: visual-layered-shadows
+     rule: visual-shadow-direction (all top-down)
+     rule: visual-shadow-matches-elevation
+     rule: visual-no-pure-black-shadow ─────────────── */
+  --shadow-1:
+    0 1px 2px rgba(15, 25, 35, 0.06),
+    0 1px 3px rgba(15, 25, 35, 0.04);
+  --shadow-2:
+    0 2px 4px rgba(15, 25, 35, 0.08),
+    0 4px 8px rgba(15, 25, 35, 0.05),
+    0 1px 2px rgba(15, 25, 35, 0.04);
+  --shadow-3:
+    0 4px 8px  rgba(15, 25, 35, 0.10),
+    0 8px 16px rgba(15, 25, 35, 0.07),
+    0 16px 32px rgba(15, 25, 35, 0.05);
+  --shadow-4:
+    0 8px 16px  rgba(15, 25, 35, 0.12),
+    0 16px 32px rgba(15, 25, 35, 0.08),
+    0 32px 64px rgba(15, 25, 35, 0.06);
+
+  /* Legacy aliases */
+  --shadow-xs: var(--shadow-1);
+  --shadow-sm: var(--shadow-1);
+  --shadow-md: var(--shadow-2);
+  --shadow-lg: var(--shadow-3);
+  --shadow-xl: var(--shadow-4);
+  --shadow-card: var(--shadow-2);
+  --shadow-card-hover: var(--shadow-3);
+  --shadow-button:
+    0 1px 2px rgba(15, 25, 35, 0.05),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  --shadow-inner: inset 0 2px 4px rgba(0,0,0,0.15);
+
+  /* Focus Ring */
   --shadow-focus: 0 0 0 3px var(--color-primary-50);
-  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.03);
-  --shadow-card-hover: 0 8px 16px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -4px rgba(15, 23, 42, 0.06);
-  --shadow-button: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --shadow-button-hover: 0 4px 8px -2px rgba(15, 23, 42, 0.1);
-  
-  /* Ring for selected states */
   --ring-primary: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
   --ring-blue: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-accent-blue);
 
-  /* Transitions - Smooth & Professional */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* ── Transitions — canonical timing
+     rule: timing-consistent
+     rule: duration-press-hover (120-180ms)
+     rule: duration-small-state (180-260ms)
+     rule: duration-max-300ms ──────────────────────── */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);   /* press/hover */
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);   /* state changes */
+  --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);   /* view transitions */
+  --transition-enter:  200ms cubic-bezier(0, 0, 0.2, 1);     /* ease-out for entrances */
+  --transition-exit:   150ms cubic-bezier(0.4, 0, 1, 1);     /* ease-in for exits */
+  --transition-spring: 280ms cubic-bezier(0.34, 1.56, 0.64, 1); /* spring <300ms */
 
-  /* Z-Index Scale */
+  /* ── Z-Index Scale ──────────────────────────────── */
   --z-base: 0;
+  --z-raised: 10;
   --z-dropdown: 100;
   --z-sticky: 200;
   --z-fixed: 300;
   --z-modal-backdrop: 400;
   --z-modal: 500;
   --z-toast: 600;
+  --z-tooltip: 700;
 }
 
-/* Dark Mode - Premium Dark Theme */
+/* ── Dark mode overrides ─────────────────────────── */
 .dark-mode {
   --color-text: #ffffff;
+  --color-text-main: #ffffff;
   --color-text-secondary: #afafaf;
   --color-text-tertiary: #777777;
-  --color-text-light: #777777;
-  
   --color-background: #131f24;
   --color-surface: #202f36;
   --color-surface-variant: #18282e;
   --color-surface-elevated: #202f36;
-  
-  --color-border: #37464f;
+  --color-border: rgba(55, 70, 79, 1);
+  --color-border-alpha: rgba(255, 255, 255, 0.07);
   --color-divider: #37464f;
-  
-  --color-primary-50: rgba(255, 150, 0, 0.15);
-  --color-primary-surface: rgba(255, 150, 0, 0.1);
-  --color-info-bg: rgba(59, 130, 246, 0.12);
-  --color-error-bg: rgba(239, 68, 68, 0.12);
-  
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.35), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
-  --shadow-card-hover: 0 8px 16px -4px rgba(0, 0, 0, 0.35);
+
+  --shadow-1:
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.18);
+  --shadow-2:
+    0 2px 4px rgba(0, 0, 0, 0.28),
+    0 4px 8px rgba(0, 0, 0, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-3:
+    0 4px 8px  rgba(0, 0, 0, 0.32),
+    0 8px 16px rgba(0, 0, 0, 0.25),
+    0 16px 32px rgba(0, 0, 0, 0.18);
+  --shadow-4:
+    0 8px 16px  rgba(0, 0, 0, 0.38),
+    0 16px 32px rgba(0, 0, 0, 0.28),
+    0 32px 64px rgba(0, 0, 0, 0.20);
+
+  --shadow-card: var(--shadow-2);
+  --shadow-card-hover: var(--shadow-3);
 }

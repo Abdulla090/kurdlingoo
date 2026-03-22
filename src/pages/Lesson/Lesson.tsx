@@ -31,6 +31,7 @@ import { unit4 } from '../../data/courses/unit4';
 import { unit5 } from '../../data/courses/unit5';
 import { unit6 } from '../../data/courses/unit6';
 import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
+import { intermediateUnit2 } from '../../data/courses/intermediate-unit2';
 import { completeLesson, isLessonUnlocked } from '../../utils/progressManager';
 import Button from '../../components/Button/Button';
 import './Lesson.css';
@@ -129,7 +130,7 @@ const Lesson = () => {
         const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
 
         // 2. Use saved units or fallback to default imports
-        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1];
+        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1, intermediateUnit2];
 
         // 3. Find lesson in the determined units
         let foundLesson = null;
@@ -203,7 +204,20 @@ const Lesson = () => {
         );
     }
 
-    if (!lesson) return <div className="lesson-view"><div className="exercise-container"><h2>{t('lessonNotFound')}</h2><Button onClick={() => navigate('/learn')}>{t('backToLearn')}</Button></div></div>;
+    if (!lesson) {
+        return (
+            <div className="lesson-view" style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{ textAlign: 'center', padding: '40px', background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--color-border)' }}>
+                    <h2 style={{ marginBottom: '24px', fontSize: '1.5rem', fontWeight: 600 }}>
+                        {t('lessonNotFound') || 'Lesson not found'}
+                    </h2>
+                    <Button variant="primary" onClick={() => navigate('/learn')}>
+                        {t('backToLearn') || 'Back to Learn'}
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 
     const currentExercise = lesson.exercises[currentExerciseIndex];
 
