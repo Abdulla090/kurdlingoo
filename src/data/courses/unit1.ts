@@ -845,7 +845,7 @@ export const unit1: Unit = {
                         { kurdish: "برنج", english: "Rice" },
                         { kurdish: "گۆشت", english: "Meat" },
                         { kurdish: "مریشک", english: "Chicken" },
-                        { kurdish: "سەوزە", english: "Salad" }
+                        { kurdish: "زەڵاتە", english: "Salad" }
                     ]
                 },
                 {

@@ -331,33 +331,15 @@ export const unit2: Unit = {
                     hints: ['I', 'want', 'buy']
                 },
                 {
-                    type: 'roleplay-chat',
-                    question: 'You are at a market. Respond to the seller.',
-                    scenario: '🛒 You are at a Kurdish bazaar looking for a shirt. The seller greets you. Reply naturally in Kurdish!',
-                    chatMessages: [
-                        { sender: 'ai', text: 'سڵاو! بەخێربێیت بۆ دووکانەکەم. چیت دەوێت؟', avatar: '👨‍💼', name: 'فرۆشیار' },
-                        { sender: 'ai', text: 'confirm: زۆر باشە! بەڵێ کراسی جوانمان هەیە.', avatar: '👨‍💼', name: 'فرۆشیار' }
-                    ],
-                    acceptableResponses: [
-                        'سڵاو من کراسێکم دەوێت',
-                        'کراسێکم دەوێت',
-                        'من دەمەوێت کراس بکڕم',
-                        'دەمەوێت کراس بکڕم',
-                        'سڵاو کراس دەوێم'
-                    ],
-                    keywordsRequired: ['کراس'],
-                    hints: ['shirt', 'want', 'hello']
-                },
-                {
                     type: 'conversation',
                     question: 'Complete the shopping dialogue',
                     dialogue: [
-                        { speaker: 'Seller', text: 'سڵاو! چیت دەوێت؟' },
-                        { speaker: 'You', text: '___', options: ['من کراسێکم دەوێت', 'باشم', 'سپاس'] },
-                        { speaker: 'Seller', text: 'ئەمە بە چەندە؟' },
-                        { speaker: 'You', text: '___', options: ['بە دە دۆلارە', 'نازانم', 'خوا حافیز'] }
+                        { speaker: 'Seller', text: 'Hello! Can I help you?' },
+                        { speaker: 'You', text: '___', options: ['Yes, I want a shirt', 'I am good', 'Thank you'] },
+                        { speaker: 'You', text: '___', options: ['How much is this?', 'I do not know', 'Goodbye'] },
+                        { speaker: 'Seller', text: 'It is ten dollars.' }
                     ],
-                    correctOptions: ['من کراسێکم دەوێت', 'بە دە دۆلارە']
+                    correctOptions: ['Yes, I want a shirt', 'How much is this?']
                 },
                 {
                     type: 'multiple-choice',
@@ -432,7 +414,7 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'typing',
-                    question: "بە ئینگلیزی بنووسە: 'قوتابخانە لە کوێیە؟'",
+                    question: "بە ئینگلیزی بنووسە: 'قوتابخانەکە لە کوێیە؟'",
                     correctAnswer: 'Where is the school?',
                     hints: ['Where', 'school']
                 },
@@ -456,10 +438,10 @@ export const unit2: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: "بە ئینگلیزی بنووسە: 'بازاڕ لە کوێیە؟'",
-                    sourceText: 'بازاڕ لە کوێیە؟',
+                    question: "بە ئینگلیزی بنووسە: 'بازاڕەکە لە کوێیە؟'",
+                    sourceText: 'بازاڕەکە لە کوێیە؟',
                     correctSentence: ['Where', 'is', 'the', 'market?'],
-                    options: ['Where', 'is', 'the', 'market?', 'when', 'how']
+                    options: ['Where', 'is', 'the', 'market?', 'are', 'a', 'when', 'how']
                 },
                 {
                     type: 'fill-blank',
@@ -471,31 +453,32 @@ export const unit2: Unit = {
                 {
                     type: 'roleplay-chat',
                     question: 'A tourist asks you for directions. Help them!',
-                    scenario: '🗺️ You are on the street and a tourist asks you where the hospital is. Give them directions in Kurdish!',
+                    scenario: '🗺️ You are on the street and a tourist asks you where the market is. Give them directions in English!',
                     chatMessages: [
-                        { sender: 'ai', text: 'ببورە! من نەخۆشخانەم دەوێت. لە کوێیە؟', avatar: '🧑‍🦱', name: 'گەشتیار' },
-                        { sender: 'ai', text: 'confirm: زۆر سوپاس! دەست خۆش بیت.', avatar: '🧑‍🦱', name: 'گەشتیار' }
+                        { sender: 'ai', text: 'Excuse me! I want to go to the market. Where is it?', avatar: '🧑‍🦱', name: 'Tourist' },
+                        { sender: 'ai', text: 'confirm: Thank you very much! Have a good day.', avatar: '🧑‍🦱', name: 'Tourist' }
                     ],
                     acceptableResponses: [
-                        'بڕۆ ڕاستەوخۆ پاشان بچۆ بۆ چەپ',
-                        'بڕۆ ڕێک و پاشان بچۆ چەپ',
-                        'ڕاستەوخۆ بڕۆ و بچۆ بۆ چەپ',
-                        'بڕۆ ڕێک پاشان چەپ',
-                        'ڕێک بڕۆ و چەپ بچۆ'
+                        'Go straight and then turn left',
+                        'Go straight then left',
+                        'Turn left and go straight',
+                        'Go straight and turn left',
+                        'Straight then left'
                     ],
-                    keywordsRequired: ['ڕێک', 'چەپ'],
-                    hints: ['go', 'straight', 'left', 'right']
+                    keywordsRequired: ['straight', 'left'],
+                    hints: ['go', 'straight', 'left', 'right'],
+                    speechLang: 'en-US'
                 },
                 {
                     type: 'conversation',
                     question: 'Complete the directions dialogue',
                     dialogue: [
-                        { speaker: 'Tourist', text: 'ببورە، بازاڕ لە کوێیە؟' },
-                        { speaker: 'You', text: '___', options: ['بڕۆ ڕێک', 'نازانم', 'خوا حافیز'] },
-                        { speaker: 'Tourist', text: 'دوورە؟' },
-                        { speaker: 'You', text: '___', options: ['نەخێر، نزیکە', 'بەڵێ', 'سپاس'] }
+                        { speaker: 'Tourist', text: 'Excuse me, where is the market?' },
+                        { speaker: 'You', text: '___', options: ['Go straight', 'I do not know', 'Goodbye'] },
+                        { speaker: 'Tourist', text: 'Is it far?' },
+                        { speaker: 'You', text: '___', options: ['No, it is near', 'Yes', 'Thank you'] }
                     ],
-                    correctOptions: ['بڕۆ ڕێک', 'نەخێر، نزیکە']
+                    correctOptions: ['Go straight', 'No, it is near']
                 }
             ]
         },
@@ -545,20 +528,21 @@ export const unit2: Unit = {
                 {
                     type: 'roleplay-chat',
                     question: 'Chat about the weather with a friend!',
-                    scenario: '☀️ Your Kurdish friend is asking about the weather today. Tell them it is sunny and hot!',
+                    scenario: '☀️ Your friend is asking about the weather today. Tell them it is sunny and hot in English!',
                     chatMessages: [
-                        { sender: 'ai', text: 'سڵاو هاوڕێ! کەش و هەوا ئەمڕۆ چۆنە؟', avatar: '👋', name: 'هاوڕێ' },
-                        { sender: 'ai', text: 'confirm: ئاهان باشە! دەچمە دەرەوە!', avatar: '👋', name: 'هاوڕێ' }
+                        { sender: 'ai', text: 'Hello friend! How is the weather today?', avatar: '👋', name: 'Friend' },
+                        { sender: 'ai', text: 'confirm: Oh okay! I will go outside then!', avatar: '👋', name: 'Friend' }
                     ],
                     acceptableResponses: [
-                        'ئەمڕۆ خۆرەتاوە و گەرمە',
-                        'خۆرەتاوە و گەرمە',
-                        'ئەمڕۆ زۆر گەرمە',
-                        'کەشەکە خۆرەتاوە',
-                        'هەوا گەرمە'
+                        'Today is sunny and hot',
+                        'It is sunny and hot',
+                        'It is very hot today',
+                        'The weather is sunny',
+                        'It is hot'
                     ],
-                    keywordsRequired: ['گەرم', 'خۆرەتاو'],
-                    hints: ['sunny', 'hot', 'today']
+                    keywordsRequired: ['sunny', 'hot'],
+                    hints: ['sunny', 'hot', 'today'],
+                    speechLang: 'en-US'
                 },
                 {
                     type: 'multiple-choice',

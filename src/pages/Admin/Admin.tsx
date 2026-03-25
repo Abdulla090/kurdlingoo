@@ -9,6 +9,8 @@ import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
 import { unit5 } from '../../data/courses/unit5';
 import { unit6 } from '../../data/courses/unit6';
+import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
+import { intermediateUnit2 } from '../../data/courses/intermediate-unit2';
 import type { Unit, Lesson, Exercise, Guidebook } from '../../types';
 
 const Admin = () => {
@@ -26,11 +28,23 @@ const Admin = () => {
 
     useEffect(() => {
         // Load units from localStorage or use defaults
-        const savedUnits = localStorage.getItem('kurdlingo-units');
-        if (savedUnits) {
-            setUnits(JSON.parse(savedUnits));
+        const savedUnitsStr = localStorage.getItem('kurdlingo-units');
+        const defaultUnits = [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1, intermediateUnit2] as Unit[];
+        
+        if (savedUnitsStr) {
+            try {
+                let saved = JSON.parse(savedUnitsStr);
+                // Self-repair: Ensure any missing default units (like intermediate units) are appended
+                const missingUnits = defaultUnits.filter(defU => !saved.find((su: any) => su.id === defU.id));
+                if (missingUnits.length > 0) {
+                    saved = [...saved, ...missingUnits];
+                }
+                setUnits(saved);
+            } catch (e) {
+                setUnits(defaultUnits);
+            }
         } else {
-            setUnits([unit1, unit2, unit3, unit4, unit5, unit6] as Unit[]);
+            setUnits(defaultUnits);
         }
     }, []);
 
@@ -684,92 +698,27 @@ const Admin = () => {
                             </div>
                         </div>
 
-                        {/* Exercise Type */}
-                        <div className="form-group">
-                            <label>🎮 جۆری یاری</label>
-                            <select
-                                value={editingItem?.type || 'multiple-choice'}
-                                onChange={(e) => setEditingItem({ ...editingItem, type: e.target.value })}
-                                className="type-selector"
-                            >
-                                <option value="multiple-choice">هەڵبژاردنی چەند</option>
-                                <option value="sentence-builder">دروستکردنی ڕستە</option>
-                                <option value="match-pairs">جووتکردنەوە</option>
-                                <option value="fill-blank">پڕکردنەوەی بۆشایی</option>
-                                <option value="typing">تایپکردن</option>
-                                <option value="image-selection">هەڵبژاردنی وێنە</option>
-                            </select>
-                        </div>
-
-                        {/* Question */}
-                        <div className="form-group">
-                            <label>❓ پرسیار</label>
-                            <textarea
-                                rows={2}
-                                value={editingItem?.question || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, question: e.target.value })}
-                                placeholder="پرسیار بنووسە..."
+                        {/* Re-use ExerciseEditor */}
+                        <div style={{ marginTop: '20px', borderTop: '2px solid #ccc', paddingTop: '20px' }}>
+                            <ExerciseEditor
+                                exercise={editingItem}
+                                onChange={setEditingItem}
+                                onSave={() => {}} 
+                                onCancel={() => {}}
+                                isQuickCreate={true}
                             />
                         </div>
-
-                        {/* Quick options for multiple-choice */}
-                        {editingItem?.type === 'multiple-choice' && (
-                            <div className="form-section">
-                                <h3>📝 هەڵبژاردنەکان</h3>
-                                {(editingItem?.options || []).map((option, index) => (
-                                    <div key={index} className="option-editor">
-                                        <div className="option-number">{index + 1}</div>
-                                        <input
-                                            type="text"
-                                            placeholder={`هەڵبژاردن ${index + 1}`}
-                                            value={option.text || ''}
-                                            onChange={(e) => {
-                                                const newOptions = [...editingItem.options];
-                                                newOptions[index] = { ...option, text: e.target.value };
-                                                setEditingItem({ ...editingItem, options: newOptions });
-                                            }}
-                                        />
-                                        <label className="correct-checkbox">
-                                            <input
-                                                type="checkbox"
-                                                checked={option.correct || false}
-                                                onChange={(e) => {
-                                                    const newOptions = [...editingItem.options];
-                                                    newOptions[index] = { ...option, correct: e.target.checked };
-                                                    setEditingItem({ ...editingItem, options: newOptions });
-                                                }}
-                                            />
-                                            ✓ ڕاست
-                                        </label>
-                                        <button
-                                            onClick={() => {
-                                                const newOptions = editingItem.options.filter((_, i) => i !== index);
-                                                setEditingItem({ ...editingItem, options: newOptions });
-                                            }}
-                                            className="btn-remove"
-                                        >❌</button>
-                                    </div>
-                                ))}
-                                <button
-                                    onClick={() => {
-                                        const newOptions = [...(editingItem.options || []), { id: `opt${Date.now()}`, text: '', correct: false }];
-                                        setEditingItem({ ...editingItem, options: newOptions });
-                                    }}
-                                    className="btn-add-small"
-                                >➕ هەڵبژاردن زیاد بکە</button>
-                            </div>
-                        )}
 
                         <div className="form-actions" style={{ marginTop: '24px' }}>
                             <button
                                 onClick={handleSaveQuickCreate}
                                 className="btn-save"
                                 disabled={!quickCreateUnit || !quickCreateLesson}
-                                style={{ opacity: (!quickCreateUnit || !quickCreateLesson) ? 0.5 : 1 }}
+                                style={{ opacity: (!quickCreateUnit || !quickCreateLesson) ? 0.5 : 1, width: '100%', fontSize: '18px', padding: '16px' }}
                             >
-                                💾 یاری زیاد بکە
+                                💾 پاراستن (Save Game)
                             </button>
-                            <button onClick={() => setEditMode(null)} className="btn-cancel">❌ پاشگەزبوونەوە</button>
+                            <button onClick={() => setEditMode(null)} className="btn-cancel" style={{ width: '100%' }}>❌ داخستن</button>
                         </div>
                     </div>
                 )}
@@ -855,7 +804,7 @@ const GuidebookEditor = ({ guidebook, onSave, onCancel }) => {
 };
 
 // Exercise Editor Component
-const ExerciseEditor = ({ exercise, onChange, onSave, onCancel }) => {
+const ExerciseEditor = ({ exercise, onChange, onSave, onCancel, isQuickCreate = false }) => {
     // Ensure exercise has all necessary fields initialized
     const safeExercise = {
         type: 'multiple-choice',
@@ -915,8 +864,8 @@ const ExerciseEditor = ({ exercise, onChange, onSave, onCancel }) => {
     };
 
     return (
-        <div className="admin-panel edit-panel exercise-editor">
-            <h2>✏️ Edit Exercise #{safeExercise.id}</h2>
+        <div className={isQuickCreate ? "" : "admin-panel edit-panel exercise-editor"}>
+            {!isQuickCreate && <h2>✏️ Edit Exercise #{safeExercise.id}</h2>}
 
             <div className="form-group">
                 <label>🎮 Exercise Type</label>
@@ -924,15 +873,20 @@ const ExerciseEditor = ({ exercise, onChange, onSave, onCancel }) => {
                     value={safeExercise.type}
                     onChange={(e) => updateField('type', e.target.value)}
                     className="type-selector"
+                    style={{ background: '#fff' }}
                 >
                     <option value="multiple-choice">Multiple Choice</option>
                     <option value="sentence-builder">Sentence Builder</option>
                     <option value="match-pairs">Match Pairs</option>
                     <option value="fill-blank">Fill in the Blank</option>
                     <option value="listening">Listening</option>
+                    <option value="pronunciation">Pronunciation (Voice game)</option>
                     <option value="typing">Typing</option>
                     <option value="conversation">Conversation</option>
+                    <option value="roleplay-chat">Roleplay Chat</option>
                     <option value="image-selection">Image Selection</option>
+                    <option value="vocabulary-grid">Vocabulary Grid</option>
+                    <option value="cultural-note">Cultural Note</option>
                 </select>
             </div>
 
@@ -1170,17 +1124,76 @@ const ExerciseEditor = ({ exercise, onChange, onSave, onCancel }) => {
                 </div>
             )}
 
-            {/* Placeholder for other types */}
-            {['listening', 'conversation'].includes(safeExercise.type) && (
+            {/* Voice / Pronunciation */}
+            {safeExercise.type === 'pronunciation' && (
                 <div className="form-section">
-                    <p>⚠️ This exercise type is coming soon!</p>
+                    <h3>🎙️ Pronunciation Settings</h3>
+                    <div className="form-group">
+                        <label>Expected Answer (What user must say)</label>
+                        <input
+                            type="text"
+                            value={safeExercise.expectedAnswer || safeExercise.targetTranslation || ''}
+                            onChange={(e) => updateField('expectedAnswer', e.target.value)}
+                        />
+                    </div>
                 </div>
             )}
 
-            <div className="form-actions">
-                <button onClick={() => onSave(safeExercise)} className="btn-save">💾 Save Exercise</button>
-                <button onClick={onCancel} className="btn-cancel">❌ Cancel</button>
-            </div>
+            {/* Conversation / Roleplay */}
+            {['conversation', 'roleplay-chat'].includes(safeExercise.type) && (
+                <div className="form-section">
+                    <h3>💬 {safeExercise.type} Flow (Advanced JSON)</h3>
+                    <p className="hint">Edit dialogues or chatMessages directly here using valid JSON syntax.</p>
+                    <textarea
+                        rows="15"
+                        style={{ width: '100%', fontFamily: 'monospace', padding: '10px' }}
+                        value={safeExercise.type === 'conversation' ? JSON.stringify(safeExercise.dialogue || [], null, 2) : JSON.stringify(safeExercise.chatMessages || [], null, 2)}
+                        onChange={(e) => {
+                            try {
+                                const parsed = JSON.parse(e.target.value);
+                                if (safeExercise.type === 'conversation') updateField('dialogue', parsed);
+                                else if (safeExercise.type === 'roleplay-chat') updateField('chatMessages', parsed);
+                            } catch (err) {}
+                        }}
+                    />
+                    {safeExercise.type === 'conversation' && (
+                        <div className="form-group" style={{ marginTop: '16px' }}>
+                            <label>Correct Options (comma-separated exact matches)</label>
+                            <input
+                                type="text"
+                                value={Array.isArray(safeExercise.correctOptions) ? safeExercise.correctOptions.join(', ') : ''}
+                                onChange={(e) => updateField('correctOptions', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Vocabulary Grid / Cultural Note */}
+            {['vocabulary-grid', 'cultural-note'].includes(safeExercise.type) && (
+                <div className="form-section">
+                    <h3>🔠 Additional Data (JSON)</h3>
+                    <textarea
+                        rows="10"
+                        style={{ width: '100%', fontFamily: 'monospace', padding: '10px' }}
+                        value={safeExercise.type === 'vocabulary-grid' ? JSON.stringify(safeExercise.items || [], null, 2) : JSON.stringify(safeExercise.facts || [], null, 2)}
+                        onChange={(e) => {
+                            try {
+                                const parsed = JSON.parse(e.target.value);
+                                if (safeExercise.type === 'vocabulary-grid') updateField('items', parsed);
+                                else updateField('facts', parsed);
+                            } catch (err) {}
+                        }}
+                    />
+                </div>
+            )}
+
+            {!isQuickCreate && (
+                <div className="form-actions">
+                    <button onClick={() => onSave(safeExercise)} className="btn-save">💾 Save Exercise</button>
+                    <button onClick={onCancel} className="btn-cancel">❌ Cancel</button>
+                </div>
+            )}
         </div>
     );
 };

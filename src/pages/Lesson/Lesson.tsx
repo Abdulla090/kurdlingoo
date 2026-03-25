@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     // UI Icons
     X, Check, Heart, Sparkles, RefreshCw, ChevronRight,
-    Settings, Play, Pause, RotateCcw, Loader2, Volume2, Mic, MicOff, CheckCircle2, XCircle
+    Settings, Play, Pause, RotateCcw, Loader2, Volume2, Mic, MicOff, CheckCircle2, XCircle, SkipForward, Flag
 } from 'lucide-react';
 import { sendChatMessage } from '../../services/api';
 import {
@@ -34,6 +34,7 @@ import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
 import { intermediateUnit2 } from '../../data/courses/intermediate-unit2';
 import { completeLesson, isLessonUnlocked } from '../../utils/progressManager';
 import Button from '../../components/Button/Button';
+import { supabase } from '../../lib/supabase';
 import './Lesson.css';
 
 // Emoji to Icon Mapping
@@ -127,10 +128,22 @@ const Lesson = () => {
 
     useEffect(() => {
         // 1. Try to load units from localStorage (Admin edits)
-        const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
-
-        // 2. Use saved units or fallback to default imports
-        const allUnits = savedUnits || [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1, intermediateUnit2];
+        const savedUnitsStr = localStorage.getItem('kurdlingo-units');
+        const defaultUnits: Unit[] = [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1 as any, intermediateUnit2 as any];
+        
+        let allUnits = defaultUnits;
+        if (savedUnitsStr) {
+            try {
+                let saved = JSON.parse(savedUnitsStr);
+                const missingUnits = defaultUnits.filter(def => !saved.find((su: any) => su.id === def.id));
+                if (missingUnits.length > 0) {
+                    saved = [...saved, ...missingUnits];
+                }
+                allUnits = saved;
+            } catch (e) {
+                // fallback to default
+            }
+        }
 
         // 3. Find lesson in the determined units
         let foundLesson = null;
@@ -246,6 +259,35 @@ const Lesson = () => {
         }
     };
 
+    const handleSkip = () => {
+        setFeedback(null);
+        const nextIndex = currentExerciseIndex + 1;
+        setProgress((nextIndex / lesson.exercises.length) * 100);
+
+        if (nextIndex < lesson.exercises.length) {
+            setCurrentExerciseIndex(nextIndex);
+        } else {
+            completeLesson(lessonId, currentUnitId, xpEarned);
+            setIsCompleted(true);
+        }
+    };
+
+    const handleFeedback = async () => {
+        if (!currentExercise) return;
+        
+        try {
+            await supabase.from('feedbacks').insert([{
+                lesson_id: lessonId,
+                exercise_json: currentExercise,
+                reported_at: new Date().toISOString()
+            }]);
+            alert('Feedback sent! Thanks for reporting.');
+        } catch (error) {
+            console.error(error);
+            alert('Failed to send feedback, but we appreciate it!');
+        }
+    };
+
     if (isCompleted) {
         return (
             <div className="lesson-completed">
@@ -310,6 +352,24 @@ const Lesson = () => {
                     <Heart fill="#ff4b4b" color="#ff4b4b" size={24} aria-hidden="true" />
                     <span aria-hidden="true">{lives}</span>
                 </div>
+                <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
+                    <button 
+                        className="icon-btn" 
+                        onClick={handleSkip} 
+                        title="Skip Exercise"
+                        style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-full)', background: 'var(--color-surface)', border: '2px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-secondary)', cursor: 'pointer' }}
+                    >
+                        <SkipForward size={20} />
+                    </button>
+                    <button 
+                        className="icon-btn" 
+                        onClick={handleFeedback} 
+                        title="Report an Issue"
+                        style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-full)', background: 'var(--color-surface)', border: '2px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-secondary)', cursor: 'pointer' }}
+                    >
+                        <Flag size={20} />
+                    </button>
+                </div>
             </header>
 
             <main className="lesson-content" aria-live="polite">
@@ -359,14 +419,14 @@ const Lesson = () => {
                     <div className="feedback-content">
                         <div className="feedback-header">
                             {feedback === 'correct' ? (
-                                <div className="feedback-icon correct"><Check size={24} /></div>
+                                <div className="feedback-icon correct"><Check size={40} strokeWidth={3} /></div>
                             ) : (
-                                <div className="feedback-icon incorrect"><X size={24} /></div>
+                                <div className="feedback-icon incorrect"><X size={40} strokeWidth={3} /></div>
                             )}
                             <div className="feedback-text">
-                                <h3>{feedback === 'correct' ? (t('correct') || '✓ دروستە!') : (t('incorrect') || '✗ هەڵەیە!')}</h3>
+                                <h3>{feedback === 'correct' ? (t('correct') || 'نایابە!') : (t('incorrect') || 'وەڵامی دروست:')}</h3>
                                 {feedback === 'incorrect' && (
-                                    <p>{t('correctSolution') || 'وەڵامی دروست:'} {' '}
+                                    <p>
                                         <strong>
                                         {currentExercise.correctSentence
                                             ? currentExercise.correctSentence.join(' ')
@@ -1210,7 +1270,9 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         const aiGreeting = (exercise.chatMessages || []).find(m => m.sender === 'ai' && !m.text.startsWith('confirm:'));
         if (aiGreeting) {
             setIsSpeakingAI(true);
-            speakText(aiGreeting.text).finally(() => setIsSpeakingAI(false));
+            speakText(aiGreeting.text).finally(() => {
+                setTimeout(() => setIsSpeakingAI(false), 500);
+            });
         }
     }, [exercise.id, exercise.question]);
 
@@ -1230,27 +1292,17 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         };
     }, []);
 
-    // TTS helper - speak text using Gemini or fallback to browser Web Speech API
-    const speakText = async (text: string) => {
-        try {
-            const { requestGeminiVoice, playBase64Audio } = await import('../../services/api');
-            const result = await requestGeminiVoice(text);
-            if (result.success && result.audioContent) {
-                await playBase64Audio(result.audioContent, result.mimeType || 'audio/wav');
-                return;
-            }
-            // Gemini failed silently — fall through to browser TTS below
-        } catch (_e) {
-            // Gemini TTS unavailable (404 in local dev, CORS, etc.) — use browser TTS
-        }
-        // Fallback: Web Speech API (male voice)
-        if ('speechSynthesis' in window) {
-            return new Promise<void>((resolve) => {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.92;
-                utterance.pitch = 0.9;
+    // TTS helper - use browser Web Speech API (Gemini Voice is a Vercel-only endpoint)
+    const speakText = (text: string): Promise<void> => {
+        if (!('speechSynthesis' in window)) return Promise.resolve();
+        return new Promise<void>((resolve) => {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.92;
+            utterance.pitch = 0.9;
+
+            const trySpeak = () => {
                 const voices = window.speechSynthesis.getVoices();
                 const en = voices.filter(v => v.lang.startsWith('en'));
                 const maleVoice =
@@ -1264,16 +1316,28 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                 utterance.onend = () => resolve();
                 utterance.onerror = () => resolve();
                 window.speechSynthesis.speak(utterance);
-            });
-        }
+            };
+
+            // Voices may not be loaded yet on first call
+            if (window.speechSynthesis.getVoices().length > 0) {
+                trySpeak();
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.onvoiceschanged = null;
+                    trySpeak();
+                };
+            }
+        });
     };
 
     // Toggle voice recording (click to start, click again to stop)
     const toggleRecording = () => {
         if (isCheckingRef.current || hasAnsweredRef.current || isTranscribing) return;
 
+        // If AI is still speaking, block the mic entirely
+        if (isSpeakingAI) return;
+
         if (isRecording) {
-            // Stop recording manually
             setIsRecording(false);
             if (recognitionRef.current) {
                 try { recognitionRef.current.stop(); } catch (e) { }
@@ -1281,7 +1345,6 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
             return;
         }
 
-        // Start recording
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             setVoiceError(t('unsupportedBrowser') || 'Speech recognition is not available in this browser.');
@@ -1294,82 +1357,71 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
             try { recognitionRef.current.abort(); } catch (e) { }
         }
 
-        const recognition = new SpeechRecognition();
-        recognitionRef.current = recognition;
-        recognition.lang = exercise.speechLang || 'en-US';
-        recognition.continuous = true; // MUST be true so it doesn't stop on pause
-        recognition.interimResults = true;
-        recognition.maxAlternatives = 1;
+        // CRITICAL: Kill any lingering speechSynthesis before opening the mic.
+        // Chrome Desktop shares one audio channel for TTS and STT.
+        // If speechSynthesis is even partially active, recognition.start() 
+        // immediately throws a 'network' error.
+        if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
 
-        let accumulatedTranscript = '';
-        let latestSpoken = '';
+        // Small delay to let Chrome fully release the audio channel
+        const startRecognition = () => {
+            const recognition = new SpeechRecognition();
+            recognitionRef.current = recognition;
+            recognition.lang = exercise.speechLang || 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 5;
 
-        setIsRecording(true); // Set synchronously to avoid double clicks
-        setSpokenText('');
+            recognition.onstart = () => {
+                setIsRecording(true);
+                setSpokenText('');
+            };
 
-        recognition.onstart = () => {
-             // State is already set
-        };
+            recognition.onresult = (event: any) => {
+                const results = event.results[0];
+                let bestTranscript = results[0].transcript;
 
-        recognition.onresult = (event: any) => {
-            let interim = '';
-            let finalStr = '';
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalStr += event.results[i][0].transcript + ' ';
-                } else {
-                    interim += event.results[i][0].transcript;
-                }
-            }
-            accumulatedTranscript += finalStr;
-            latestSpoken = accumulatedTranscript + interim;
-            setSpokenText(latestSpoken);
-        };
-
-        recognition.onerror = (event: any) => {
-            // 'no-speech' on continuous mode just means a brief silence — ignore it and keep going
-            if (event.error === 'no-speech') {
-                // Don't stop — browser will auto-restart on continuous=true
-                return;
-            }
-            if (event.error === 'aborted') {
-                // Manual abort (user stopped), don't show error
-                return;
-            }
-            if (event.error === 'network') {
-                // Google's STT servers unreachable (common on localhost or restricted networks).
-                // Silently stop — the onend handler will submit whatever was captured.
+                setSpokenText(bestTranscript);
                 setIsRecording(false);
-                setIsTranscribing(false);
-                return;
+
+                if (bestTranscript.trim()) {
+                    console.log("Roleplay STT Result:", bestTranscript);
+                    submitAnswer(bestTranscript.trim());
+                }
+            };
+
+            recognition.onerror = (event: any) => {
+                console.error('Speech recognition error:', event.error);
+                setIsRecording(false);
+
+                if (event.error === 'no-speech' || event.error === 'aborted' || event.error === 'network') {
+                    return;
+                }
+
+                setVoiceError(t('couldNotHear') || 'Could not hear you. Please try again.');
+            };
+
+            recognition.onend = () => {
+                setIsRecording(false);
+            };
+
+            try {
+                recognition.start();
+            } catch (err) {
+                console.error('Recognition start error:', err);
+                setIsRecording(false);
+                setVoiceError(t('voiceError') || 'Voice processing failed. Please try again.');
             }
-            // Real error — stop and show message
-            setIsRecording(false);
-            setIsTranscribing(false);
-            setVoiceError(t('couldNotHear') || 'Could not hear you. Please try again.');
         };
 
-        recognition.onend = () => {
-            const wasRecording = isRecording;
-            setIsRecording(false);
-            setIsTranscribing(false);
-            
-            // If we have text gathered, submit it
-            if (latestSpoken.trim()) {
-                submitAnswer(latestSpoken.trim());
-            } else if (accumulatedTranscript.trim()) {
-                submitAnswer(accumulatedTranscript.trim());
-            }
-            // If continuous mode ended unexpectedly with no text AND we haven't stopped manually,
-            // do NOT auto-restart (avoid infinite loops). User taps again if needed.
-        };
-
-        try {
-            recognition.start();
-        } catch (err) {
-            console.error('Recognition start error:', err);
-            setIsRecording(false);
-            setVoiceError(t('voiceError') || 'Voice processing failed. Please try again.');
+        // If speechSynthesis was active, wait 300ms for Chrome to release audio hardware
+        if ('speechSynthesis' in window && window.speechSynthesis.pending) {
+            window.speechSynthesis.cancel();
+            setTimeout(startRecognition, 300);
+        } else {
+            startRecognition();
         }
     };
 
@@ -1380,7 +1432,9 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
         if (aiMessages.length > 0) {
             const lastAiMsg = aiMessages[aiMessages.length - 1].text;
             setIsSpeakingAI(true);
-            speakText(lastAiMsg).finally(() => setIsSpeakingAI(false));
+            speakText(lastAiMsg).finally(() => {
+                setTimeout(() => setIsSpeakingAI(false), 500);
+            });
         }
     };
 
@@ -1451,7 +1505,10 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                     };
                     setTimeout(() => {
                         setMessages(prev => [...prev, aiMessage]);
-                        speakText(responseText);
+                        setIsSpeakingAI(true);
+                        speakText(responseText).finally(() => {
+                            setTimeout(() => setIsSpeakingAI(false), 500);
+                        });
                     }, 600);
                 }
             } else {
@@ -1523,11 +1580,11 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
                 {/* IDLE / NOT RECORDING YET */}
                 {!isRecording && !isChecking && !isTranscribing && !hasAnswered && (
                     <div className="pron-idle-state">
-                        <button className="pronunciation-mic-btn" onClick={toggleRecording} type="button">
+                        <button className="pronunciation-mic-btn" onClick={toggleRecording} type="button" disabled={isSpeakingAI} style={{ opacity: isSpeakingAI ? 0.4 : 1 }}>
                             <div className="mic-circle">
                                 <Mic size={40} strokeWidth={1.5} color="white" />
                             </div>
-                            <span className="mic-label">{t('tapToSpeak') || 'بکلیک بکە و وەڵام بدەوە'}</span>
+                            <span className="mic-label">{isSpeakingAI ? (t('waitForAI') || '...چاوەڕوان بە') : (t('tapToSpeak') || 'بکلیک بکە و وەڵام بدەوە')}</span>
                         </button>
                     </div>
                 )}
@@ -1714,6 +1771,8 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
 
     // Start speech recognition
     const startListening = () => {
+        if (isPlaying) return;
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             setStatus('unsupported');
@@ -1724,81 +1783,97 @@ const PronunciationExercise = ({ exercise, onAnswer }) => {
             try { recognitionRef.current.abort(); } catch (e) { }
         }
 
-        const recognition = new SpeechRecognition();
-        recognitionRef.current = recognition;
-        recognition.lang = exercise.speechLang || 'en-US';
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 5;
+        // CRITICAL: Kill any lingering speechSynthesis before opening the mic.
+        if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
 
-        recognition.onstart = () => {
-            setStatus('listening');
-            setTranscript('');
-        };
+        const startRec = () => {
+            const recognition = new SpeechRecognition();
+            recognitionRef.current = recognition;
+            recognition.lang = exercise.speechLang || 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 5;
 
-        recognition.onresult = (event) => {
-            const results = event.results[0];
-            const expected = (exercise.expectedAnswer || exercise.targetTranslation).toLowerCase().trim();
-            const accepted = (exercise.acceptedAnswers || []).map(a => a.toLowerCase().trim());
+            recognition.onstart = () => {
+                setStatus('listening');
+                setTranscript('');
+            };
 
-            let bestMatch = '';
-            let bestScore = 0;
+            recognition.onresult = (event) => {
+                const results = event.results[0];
+                const expected = (exercise.expectedAnswer || exercise.targetTranslation).toLowerCase().trim();
+                const accepted = (exercise.acceptedAnswers || []).map(a => a.toLowerCase().trim());
 
-            // Check all alternative transcriptions for best match
-            for (let i = 0; i < results.length; i++) {
-                const alt = results[i].transcript.toLowerCase().trim();
+                let bestMatch = '';
+                let bestScore = 0;
 
-                // Exact match
-                if (alt === expected || accepted.includes(alt)) {
-                    bestMatch = alt;
-                    bestScore = 1;
-                    break;
+                // Check all alternative transcriptions for best match
+                for (let i = 0; i < results.length; i++) {
+                    const alt = results[i].transcript.toLowerCase().trim();
+
+                    // Exact match
+                    if (alt === expected || accepted.includes(alt)) {
+                        bestMatch = alt;
+                        bestScore = 1;
+                        break;
+                    }
+
+                    // Fuzzy match
+                    const score = similarity(alt, expected);
+                    // Also check against accepted answers
+                    const acceptedScore = Math.max(0, ...accepted.map(a => similarity(alt, a)));
+                    const finalScore = Math.max(score, acceptedScore);
+
+                    if (finalScore > bestScore) {
+                        bestScore = finalScore;
+                        bestMatch = alt;
+                    }
                 }
 
-                // Fuzzy match
-                const score = similarity(alt, expected);
-                // Also check against accepted answers
-                const acceptedScore = Math.max(0, ...accepted.map(a => similarity(alt, a)));
-                const finalScore = Math.max(score, acceptedScore);
+                setTranscript(bestMatch || results[0].transcript);
+                setStatus('processing');
 
-                if (finalScore > bestScore) {
-                    bestScore = finalScore;
-                    bestMatch = alt;
+                const isCorrect = bestScore >= 0.6;
+
+                setTimeout(() => {
+                    setStatus(isCorrect ? 'correct' : 'incorrect');
+                    setAttempts(prev => prev + 1);
+                }, 800);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                if (event.error === 'no-speech' || event.error === 'aborted' || event.error === 'network') {
+                    if (statusRef.current === 'listening') {
+                        setStatus('idle');
+                    }
+                } else if (event.error === 'not-allowed') {
+                    setStatus('error');
+                } else {
+                    setStatus('idle');
                 }
-            }
+            };
 
-            setTranscript(bestMatch || results[0].transcript);
-            setStatus('processing');
+            recognition.onend = () => {
+                if (statusRef.current === 'listening') {
+                    setStatus('idle');
+                }
+            };
 
-            const isCorrect = bestScore >= 0.6;
-
-            setTimeout(() => {
-                setStatus(isCorrect ? 'correct' : 'incorrect');
-                setAttempts(prev => prev + 1);
-            }, 800);
-        };
-
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-            if (event.error === 'no-speech') {
-                setStatus('idle');
-            } else if (event.error === 'not-allowed') {
+            try {
+                recognition.start();
+            } catch (e) {
                 setStatus('error');
-            } else {
-                setStatus('idle');
             }
         };
 
-        recognition.onend = () => {
-            if (statusRef.current === 'listening') {
-                setStatus('idle');
-            }
-        };
-
-        try {
-            recognition.start();
-        } catch (e) {
-            setStatus('error');
+        if ('speechSynthesis' in window && window.speechSynthesis.pending) {
+            window.speechSynthesis.cancel();
+            setTimeout(startRec, 300); // 300ms wait for browser hardware release
+        } else {
+            startRec();
         }
     };
 

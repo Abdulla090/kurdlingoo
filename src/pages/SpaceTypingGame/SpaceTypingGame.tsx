@@ -533,7 +533,7 @@ const SpaceTypingGame = () => {
                         {gameLevels.map((level, i) => {
                             const hs = highScores[level.id];
                             const isCompleted = !!hs;
-                            const isLocked = i > 0 && !highScores[gameLevels[i - 1].id];
+                            const isLocked = false; // i > 0 && !highScores[gameLevels[i - 1].id];
                             // If it's not locked and not completed, it's the current "next" level.
                             // If all previous are completed, this is the frontier.
                             const isCurrent = !isLocked && !isCompleted;

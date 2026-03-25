@@ -10,6 +10,8 @@ import { unit3 } from '../../data/courses/unit3';
 import { unit4 } from '../../data/courses/unit4';
 import { unit5 } from '../../data/courses/unit5';
 import { unit6 } from '../../data/courses/unit6';
+import { intermediateUnit1 } from '../../data/courses/intermediate-unit1';
+import { intermediateUnit2 } from '../../data/courses/intermediate-unit2';
 import { ColorfulIcon } from '../../components/ColorfulIcon/ColorfulIcon';
 import './Guidebook.css';
 
@@ -33,23 +35,29 @@ const Guidebook = () => {
     };
 
     useEffect(() => {
-        const savedUnits = JSON.parse(localStorage.getItem('kurdlingo-units') || 'null');
-        const defaultUnits = [unit1, unit2, unit3, unit4, unit5, unit6];
+        const savedUnitsStr = localStorage.getItem('kurdlingo-units');
+        const defaultUnits = [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1 as any, intermediateUnit2 as any];
 
-        let allUnits;
-        if (savedUnits) {
-            allUnits = savedUnits.map(savedUnit => {
-                const defaultUnit = defaultUnits.find(du => du.id === savedUnit.id);
-                return {
-                    ...defaultUnit,
-                    ...savedUnit,
-                    // If it's a default unit, prioritize the file content for updates.
-                    // If it's a custom unit (like Unit 5), keep its saved guidebook.
-                    guidebook: defaultUnit ? defaultUnit.guidebook : savedUnit.guidebook
-                };
-            });
-        } else {
-            allUnits = defaultUnits;
+        let allUnits = defaultUnits;
+        if (savedUnitsStr) {
+            try {
+                let savedUnits = JSON.parse(savedUnitsStr);
+                const missingUnits = defaultUnits.filter(def => !savedUnits.find((su: any) => su.id === def.id));
+                if (missingUnits.length > 0) {
+                    savedUnits = [...savedUnits, ...missingUnits];
+                }
+                
+                allUnits = savedUnits.map((savedUnit: any) => {
+                    const defaultUnit = defaultUnits.find(du => du.id === savedUnit.id);
+                    return {
+                        ...defaultUnit,
+                        ...savedUnit,
+                        guidebook: defaultUnit ? defaultUnit.guidebook : savedUnit.guidebook
+                    };
+                });
+            } catch (e) {
+                // Ignore parse errors, fallback was set
+            }
         }
 
         const foundUnit = allUnits.find(u => u.id == unitId);

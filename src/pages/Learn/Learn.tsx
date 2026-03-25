@@ -164,7 +164,7 @@ const Learn: React.FC = () => {
 
             {/* ========== MAIN CONTENT ========== */}
             <div className="learn-main">
-                {units.map((unit, unitIndex) => {
+                {units.filter((u: Unit) => !u.id.includes('intermediate')).map((unit, unitIndex) => {
                     const theme = UNIT_THEMES[unitIndex % UNIT_THEMES.length];
 
                     return (

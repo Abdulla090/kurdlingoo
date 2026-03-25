@@ -131,7 +131,7 @@ export const unit3: Unit = {
         keyPhrases: [
             { english: "I would like...", kurdish: "دەمەوێت... (بە ڕێزەوە)", pronunciation: "ئای ود لایک..." },
             { english: "The bill, please", kurdish: "حیسابەکە، تکایە", pronunciation: "زە بیڵ، پلیز" },
-            { english: "Where is the airport?", kurdish: "فڕۆکەخانە لە کوێیە؟", pronunciation: "وێر ئیز زە ئێرپۆرت؟" },
+            { english: "Where is the airport?", kurdish: "فڕۆکەخانەکە لە کوێیە؟", pronunciation: "وێر ئیز زە ئێرپۆرت؟" },
             { english: "My battery is dead", kurdish: "شەحنم نەماوە", pronunciation: "مای باتری ئیز دێد" },
             { english: "Happy Newroz!", kurdish: "نەورۆزتان پیرۆز!", pronunciation: "هاپی نەورۆز" },
             { english: "Can you help me?", kurdish: "دەتوانیت یارمەتیم بدەیت؟", pronunciation: "کان یو هێڵپ می؟" }
@@ -209,12 +209,12 @@ export const unit3: Unit = {
                     type: 'conversation',
                     question: 'Complete the restaurant dialogue',
                     dialogue: [
-                        { speaker: 'Waiter', text: 'سڵاو! چیتان دەوێت؟' },
-                        { speaker: 'You', text: '___', options: ['من کەباب و بریانیم دەوێت', 'باشم', 'سپاس'] },
-                        { speaker: 'Waiter', text: 'باشە، چیتان دەوێت بخۆنەوە؟' },
-                        { speaker: 'You', text: '___', options: ['دۆغم دەوێت', 'نەخێر', 'خوا حافیز'] }
+                        { speaker: 'Waiter', text: 'Hello! What would you like to eat?' },
+                        { speaker: 'You', text: '___', options: ['I want kebab and biryani', 'I am fine', 'Thank you'] },
+                        { speaker: 'Waiter', text: 'Okay, what would you like to drink?' },
+                        { speaker: 'You', text: '___', options: ['I want ayran', 'No', 'Goodbye'] }
                     ],
-                    correctOptions: ['من کەباب و بریانیم دەوێت', 'دۆغم دەوێت']
+                    correctOptions: ['I want kebab and biryani', 'I want ayran']
                 },
                 {
                     type: 'typing',
@@ -524,12 +524,12 @@ export const unit3: Unit = {
                     type: 'conversation',
                     question: 'Complete the job interview',
                     dialogue: [
-                        { speaker: 'Interviewer', text: 'پیشەکەت چییە؟' },
-                        { speaker: 'You', text: '___', options: ['من ئەندازیارم', 'باشم', 'سپاس'] },
-                        { speaker: 'Interviewer', text: 'چەند ساڵە کار دەکەیت؟' },
-                        { speaker: 'You', text: '___', options: ['پێنج ساڵە', 'نازانم', 'خوا حافیز'] }
+                        { speaker: 'Interviewer', text: 'What is your profession?' },
+                        { speaker: 'You', text: '___', options: ['I am an engineer', 'I am fine', 'Thank you'] },
+                        { speaker: 'Interviewer', text: 'How many years of experience do you have?' },
+                        { speaker: 'You', text: '___', options: ['Five years', 'I do not know', 'Goodbye'] }
                     ],
-                    correctOptions: ['من ئەندازیارم', 'پێنج ساڵە']
+                    correctOptions: ['I am an engineer', 'Five years']
                 },
                 {
                     type: 'career-path',
@@ -677,12 +677,12 @@ export const unit3: Unit = {
                     type: 'conversation',
                     question: 'Complete the hotel check-in',
                     dialogue: [
-                        { speaker: 'Receptionist', text: 'سڵاو! چۆنم یارمەتیتان بدەم؟' },
-                        { speaker: 'You', text: '___', options: ['من حجزم هەیە', 'باشم', 'خوا حافیز'] },
-                        { speaker: 'Receptionist', text: 'ناوتان چییە؟' },
-                        { speaker: 'You', text: '___', options: ['ناوم ئەحمەدە', 'نازانم', 'سپاس'] }
+                        { speaker: 'Receptionist', text: 'Hello! How can I help you?' },
+                        { speaker: 'You', text: '___', options: ['I have a reservation', 'I am fine', 'Goodbye'] },
+                        { speaker: 'Receptionist', text: 'What is your name?' },
+                        { speaker: 'You', text: '___', options: ['My name is Ahmed', 'I do not know', 'Thank you'] }
                     ],
-                    correctOptions: ['من حجزم هەیە', 'ناوم ئەحمەدە']
+                    correctOptions: ['I have a reservation', 'My name is Ahmed']
                 },
                 {
                     type: 'route-planner',
@@ -836,12 +836,12 @@ export const unit3: Unit = {
                     type: 'conversation',
                     question: 'Complete the tech support dialogue',
                     dialogue: [
-                        { speaker: 'Support', text: 'کێشەکەت چییە؟' },
-                        { speaker: 'You', text: '___', options: ['ئینتەرنێتەکەم کار ناکات', 'باشم', 'سپاس'] },
-                        { speaker: 'Support', text: 'WiFi چەک کردووە؟' },
-                        { speaker: 'You', text: '___', options: ['بەڵێ، بەڵام کار ناکات', 'نەخێر', 'نازانم'] }
+                        { speaker: 'Support', text: 'What is your problem?' },
+                        { speaker: 'You', text: '___', options: ['My internet is not working', 'I am fine', 'Thank you'] },
+                        { speaker: 'Support', text: 'Did you check the WiFi?' },
+                        { speaker: 'You', text: '___', options: ['Yes, but it is not working', 'No', 'I do not know'] }
                     ],
-                    correctOptions: ['ئینتەرنێتەکەم کار ناکات', 'بەڵێ، بەڵام کار ناکات']
+                    correctOptions: ['My internet is not working', 'Yes, but it is not working']
                 },
                 {
                     type: 'typing',

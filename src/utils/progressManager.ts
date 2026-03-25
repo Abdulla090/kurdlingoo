@@ -78,19 +78,11 @@ export const isLessonCompleted = (lessonId: string): boolean => {
  * Check if a lesson is unlocked (previous lesson in same unit is completed OR it's the first lesson)
  */
 export const isLessonUnlocked = (
-    lessonId: string, 
-    unitLessons: { id: string }[]
+    _lessonId: string, 
+    _unitLessons: { id: string }[]
 ): boolean => {
-    const lessonIndex = unitLessons.findIndex(l => l.id === lessonId);
-    
-    // First lesson is always unlocked
-    if (lessonIndex === 0) return true;
-    
-    // Check if previous lesson is completed
-    const previousLessonId = unitLessons[lessonIndex - 1]?.id;
-    if (!previousLessonId) return false;
-    
-    return isLessonCompleted(previousLessonId);
+    // ALL LESSONS OPEN FOR TESTING
+    return true;
 };
 
 /**

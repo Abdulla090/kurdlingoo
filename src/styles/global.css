@@ -286,3 +286,19 @@ p, span, h1, h2, h3, h4, h5, h6, div, label, button, input {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Global: Question text always white + bold in dark app ──────────────────
+   This covers exercise-question in all game screens, fill-blank prompts,
+   typing prompts, and any h2 used as a question header.
+   Since the app is always dark-mode, #ffffff is the correct default.
+   ──────────────────────────────────────────────────────────────────────── */
+.exercise-question,
+.typing-prompt,
+h2.exercise-question,
+.fill-blank-prompt,
+.pronunciation-question,
+.game-question,
+.lesson-question {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
