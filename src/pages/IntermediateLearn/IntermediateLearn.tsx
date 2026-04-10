@@ -11,7 +11,8 @@ import { intermediateUnit2 } from '../../data/courses/intermediate-unit2';
 import {
     isLessonCompleted,
     isLessonUnlocked,
-    isUnitCompleted
+    isUnitCompleted,
+    getNextUnlockedLesson
 } from '../../utils/progressManager';
 import './IntermediateLearn.css';
 
@@ -32,6 +33,14 @@ const IntermediateLearn: React.FC = () => {
     const { t } = useLanguage();
     const [units, setUnits] = React.useState<Unit[]>([]);
     const activeNodeRef = React.useRef<HTMLAnchorElement>(null);
+
+    const globalNextLessonId = React.useMemo(() => {
+        for (const unit of units) {
+            const next = getNextUnlockedLesson(unit.lessons);
+            if (next) return next;
+        }
+        return null;
+    }, [units]);
 
     React.useEffect(() => {
         if (activeNodeRef.current) {
@@ -163,7 +172,7 @@ const IntermediateLearn: React.FC = () => {
                                     const Icon = getLessonIcon(lesson.title);
                                     const completed = isLessonCompleted(lesson.id);
                                     const unlocked = isLessonUnlocked(lesson.id, unit.lessons);
-                                    const isCurrent = unlocked && !completed;
+                                    const isCurrent = lesson.id === globalNextLessonId;
                                     const isLocked = !unlocked;
 
                                     let positionClass = '';
@@ -221,8 +230,6 @@ const IntermediateLearn: React.FC = () => {
                                                     </div>
                                                 )}
                                             </div>
-
-                                            <div className="int-node-tooltip">{lesson.title}</div>
                                         </Link>
                                     );
                                 })}

@@ -18,8 +18,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import {
     isLessonCompleted,
     isLessonUnlocked,
-
-    isUnitCompleted
+    isUnitCompleted,
+    getNextUnlockedLesson
 } from '../../utils/progressManager';
 import './Learn.css';
 
@@ -85,6 +85,15 @@ const Learn: React.FC = () => {
             }
         }
         return lastId;
+    }, [units]);
+
+    // Find exactly ONE lesson that should have the START badge globally
+    const globalNextLessonId = React.useMemo(() => {
+        for (const unit of units) {
+            const next = getNextUnlockedLesson(unit.lessons);
+            if (next) return next;
+        }
+        return null;
     }, [units]);
 
     // Auto-scroll to lesson node
@@ -229,7 +238,7 @@ const Learn: React.FC = () => {
                                     const Icon = getLessonIcon(lesson.title);
                                     const completed = isLessonCompleted(lesson.id);
                                     const unlocked = isLessonUnlocked(lesson.id, unit.lessons);
-                                    const isCurrent = unlocked && !completed;
+                                    const isCurrent = lesson.id === globalNextLessonId;
                                     const isLocked = !unlocked;
 
                                     // Phingo global index calculation (approximation)
@@ -328,7 +337,6 @@ const Learn: React.FC = () => {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <div className="node-tooltip">{lesson.title}</div>
                                                 </Link>
                                             </div>
                                         </React.Fragment>
