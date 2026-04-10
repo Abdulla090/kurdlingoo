@@ -34,13 +34,6 @@ const UNIT_THEMES = [
     { gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#f59e0b', shadow: '#b45309' },
 ];
 
-const BUTTON_FACE_RIM_COLORS = [
-    { face: '#58CC02', rim: '#58A700' }, // Green
-    { face: '#CE82FF', rim: '#A568CC' }, // Mint
-    { face: '#1CB0F6', rim: '#1899D6' }, // Blue
-    { face: '#FF4B4B', rim: '#EA2B2B' }, // Red
-    { face: '#FF9600', rim: '#CC7800' }, // Orange
-];
 
 const CURVE_AMPLITUDE_RATIO = 0.18;
 const ARC_FREQUENCY = Math.PI / 4;
