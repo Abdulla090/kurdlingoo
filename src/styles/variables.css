@@ -5,11 +5,11 @@
      ============================================ */
 
   /* ── Brand Colors ─────────────────────────────── */
-  --color-primary: #ff9600;
-  --color-primary-dark: #cc7800;
-  --color-primary-light: #ffb44d;
-  --color-primary-50: rgba(255, 150, 0, 0.15);
-  --color-primary-surface: rgba(255, 150, 0, 0.10);
+  --color-primary: #1a73e8;
+  --color-primary-dark: #1557b0;
+  --color-primary-light: #4d9ff0;
+  --color-primary-50: rgba(26, 115, 232, 0.15);
+  --color-primary-surface: rgba(26, 115, 232, 0.10);
 
   /* ── Achievements & Streaks ────────────────────── */
   --color-gold: #ff9600;
@@ -52,7 +52,7 @@
   --color-success: #58cc02;
   --color-success-dark: #46a302;
   --color-error: #ff4b4b;
-  --color-warning: #ff9600;
+  --color-warning: #f59e0b;
   --color-info: #1cb0f6;
 
   /* ── Typography ────────────────────────────────── */
@@ -128,7 +128,7 @@
   /* Focus Ring */
   --shadow-focus: 0 0 0 3px var(--color-primary-50);
   --ring-primary: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
-  --ring-blue: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-accent-blue);
+  --ring-blue: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
 
   /* ── Transitions — canonical timing
      rule: timing-consistent
@@ -187,3 +187,42 @@
   --shadow-card: var(--shadow-2);
   --shadow-card-hover: var(--shadow-3);
 }
+
+/* ── Light mode overrides ─────────────────────────── */
+.light-theme, html[data-theme="light"] {
+  --color-text: #0f172a;
+  --color-text-main: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #64748b;
+  --color-text-light: #94a3b8;
+  --color-text-inverse: #ffffff;
+  
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-variant: #f1f5f9;
+  --color-surface-elevated: #ffffff;
+  
+  --color-border: #e2e8f0;
+  --color-border-alpha: rgba(0, 0, 0, 0.08);
+  --color-divider: #e2e8f0;
+
+  --shadow-1:
+    0 1px 2px rgba(15, 25, 35, 0.06),
+    0 1px 3px rgba(15, 25, 35, 0.04);
+  --shadow-2:
+    0 2px 4px rgba(15, 25, 35, 0.08),
+    0 4px 8px rgba(15, 25, 35, 0.05),
+    0 1px 2px rgba(15, 25, 35, 0.04);
+  --shadow-3:
+    0 4px 8px  rgba(15, 25, 35, 0.10),
+    0 8px 16px rgba(15, 25, 35, 0.07),
+    0 16px 32px rgba(15, 25, 35, 0.05);
+  --shadow-4:
+    0 8px 16px  rgba(15, 25, 35, 0.12),
+    0 16px 32px rgba(15, 25, 35, 0.08),
+    0 32px 64px rgba(15, 25, 35, 0.06);
+
+  --shadow-card: var(--shadow-2);
+  --shadow-card-hover: var(--shadow-3);
+}
+

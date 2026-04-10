@@ -139,7 +139,7 @@ a {
    rule: native-selection-styling
    ──────────────────────────────────────────────────────────────────────── */
 ::selection {
-  background: rgba(255, 150, 0, 0.25);
+  background: rgba(26, 115, 232, 0.25);
   color: #fff;
 }
 
@@ -299,6 +299,6 @@ h2.exercise-question,
 .pronunciation-question,
 .game-question,
 .lesson-question {
-  color: #ffffff !important;
+  color: var(--color-text-main) !important;
   font-weight: 800 !important;
 }

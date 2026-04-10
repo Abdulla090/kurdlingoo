@@ -28,7 +28,7 @@ const Admin = () => {
 
     useEffect(() => {
         // Load units from localStorage or use defaults
-        const savedUnitsStr = localStorage.getItem('kurdlingo-units');
+        const savedUnitsStr = localStorage.getItem('phingo-units');
         const defaultUnits = [unit1, unit2, unit3, unit4, unit5, unit6, intermediateUnit1, intermediateUnit2] as Unit[];
         
         if (savedUnitsStr) {
@@ -50,7 +50,7 @@ const Admin = () => {
 
     const saveUnits = (updatedUnits: Unit[]) => {
         setUnits(updatedUnits);
-        localStorage.setItem('kurdlingo-units', JSON.stringify(updatedUnits));
+        localStorage.setItem('phingo-units', JSON.stringify(updatedUnits));
         console.log('✅ Units saved to localStorage:', updatedUnits.map(u => ({
             id: u.id,
             title: u.title,
@@ -413,13 +413,13 @@ const Admin = () => {
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'kurdlingo-data.json';
+        link.download = 'phingo-data.json';
         link.click();
     };
 
     const resetToDefaults = () => {
         if (confirm('Are you sure you want to reset all data to defaults? This cannot be undone!')) {
-            localStorage.removeItem('kurdlingo-units');
+            localStorage.removeItem('phingo-units');
             setUnits([unit1, unit2, unit3, unit4, unit5, unit6]);
             setSelectedUnit(null);
             setSelectedLesson(null);
@@ -948,7 +948,7 @@ const ExerciseEditor = ({ exercise, onChange, onSave, onCancel, isQuickCreate = 
                             type="text"
                             value={safeExercise.sourceText || ''}
                             onChange={(e) => updateField('sourceText', e.target.value)}
-                            placeholder="e.g., 'Hello, KurdLingo'"
+                            placeholder="e.g., 'Hello, Phingo'"
                         />
                     </div>
                     <div className="form-group">

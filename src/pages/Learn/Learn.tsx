@@ -27,12 +27,54 @@ import { Unit } from '../../types';
 
 // Unit color schemes
 const UNIT_THEMES = [
-    { gradient: 'linear-gradient(135deg, #ff9600 0%, #cc7800 100%)', color: '#ff9600', shadow: '#cc7800' }, // Primary Orange Theme
-    { gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#3b82f6', shadow: '#1d4ed8' },
+    { gradient: 'linear-gradient(135deg, #1a73e8 0%, #1557b0 100%)', color: '#1a73e8', shadow: '#1557b0' },
+    { gradient: 'linear-gradient(135deg, #ff9600 0%, #cc7800 100%)', color: '#ff9600', shadow: '#cc7800' },
     { gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: '#ef4444', shadow: '#b91c1c' },
     { gradient: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)', color: '#a855f7', shadow: '#7c3aed' },
-    { gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#f59e0b', shadow: '#b45309' }, // Gold for Challenge
+    { gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#f59e0b', shadow: '#b45309' },
 ];
+
+const BUTTON_FACE_RIM_COLORS = [
+    { face: '#58CC02', rim: '#58A700' }, // Green
+    { face: '#CE82FF', rim: '#A568CC' }, // Mint
+    { face: '#1CB0F6', rim: '#1899D6' }, // Blue
+    { face: '#FF4B4B', rim: '#EA2B2B' }, // Red
+    { face: '#FF9600', rim: '#CC7800' }, // Orange
+];
+
+const CURVE_AMPLITUDE_RATIO = 0.18;
+const ARC_FREQUENCY = Math.PI / 4;
+const CURVE_TENSION = 1.25;
+
+const getDynamicOffset = (globalIndex: number, amplitude: number) => {
+    const baseSine = Math.sin(globalIndex * ARC_FREQUENCY);
+    const adjustedSine = Math.sign(baseSine) * Math.pow(Math.abs(baseSine), CURVE_TENSION);
+    return adjustedSine * amplitude * -1;
+};
+
+
+const playPopSound = () => {
+    try {
+        if (typeof window !== 'undefined') {
+            if (navigator.vibrate) navigator.vibrate(15);
+            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+            if (AudioContext) {
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.08);
+            }
+        }
+    } catch(e) {}
+};
 
 const Learn: React.FC = () => {
     const navigate = useNavigate();
@@ -197,124 +239,105 @@ const Learn: React.FC = () => {
                                     const isCurrent = unlocked && !completed;
                                     const isLocked = !unlocked;
 
-                                    // Zigzag: 0=center, 1=right, 2=center, 3=left
-                                    let positionClass = '';
-                                    if (index % 4 === 1) positionClass = 'right';
-                                    if (index % 4 === 3) positionClass = 'left';
+                                    // Phingo global index calculation (approximation)
+                                    let globalIndex = 0;
+                                    for(let i=0; i<unitIndex; i++) globalIndex += units[i].lessons.length;
+                                    globalIndex += index;
 
-                                    // Next node position for connector direction
-                                    const nextIndex = index + 1;
-                                    let nextPositionClass = '';
-                                    if (nextIndex < unit.lessons.length) {
-                                        if (nextIndex % 4 === 1) nextPositionClass = 'right';
-                                        else if (nextIndex % 4 === 3) nextPositionClass = 'left';
-                                        else nextPositionClass = 'center';
-                                    }
+                                    const amplitude = Math.min(window.innerWidth * CURVE_AMPLITUDE_RATIO, 75);
+                                    const xOffset = getDynamicOffset(globalIndex, amplitude);
+                                    const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+                                    const flip = isRTL ? -1 : 1;
+
+                                    
+                                    const nextGlobalIndex = globalIndex + 1;
+                                    const nextXOffset = getDynamicOffset(nextGlobalIndex, amplitude);
+                                    
+                                    // True logic for determining path colors (Gold if completed, otherwise face color, gray if next is locked)
+                                    // Next node tells us if the curve should be gray/dotted
+                                    const isNextLocked = index + 1 < unit.lessons.length ? !isLessonUnlocked(unit.lessons[index + 1].id, unit.lessons) : true;
+                                    
+                                    // Connect the button themes directly to the main unit header theme!
+                                    const btnTheme = { face: theme.color, rim: theme.shadow };
+                                    
+                                    const pathColor = completed ? '#FFC800' : btnTheme.face;
+                                    const nextDiffX = (nextXOffset - xOffset) * flip;
 
                                     const handleClick = (e: React.MouseEvent) => {
+                                        playPopSound();
                                         if (isLocked) e.preventDefault();
                                     };
 
                                     const lessonPath = lesson.type === 'game' && lesson.gameId === 'neuromatch'
                                         ? '/neuromatch'
                                         : `/lesson/${lesson.id}`;
-
+                                        
+                                    // Make spring stagger delay relative to absolute count (up to 15 nodes for UX)
+                                    const staggerDelay = Math.min(index * 0.08, 1.5);
+                                    
                                     const isLastLesson = index === unit.lessons.length - 1;
 
                                     return (
                                         <React.Fragment key={lesson.id}>
-                                            <Link
-                                                ref={(lastCompletedId ? lesson.id === lastCompletedId : isCurrent) ? activeNodeRef : null}
-                                                to={isLocked ? '#' : lessonPath}
-                                                className={`path-node ${positionClass} ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''} ${completed ? 'completed' : ''}`}
-                                                onClick={handleClick}
-                                                aria-disabled={isLocked}
-                                            >
-                                                <div
-                                                    className="node-circle"
-                                                    style={{
-                                                        '--node-bg': isCurrent || completed ? theme.gradient : '#e5e7eb',
-                                                        '--node-shadow': isCurrent || completed ? theme.shadow : '#d1d5db',
-                                                        '--node-text': isCurrent || completed ? '#ffffff' : '#9ca3af',
-                                                        '--node-accent': theme.color
-                                                    } as React.CSSProperties}
-                                                >
-                                                    {isLocked ? (
-                                                        <Lock size={32} weight="fill" color="var(--node-text)" />
-                                                    ) : (
-                                                        <Icon size={36} weight="fill" color="var(--node-text)" />
-                                                    )}
-
-                                                    {/* START Bubble for current lesson */}
-                                                    {isCurrent && (
-                                                        <div className="start-bubble" style={{ color: theme.shadow, borderColor: theme.shadow }}>
-                                                            {t('start') || 'START'}
-                                                        </div>
-                                                    )}
-
-                                                    {/* Crown sitting on top */}
-                                                    {isCurrent && (
-                                                        <div className="crown-badge">
-                                                            <Crown size={42} weight="fill" color="#fbbf24" style={{ filter: 'drop-shadow(0 2px 0 #b45309)' }} />
-                                                        </div>
-                                                    )}
-
-                                                    {/* Checkmark for completed */}
-                                                    {completed && (
-                                                        <div className="completed-badge">
-                                                            <CheckCircle size={24} weight="fill" color={theme.color} />
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <div className="node-tooltip">{lesson.title}</div>
-                                            </Link>
-                                            {/* SVG Snake-curve connector to next node */}
-                                            {!isLastLesson && (() => {
-                                                // Detect RTL — nodes flip via CSS [dir="rtl"] rules
-                                                const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
-                                                const flip = isRTL ? -1 : 1;
-
-                                                // Positions relative to center (0): right=+70, left=-70 (flipped in RTL)
-                                                const fromX = (positionClass === 'right' ? 70 : positionClass === 'left' ? -70 : 0) * flip;
-                                                const toPos = nextPositionClass || 'center';
-                                                const toX = (toPos === 'right' ? 70 : toPos === 'left' ? -70 : 0) * flip;
-
-                                                // SVG viewBox: center at x=100, so offsets are 100+pos
-                                                const x1 = 100 + fromX;
-                                                const x2 = 100 + toX;
-                                                const svgH = 60;
-                                                // Smooth S-curve using cubic bezier
-                                                const d = `M ${x1},0 C ${x1},${svgH * 0.55} ${x2},${svgH * 0.45} ${x2},${svgH}`;
-
-                                                return (
-                                                    <svg
-                                                        className={`path-snake ${completed ? 'path-snake--active' : ''}`}
-                                                        viewBox="0 0 200 60"
-                                                        preserveAspectRatio="none"
-                                                        style={{ '--snake-color': theme.color } as React.CSSProperties}
-                                                    >
-                                                        {/* Background track (always visible) */}
-                                                        <path
-                                                            d={d}
+                                            <div className="path-node-wrapper" style={{ transform: `translateX(${xOffset * flip}px)` }}>
+                                                {/* Thick SVG Curve connection to the next node */}
+                                                {!isLastLesson && (
+                                                    <svg style={{ position: 'absolute', top: '50%', left: '50%', width: '0', height: '140px', overflow: 'visible', zIndex: -1, pointerEvents: 'none' }}>
+                                                        <path 
+                                                            d={`M 0 0 C 0 80, ${nextDiffX} 60, ${nextDiffX} 140`}
                                                             fill="none"
-                                                            stroke="#d1d5db"
-                                                            strokeWidth="5"
+                                                            stroke={isNextLocked ? '#e5e7eb' : pathColor}
+                                                            strokeWidth="18"
                                                             strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
-                                                        {/* Active overlay (green when completed) */}
-                                                        {completed && (
-                                                            <path
-                                                                d={d}
-                                                                fill="none"
-                                                                stroke={theme.color}
-                                                                strokeWidth="5"
-                                                                strokeLinecap="round"
-                                                            />
-                                                        )}
                                                     </svg>
-                                                );
-                                            })()}
+                                                )}
+                                                
+                                                <Link
+                                                    ref={(lastCompletedId ? lesson.id === lastCompletedId : isCurrent) ? activeNodeRef : null}
+                                                    to={isLocked ? '#' : lessonPath}
+                                                    className={`path-node ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''} ${completed ? 'completed' : ''}`}
+                                                    onClick={handleClick}
+                                                    aria-disabled={isLocked}
+                                                >
+                                                    <div
+                                                        className="node-circle"
+                                                        style={{
+                                                            '--node-bg': isLocked ? '#e5e7eb' : (completed ? '#FFC800' : btnTheme.face),
+                                                            '--node-shadow': isLocked ? '#d1d5db' : (completed ? '#D29600' : btnTheme.rim),
+                                                            '--node-text': isLocked ? '#9ca3af' : 'white',
+                                                            '--node-accent': completed ? '#FFC800' : btnTheme.face,
+                                                            'animationDelay': `${staggerDelay}s`
+                                                        } as React.CSSProperties}
+                                                    >
+                                                        {isLocked ? (
+                                                            <Lock size={32} weight="fill" color="var(--node-text)" />
+                                                        ) : (
+                                                            <Icon size={36} weight="fill" color="var(--node-text)" />
+                                                        )}
+
+                                                        {isCurrent && (
+                                                            <div className="start-bubble" style={{ color: btnTheme.rim, borderColor: btnTheme.rim }}>
+                                                                {t('start') || 'START'}
+                                                            </div>
+                                                        )}
+
+                                                        {isCurrent && (
+                                                            <div className="crown-badge">
+                                                                <Crown size={42} weight="fill" color="#fbbf24" style={{ filter: 'drop-shadow(0 2px 0 #b45309)' }} />
+                                                            </div>
+                                                        )}
+
+                                                        {completed && (
+                                                            <div className="completed-badge" style={{ color: '#FFC800' }}>
+                                                                <CheckCircle size={24} weight="fill" color="currentColor" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="node-tooltip">{lesson.title}</div>
+                                                </Link>
+                                            </div>
                                         </React.Fragment>
                                     );
                                 })}

@@ -5,13 +5,13 @@
 
   /* --- BRAND PALETTE (Vibrant & Rich) --- */
 
-  /* Primary Orange (Brand Theme) */
-  --color-primary: #ff9600;
-  --color-primary-light: #ffb44d;
+  /* Primary Blue (Brand Theme) */
+  --color-primary: #1a73e8;
+  --color-primary-light: #4d9ff0;
   /* Fallback */
-  --color-primary-dark: #cc7800;
-  --color-primary-shadow: #cc7800;
-  --grad-primary: linear-gradient(135deg, #ff9600 0%, #e68600 100%);
+  --color-primary-dark: #1557b0;
+  --color-primary-shadow: #1557b0;
+  --grad-primary: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
   /* Richer Gradient */
 
   /* Secondary Red (Error/Alert) */
@@ -40,48 +40,68 @@
   --color-gold-shadow: #cc9900;
   --grad-gold: linear-gradient(135deg, #ffc800 0%, #e5a500 100%);
 
-  /* --- NEUTRALS & SURFACES --- */
+  /* --- NEUTRALS & SURFACES (Dark Mode Default) --- */
   --color-background: #131f24;
   --color-surface: #202f36;
-  /* Visible gray background, white cards -> Darker panels */
   --color-surface-dim: #18282e;
-  /* Locked/Disabled states */
   --color-border: #37464f;
   --color-border-hover: #4b5e68;
 
-  /* --- TYPOGRAPHY --- */
+  /* --- TYPOGRAPHY (Dark) --- */
   --color-text-main: #ffffff;
   --color-text-secondary: #afafaf;
   --color-text-light: #777777;
   --color-text-inverse: #131f24;
 
-  /* --- ELEVATION & SHADOWS (Premium 3D) --- */
+  /* --- ELEVATION & SHADOWS (Dark) --- */
   --shadow-sm: 0 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 0 #111b1f;
-  /* "Hard" shadow for buttons */
   --shadow-lg: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
-  /* Soft float shadow */
-
   --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-  /* For cards */
   --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 
-  /* --- GLASSMORPHISM --- */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.5);
+  /* --- GLASSMORPHISM (Dark) --- */
+  --glass-bg: rgba(32, 47, 54, 0.7);
+  --glass-border: rgba(55, 70, 79, 0.5);
   --glass-blur: blur(12px);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 
-  /* --- SPACING & RADIUS --- */
+  /* --- SPACING & RADIUS (Global) --- */
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 20px;
   --radius-xl: 32px;
-  /* Very rounded for that friendly feel */
 
-  /* --- ANIMATIONS --- */
+  /* --- ANIMATIONS (Global) --- */
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.light-theme, html[data-theme="light"] {
+  /* --- NEUTRALS & SURFACES (Light) --- */
+  --color-background: #f7f7f7;
+  --color-surface: #ffffff;
+  --color-surface-dim: #e5e5e5;
+  --color-border: #e5e5e5;
+  --color-border-hover: #d0d0d0;
+  
+  /* --- TYPOGRAPHY (Light) --- */
+  --color-text-main: #4b4b4b;
+  --color-text-secondary: #777777;
+  --color-text-light: #aaaaaa;
+  --color-text-inverse: #ffffff;
+
+  /* --- ELEVATION & SHADOWS (Light) --- */
+  --shadow-sm: 0 2px 0 rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 0 #d9d9d9;
+  --shadow-lg: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* --- GLASSMORPHISM (Light) --- */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
 /* Base Reset & Fonts */
@@ -139,7 +159,7 @@ body {
 
 /* New Premium Button Class (Utility) */
 .premium-btn {
-  background: white;
+  background: var(--color-surface);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 12px 24px;

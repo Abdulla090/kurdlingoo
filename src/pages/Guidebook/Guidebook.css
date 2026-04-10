@@ -319,7 +319,7 @@
 }
 
 .phrase-card {
-    background: white;
+    background: var(--color-surface);
     padding: 1.5rem;
     border-radius: 1.25rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -373,7 +373,7 @@
 }
 
 .word-block {
-    background: white;
+    background: var(--color-surface);
     border: 1px solid rgba(0, 0, 0, 0.05);
     padding: 0.75rem 1.25rem;
     border-radius: 1rem;
@@ -414,7 +414,7 @@
 }
 
 .pronoun-card {
-    background: white;
+    background: var(--color-surface);
     border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 1.25rem;
     padding: 1.25rem;
@@ -553,7 +553,7 @@
 
 /* Conjugation Table */
 .conjugation-table {
-    background: white;
+    background: var(--color-surface);
     border-radius: 1.25rem;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -633,7 +633,7 @@
 
 .chat-avatar {
     font-size: 1.5rem;
-    background: white;
+    background: var(--color-surface);
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -645,7 +645,7 @@
 }
 
 .chat-content {
-    background: white;
+    background: var(--color-surface);
     padding: 1.25rem;
     border-radius: 1.25rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);

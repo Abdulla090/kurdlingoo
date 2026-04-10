@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🟠 KurdLingo
+# 🟠 Phingo
 
 ### The Modern English Language Learning Platform for Kurds
 
-[![Live App](https://img.shields.io/badge/▶_Live_App-kurdlingo.vercel.app-FF9600?style=for-the-badge&logo=vercel&logoColor=white)](https://kurdlingo.vercel.app)
+[![Live App](https://img.shields.io/badge/▶_Live_App-phingo.vercel.app-FF9600?style=for-the-badge&logo=vercel&logoColor=white)](https://phingo.vercel.app)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
@@ -19,7 +19,7 @@
 
 ## ⚡ Overview
 
-KurdLingo is a full-featured, gamified language learning web app built for Kurdish speakers to learn **English** worldwide. Inspired by the best in language-tech (Duolingo, Memrise), it combines adaptive AI with structured lessons, interactive games, and a vibrant community leaderboard — all wrapped in a premium, mobile-first interface.
+Phingo is a full-featured, gamified language learning web app built for Kurdish speakers to learn **English** worldwide. Inspired by the best in language-tech (Duolingo, Memrise), it combines adaptive AI with structured lessons, interactive games, and a vibrant community leaderboard — all wrapped in a premium, mobile-first interface.
 
 > 🎯 **Mission:** Make English language education accessible, engaging, and free for everyone.
 
@@ -61,8 +61,8 @@ Deployment      Vercel (Frontend) · InsForge (Backend)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Abdulla090/kurdlingoo.git
-cd kurdlingoo
+git clone https://github.com/Abdulla090/phingoo.git
+cd phingoo
 
 # 2. Install dependencies
 npm install
@@ -156,6 +156,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Made with 🧡 for the Kurdish community**
 
-[Live App](https://kurdlingo.vercel.app) · [Report Bug](https://github.com/Abdulla090/kurdlingoo/issues) · [Request Feature](https://github.com/Abdulla090/kurdlingoo/issues)
+[Live App](https://phingo.vercel.app) · [Report Bug](https://github.com/Abdulla090/phingoo/issues) · [Request Feature](https://github.com/Abdulla090/phingoo/issues)
 
 </div>

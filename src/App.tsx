@@ -25,6 +25,8 @@ import Layout from './components/Layout/Layout';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
 import ProfileSetupModal from './components/ProfileSetupModal';
+import VoiceTest from './pages/VoiceTest';
+import AuthCallback from './pages/AuthCallback/AuthCallback';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -55,7 +57,9 @@ const AnimatedRoutes = () => {
         <Route path="/typing-rush" element={<PageTransition><TypingRush /></PageTransition>} />
         <Route path="/dictionary" element={<Layout><BookDictionary /></Layout>} />
         <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/eltis" element={<PageTransition><Eltis /></PageTransition>} />
+        <Route path="/voicetest" element={<Layout><VoiceTest /></Layout>} />
       </Routes>
     </AnimatePresence>
   );

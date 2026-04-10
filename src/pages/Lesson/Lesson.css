@@ -909,7 +909,7 @@
 }
 
 .feedback-icon.incorrect {
-    background: #ffffff;
+    background: var(--color-surface);
     color: #ff4b4b;
     animation: shake 0.5s ease-in-out;
 }
@@ -1504,56 +1504,79 @@
     animation: slideIn 0.3s ease-out;
 }
 
+.dialogue-line {max-width: 100%; width: 100%;}
 .dialogue-line.other {
-    background: #f3f4f6;
-    align-self: flex-start;
-    margin-right: 20%;
+    background: var(--color-surface);
+    border: 3px solid var(--color-border);
+    color: var(--color-text);
+    border-radius: 20px 20px 20px 4px;
+    box-shadow: 0 4px 0 var(--color-border);
+}
+[dir='rtl'] .dialogue-line.other {
+    border-radius: 20px 20px 4px 20px;
 }
 
 .dialogue-line.user {
-    background: var(--color-primary-light);
-    align-self: flex-end;
-    margin-left: 20%;
+    background: var(--unit-color, #ff9600);
+    border: 3px solid var(--unit-color-dark, #cc7800);
+    color: white;
+    border-radius: 20px 20px 4px 20px;
+    box-shadow: 0 4px 0 var(--unit-color-dark, #cc7800);
+}
+[dir='rtl'] .dialogue-line.user {
+    border-radius: 20px 20px 20px 4px;
 }
 
 .speaker-label {
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.75rem;
     text-transform: uppercase;
-    color: #6b7280;
+    color: inherit;
+    opacity: 0.7;
 }
 
 .dialogue-text {
-    font-size: 1rem;
-    color: var(--color-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: inherit;
+    line-height: 2.8; /* Exteme height */
+    width: 100%;
 }
 
 .dialogue-options {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: 12px;
+    margin-top: 12px;
 }
 
 .dialogue-option {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
+    padding: 14px 18px;
+    border: 3px solid rgba(0, 0, 0, 0.15);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.2);
+    color: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     text-align: start;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 .dialogue-option:hover {
-    border-color: var(--color-primary);
-    background: var(--color-primary-light);
+    background: rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .dialogue-option.selected {
-    border-color: var(--color-primary);
-    background: var(--color-primary);
-    color: white;
+    background: var(--color-surface);
+    color: var(--unit-color-dark, #cc7800);
+    border-color: white;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(2px);
+    opacity: 0.95;
 }
 
 /* ============================================
@@ -1928,7 +1951,7 @@
 }
 
 .dark-blue-mode .chat-message.user .message-bubble {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
+    background: linear-gradient(135deg, #1e40af 0%, #ff9600 100%) !important;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
 }
 
@@ -2176,7 +2199,7 @@
 }
 
 .dark-blue-mode .chat-message.user .message-bubble {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
+    background: linear-gradient(135deg, #1e40af 0%, #ff9600 100%) !important;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
 }
 
@@ -2858,7 +2881,7 @@
 }
 
 .dark-blue-mode .voice-processing {
-    color: #60a5fa;
+    color: #ffb44d;
 }
 
 /* Mobile responsive */
@@ -2912,8 +2935,8 @@
 .dark-blue-mode .option-btn:hover,
 .dark-blue-mode .option-card:hover,
 .dark-blue-mode .image-card:hover {
-    background: #1e3a8a !important;
-    border-color: #60a5fa !important;
+    background: #cc7800 !important;
+    border-color: #ffb44d !important;
 }
 
 /* Dark blue: Roleplay Chat Layout Fixes */
@@ -3029,7 +3052,7 @@
 
 .dark-blue-mode .blank-space {
     background: rgba(30, 41, 59, 0.5) !important;
-    color: #60a5fa !important;
+    color: #ffb44d !important;
     border-bottom-color: #3b82f6 !important;
 }
 
@@ -3612,7 +3635,7 @@
 }
 
 .dark-blue-mode .pronunciation-english-word {
-    color: #60a5fa;
+    color: #ffb44d;
 }
 
 /* Idle state wrapper with attempts badge */

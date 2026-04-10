@@ -92,7 +92,7 @@
 .scenario-titles p {
     font-size: 11px;
     margin: 0;
-    color: #777;
+    color: var(--color-text-secondary);
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -228,7 +228,7 @@
 .eval-correction {
     font-weight: 500;
     line-height: 1.4;
-    color: #777;
+    color: var(--color-text-secondary);
 }
 
 .eval-loading {
@@ -276,7 +276,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #555;
+    color: var(--color-text-light);
 }
 
 /* Typing Indicator */
@@ -331,7 +331,7 @@
 .record-status {
     font-size: 12px;
     font-weight: 700;
-    color: #777;
+    color: var(--color-text-secondary);
     height: 16px;
     transition: color 0.3s;
 }
@@ -355,7 +355,7 @@
     border-radius: 50%;
     background: var(--color-surface);
     border: 3px solid var(--color-surface-variant);
-    color: #777;
+    color: var(--color-text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -366,7 +366,7 @@
 }
 
 .mic-button:hover {
-    background: #f7f7f7;
+    background: var(--color-background);
     border-color: var(--color-border);
     transform: scale(1.05);
 }
