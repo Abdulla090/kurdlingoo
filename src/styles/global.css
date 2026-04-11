@@ -49,7 +49,8 @@ body {
   /* rule: type-text-wrap-pretty — reduces orphans in body copy */
   text-wrap: pretty;
 
-  overflow-x: hidden;
+  /* Use clip instead of hidden to prevent creating a scroll container that breaks position: sticky */
+  overflow-x: clip;
 }
 
 /* ── Headings ─────────────────────────────────────────────────────────────

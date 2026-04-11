@@ -890,10 +890,13 @@ const FillBlank = ({ exercise, onAnswer }) => {
     return (
         <div className="exercise-container">
             <h2 className="exercise-question" dir="auto">{exercise.question}</h2>
-            <div className="sentence-display" dir="auto">
+            <div 
+                className="sentence-display" 
+                dir={exercise.sentenceParts.some(p => /[\u0600-\u06FF]/.test(p)) ? "rtl" : "ltr"}
+            >
                 {exercise.sentenceParts.map((part, idx) => (
-                    <span key={idx} className={part === "___" ? "blank-space" : ""}>
-                        {part === "___" && selected ? selected : part}
+                    <span key={idx} className={part === "___" ? "blank-space" : ""} dir="auto">
+                        <bdi>{part === "___" && selected ? selected : part}</bdi>
                     </span>
                 ))}
             </div>
@@ -1178,13 +1181,16 @@ const StoryCompletion = ({ exercise, onAnswer }) => {
         <div className="exercise-container">
             <h2 className="exercise-question">{exercise.question || t('completeStory')}</h2>
             <div className="story-container">
-                <div className="story-text">
+                <div 
+                    className="story-text"
+                    dir={/[\u0600-\u06FF]/.test(story) ? "rtl" : "ltr"}
+                >
                     {storyParts.map((part, idx) => (
-                        <span key={idx}>
-                            {part}
+                        <span key={idx} dir="auto">
+                            <bdi>{part}</bdi>
                             {idx < storyParts.length - 1 && (
                                 <span className={`story-blank ${answers[idx] ? 'filled' : ''}`}>
-                                    {answers[idx] || '___'}
+                                    <bdi>{answers[idx] || '___'}</bdi>
                                 </span>
                             )}
                         </span>
@@ -1279,7 +1285,10 @@ const RoleplayChat = ({ exercise, onAnswer }) => {
 
     useEffect(() => {
         if (chatEndRef.current) {
-            chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            chatEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            setTimeout(() => {
+                chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
         }
     }, [messages, isChecking, isTranscribing]);
 

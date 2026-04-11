@@ -271,7 +271,7 @@ export const unit3: Unit = {
                     type: 'multiple-choice',
                     question: 'What is "Bill" in Kurdish?',
                     options: [
-                        { text: 'حیساب', image: '🧾', correct: true },
+                        { text: 'حیساب (ئەژمار)', image: '🧾', correct: true },
                         { text: 'پارە', image: '💵', correct: false },
                         { text: 'مێز', image: '🪑', correct: false }
                     ]
@@ -287,7 +287,7 @@ export const unit3: Unit = {
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'کەوچک', english: 'Spoon' },
-                        { kurdish: 'چەتەڵ', english: 'Fork' },
+                        { kurdish: 'چەتاڵ', english: 'Fork' },
                         { kurdish: 'چەقۆ', english: 'Knife' },
                         { kurdish: 'قاپ', english: 'Plate' }
                     ]

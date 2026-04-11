@@ -6,7 +6,7 @@
     display: flex;
     min-height: 100vh;
     background: var(--color-background);
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100vw;
 }
 
@@ -198,7 +198,7 @@
     padding-bottom: 80px;
     transition: margin-inline-start var(--transition-normal);
     min-height: 100vh;
-    overflow-x: hidden; /* Prevent child pages from causing horizontal scroll */
+    overflow-x: clip; /* clip instead of hidden to prevent scrolling container from breaking sticky elements */
     max-width: 100vw;
 }
 

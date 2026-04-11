@@ -1591,11 +1591,11 @@
     font-size: 1.1rem;
     line-height: 1.8;
     color: var(--color-text);
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    background: var(--color-surface-variant);
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     margin-bottom: var(--spacing-xl);
-    border: 2px solid #f59e0b;
+    border: 2px solid var(--color-warning);
 }
 
 .quiz-section h3 {
@@ -3548,25 +3548,30 @@
 }
 
 /* Dark Blue Mode (Intermediate) */
+.dark-mode .pronunciation-card, 
 .dark-blue-mode .pronunciation-card {
     background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
     border-color: #334155;
     box-shadow: 0 6px 0 #0f172a, 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+.dark-mode .pronunciation-target, 
 .dark-blue-mode .pronunciation-target {
     color: #f1f5f9;
 }
 
+.dark-mode .pronunciation-phonetic, 
 .dark-blue-mode .pronunciation-phonetic {
     color: #94a3b8;
 }
 
+.dark-mode .pronunciation-meaning, 
 .dark-blue-mode .pronunciation-meaning {
     background: rgba(28, 176, 246, 0.15);
     color: #38bdf8;
 }
 
+.dark-mode .pronunciation-listen-btn, 
 .dark-blue-mode .pronunciation-listen-btn {
     background: #1e293b;
     border-color: #334155;
@@ -3574,6 +3579,7 @@
     box-shadow: 0 3px 0 #0f172a;
 }
 
+.dark-mode .pronunciation-listen-btn, 
 .dark-blue-mode .pronunciation-listen-btn:hover {
     background: #0f172a;
     border-color: #38bdf8;
@@ -3615,6 +3621,7 @@
     color: #ff6b6b;
 }
 
+.dark-mode .pronunciation-processing, 
 .dark-blue-mode .pronunciation-processing span {
     color: #38bdf8;
 }
@@ -3634,6 +3641,7 @@
     padding: 4px 0;
 }
 
+.dark-mode .pronunciation-english-word, 
 .dark-blue-mode .pronunciation-english-word {
     color: #ffb44d;
 }

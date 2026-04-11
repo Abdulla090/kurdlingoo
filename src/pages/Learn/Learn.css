@@ -243,14 +243,18 @@
     padding: 16px 24px;
     border-radius: 16px;
     color: #ffffff;
-    position: relative;
-    overflow: hidden;
-
+    
+    /* Sticky magic */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    
     /* Strong 3D Beveled Look */
     box-shadow:
         inset 0 4px 0 rgba(255, 255, 255, 0.25),
         inset 0 -6px 0 rgba(0, 0, 0, 0.15),
-        0 6px 0 rgba(0, 0, 0, 0.2);
+        0 8px 16px rgba(0, 0, 0, 0.2);
 
     transition: box-shadow 0.15s ease;
 }
@@ -735,12 +739,7 @@ body.dark-mode .path-node.locked .node-circle {
     }
 }
 
-    /* Current Node Styling override */
-.path-node.current .node-circle {
-    /* Keep width exact, but adjust crown placement */
-    width: 60px !important;
-    height: 60px !important;
-}
+    /* Current Node Styling override used to be here */
 
 .crown-badge {
     position: absolute;
@@ -977,13 +976,14 @@ body.dark-mode .path-node.locked .node-circle {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    /* Aggressive diagonal shine beam from TOP RIGHT to BOTTOM LEFT */
+    /* Soft blurred white specular shine on opposite diagonal sides */
     background: linear-gradient(
-        -45deg,
-        rgba(255, 255, 255, 0.7) 0%,
-        rgba(255, 255, 255, 0.4) 45%,
+        45deg,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.2) 25%,
         rgba(255, 255, 255, 0) 50%,
-        rgba(255, 255, 255, 0) 100%
+        rgba(255, 255, 255, 0.2) 75%,
+        rgba(255, 255, 255, 0.6) 100%
     );
     z-index: 1; /* Stay behind the icon */
     pointer-events: none;
@@ -1021,4 +1021,18 @@ body.dark-mode .path-node.locked .node-circle {
 .path-node {
     animation: spring-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
     /* Delay gets injected via CSS var or inline style */
+}
+
+/* Mobile sizing for dot buttons */
+@media (max-width: 768px) {
+    .node-circle {
+        width: 68px !important;
+        height: 68px !important;
+    }
+    
+    /* Bring buttons closer together vertically on mobile */
+    .path-node-wrapper {
+        height: 110px !important;
+        min-height: 110px !important;
+    }
 }
