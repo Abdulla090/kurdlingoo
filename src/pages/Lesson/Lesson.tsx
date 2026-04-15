@@ -895,7 +895,7 @@ const FillBlank = ({ exercise, onAnswer }) => {
                 dir={exercise.sentenceParts.some(p => /[\u0600-\u06FF]/.test(p)) ? "rtl" : "ltr"}
             >
                 {exercise.sentenceParts.map((part, idx) => (
-                    <span key={idx} className={part === "___" ? "blank-space" : ""} dir="auto">
+                    <span key={idx} className={part === "___" ? "blank-space" : ""} dir="auto" style={{ marginRight: '8px' }}>
                         <bdi>{part === "___" && selected ? selected : part}</bdi>
                     </span>
                 ))}

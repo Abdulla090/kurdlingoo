@@ -236,7 +236,7 @@
 }
 
 .option-card:hover {
-    background: #1e2f3b;
+    background: var(--color-surface-dim);
     border-color: var(--unit-color, #1cb0f6);
     box-shadow: 0 6px 0 var(--unit-color-dark, #1899d6);
     transform: translateY(-2px);
@@ -740,7 +740,7 @@
     font-weight: 800;
     color: var(--color-primary);
     animation: pulse 2s ease-in-out infinite;
-    background: linear-gradient(135deg, #2d2214 0%, transparent 100%);
+    background: var(--color-surface-dim);
     border-radius: var(--radius-sm);
 }
 
@@ -3849,4 +3849,4 @@
     border-bottom-style: solid;
     /* color is set dynamically via style prop */
     transition: border-color 0.3s ease;
-}
+}

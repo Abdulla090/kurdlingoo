@@ -93,9 +93,9 @@ export const unit4: Unit = {
                 list: [
                     "Congratulations! (پیرۆزە!)",
                     "I'm sorry to hear that (بەداخەوەم)",
-                    "Best wishes (خواستی باش)",
+                    "Best wishes (هیوای باشترین)",
                     "Take care (ئاگاداری خۆت بە)",
-                    "Keep in touch (پەیوەندی بکە)"
+                    "Keep in touch (لە پەیوەندیدا بە)"
                 ]
             },
             {
@@ -123,7 +123,7 @@ export const unit4: Unit = {
                         { english: "Account", kurdish: "هەژمار", icon: "💳" },
                         { english: "ATM", kurdish: "ئەی تی ئێم", icon: "🏧" },
                         { english: "Transfer", kurdish: "گواستنەوە", icon: "💸" },
-                        { english: "Balance", kurdish: "مانەوە", icon: "💰" }
+                        { english: "Balance", kurdish: "باڵانس", icon: "💰" }
                     ]
                 }
             }
@@ -140,20 +140,20 @@ export const unit4: Unit = {
     lessons: [
         {
             id: 'unit4-lesson1',
-            title: 'Business & Office',
+            title: 'بازرگانی و نووسینگە (Business & Office)',
             icon: '💼',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Meeting" in Kurdish?',
+                    question: 'واتای "کۆبوونەوە" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'کۆبوونەوە', image: '🤝', correct: true },
-                        { text: 'نووسینگە', image: '🏢', correct: false },
-                        { text: 'پرۆژە', image: '📁', correct: false }
+                        { text: 'Meeting', image: '🤝', correct: true },
+                        { text: 'Office', image: '🏢', correct: false },
+                        { text: 'Project', image: '📁', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'کۆبوونەوە', english: 'Meeting' },
                         { kurdish: 'ئیمەیل', english: 'Email' },
@@ -163,46 +163,46 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I have a meeting"',
-                    sourceText: 'I have a meeting',
-                    correctSentence: ['کۆبوونەوەیەکم', 'هەیە'],
-                    options: ['کۆبوونەوەیەکم', 'هەیە', 'نییە', 'دەوێت']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "کۆبوونەوەیەکم هەیە"',
+                    sourceText: 'کۆبوونەوەیەکم هەیە',
+                    correctSentence: ['I', 'have', 'a', 'meeting'],
+                    options: ['I', 'have', 'a', 'meeting', 'an', 'office']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Send me an ___"',
-                    sentenceParts: ['___', 'بۆ', 'بنێرە'],
-                    correctOption: 'ئیمەیل',
-                    options: ['ئیمەیل', 'نامە', 'پەیام', 'تەلەفۆن']
+                    question: 'ڕستەکە تەواو بکە: "ئیمەیلێک بۆ من بنێرە"',
+                    sentenceParts: ['Send', 'me', 'an', '___'],
+                    correctOption: 'email',
+                    options: ['email', 'letter', 'message', 'call']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "Deadline"',
-                    correctAnswer: 'کۆتا کات',
-                    hints: ['کۆتا', 'کات']
+                    question: 'بە ئینگلیزی بنووسە: "کۆتا کات"',
+                    correctAnswer: 'Deadline',
+                    hints: ['Dead', 'line']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Client" in Kurdish?',
+                    question: 'واتای "کڕیار" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'کڕیار', image: '🤝', correct: true },
-                        { text: 'کارمەند', image: '👔', correct: false },
-                        { text: 'بەڕێوبەر', image: '👨‍💼', correct: false }
+                        { text: 'Client', image: '🤝', correct: true },
+                        { text: 'Employee', image: '👔', correct: false },
+                        { text: 'Manager', image: '👨‍💼', correct: false }
                     ]
                 },
                 {
                     type: 'conversation',
-                    question: 'Complete the business dialogue',
+                    question: 'گفتوگۆ بازرگانییەکە تەواو بکە',
                     dialogue: [
-                        { speaker: 'Boss', text: 'کەی پرۆژەکە تەواو دەبێت؟' },
-                        { speaker: 'You', text: '___', options: ['هەفتەی داهاتوو', 'نازانم', 'باشە'] },
-                        { speaker: 'Boss', text: 'زۆر باشە، سپاس.' },
-                        { speaker: 'You', text: '___', options: ['بەڕێزەوە', 'خوا حافیز', 'نەخێر'] }
+                        { speaker: 'Boss', text: 'When is the project deadline?' },
+                        { speaker: 'You', text: '___', options: ['Next week', 'I don\'t know', 'Good'] },
+                        { speaker: 'Boss', text: 'Great, thank you.' },
+                        { speaker: 'You', text: '___', options: ['You are welcome', 'Goodbye', 'No problem'] }
                     ],
-                    correctOptions: ['هەفتەی داهاتوو', 'بەڕێزەوە']
+                    correctOptions: ['Next week', 'You are welcome']
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'بەڕێوبەر', english: 'Manager' },
                         { kurdish: 'کارمەند', english: 'Employee' },
@@ -212,36 +212,36 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "The ___ is tomorrow"',
-                    sentenceParts: ['___', 'سبەیە'],
-                    correctOption: 'کۆتا کات',
-                    options: ['کۆتا کات', 'کۆبوونەوە', 'پرۆژە', 'ئیمەیل']
+                    question: 'ڕستەکە تەواو بکە: "کۆتا کات سبەینێیە"',
+                    sentenceParts: ['The', '___', 'is', 'tomorrow'],
+                    correctOption: 'deadline',
+                    options: ['deadline', 'meeting', 'project', 'email']
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Can we schedule a meeting?"',
-                    sourceText: 'Can we schedule a meeting?',
-                    correctSentence: ['دەتوانین', 'کۆبوونەوەیەک', 'دابنێین', '؟'],
-                    options: ['دەتوانین', 'کۆبوونەوەیەک', 'دابنێین', '؟', 'بکەین', 'بڵێین']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "دەتوانین کۆبوونەوەیەک دابنێین؟"',
+                    sourceText: 'دەتوانین کۆبوونەوەیەک دابنێین؟',
+                    correctSentence: ['Can', 'we', 'schedule', 'a', 'meeting', '?'],
+                    options: ['Can', 'we', 'schedule', 'a', 'meeting', '?', 'do', 'make']
                 }
             ]
         },
         {
             id: 'unit4-lesson2',
-            title: 'Health & Medical',
+            title: 'تەندروستی و پزیشکی (Health & Medical)',
             icon: '🏥',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Doctor" in Kurdish?',
+                    question: 'واتای "پزیشک" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'پزیشک', image: '👨‍⚕️', correct: true },
-                        { text: 'نەخۆشخانە', image: '🏥', correct: false },
-                        { text: 'دەرمان', image: '💊', correct: false }
+                        { text: 'Doctor', image: '👨‍⚕️', correct: true },
+                        { text: 'Hospital', image: '🏥', correct: false },
+                        { text: 'Medicine', image: '💊', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'پزیشک', english: 'Doctor' },
                         { kurdish: 'نەخۆشخانە', english: 'Hospital' },
@@ -251,136 +251,136 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I am sick"',
-                    sourceText: 'I am sick',
-                    correctSentence: ['من', 'نەخۆشم'],
-                    options: ['من', 'نەخۆشم', 'باشم', 'تەندروستم']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "من نەخۆشم"',
+                    sourceText: 'من نەخۆشم',
+                    correctSentence: ['I', 'am', 'sick'],
+                    options: ['I', 'am', 'sick', 'well', 'healthy']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I have a ___" (headache)',
-                    sentenceParts: ['___', 'م', 'هەیە'],
-                    correctOption: 'سەرێشە',
-                    options: ['سەرێشە', 'تا', 'دەرد', 'نەخۆشی']
+                    question: 'ڕستەکە تەواو بکە: "سەرێشەم هەیە"',
+                    sentenceParts: ['I', 'have', 'a', '___'],
+                    correctOption: 'headache',
+                    options: ['headache', 'fever', 'pain', 'disease']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "I need medicine"',
-                    correctAnswer: 'پێویستیم بە دەرمان هەیە',
-                    hints: ['پێویستیم', 'دەرمان']
+                    question: 'بە ئینگلیزی بنووسە: "پێویستیم بە دەرمان هەیە"',
+                    correctAnswer: 'I need medicine',
+                    hints: ['I need', 'medicine']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Fever" in Kurdish?',
+                    question: 'واتای "تا" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'تا', image: '🌡️', correct: true },
-                        { text: 'سەرێشە', image: '🤕', correct: false },
-                        { text: 'دەرد', image: '😷', correct: false }
+                        { text: 'Fever', image: '🌡️', correct: true },
+                        { text: 'Headache', image: '🤕', correct: false },
+                        { text: 'Pain', image: '😷', correct: false }
                     ]
                 },
                 {
                     type: 'conversation',
-                    question: 'Complete the doctor visit',
+                    question: 'گفتوگۆی سەردانی پزیشک تەواو بکە',
                     dialogue: [
-                        { speaker: 'Doctor', text: 'چیت هەیە؟' },
-                        { speaker: 'You', text: '___', options: ['سەرێشەم هەیە', 'باشم', 'سپاس'] },
-                        { speaker: 'Doctor', text: 'ئەم دەرمانە بنووسە.' },
-                        { speaker: 'You', text: '___', options: ['سوپاس دکتۆر', 'نەخێر', 'خوا حافیز'] }
+                        { speaker: 'Doctor', text: 'How are you feeling today?' },
+                        { speaker: 'You', text: '___', options: ['I have a headache', 'I am fine', 'Thank you'] },
+                        { speaker: 'Doctor', text: 'Please take this medicine.' },
+                        { speaker: 'You', text: '___', options: ['Thank you, doctor', 'No', 'Goodbye'] }
                     ],
-                    correctOptions: ['سەرێشەم هەیە', 'سوپاس دکتۆر']
+                    correctOptions: ['I have a headache', 'Thank you, doctor']
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'سەرێشە', english: 'Headache' },
-                        { kurdish: 'دڵدرد', english: 'Stomachache' },
+                        { kurdish: 'سکئێشە', english: 'Stomachache' },
                         { kurdish: 'تا', english: 'Fever' },
-                        { kurdish: 'کۆلێرە', english: 'Cough' }
+                        { kurdish: 'کۆکە', english: 'Cough' }
                     ]
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I need to see a ___"',
-                    sentenceParts: ['پێویستە', '___', 'ببینم'],
-                    correctOption: 'پزیشک',
-                    options: ['پزیشک', 'دەرمان', 'نەخۆشخانە', 'کارمەند']
+                    question: 'ڕستەکە تەواو بکە: "پێویستە پزیشکێک ببینم"',
+                    sentenceParts: ['I', 'need', 'to', 'see', 'a', '___'],
+                    correctOption: 'doctor',
+                    options: ['doctor', 'medicine', 'hospital', 'nurse']
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I\'m not feeling well"',
-                    sourceText: 'I\'m not feeling well',
-                    correctSentence: ['هەستم', 'باش', 'نییە'],
-                    options: ['هەستم', 'باش', 'نییە', 'یە', 'خراپە']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "هەستم باش نییە"',
+                    sourceText: 'هەستم باش نییە',
+                    correctSentence: ['I', 'am', 'not', 'feeling', 'well'],
+                    options: ['I', 'am', 'not', 'feeling', 'well', 'good', 'bad']
                 }
             ]
         },
         {
             id: 'unit4-lesson3',
-            title: 'Appointments & Scheduling',
+            title: 'چاوپێکەوتن و خشتەدانان (Appointments & Scheduling)',
             icon: '📅',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Appointment" in Kurdish?',
+                    question: 'واتای "چاوپێکەوتن" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'چاوپێکەوتن', image: '📅', correct: true },
-                        { text: 'کۆبوونەوە', image: '🤝', correct: false },
-                        { text: 'کات', image: '⏰', correct: false }
+                        { text: 'Appointment', image: '📅', correct: true },
+                        { text: 'Meeting', image: '🤝', correct: false },
+                        { text: 'Time', image: '⏰', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'چاوپێکەوتن', english: 'Appointment' },
-                        { kurdish: 'کاتژمێر', english: 'Time' },
+                        { kurdish: 'کات', english: 'Time' },
                         { kurdish: 'ڕۆژ', english: 'Day' },
                         { kurdish: 'بەردەست', english: 'Available' }
                     ]
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "Can I make an appointment?"',
-                    sourceText: 'Can I make an appointment?',
-                    correctSentence: ['دەتوانم', 'چاوپێکەوتنێک', 'دابنێم', '؟'],
-                    options: ['دەتوانم', 'چاوپێکەوتنێک', 'دابنێم', '؟', 'بکەم', 'بڵێم']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "دەتوانم چاوپێکەوتنێک دابنێم؟"',
+                    sourceText: 'دەتوانم چاوپێکەوتنێک دابنێم؟',
+                    correctSentence: ['Can', 'I', 'make', 'an', 'appointment', '?'],
+                    options: ['Can', 'I', 'make', 'an', 'appointment', '?', 'do', 'take']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "When are you ___?"',
-                    sentenceParts: ['کەی', '___', 'یت', '؟'],
-                    correctOption: 'بەردەست',
-                    options: ['بەردەست', 'خەریک', 'نەخۆش', 'باش']
+                    question: 'ڕستەکە تەواو بکە: "کەی بەردەستیت؟"',
+                    sentenceParts: ['When', 'are', 'you', '___', '?'],
+                    correctOption: 'available',
+                    options: ['available', 'busy', 'sick', 'good']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "Tomorrow at 2 PM"',
-                    correctAnswer: 'سبەی لە کاتژمێر ٢',
-                    hints: ['سبەی', 'کاتژمێر']
+                    question: 'بە ئینگلیزی بنووسە: "سبەینێ کاتژمێر ٢"',
+                    correctAnswer: 'Tomorrow at 2 PM',
+                    hints: ['Tomorrow', 'at', '2 PM']
                 },
                 {
                     type: 'conversation',
-                    question: 'Complete the appointment booking',
+                    question: 'دیالۆگی دانانی کات تەواو بکە',
                     dialogue: [
-                        { speaker: 'Receptionist', text: 'کەی دەتەوێت بێیت؟' },
-                        { speaker: 'You', text: '___', options: ['سێشەممە باشە', 'نازانم', 'خوا حافیز'] },
-                        { speaker: 'Receptionist', text: 'چ کاتژمێرێک؟' },
-                        { speaker: 'You', text: '___', options: ['کاتژمێر ٣', 'ئێستا', 'دوێنێ'] }
+                        { speaker: 'Receptionist', text: 'When would you like to come in?' },
+                        { speaker: 'You', text: '___', options: ['Tuesday is good', 'I don\'t know', 'Goodbye'] },
+                        { speaker: 'Receptionist', text: 'What time?' },
+                        { speaker: 'You', text: '___', options: ['At 3 PM', 'Now', 'Yesterday'] }
                     ],
-                    correctOptions: ['سێشەممە باشە', 'کاتژمێر ٣']
+                    correctOptions: ['Tuesday is good', 'At 3 PM']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Cancel" in Kurdish?',
+                    question: 'واتای "هەڵوەشاندنەوە" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'هەڵوەشاندنەوە', image: '❌', correct: true },
-                        { text: 'دانان', image: '✅', correct: false },
-                        { text: 'گۆڕین', image: '🔄', correct: false }
+                        { text: 'Cancel', image: '❌', correct: true },
+                        { text: 'Book', image: '✅', correct: false },
+                        { text: 'Change', image: '🔄', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
-                        { kurdish: 'دانان', english: 'Set/Book' },
+                        { kurdish: 'دانان', english: 'Book / Set' },
                         { kurdish: 'هەڵوەشاندنەوە', english: 'Cancel' },
                         { kurdish: 'گۆڕین', english: 'Change' },
                         { kurdish: 'پشتڕاستکردنەوە', english: 'Confirm' }
@@ -388,36 +388,36 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I need to ___ my appointment"',
-                    sentenceParts: ['پێویستە', 'چاوپێکەوتنەکەم', '___', 'بکەمەوە'],
-                    correctOption: 'هەڵوەشێنم',
-                    options: ['هەڵوەشێنم', 'دابنێم', 'بگۆڕم', 'ببینم']
+                    question: 'ڕستەکە تەواو بکە: "پێویستە چاوپێکەوتنەکەم هەڵوەشێنمەوە"',
+                    sentenceParts: ['I', 'need', 'to', '___', 'my', 'appointment'],
+                    correctOption: 'cancel',
+                    options: ['cancel', 'book', 'change', 'see']
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "See you then"',
-                    sourceText: 'See you then',
-                    correctSentence: ['ئەو', 'کاتە', 'دەتبینم'],
-                    options: ['ئەو', 'کاتە', 'دەتبینم', 'ئێستا', 'دوێنێ']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "ئەو کاتە دەتبینم"',
+                    sourceText: 'ئەو کاتە دەتبینم',
+                    correctSentence: ['See', 'you', 'then'],
+                    options: ['See', 'you', 'then', 'now', 'yesterday']
                 }
             ]
         },
         {
             id: 'unit4-lesson4',
-            title: 'Opinions & Discussions',
+            title: 'ڕاکان و گفتوگۆکان (Opinions & Discussions)',
             icon: '💭',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'How do you say "I think" in Kurdish?',
+                    question: 'چۆن دەڵێیت "من پێموایە" بە ئینگلیزی؟',
                     options: [
-                        { text: 'من پێموایە', image: '💭', correct: true },
-                        { text: 'من دەزانم', image: '🧠', correct: false },
-                        { text: 'من دەڵێم', image: '🗣️', correct: false }
+                        { text: 'I think', image: '💭', correct: true },
+                        { text: 'I know', image: '🧠', correct: false },
+                        { text: 'I say', image: '🗣️', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'من پێموایە', english: 'I think' },
                         { kurdish: 'من هاوڕام', english: 'I agree' },
@@ -427,46 +427,46 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "What do you think?"',
-                    sourceText: 'What do you think?',
-                    correctSentence: ['تۆ', 'چیت', 'پێوایە', '؟'],
-                    options: ['تۆ', 'چیت', 'پێوایە', '؟', 'دەزانیت', 'دەڵێیت']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "تۆ چیت پێوایە؟"',
+                    sourceText: 'تۆ چیت پێوایە؟',
+                    correctSentence: ['What', 'do', 'you', 'think', '?'],
+                    options: ['What', 'do', 'you', 'think', '?', 'know', 'say']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "I ___ with you"',
-                    sentenceParts: ['من', 'لەگەڵ', 'تۆ', '___'],
-                    correctOption: 'هاوڕام',
-                    options: ['هاوڕام', 'هاوڕا نیم', 'دەڵێم', 'دەزانم']
+                    question: 'ڕستەکە تەواو بکە: "من لەگەڵت هاوڕام"',
+                    sentenceParts: ['I', '___', 'with', 'you'],
+                    correctOption: 'agree',
+                    options: ['agree', 'disagree', 'say', 'know']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "In my opinion"',
-                    correctAnswer: 'لە ڕای مندا',
-                    hints: ['ڕای', 'مندا']
+                    question: 'بە ئینگلیزی بنووسە: "لە ڕای مندا"',
+                    correctAnswer: 'In my opinion',
+                    hints: ['In', 'my', 'opinion']
                 },
                 {
                     type: 'conversation',
-                    question: 'Complete the discussion',
+                    question: 'گفتوگۆکە تەواو بکە',
                     dialogue: [
-                        { speaker: 'Friend', text: 'تۆ چیت پێوایە دەربارەی ئەم بیرۆکەیە؟' },
-                        { speaker: 'You', text: '___', options: ['من پێموایە باشە', 'نازانم', 'خوا حافیز'] },
-                        { speaker: 'Friend', text: 'منیش هاوڕام.' },
-                        { speaker: 'You', text: '___', options: ['زۆر باشە', 'نەخێر', 'ببورە'] }
+                        { speaker: 'Friend', text: 'What do you think about this idea?' },
+                        { speaker: 'You', text: '___', options: ['I think it is good', 'I don\'t know', 'Goodbye'] },
+                        { speaker: 'Friend', text: 'I agree with you.' },
+                        { speaker: 'You', text: '___', options: ['Very good', 'No', 'Sorry'] }
                     ],
-                    correctOptions: ['من پێموایە باشە', 'زۆر باشە']
+                    correctOptions: ['I think it is good', 'Very good']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Believe" in Kurdish?',
+                    question: 'واتای "باوەڕ" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'باوەڕ', image: '🙏', correct: true },
-                        { text: 'بیر', image: '💭', correct: false },
-                        { text: 'زانین', image: '🧠', correct: false }
+                        { text: 'Believe', image: '🙏', correct: true },
+                        { text: 'Think', image: '💭', correct: false },
+                        { text: 'Know', image: '🧠', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'باوەڕ', english: 'Believe' },
                         { kurdish: 'بیرۆکە', english: 'Idea' },
@@ -476,36 +476,36 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "That\'s a good ___"',
-                    sentenceParts: ['ئەوە', '___', 'ێکی', 'باشە'],
-                    correctOption: 'بیرۆکە',
-                    options: ['بیرۆکە', 'ڕا', 'وشە', 'کار']
+                    question: 'ڕستەکە تەواو بکە: "ئەوە بیرۆکەیەکی باشە"',
+                    sentenceParts: ['That\'s', 'a', 'good', '___'],
+                    correctOption: 'idea',
+                    options: ['idea', 'opinion', 'word', 'job']
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I believe you"',
-                    sourceText: 'I believe you',
-                    correctSentence: ['من', 'باوەڕت', 'پێدەکەم'],
-                    options: ['من', 'باوەڕت', 'پێدەکەم', 'دەزانم', 'دەبینم']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "من باوەڕت پێدەکەم"',
+                    sourceText: 'من باوەڕت پێدەکەم',
+                    correctSentence: ['I', 'believe', 'you'],
+                    options: ['I', 'believe', 'you', 'know', 'see']
                 }
             ]
         },
         {
             id: 'unit4-lesson5',
-            title: 'Banking & Finance',
+            title: 'بانک و دارایی (Banking & Finance)',
             icon: '🏦',
             exercises: [
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Bank" in Kurdish?',
+                    question: 'واتای "بانک" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'بانک', image: '🏦', correct: true },
-                        { text: 'دووکان', image: '🏪', correct: false },
-                        { text: 'نووسینگە', image: '🏢', correct: false }
+                        { text: 'Bank', image: '🏦', correct: true },
+                        { text: 'Shop', image: '🏪', correct: false },
+                        { text: 'Office', image: '🏢', correct: false }
                     ]
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'بانک', english: 'Bank' },
                         { kurdish: 'هەژمار', english: 'Account' },
@@ -515,66 +515,66 @@ export const unit4: Unit = {
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I want to open an account"',
-                    sourceText: 'I want to open an account',
-                    correctSentence: ['دەمەوێت', 'هەژمارێک', 'بکەمەوە'],
-                    options: ['دەمەوێت', 'هەژمارێک', 'بکەمەوە', 'دابخەم', 'ببینم']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "دەمەوێت هەژمارێک بکەمەوە"',
+                    sourceText: 'دەمەوێت هەژمارێک بکەمەوە',
+                    correctSentence: ['I', 'want', 'to', 'open', 'an', 'account'],
+                    options: ['I', 'want', 'to', 'open', 'an', 'account', 'close', 'see']
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "Where is the ___?"',
-                    sentenceParts: ['___', 'لە', 'کوێیە', '؟'],
-                    correctOption: 'بانک',
-                    options: ['بانک', 'دووکان', 'ماڵ', 'قوتابخانە']
+                    question: 'ڕستەکە تەواو بکە: "بانکەکە لە کوێیە؟"',
+                    sentenceParts: ['Where', 'is', 'the', '___', '?'],
+                    correctOption: 'bank',
+                    options: ['bank', 'shop', 'home', 'school']
                 },
                 {
                     type: 'typing',
-                    question: 'Type in Kurdish: "ATM"',
-                    correctAnswer: 'ئەی تی ئێم',
-                    hints: ['ئەی', 'تی', 'ئێم']
+                    question: 'بە ئینگلیزی بنووسە: "ئامێری ڕاکێشانی پارە"', 
+                    correctAnswer: 'ATM',
+                    hints: ['A', 'T', 'M']
                 },
                 {
                     type: 'multiple-choice',
-                    question: 'What is "Transfer" in Kurdish?',
+                    question: 'واتای "گواستنەوە" بە ئینگلیزی چییە؟',
                     options: [
-                        { text: 'گواستنەوە', image: '💸', correct: true },
-                        { text: 'وەرگرتن', image: '💰', correct: false },
-                        { text: 'دان', image: '💵', correct: false }
+                        { text: 'Transfer', image: '💸', correct: true },
+                        { text: 'Receive', image: '💰', correct: false },
+                        { text: 'Give', image: '💵', correct: false }
                     ]
                 },
                 {
                     type: 'conversation',
-                    question: 'Complete the bank visit',
+                    question: 'دیالۆگی بانکەکە تەواو بکە',
                     dialogue: [
-                        { speaker: 'Teller', text: 'چۆنم یارمەتیتان بدەم؟' },
-                        { speaker: 'You', text: '___', options: ['دەمەوێت پارە بکێشمەوە', 'باشم', 'خوا حافیز'] },
-                        { speaker: 'Teller', text: 'چەند؟' },
-                        { speaker: 'You', text: '___', options: ['سەد دۆلار', 'نازانم', 'سپاس'] }
+                        { speaker: 'Teller', text: 'How can I help you?' },
+                        { speaker: 'You', text: '___', options: ['I want to withdraw money', 'I am fine', 'Goodbye'] },
+                        { speaker: 'Teller', text: 'How much?' },
+                        { speaker: 'You', text: '___', options: ['One hundred dollars', 'I don\'t know', 'Thank you'] }
                     ],
-                    correctOptions: ['دەمەوێت پارە بکێشمەوە', 'سەد دۆلار']
+                    correctOptions: ['I want to withdraw money', 'One hundred dollars']
                 },
                 {
-                    type: 'match-pairs', question: 'Match the pairs',
+                    type: 'match-pairs', question: 'وشەکان پەیوەست بکە',
                     pairs: [
                         { kurdish: 'گواستنەوە', english: 'Transfer' },
                         { kurdish: 'کێشانەوە', english: 'Withdraw' },
-                        { kurdish: 'دانان', english: 'Deposit' },
-                        { kurdish: 'مانەوە', english: 'Balance' }
+                        { kurdish: 'دانان (پاشەکەوت)', english: 'Deposit' }, 
+                        { kurdish: 'باڵانس (بڕی ماوە)', english: 'Balance' } 
                     ]
                 },
                 {
                     type: 'fill-blank',
-                    question: 'Complete: "What is my ___?"',
-                    sentenceParts: ['___', 'ی', 'من', 'چەندە', '؟'],
-                    correctOption: 'مانەوە',
-                    options: ['مانەوە', 'هەژمار', 'کارت', 'ناو']
+                    question: 'ڕستەکە تەواو بکە: "What is my ___?" (باڵانسی من چەندە؟)',
+                    sentenceParts: ['What', 'is', 'my', '___', '?'],
+                    correctOption: 'balance',
+                    options: ['balance', 'account', 'card', 'name']
                 },
                 {
                     type: 'sentence-builder',
-                    question: 'Translate: "I need my card"',
-                    sourceText: 'I need my card',
-                    correctSentence: ['پێویستیم', 'بە', 'کارتەکەم', 'هەیە'],
-                    options: ['پێویستیم', 'بە', 'کارتەکەم', 'هەیە', 'نییە', 'دەوێت']
+                    question: 'ئەم ڕستەیە وەربگێڕە: "پێویستیم بە کارتەکەم هەیە"',
+                    sourceText: 'پێویستیم بە کارتەکەم هەیە',
+                    correctSentence: ['I', 'need', 'my', 'card'],
+                    options: ['I', 'need', 'my', 'card', 'want', 'don\'t']
                 }
             ]
         }

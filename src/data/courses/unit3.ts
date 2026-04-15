@@ -19,14 +19,14 @@ export const unit3: Unit = {
                             type: "sentence-structure",
                             data: {
                                 english: [
-                                    { word: "I", label: "Subject", color: "#ef4444" },
+                                    { word: "I", label: "Subject", color: "#3b82f6" },
                                     { word: "Will", label: "Future", color: "#f59e0b" },
-                                    { word: "Go", label: "Verb", color: "#3b82f6" }
+                                    { word: "Go", label: "Verb", color: "#ef4444" }
                                 ],
                                 kurdish: [
-                                    { word: "من", label: "بکەر", color: "#ef4444" },
+                                    { word: "من", label: "بکەر", color: "#3b82f6" },
                                     { word: "دە", label: "داهاتوو", color: "#f59e0b" },
-                                    { word: "ڕۆم", label: "کردار", color: "#3b82f6" }
+                                    { word: "ڕۆم", label: "کردار", color: "#ef4444" }
                                 ]
                             }
                         }
@@ -92,7 +92,7 @@ export const unit3: Unit = {
                 visual: {
                     type: "dialogue",
                     data: [
-                        { speaker: "A", avatar: "💁‍♂️", english: "Do you have a reservation?", kurdish: "ئایا حجرت هەیە؟" },
+                        { speaker: "A", avatar: "💁‍♂️", english: "Do you have a reservation?", kurdish: "ئایا حجزت هەیە؟" },
                         { speaker: "B", avatar: "🧔", english: "Yes, under the name Azad.", kurdish: "بەڵێ، بە ناوی ئازاد." },
                         { speaker: "A", avatar: "💁‍♂️", english: "Here is your key.", kurdish: "فەرموو کلیلەکەت." },
                         { speaker: "B", avatar: "🧔", english: "Thank you.", kurdish: "سوپاس." }
@@ -129,10 +129,10 @@ export const unit3: Unit = {
             }
         ],
         keyPhrases: [
-            { english: "I would like...", kurdish: "دەمەوێت... (بە ڕێزەوە)", pronunciation: "ئای ود لایک..." },
+            { english: "I would like...", kurdish: "دەمەوێت... (بە ڕێزەوە)", pronunciation: "ئای وود لایک..." },
             { english: "The bill, please", kurdish: "حیسابەکە، تکایە", pronunciation: "زە بیڵ، پلیز" },
-            { english: "Where is the airport?", kurdish: "فڕۆکەخانەکە لە کوێیە؟", pronunciation: "وێر ئیز زە ئێرپۆرت؟" },
-            { english: "My battery is dead", kurdish: "شەحنم نەماوە", pronunciation: "مای باتری ئیز دێد" },
+            { english: "Where is the airport?", kurdish: "فڕۆکەخانەکە لە کوێیە؟", pronunciation: "وێر ئز زە ئێرپۆرت؟" },
+            { english: "My battery is dead", kurdish: "شەحنم نەماوە", pronunciation: "مای باتری ئز دێد" },
             { english: "Happy Newroz!", kurdish: "نەورۆزتان پیرۆز!", pronunciation: "هاپی نەورۆز" },
             { english: "Can you help me?", kurdish: "دەتوانیت یارمەتیم بدەیت؟", pronunciation: "کان یو هێڵپ می؟" }
         ]
@@ -144,50 +144,56 @@ export const unit3: Unit = {
             icon: '🍽️',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Restaurant" in Kurdish?',
+                    question: "'چێشتخانە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'چێشتخانە', image: '🍽️', correct: true },
-                        { text: 'چایخانە', image: '☕', correct: false },
-                        { text: 'نانەواخانە', image: '🍞', correct: false },
-                        { text: 'خواردن', image: '🍴', correct: false }
+                        { id: 'opt1', text: 'Restaurant', image: '🍽️', correct: true },
+                        { id: 'opt2', text: 'Cafe', image: '☕', correct: false },
+                        { id: 'opt3', text: 'Bakery', image: '🍞', correct: false },
+                        { id: 'opt4', text: 'Food', image: '🍴', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
-                        { kurdish: 'خواردن', english: 'Food/Eating' },
-                        { kurdish: 'خواردنەوە', english: 'Drinking' },
+                        { kurdish: 'خواردن', english: 'Food' },
+                        { kurdish: 'خواردنەوە', english: 'Drink' },
                         { kurdish: 'تام', english: 'Taste' },
-                        { kurdish: 'برسی', english: 'Hunger' },
+                        { kurdish: 'برسییەتی', english: 'Hunger' },
                         { kurdish: 'تینوویەتی', english: 'Thirst' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I would like to order food"',
-                    sourceText: 'I would like to order food',
-                    correctSentence: ['من', 'دەمەوێت', 'خواردن', 'داوا', 'بکەم'],
-                    options: ['من', 'دەمەوێت', 'خواردن', 'داوا', 'بکەم', 'بخۆم', 'بکڕم']
+                    question: 'بە ئینگلیزی بنووسە: "دەمەوێت خواردن داوا بکەم"',
+                    sourceText: 'دەمەوێت خواردن داوا بکەم',
+                    correctSentence: ['I', 'would like', 'to order', 'food'],
+                    options: ['I', 'would like', 'to order', 'food', 'eat', 'buy', 'want']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "This food is very ___" (delicious)',
-                    sentenceParts: ['ئەم', 'خواردنە', 'زۆر', '___'],
-                    correctOption: 'تامدارە',
-                    options: ['تامدارە', 'گرانە', 'هەرزانە', 'گەرمە']
+                    question: 'Complete: "This food is very ___" (تامدار)',
+                    sentenceParts: ['This', 'food', 'is', 'very', '___'],
+                    correctOption: 'delicious',
+                    options: ['delicious', 'expensive', 'cheap', 'hot']
                 },
                 {
+                    id: 5,
                     type: 'vocabulary-grid',
-                    question: 'Match Kurdish dishes with their descriptions',
+                    question: 'Learn some popular international foods',
                     items: [
-                        { kurdish: 'دۆلمە', english: 'Stuffed vegetables', image: '🫑' },
-                        { kurdish: 'کوبە', english: 'Meat & bulgur balls', image: '🥙' },
-                        { kurdish: 'بریانی', english: 'Rice dish', image: '🍚' },
-                        { kurdish: 'کەباب', english: 'Grilled meat', image: '🍖' }
+                        { english: 'Burger', kurdish: 'بەرگر', image: '🍔' },
+                        { english: 'Pizza', kurdish: 'پیتزا', image: '🍕' },
+                        { english: 'Salad', kurdish: 'زەڵاتە', image: '🥗' },
+                        { english: 'Soup', kurdish: 'شۆربا', image: '🥣' }
                     ]
                 },
                 {
+                    id: 6,
                     type: 'roleplay-chat',
                     question: 'Order food at a restaurant in English!',
                     scenario: '🍽️ You are at a restaurant. The waiter is taking your order. Order your favorite dish in English!',
@@ -207,33 +213,37 @@ export const unit3: Unit = {
                     speechLang: 'en-US'
                 },
                 {
+                    id: 7,
                     type: 'conversation',
                     question: 'Complete the restaurant dialogue',
                     dialogue: [
                         { speaker: 'Waiter', text: 'Hello! What would you like to eat?' },
-                        { speaker: 'You', text: '___', options: ['I want kebab and biryani', 'I am fine', 'Thank you'] },
+                        { speaker: 'You', text: '___', options: ['I would like kebab and biryani', 'I am fine', 'Thank you'] },
                         { speaker: 'Waiter', text: 'Okay, what would you like to drink?' },
-                        { speaker: 'You', text: '___', options: ['I want ayran', 'No', 'Goodbye'] }
+                        { speaker: 'You', text: '___', options: ['I would like ayran', 'No', 'Goodbye'] }
                     ],
-                    correctOptions: ['I want kebab and biryani', 'I want ayran']
+                    correctOptions: ['I would like kebab and biryani', 'I would like ayran']
                 },
                 {
+                    id: 8,
                     type: 'typing',
-                    question: 'Type in Kurdish: "The bill, please"',
-                    correctAnswer: 'حیسابەکە تکایە',
-                    hints: ['حیساب', 'تکایە']
+                    question: 'بە ئینگلیزی بنووسە: "حیسابەکە تکایە"',
+                    correctAnswer: 'The bill please',
+                    hints: ['The', 'bill', 'please']
                 },
                 {
+                    id: 9,
                     type: 'multiple-choice',
-                    question: 'How do you say "Breakfast"?',
+                    question: "'نانی بەیانی' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'تایبەت', image: '🍳', correct: true },
-                        { text: 'نانی نیوەڕۆ', image: '🍱', correct: false },
-                        { text: 'شێوانە', image: '🍽️', correct: false },
-                        { text: 'خواردن', image: '🍴', correct: false }
+                        { id: 'opt1', text: 'Breakfast', image: '🍳', correct: true },
+                        { id: 'opt2', text: 'Lunch', image: '🍱', correct: false },
+                        { id: 'opt3', text: 'Dinner', image: '🍽️', correct: false },
+                        { id: 'opt4', text: 'Food', image: '🍴', correct: false }
                     ]
                 },
                 {
+                    id: 10,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'چای', english: 'Tea' },
@@ -244,20 +254,23 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 11,
                     type: 'sentence-builder',
-                    question: 'Translate: "I am vegetarian"',
-                    sourceText: 'I am vegetarian',
-                    correctSentence: ['من', 'ڕووەکخۆرم'],
-                    options: ['من', 'ڕووەکخۆرم', 'گۆشتخۆرم', 'برسیمە', 'تێرم']
+                    question: 'بە ئینگلیزی بنووسە: "من ڕووەکخۆرم"',
+                    sourceText: 'من ڕووەکخۆرم',
+                    correctSentence: ['I', 'am', 'vegetarian'],
+                    options: ['I', 'am', 'vegetarian', 'meat', 'hungry', 'full']
                 },
                 {
+                    id: 12,
                     type: 'fill-blank',
-                    question: 'Complete: "Do you have ___ food?" (spicy)',
-                    sentenceParts: ['ئایا', 'خواردنی', '___', 'تان', 'هەیە', '؟'],
-                    correctOption: 'تیژ',
-                    options: ['تیژ', 'شیرین', 'سوور', 'ترش']
+                    question: 'Complete: "Do you have ___ food?" (تیژ)',
+                    sentenceParts: ['Do', 'you', 'have', '___', 'food?'],
+                    correctOption: 'spicy',
+                    options: ['spicy', 'sweet', 'red', 'sour']
                 },
                 {
+                    id: 13,
                     type: 'cultural-note',
                     question: 'Learn about Kurdish tea culture',
                     content: 'In Kurdish culture, tea (چای) is served throughout the day and is a symbol of hospitality. It is typically served in small glasses with sugar cubes.',
@@ -268,22 +281,25 @@ export const unit3: Unit = {
                     }
                 },
                 {
+                    id: 14,
                     type: 'multiple-choice',
-                    question: 'What is "Bill" in Kurdish?',
+                    question: "'حیساب (ئەژمار)' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'حیساب (ئەژمار)', image: '🧾', correct: true },
-                        { text: 'پارە', image: '💵', correct: false },
-                        { text: 'مێز', image: '🪑', correct: false }
+                        { id: 'opt1', text: 'Bill', image: '🧾', correct: true },
+                        { id: 'opt2', text: 'Money', image: '💵', correct: false },
+                        { id: 'opt3', text: 'Table', image: '🪑', correct: false }
                     ]
                 },
                 {
+                    id: 15,
                     type: 'sentence-builder',
-                    question: 'Translate: "The tea is hot"',
-                    sourceText: 'The tea is hot',
-                    correctSentence: ['چایەکە', 'گەرمە'],
-                    options: ['چایەکە', 'گەرمە', 'ساردە', 'خۆشە']
+                    question: 'بە ئینگلیزی بنووسە: "چایەکە گەرمە"',
+                    sourceText: 'چایەکە گەرمە',
+                    correctSentence: ['The', 'tea', 'is', 'hot'],
+                    options: ['The', 'tea', 'is', 'hot', 'cold', 'good']
                 },
                 {
+                    id: 16,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'کەوچک', english: 'Spoon' },
@@ -300,65 +316,73 @@ export const unit3: Unit = {
             icon: '🎉',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Newroz" (Kurdish New Year)?',
+                    question: "'سەری ساڵی کوردی' چ جەژنێکە؟",
                     options: [
-                        { text: 'نەورۆز', image: '🔥', correct: true },
-                        { text: 'جەژن', image: '🎊', correct: false },
-                        { text: 'ئاهەنگ', image: '🎉', correct: false },
-                        { text: 'بایرام', image: '🎈', correct: false }
+                        { id: 'opt1', text: 'Newroz', image: '🔥', correct: true },
+                        { id: 'opt2', text: 'Festival', image: '🎊', correct: false },
+                        { id: 'opt3', text: 'Party', image: '🎉', correct: false },
+                        { id: 'opt4', text: 'Holiday', image: '🎈', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'نەورۆز', english: 'Kurdish New Year' },
-                        { kurdish: 'جەژن', english: 'Festival/Celebration' },
-                        { kurdish: 'ئاهەنگ', english: 'Party/Event' },
+                        { kurdish: 'جەژن', english: 'Festival' },
+                        { kurdish: 'ئاهەنگ', english: 'Party' },
                         { kurdish: 'ڕێز', english: 'Respect' },
                         { kurdish: 'نەریت', english: 'Tradition' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "Happy Newroz!"',
-                    sourceText: 'Happy Newroz!',
-                    correctSentence: ['نەورۆزتان', 'پیرۆز', 'بێت', '!'],
-                    options: ['نەورۆزتان', 'پیرۆز', 'بێت', '!', 'جەژنتان', 'خۆش']
+                    question: 'بە ئینگلیزی بنووسە: "نەورۆزتان پیرۆز بێت!"',
+                    sourceText: 'نەورۆزتان پیرۆز بێت!',
+                    correctSentence: ['Happy', 'Newroz!'],
+                    options: ['Happy', 'Newroz!', 'Good', 'Festival!']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "We celebrate ___ on March 21st"',
-                    sentenceParts: ['ئێمە', '___', 'لە', 'بیست', 'و', 'یەکی', 'ئازار', 'دەگێڕین'],
-                    correctOption: 'نەورۆز',
-                    options: ['نەورۆز', 'جەژن', 'ئاهەنگ', 'بایرام']
+                    question: 'Complete: "We celebrate Newroz on ___ 21st" (ئازار)',
+                    sentenceParts: ['We', 'celebrate', 'Newroz', 'on', '___', '21st'],
+                    correctOption: 'March',
+                    options: ['March', 'April', 'May', 'June']
                 },
                 {
+                    id: 5,
                     type: 'cultural-timeline',
                     question: 'Order these Kurdish celebrations chronologically',
                     events: [
-                        { name: 'نەورۆز', date: 'March 21', order: 1 },
-                        { name: 'ڕەمەزان', date: 'Variable', order: 2 },
-                        { name: 'جەژنی قوربان', date: 'Variable', order: 3 }
+                        { name: 'Newroz', date: 'March 21', order: 1 },
+                        { name: 'Ramadan', date: 'Variable', order: 2 },
+                        { name: 'Eid al-Adha', date: 'Variable', order: 3 }
                     ]
                 },
                 {
+                    id: 6,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Traditional dance"',
-                    correctAnswer: 'هەڵپەڕکێ',
-                    hints: ['هەڵپەڕکێ']
+                    question: 'بە ئینگلیزی بنووسە: "هەڵپەڕکێ"',
+                    correctAnswer: 'Traditional dance',
+                    hints: ['Traditional', 'dance']
                 },
                 {
+                    id: 7,
                     type: 'multiple-choice',
-                    question: 'What is "Wedding" in Kurdish?',
+                    question: "'زەماوەند' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'زەماوەند', image: '💒', correct: true },
-                        { text: 'جەژن', image: '🎉', correct: false },
-                        { text: 'ئاهەنگ', image: '🎊', correct: false },
-                        { text: 'خوازبێنی', image: '💍', correct: false }
+                        { id: 'opt1', text: 'Wedding', image: '💒', correct: true },
+                        { id: 'opt2', text: 'Festival', image: '🎉', correct: false },
+                        { id: 'opt3', text: 'Party', image: '🎊', correct: false },
+                        { id: 'opt4', text: 'Engagement', image: '💍', correct: false }
                     ]
                 },
                 {
+                    id: 8,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'زەماوەند', english: 'Wedding' },
@@ -368,37 +392,42 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 9,
                     type: 'sentence-builder',
-                    question: 'Translate: "I love Kurdish music"',
-                    sourceText: 'I love Kurdish music',
-                    correctSentence: ['من', 'مۆسیقای', 'کوردیم', 'خۆشدەوێت'],
-                    options: ['من', 'مۆسیقای', 'کوردیم', 'خۆشدەوێت', 'ڕقم', 'لێیە']
+                    question: 'بە ئینگلیزی بنووسە: "من مۆسیقای کوردیم خۆشدەوێت"',
+                    sourceText: 'من مۆسیقای کوردیم خۆشدەوێت',
+                    correctSentence: ['I', 'love', 'Kurdish', 'music'],
+                    options: ['I', 'love', 'Kurdish', 'music', 'hate', 'song']
                 },
                 {
+                    id: 10,
                     type: 'fill-blank',
-                    question: 'Complete: "Kurdish ___ is very colorful"',
-                    sentenceParts: ['جلوبەرگی', 'کوردی', 'زۆر', '___'],
-                    correctOption: 'ڕەنگاوڕەنگە',
-                    options: ['ڕەنگاوڕەنگە', 'ڕەشە', 'سپیە', 'گرانە']
+                    question: 'Complete: "Kurdish clothes are very ___" (ڕەنگاوڕەنگ)',
+                    sentenceParts: ['Kurdish', 'clothes', 'are', 'very', '___'],
+                    correctOption: 'colorful',
+                    options: ['colorful', 'black', 'white', 'expensive']
                 },
                 {
+                    id: 11,
                     type: 'image-match',
-                    question: 'Match Kurdish cultural items',
+                    question: 'Match Kurdish cultural items with English',
                     pairs: [
-                        { image: '🎵', kurdish: 'مۆسیقا' },
-                        { image: '💃', kurdish: 'هەڵپەڕکێ' },
-                        { image: '👗', kurdish: 'جلوبەرگ' },
-                        { image: '🔥', kurdish: 'ئاگر' }
+                        { image: '🎵', kurdish: 'Music' },
+                        { image: '💃', kurdish: 'Dance' },
+                        { image: '👗', kurdish: 'Clothes' },
+                        { image: '🔥', kurdish: 'Fire' }
                     ]
                 },
                 {
+                    id: 12,
                     type: 'story-completion',
                     question: 'Complete the Newroz story',
-                    story: 'نەورۆز جەژنی نوێیە لە کوردستان. خەڵکی کورد ___ دەسووتێنن و ___ دەکەن.',
-                    blanks: ['ئاگر', 'هەڵپەڕکێ'],
-                    options: ['ئاگر', 'ئاو', 'هەڵپەڕکێ', 'دەنگ']
+                    story: 'Newroz is the Kurdish New Year. Kurdish people light ___ and ___ together.',
+                    blanks: ['fire', 'dance'],
+                    options: ['fire', 'water', 'dance', 'sing']
                 },
                 {
+                    id: 13,
                     type: 'match-pairs',
                     question: 'Match traditional clothes',
                     pairs: [
@@ -409,19 +438,21 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 14,
                     type: 'fill-blank',
-                    question: 'Complete: "Newroz is in ___"',
-                    sentenceParts: ['نەورۆز', 'لە', 'وەرزی', '___', 'دایە'],
-                    correctOption: 'بەهار',
-                    options: ['بەهار', 'هاوین', 'زستان', 'پایز']
+                    question: 'Complete: "Newroz is in ___" (بەهار)',
+                    sentenceParts: ['Newroz', 'is', 'in', '___'],
+                    correctOption: 'Spring',
+                    options: ['Spring', 'Summer', 'Winter', 'Autumn']
                 },
                 {
+                    id: 15,
                     type: 'multiple-choice',
-                    question: 'What is "Picnic"?',
+                    question: "'سەیران' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'سەیران', image: '🌳', correct: true },
-                        { text: 'کار', image: '💼', correct: false },
-                        { text: 'خەو', image: '😴', correct: false }
+                        { id: 'opt1', text: 'Picnic', image: '🌳', correct: true },
+                        { id: 'opt2', text: 'Work', image: '💼', correct: false },
+                        { id: 'opt3', text: 'Sleep', image: '😴', correct: false }
                     ]
                 }
             ]
@@ -432,56 +463,63 @@ export const unit3: Unit = {
             icon: '💼',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Job/Work" in Kurdish?',
+                    question: "'کار' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'کار', image: '💼', correct: true },
-                        { text: 'قوتابخانە', image: '🏫', correct: false },
-                        { text: 'زانکۆ', image: '🎓', correct: false },
-                        { text: 'مامۆستا', image: '👨‍🏫', correct: false }
+                        { id: 'opt1', text: 'Job/Work', image: '💼', correct: true },
+                        { id: 'opt2', text: 'School', image: '🏫', correct: false },
+                        { id: 'opt3', text: 'University', image: '🎓', correct: false },
+                        { id: 'opt4', text: 'Teacher', image: '👨‍🏫', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'مامۆستا', english: 'Teacher' },
                         { kurdish: 'پزیشک', english: 'Doctor' },
                         { kurdish: 'ئەندازیار', english: 'Engineer' },
-                        { kurdish: 'وەکیل', english: 'Lawyer' },
+                        { kurdish: 'پارێزەر', english: 'Lawyer' },
                         { kurdish: 'نووسەر', english: 'Writer' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I work as a teacher"',
-                    sourceText: 'I work as a teacher',
-                    correctSentence: ['من', 'وەک', 'مامۆستا', 'کار', 'دەکەم'],
-                    options: ['من', 'وەک', 'مامۆستا', 'کار', 'دەکەم', 'پزیشک', 'قوتابیم']
+                    question: 'بە ئینگلیزی بنووسە: "من وەک مامۆستایەک کار دەکەم"',
+                    sourceText: 'من وەک مامۆستایەک کار دەکەم',
+                    correctSentence: ['I', 'work', 'as', 'a', 'teacher'],
+                    options: ['I', 'work', 'as', 'a', 'teacher', 'doctor', 'student']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "I study at the ___"',
-                    sentenceParts: ['من', 'لە', '___', 'دەخوێنم'],
-                    correctOption: 'زانکۆ',
-                    options: ['زانکۆ', 'قوتابخانە', 'کتێبخانە', 'دووکان']
+                    question: 'Complete: "I study at the ___" (زانکۆ)',
+                    sentenceParts: ['I', 'study', 'at', 'the', '___'],
+                    correctOption: 'university',
+                    options: ['university', 'school', 'library', 'shop']
                 },
                 {
+                    id: 5,
                     type: 'typing',
-                    question: 'Type in Kurdish: "University"',
-                    correctAnswer: 'زانکۆ',
-                    hints: ['زانکۆ']
+                    question: 'بە ئینگلیزی بنووسە: "زانکۆ"',
+                    correctAnswer: 'University',
+                    hints: ['University']
                 },
                 {
+                    id: 6,
                     type: 'multiple-choice',
-                    question: 'How do you say "Student"?',
+                    question: "'قوتابی' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'قوتابی', image: '👨‍🎓', correct: true },
-                        { text: 'مامۆستا', image: '👨‍🏫', correct: false },
-                        { text: 'کارمەند', image: '👔', correct: false },
-                        { text: 'کرێکار', image: '👷', correct: false }
+                        { id: 'opt1', text: 'Student', image: '👨‍🎓', correct: true },
+                        { id: 'opt2', text: 'Teacher', image: '👨‍🏫', correct: false },
+                        { id: 'opt3', text: 'Employee', image: '👔', correct: false },
+                        { id: 'opt4', text: 'Worker', image: '👷', correct: false }
                     ]
                 },
                 {
+                    id: 7,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'قوتابخانە', english: 'School' },
@@ -491,20 +529,23 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 8,
                     type: 'sentence-builder',
-                    question: 'Translate: "What is your profession?"',
-                    sourceText: 'What is your profession?',
-                    correctSentence: ['پیشەکەت', 'چییە', '؟'],
-                    options: ['پیشەکەت', 'چییە', '؟', 'ناوت', 'کوێیە', 'کەی']
+                    question: 'بە ئینگلیزی بنووسە: "پیشەکەت چییە؟"',
+                    sourceText: 'پیشەکەت چییە؟',
+                    correctSentence: ['What', 'is', 'your', 'profession?'],
+                    options: ['What', 'is', 'your', 'profession?', 'Where', 'name', 'When']
                 },
                 {
+                    id: 9,
                     type: 'fill-blank',
-                    question: 'Complete: "I have a ___ tomorrow"',
-                    sentenceParts: ['سبەی', '___', 'م', 'هەیە'],
-                    correctOption: 'تاقیکردنەوە',
-                    options: ['تاقیکردنەوە', 'کار', 'ئاهەنگ', 'سەردان']
+                    question: 'Complete: "I have an ___ tomorrow" (تاقیکردنەوە)',
+                    sentenceParts: ['I', 'have', 'an', '___', 'tomorrow'],
+                    correctOption: 'exam',
+                    options: ['exam', 'job', 'party', 'visit']
                 },
                 {
+                    id: 10,
                     type: 'roleplay-chat',
                     question: 'Answer job interview questions in English!',
                     scenario: '💼 You are in a job interview. The interviewer asks about your profession and experience. Answer professionally in English!',
@@ -523,6 +564,7 @@ export const unit3: Unit = {
                     speechLang: 'en-US'
                 },
                 {
+                    id: 11,
                     type: 'conversation',
                     question: 'Complete the job interview',
                     dialogue: [
@@ -534,6 +576,7 @@ export const unit3: Unit = {
                     correctOptions: ['I am an engineer', 'Five years']
                 },
                 {
+                    id: 12,
                     type: 'career-path',
                     question: 'Match education levels with Kurdish terms',
                     levels: [
@@ -544,35 +587,39 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 13,
                     type: 'multiple-choice',
-                    question: 'What does "مووچە" mean?',
+                    question: "'مووچە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'Salary', image: '💰', correct: true },
-                        { text: 'Work', image: '💼', correct: false },
-                        { text: 'Office', image: '🏢', correct: false },
-                        { text: 'Boss', image: '👔', correct: false }
+                        { id: 'opt1', text: 'Salary', image: '💰', correct: true },
+                        { id: 'opt2', text: 'Work', image: '💼', correct: false },
+                        { id: 'opt3', text: 'Office', image: '🏢', correct: false },
+                        { id: 'opt4', text: 'Boss', image: '👔', correct: false }
                     ]
                 },
                 {
+                    id: 14,
                     type: 'multiple-choice',
-                    question: 'What is "Office"?',
+                    question: "'نووسینگە (ئۆفیس)' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'نووسینگە', image: '🏢', correct: true },
-                        { text: 'ماڵ', image: '🏠', correct: false },
-                        { text: 'چێشتخانە', image: '🍽️', correct: false }
+                        { id: 'opt1', text: 'Office', image: '🏢', correct: true },
+                        { id: 'opt2', text: 'House', image: '🏠', correct: false },
+                        { id: 'opt3', text: 'Restaurant', image: '🍽️', correct: false }
                     ]
                 },
                 {
+                    id: 15,
                     type: 'sentence-builder',
-                    question: 'Translate: "I go to work"',
-                    sourceText: 'I go to work',
-                    correctSentence: ['من', 'دەچم', 'بۆ', 'سەر', 'کار'],
-                    options: ['من', 'دەچم', 'بۆ', 'سەر', 'کار', 'ماڵ', 'خەو']
+                    question: 'بە ئینگلیزی بنووسە: "من دەچم بۆ سەر کار"',
+                    sourceText: 'من دەچم بۆ سەر کار',
+                    correctSentence: ['I', 'go', 'to', 'work'],
+                    options: ['I', 'go', 'to', 'work', 'home', 'sleep']
                 },
                 {
+                    id: 16,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
-                        { kurdish: 'بەڕێوبەر', english: 'Manager' },
+                        { kurdish: 'بەڕێوەبەر', english: 'Manager' },
                         { kurdish: 'هاوکار', english: 'Colleague' },
                         { kurdish: 'کۆبوونەوە', english: 'Meeting' },
                         { kurdish: 'پشوودان', english: 'Break' }
@@ -586,56 +633,63 @@ export const unit3: Unit = {
             icon: '✈️',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Airplane" in Kurdish?',
+                    question: "'فڕۆکە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'فڕۆکە', image: '✈️', correct: true },
-                        { text: 'ئۆتۆمبێل', image: '🚗', correct: false },
-                        { text: 'پاس', image: '🚌', correct: false },
-                        { text: 'شەمەندەفەر', image: '🚂', correct: false }
+                        { id: 'opt1', text: 'Airplane', image: '✈️', correct: true },
+                        { id: 'opt2', text: 'Car', image: '🚗', correct: false },
+                        { id: 'opt3', text: 'Bus', image: '🚌', correct: false },
+                        { id: 'opt4', text: 'Train', image: '🚂', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'فڕۆکە', english: 'Airplane' },
                         { kurdish: 'ئۆتۆمبێل', english: 'Car' },
                         { kurdish: 'پاس', english: 'Bus' },
                         { kurdish: 'تاکسی', english: 'Taxi' },
-                        { kurdish: 'پاسکێل', english: 'Bicycle' }
+                        { kurdish: 'پاسکیل', english: 'Bicycle' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I want to book a ticket"',
-                    sourceText: 'I want to book a ticket',
-                    correctSentence: ['من', 'دەمەوێت', 'بلیتێک', 'حجز', 'بکەم'],
-                    options: ['من', 'دەمەوێت', 'بلیتێک', 'حجز', 'بکەم', 'بکڕم', 'ببینم']
+                    question: 'بە ئینگلیزی بنووسە: "دەمەوێت بلیتێک حجز بکەم"',
+                    sourceText: 'دەمەوێت بلیتێک حجز بکەم',
+                    correctSentence: ['I', 'want', 'to book', 'a ticket'],
+                    options: ['I', 'want', 'to book', 'a ticket', 'to buy', 'to see']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "The train arrives at ___"',
-                    sentenceParts: ['شەمەندەفەر', 'لە', 'کاتژمێر', '___', 'دەگاتە'],
-                    correctOption: 'حەوت',
-                    options: ['حەوت', 'شەش', 'هەشت', 'نۆ']
+                    question: 'Complete: "The train arrives at ___" (حەوت)',
+                    sentenceParts: ['The', 'train', 'arrives', 'at', '___'],
+                    correctOption: 'seven',
+                    options: ['seven', 'six', 'eight', 'nine']
                 },
                 {
+                    id: 5,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Airport"',
-                    correctAnswer: 'فڕۆکەخانە',
-                    hints: ['فڕۆکەخانە']
+                    question: 'بە ئینگلیزی بنووسە: "فڕۆکەخانە"',
+                    correctAnswer: 'Airport',
+                    hints: ['Airport']
                 },
                 {
+                    id: 6,
                     type: 'multiple-choice',
-                    question: 'How do you say "Hotel"?',
+                    question: "'ئوتێل (میوانخانە)' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'ئوتێل', image: '🏨', correct: true },
-                        { text: 'ماڵ', image: '🏠', correct: false },
-                        { text: 'چێشتخانە', image: '🍽️', correct: false },
-                        { text: 'دووکان', image: '🏪', correct: false }
+                        { id: 'opt1', text: 'Hotel', image: '🏨', correct: true },
+                        { id: 'opt2', text: 'House', image: '🏠', correct: false },
+                        { id: 'opt3', text: 'Restaurant', image: '🍽️', correct: false },
+                        { id: 'opt4', text: 'Shop', image: '🏪', correct: false }
                     ]
                 },
                 {
+                    id: 7,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'فڕۆکەخانە', english: 'Airport' },
@@ -645,20 +699,23 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 8,
                     type: 'sentence-builder',
-                    question: 'Translate: "Where is the bus station?"',
-                    sourceText: 'Where is the bus station?',
-                    correctSentence: ['وێستگەی', 'پاس', 'لە', 'کوێیە', '؟'],
-                    options: ['وێستگەی', 'پاس', 'لە', 'کوێیە', '؟', 'فڕۆکەخانە', 'کەی']
+                    question: 'بە ئینگلیزی بنووسە: "وێستگەی پاس لە کوێیە؟"',
+                    sourceText: 'وێستگەی پاس لە کوێیە؟',
+                    correctSentence: ['Where', 'is', 'the', 'bus station?'],
+                    options: ['Where', 'is', 'the', 'bus station?', 'Airport', 'When']
                 },
                 {
+                    id: 9,
                     type: 'fill-blank',
-                    question: 'Complete: "I need to check in at the ___"',
-                    sentenceParts: ['پێویستە', 'لە', '___', 'تۆمار', 'بکەم'],
-                    correctOption: 'ئوتێل',
-                    options: ['ئوتێل', 'فڕۆکەخانە', 'وێستگە', 'دووکان']
+                    question: 'Complete: "I need to check in at the ___" (ئوتێل)',
+                    sentenceParts: ['I', 'need', 'to', 'check in', 'at the', '___'],
+                    correctOption: 'hotel',
+                    options: ['hotel', 'airport', 'station', 'shop']
                 },
                 {
+                    id: 10,
                     type: 'roleplay-chat',
                     question: 'Check into your hotel in English!',
                     scenario: '🏨 You have arrived at a hotel. Talk to the receptionist to check in!',
@@ -677,6 +734,7 @@ export const unit3: Unit = {
                     speechLang: 'en-US'
                 },
                 {
+                    id: 11,
                     type: 'conversation',
                     question: 'Complete the hotel check-in',
                     dialogue: [
@@ -688,16 +746,18 @@ export const unit3: Unit = {
                     correctOptions: ['I have a reservation', 'My name is Ahmed']
                 },
                 {
+                    id: 12,
                     type: 'route-planner',
                     question: 'Plan your journey',
-                    start: 'ماڵ',
-                    destination: 'فڕۆکەخانە',
+                    start: 'Home',
+                    destination: 'Airport',
                     steps: [
-                        { transport: 'تاکسی', duration: '15 خولەک' },
-                        { transport: 'فڕۆکە', duration: '2 کاتژمێر' }
+                        { transport: 'Taxi', duration: '15 mins' },
+                        { transport: 'Airplane', duration: '2 hours' }
                     ]
                 },
                 {
+                    id: 13,
                     type: 'emergency-phrases',
                     question: 'Learn important travel phrases',
                     phrases: [
@@ -706,12 +766,13 @@ export const unit3: Unit = {
                         { kurdish: 'پۆلیس بانگ بکە', english: 'Call the police', situation: 'Emergency' }
                     ],
                     quiz: {
-                        question: 'How do you say "I am lost"?',
-                        options: ['ونم بووە', 'یارمەتیم بدە', 'باشم'],
-                        correct: 'ونم بووە'
+                        question: 'How do you say "ونم بووە"?',
+                        options: ['I am lost', 'Help me', 'I am fine'],
+                        correct: 'I am lost'
                     }
                 },
                 {
+                    id: 14,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'فڕین', english: 'To Fly' },
@@ -721,19 +782,21 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 15,
                     type: 'fill-blank',
-                    question: 'Complete: "The plane is ___"',
-                    sentenceParts: ['فڕۆکەکە', '___'],
-                    correctOption: 'خێرایە',
-                    options: ['خێرایە', 'هێواشە', 'بچووکە']
+                    question: 'Complete: "The plane is ___" (خێرا)',
+                    sentenceParts: ['The', 'plane', 'is', '___'],
+                    correctOption: 'fast',
+                    options: ['fast', 'slow', 'small']
                 },
                 {
+                    id: 16,
                     type: 'multiple-choice',
-                    question: 'What is "Ticket"?',
+                    question: "'بلیت' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'بلیت', image: '🎫', correct: true },
-                        { text: 'پاسپۆرت', image: '🛂', correct: false },
-                        { text: 'جانتا', image: '🎒', correct: false }
+                        { id: 'opt1', text: 'Ticket', image: '🎫', correct: true },
+                        { id: 'opt2', text: 'Passport', image: '🛂', correct: false },
+                        { id: 'opt3', text: 'Bag', image: '🎒', correct: false }
                     ]
                 }
             ]
@@ -744,56 +807,63 @@ export const unit3: Unit = {
             icon: '📱',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Mobile Phone" in Kurdish?',
+                    question: "'مۆبایل' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'مۆبایل', image: '📱', correct: true },
-                        { text: 'کۆمپیوتەر', image: '💻', correct: false },
-                        { text: 'تەلەفزیۆن', image: '📺', correct: false },
-                        { text: 'ئینتەرنێت', image: '🌐', correct: false }
+                        { id: 'opt1', text: 'Mobile Phone', image: '📱', correct: true },
+                        { id: 'opt2', text: 'Computer', image: '💻', correct: false },
+                        { id: 'opt3', text: 'Television', image: '📺', correct: false },
+                        { id: 'opt4', text: 'Internet', image: '🌐', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'مۆبایل', english: 'Mobile Phone' },
                         { kurdish: 'کۆمپیوتەر', english: 'Computer' },
                         { kurdish: 'ئینتەرنێت', english: 'Internet' },
                         { kurdish: 'ئیمەیل', english: 'Email' },
-                        { kurdish: 'وێبسایت', english: 'Website' }
+                        { kurdish: 'ماڵپەڕ (وێبسایت)', english: 'Website' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I use social media every day"',
-                    sourceText: 'I use social media every day',
-                    correctSentence: ['من', 'هەموو', 'ڕۆژێک', 'سۆشیال', 'میدیا', 'بەکاردەهێنم'],
-                    options: ['من', 'هەموو', 'ڕۆژێک', 'سۆشیال', 'میدیا', 'بەکاردەهێنم', 'دەبینم', 'دەکڕم']
+                    question: 'بە ئینگلیزی بنووسە: "من هەموو ڕۆژێک سۆشیال میدیا بەکاردەهێنم"',
+                    sourceText: 'من هەموو ڕۆژێک سۆشیال میدیا بەکاردەهێنم',
+                    correctSentence: ['I', 'use', 'social', 'media', 'every day'],
+                    options: ['I', 'use', 'social', 'media', 'every day', 'see', 'buy']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "Can you send me the ___?" (link)',
-                    sentenceParts: ['دەتوانیت', '___', 'بۆ', 'بنێریت', '؟'],
-                    correctOption: 'لینک',
-                    options: ['لینک', 'ئیمەیل', 'مۆبایل', 'ناو']
+                    question: 'Complete: "Can you send me the ___?" (بەستەر/لینک)',
+                    sentenceParts: ['Can', 'you', 'send', 'me', 'the', '___?'],
+                    correctOption: 'link',
+                    options: ['link', 'email', 'mobile', 'name']
                 },
                 {
+                    id: 5,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Password"',
-                    correctAnswer: 'وشەی نهێنی',
-                    hints: ['وشەی', 'نهێنی']
+                    question: 'بە ئینگلیزی بنووسە: "وشەی نهێنی"',
+                    correctAnswer: 'Password',
+                    hints: ['Password']
                 },
                 {
+                    id: 6,
                     type: 'multiple-choice',
-                    question: 'How do you say "Download"?',
+                    question: "'داگرتن' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'داگرتن', image: '⬇️', correct: true },
-                        { text: 'بارکردن', image: '⬆️', correct: false },
-                        { text: 'سڕینەوە', image: '🗑️', correct: false },
-                        { text: 'کردنەوە', image: '📂', correct: false }
+                        { id: 'opt1', text: 'Download', image: '⬇️', correct: true },
+                        { id: 'opt2', text: 'Upload', image: '⬆️', correct: false },
+                        { id: 'opt3', text: 'Delete', image: '🗑️', correct: false },
+                        { id: 'opt4', text: 'Open', image: '📂', correct: false }
                     ]
                 },
                 {
+                    id: 7,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'داگرتن', english: 'Download' },
@@ -803,39 +873,44 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 8,
                     type: 'sentence-builder',
-                    question: 'Translate: "My phone battery is dead"',
-                    sourceText: 'My phone battery is dead',
-                    correctSentence: ['باتریی', 'مۆبایلەکەم', 'تەواوبووە'],
-                    options: ['باتریی', 'مۆبایلەکەم', 'تەواوبووە', 'پڕە', 'نوێیە', 'کۆنە']
+                    question: 'بە ئینگلیزی بنووسە: "شەحنی مۆبایلەکەم نەماوە"',
+                    sourceText: 'باتریی مۆبایلەکەم تەواوبووە',
+                    correctSentence: ['My', 'phone', 'battery', 'is', 'dead'],
+                    options: ['My', 'phone', 'battery', 'is', 'dead', 'full', 'new', 'old']
                 },
                 {
+                    id: 9,
                     type: 'fill-blank',
-                    question: 'Complete: "I need to charge my ___"',
-                    sentenceParts: ['پێویستە', '___', 'م', 'چارج', 'بکەم'],
-                    correctOption: 'مۆبایل',
-                    options: ['مۆبایل', 'کۆمپیوتەر', 'کارت', 'کتێب']
+                    question: 'Complete: "I need to charge my ___" (مۆبایل)',
+                    sentenceParts: ['I', 'need', 'to', 'charge', 'my', '___'],
+                    correctOption: 'phone',
+                    options: ['phone', 'computer', 'card', 'book']
                 },
                 {
+                    id: 10,
                     type: 'app-vocabulary',
-                    question: 'Match apps with their Kurdish names',
+                    question: 'Match apps with their English names',
                     apps: [
                         { icon: '💬', english: 'WhatsApp', kurdish: 'واتساپ' },
                         { icon: '📘', english: 'Facebook', kurdish: 'فەیسبووک' },
                         { icon: '📷', english: 'Instagram', kurdish: 'ئینستاگرام' },
-                        { icon: '🐦', english: 'Twitter', kurdish: 'تویتەر' }
+                        { icon: '🐦', english: 'X (Twitter)', kurdish: 'ئێکس (تویتەر)' }
                     ]
                 },
                 {
+                    id: 11,
                     type: 'tech-troubleshooting',
                     question: 'Match problems with solutions',
                     problems: [
-                        { issue: 'ئینتەرنێت کار ناکات', solution: 'WiFi چەک بکە' },
-                        { issue: 'باتری تەواوە', solution: 'چارجی بکە' },
-                        { issue: 'وشەی نهێنیم لەبیرکردووە', solution: 'Reset بکە' }
+                        { issue: 'Internet is not working', solution: 'Check WiFi' },
+                        { issue: 'Battery is dead', solution: 'Charge it' },
+                        { issue: 'Forgot password', solution: 'Reset it' }
                     ]
                 },
                 {
+                    id: 12,
                     type: 'conversation',
                     question: 'Complete the tech support dialogue',
                     dialogue: [
@@ -847,21 +922,24 @@ export const unit3: Unit = {
                     correctOptions: ['My internet is not working', 'Yes, but it is not working']
                 },
                 {
+                    id: 13,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Screen"',
-                    correctAnswer: 'شاشە',
-                    hints: ['شاشە']
+                    question: 'بە ئینگلیزی بنووسە: "شاشە"',
+                    correctAnswer: 'Screen',
+                    hints: ['Screen']
                 },
                 {
+                    id: 14,
                     type: 'multiple-choice',
-                    question: 'What is "Battery"?',
+                    question: "'پاتری' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'پاتری', image: '🔋', correct: true },
-                        { text: 'مۆبایل', image: '📱', correct: false },
-                        { text: 'وایفای', image: '📶', correct: false }
+                        { id: 'opt1', text: 'Battery', image: '🔋', correct: true },
+                        { id: 'opt2', text: 'Phone', image: '📱', correct: false },
+                        { id: 'opt3', text: 'WiFi', image: '📶', correct: false }
                     ]
                 },
                 {
+                    id: 15,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'نامە', english: 'Message' },
@@ -878,15 +956,17 @@ export const unit3: Unit = {
             icon: '🧍',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Head" in Kurdish?',
+                    question: "'سەر' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'سەر', image: '🧠', correct: true },
-                        { text: 'دەست', image: '🤚', correct: false },
-                        { text: 'پێ', image: '🦶', correct: false }
+                        { id: 'opt1', text: 'Head', image: '🧠', correct: true },
+                        { id: 'opt2', text: 'Hand', image: '🤚', correct: false },
+                        { id: 'opt3', text: 'Foot', image: '🦶', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'سەر', english: 'Head' },
@@ -896,29 +976,33 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I have brown eyes"',
-                    sourceText: 'I have brown eyes',
-                    correctSentence: ['چاوم', 'قاوەیییە'],
-                    options: ['چاوم', 'قاوەیییە', 'سەوزە', 'شینە', 'سەرم']
+                    question: 'بە ئینگلیزی بنووسە: "چاوم قاوەییە"',
+                    sourceText: 'چاوم قاوەییە',
+                    correctSentence: ['I', 'have', 'brown', 'eyes'],
+                    options: ['I', 'have', 'brown', 'eyes', 'green', 'blue', 'head']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "She has long ___" (hair)',
-                    sentenceParts: ['قژی', '___', 'یە'],
-                    correctOption: 'درێژ',
-                    options: ['درێژ', 'کورت', 'ڕەش', 'سوور']
+                    question: 'Complete: "She has long ___" (قژ)',
+                    sentenceParts: ['She', 'has', 'long', '___'],
+                    correctOption: 'hair',
+                    options: ['hair', 'short', 'black', 'red']
                 },
                 {
+                    id: 5,
                     type: 'multiple-choice',
-                    question: 'How do you say "Tall"?',
+                    question: "'بەرز (باڵا)' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'بەرز', image: '📏', correct: true },
-                        { text: 'کورت', image: '📐', correct: false },
-                        { text: 'قەڵەو', image: '🔵', correct: false }
+                        { id: 'opt1', text: 'Tall', image: '📏', correct: true },
+                        { id: 'opt2', text: 'Short', image: '📐', correct: false },
+                        { id: 'opt3', text: 'Fat', image: '🔵', correct: false }
                     ]
                 },
                 {
+                    id: 6,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'قژ', english: 'Hair' },
@@ -928,32 +1012,36 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 7,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Shoulder"',
-                    correctAnswer: 'شان',
-                    hints: ['شان']
+                    question: 'بە ئینگلیزی بنووسە: "شان"',
+                    correctAnswer: 'Shoulder',
+                    hints: ['Shoulder']
                 },
                 {
+                    id: 8,
                     type: 'fill-blank',
-                    question: 'Complete: "He is ___ and strong" (tall)',
-                    sentenceParts: ['ئەو', '___', 'و', 'بەهێزە'],
-                    correctOption: 'بەرز',
-                    options: ['بەرز', 'کورت', 'لاواز', 'پیر']
+                    question: 'Complete: "He is ___ and strong" (بەرز)',
+                    sentenceParts: ['He', 'is', '___', 'and', 'strong'],
+                    correctOption: 'tall',
+                    options: ['tall', 'short', 'weak', 'old']
                 },
                 {
+                    id: 9,
                     type: 'sentence-builder',
-                    question: 'Translate: "My hand hurts"',
-                    sourceText: 'My hand hurts',
-                    correctSentence: ['دەستم', 'ئێشێت'],
-                    options: ['دەستم', 'ئێشێت', 'سەرم', 'باشە', 'پێم']
+                    question: 'بە ئینگلیزی بنووسە: "دەستم دەئێشێت"',
+                    sourceText: 'دەستم دەئێشێت',
+                    correctSentence: ['My', 'hand', 'hurts'],
+                    options: ['My', 'hand', 'hurts', 'head', 'fine', 'foot']
                 },
                 {
+                    id: 10,
                     type: 'multiple-choice',
-                    question: 'What is "Knee" in Kurdish?',
+                    question: "'ئەژنۆ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'ئەژنۆ', image: '🦵', correct: true },
-                        { text: 'پێ', image: '🦶', correct: false },
-                        { text: 'مل', image: '🧣', correct: false }
+                        { id: 'opt1', text: 'Knee', image: '🦵', correct: true },
+                        { id: 'opt2', text: 'Foot', image: '🦶', correct: false },
+                        { id: 'opt3', text: 'Neck', image: '🧣', correct: false }
                     ]
                 }
             ]
@@ -964,15 +1052,17 @@ export const unit3: Unit = {
             icon: '🏔️',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Mountain" in Kurdish?',
+                    question: "'چیا' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'چیا', image: '🏔️', correct: true },
-                        { text: 'دەریا', image: '🌊', correct: false },
-                        { text: 'دار', image: '🌳', correct: false }
+                        { id: 'opt1', text: 'Mountain', image: '🏔️', correct: true },
+                        { id: 'opt2', text: 'Sea', image: '🌊', correct: false },
+                        { id: 'opt3', text: 'Tree', image: '🌳', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'چیا', english: 'Mountain' },
@@ -982,64 +1072,72 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "The mountain is very high"',
-                    sourceText: 'The mountain is very high',
-                    correctSentence: ['چیاکە', 'زۆر', 'بەرزە'],
-                    options: ['چیاکە', 'زۆر', 'بەرزە', 'نزمە', 'گەورەیە', 'ڕووبارەکە']
+                    question: 'بە ئینگلیزی بنووسە: "چیاکە زۆر بەرزە"',
+                    sourceText: 'چیاکە زۆر بەرزە',
+                    correctSentence: ['The', 'mountain', 'is', 'very', 'high'],
+                    options: ['The', 'mountain', 'is', 'very', 'high', 'low', 'big', 'river']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "There are many ___ in Kurdistan" (trees)',
-                    sentenceParts: ['لە', 'کوردستان', 'زۆر', '___', 'هەیە'],
-                    correctOption: 'دار',
-                    options: ['دار', 'چیا', 'دەریا', 'ئاسمان']
+                    question: 'Complete: "There are many ___ in Kurdistan" (دار)',
+                    sentenceParts: ['There', 'are', 'many', '___', 'in', 'Kurdistan'],
+                    correctOption: 'trees',
+                    options: ['trees', 'mountains', 'seas', 'skies']
                 },
                 {
+                    id: 5,
                     type: 'multiple-choice',
-                    question: 'How do you say "Sky"?',
+                    question: "'ئاسمان' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'ئاسمان', image: '🌤️', correct: true },
-                        { text: 'زەمین', image: '🌍', correct: false },
-                        { text: 'دەریا', image: '🌊', correct: false }
+                        { id: 'opt1', text: 'Sky', image: '🌤️', correct: true },
+                        { id: 'opt2', text: 'Earth', image: '🌍', correct: false },
+                        { id: 'opt3', text: 'Sea', image: '🌊', correct: false }
                     ]
                 },
                 {
+                    id: 6,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'ئاسمان', english: 'Sky' },
-                        { kurdish: 'هەتاو', english: 'Sun' },
+                        { kurdish: 'خۆر', english: 'Sun' },
                         { kurdish: 'مانگ', english: 'Moon' },
-                        { kurdish: 'ستێرە', english: 'Star' }
+                        { kurdish: 'ئەستێرە', english: 'Star' }
                     ]
                 },
                 {
+                    id: 7,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Forest"',
-                    correctAnswer: 'دارستان',
-                    hints: ['دارستان']
+                    question: 'بە ئینگلیزی بنووسە: "دارستان"',
+                    correctAnswer: 'Forest',
+                    hints: ['Forest']
                 },
                 {
+                    id: 8,
                     type: 'fill-blank',
-                    question: 'Complete: "The ___ is beautiful at night" (sky)',
-                    sentenceParts: ['___', 'لە', 'شەوان', 'جوانە'],
-                    correctOption: 'ئاسمان',
-                    options: ['ئاسمان', 'زەمین', 'دەریا', 'چیا']
+                    question: 'Complete: "The ___ is beautiful at night" (ئاسمان)',
+                    sentenceParts: ['The', '___', 'is', 'beautiful', 'at', 'night'],
+                    correctOption: 'sky',
+                    options: ['sky', 'earth', 'sea', 'mountain']
                 },
                 {
+                    id: 9,
                     type: 'sentence-builder',
-                    question: 'Translate: "I love nature"',
-                    sourceText: 'I love nature',
-                    correctSentence: ['من', 'سروشتم', 'خۆشدەوێت'],
-                    options: ['من', 'سروشتم', 'خۆشدەوێت', 'ڕقم', 'لێیە', 'چیام']
+                    question: 'بە ئینگلیزی بنووسە: "من سروشتم خۆشدەوێت"',
+                    sourceText: 'من سروشتم خۆشدەوێت',
+                    correctSentence: ['I', 'love', 'nature'],
+                    options: ['I', 'love', 'nature', 'hate', 'mountain']
                 },
                 {
+                    id: 10,
                     type: 'multiple-choice',
-                    question: 'What is "Flower" in Kurdish?',
+                    question: "'گوڵ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'گوڵ', image: '🌺', correct: true },
-                        { text: 'دار', image: '🌳', correct: false },
-                        { text: 'بەرد', image: '🪨', correct: false }
+                        { id: 'opt1', text: 'Flower', image: '🌺', correct: true },
+                        { id: 'opt2', text: 'Tree', image: '🌳', correct: false },
+                        { id: 'opt3', text: 'Rock', image: '🪨', correct: false }
                     ]
                 }
             ]
@@ -1050,82 +1148,92 @@ export const unit3: Unit = {
             icon: '💬',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Message" in Kurdish?',
+                    question: "'پەیام / نامە' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'پەیام', image: '💬', correct: true },
-                        { text: 'ئیمەیل', image: '📧', correct: false },
-                        { text: 'ناو', image: '📛', correct: false }
+                        { id: 'opt1', text: 'Message', image: '💬', correct: true },
+                        { id: 'opt2', text: 'Email', image: '📧', correct: false },
+                        { id: 'opt3', text: 'Name', image: '📛', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'پەیام', english: 'Message' },
                         { kurdish: 'پۆست', english: 'Post' },
                         { kurdish: 'لایک', english: 'Like' },
-                        { kurdish: 'شێر', english: 'Share' }
+                        { kurdish: 'شێر (هاوبەشپێکردن)', english: 'Share' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "Send me a message"',
-                    sourceText: 'Send me a message',
-                    correctSentence: ['پەیامێکم', 'بۆ', 'بنێرە'],
-                    options: ['پەیامێکم', 'بۆ', 'بنێرە', 'بنووسە', 'بخوێنەوە', 'لایک']
+                    question: 'بە ئینگلیزی بنووسە: "نامەیەکم بۆ بنێرە"',
+                    sourceText: 'نامەیەکم بۆ بنێرە',
+                    correctSentence: ['Send', 'me', 'a', 'message'],
+                    options: ['Send', 'me', 'a', 'message', 'write', 'read', 'like']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "I will ___ your photo" (like)',
-                    sentenceParts: ['من', 'وێنەکەت', '___', 'دەکەم'],
-                    correctOption: 'لایک',
-                    options: ['لایک', 'شێر', 'سڕین', 'بلۆک']
+                    question: 'Complete: "I will ___ your photo" (لایک)',
+                    sentenceParts: ['I', 'will', '___', 'your', 'photo'],
+                    correctOption: 'like',
+                    options: ['like', 'share', 'delete', 'block']
                 },
                 {
+                    id: 5,
                     type: 'multiple-choice',
-                    question: 'How do you say "Phone call"?',
+                    question: "'پەیوەندی تەلەفۆنی' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'پەیوەندی تەلەفۆنی', image: '📞', correct: true },
-                        { text: 'پەیام', image: '💬', correct: false },
-                        { text: 'ئیمەیل', image: '📧', correct: false }
+                        { id: 'opt1', text: 'Phone call', image: '📞', correct: true },
+                        { id: 'opt2', text: 'Message', image: '💬', correct: false },
+                        { id: 'opt3', text: 'Email', image: '📧', correct: false }
                     ]
                 },
                 {
+                    id: 6,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'فۆڵۆکردن', english: 'Follow' },
                         { kurdish: 'بلۆککردن', english: 'Block' },
                         { kurdish: 'کۆمێنت', english: 'Comment' },
-                        { kurdish: 'پرۆفایل', english: 'Profile' }
+                        { kurdish: 'پڕۆفایل', english: 'Profile' }
                     ]
                 },
                 {
+                    id: 7,
                     type: 'typing',
-                    question: 'Type in Kurdish: "Video call"',
-                    correctAnswer: 'ڤیدیۆ کۆڵ',
-                    hints: ['ڤیدیۆ', 'کۆڵ']
+                    question: 'بە ئینگلیزی بنووسە: "ڤیدیۆ کۆڵ"',
+                    correctAnswer: 'Video call',
+                    hints: ['Video', 'call']
                 },
                 {
+                    id: 8,
                     type: 'fill-blank',
-                    question: 'Complete: "I ___ you on Instagram" (followed)',
-                    sentenceParts: ['من', 'لەسەر', 'ئینستاگرام', '___', 'م', 'کردیت'],
-                    correctOption: 'فۆڵۆ',
-                    options: ['فۆڵۆ', 'بلۆک', 'لایک', 'شێر']
+                    question: 'Complete: "I ___ you on Instagram" (فۆڵۆ)',
+                    sentenceParts: ['I', '___', 'you', 'on', 'Instagram'],
+                    correctOption: 'followed',
+                    options: ['followed', 'blocked', 'liked', 'shared']
                 },
                 {
+                    id: 9,
                     type: 'sentence-builder',
-                    question: 'Translate: "Check your notification"',
-                    sourceText: 'Check your notification',
-                    correctSentence: ['ئاگاداریەکانت', 'بپشکنە'],
-                    options: ['ئاگاداریەکانت', 'بپشکنە', 'بنووسە', 'بخوێنەوە', 'پەیامەکانت']
+                    question: 'بە ئینگلیزی بنووسە: "ئاگادارییەکانت (نۆتیفیکەیشنت) بپشکنە"',
+                    sourceText: 'ئاگادارییەکانت بپشکنە',
+                    correctSentence: ['Check', 'your', 'notification'],
+                    options: ['Check', 'your', 'notification', 'write', 'read', 'messages']
                 },
                 {
+                    id: 10,
                     type: 'multiple-choice',
-                    question: 'What is "Group chat" in Kurdish?',
+                    question: "'گروپی گفتوگۆ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'گروپی گفتوگۆ', image: '👥', correct: true },
-                        { text: 'پەیامی تایبەت', image: '🔒', correct: false },
-                        { text: 'ستۆری', image: '📸', correct: false }
+                        { id: 'opt1', text: 'Group chat', image: '👥', correct: true },
+                        { id: 'opt2', text: 'Private message', image: '🔒', correct: false },
+                        { id: 'opt3', text: 'Story', image: '📸', correct: false }
                     ]
                 }
             ]
@@ -1136,15 +1244,17 @@ export const unit3: Unit = {
             icon: '⚽',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Football" in Kurdish?',
+                    question: "'تۆپی پێ' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'تۆپی پێ', image: '⚽', correct: true },
-                        { text: 'باسکێتبۆڵ', image: '🏀', correct: false },
-                        { text: 'تەنیس', image: '🎾', correct: false }
+                        { id: 'opt1', text: 'Football', image: '⚽', correct: true },
+                        { id: 'opt2', text: 'Basketball', image: '🏀', correct: false },
+                        { id: 'opt3', text: 'Tennis', image: '🎾', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'تۆپی پێ', english: 'Football' },
@@ -1154,26 +1264,29 @@ export const unit3: Unit = {
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I like playing football"',
-                    sourceText: 'I like playing football',
-                    correctSentence: ['من', 'حەز', 'لە', 'تۆپی', 'پێ', 'یاریکردن', 'دەکەم'],
-                    options: ['من', 'حەز', 'لە', 'تۆپی', 'پێ', 'یاریکردن', 'دەکەم', 'بینین', 'خوێندنەوە']
+                    question: 'بە ئینگلیزی بنووسە: "من حەزم لە یاری تۆپی پێیە"',
+                    sourceText: 'من حەزم لە یاری تۆپی پێیە',
+                    correctSentence: ['I', 'like', 'playing', 'football'],
+                    options: ['I', 'like', 'playing', 'football', 'watching', 'reading']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "I play ___ every week" (sport)',
-                    sentenceParts: ['من', 'هەموو', 'هەفتەیەک', '___', 'یاری', 'دەکەم'],
-                    correctOption: 'وەرزش',
-                    options: ['وەرزش', 'مۆسیقا', 'کتێب', 'کار']
+                    question: 'Complete: "I play a ___ every week" (وەرزش)',
+                    sentenceParts: ['I', 'play', 'a', '___', 'every', 'week'],
+                    correctOption: 'sport',
+                    options: ['sport', 'music', 'book', 'job']
                 },
                 {
+                    id: 5,
                     type: 'multiple-choice',
-                    question: 'How do you say "Team"?',
+                    question: "'تیم' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'تیم', image: '👥', correct: true },
-                        { text: 'یارمەتی', image: '🤝', correct: false },
-                        { text: 'هاوڕێ', image: '👫', correct: false }
+                        { id: 'opt1', text: 'Team', image: '👥', correct: true },
+                        { id: 'opt2', text: 'Help', image: '🤝', correct: false },
+                        { id: 'opt3', text: 'Friend', image: '👫', correct: false }
                     ]
                 }
             ]
@@ -1184,44 +1297,49 @@ export const unit3: Unit = {
             icon: '📝',
             exercises: [
                 {
+                    id: 1,
                     type: 'multiple-choice',
-                    question: 'What is "Culture"?',
+                    question: "'کەلتوور' بە ئینگلیزی چییە؟",
                     options: [
-                        { text: 'کەلتوور', image: '🎭', correct: true },
-                        { text: 'وەرزش', image: '⚽', correct: false },
-                        { text: 'کار', image: '💼', correct: false }
+                        { id: 'opt1', text: 'Culture', image: '🎭', correct: true },
+                        { id: 'opt2', text: 'Sport', image: '⚽', correct: false },
+                        { id: 'opt3', text: 'Work', image: '💼', correct: false }
                     ]
                 },
                 {
+                    id: 2,
                     type: 'match-pairs', question: 'Match the pairs',
                     pairs: [
                         { kurdish: 'چیا', english: 'Mountain' },
                         { kurdish: 'فڕۆکە', english: 'Airplane' },
-                        { kurdish: 'مۆبایل', english: 'Mobile' },
+                        { kurdish: 'مۆبایل', english: 'Mobile Phone' },
                         { kurdish: 'پەیام', english: 'Message' }
                     ]
                 },
                 {
+                    id: 3,
                     type: 'sentence-builder',
-                    question: 'Translate: "I love nature"',
-                    sourceText: 'I love nature',
-                    correctSentence: ['من', 'سروشتم', 'خۆشدەوێت'],
-                    options: ['من', 'سروشتم', 'خۆشدەوێت', 'ڕقم', 'لێیە', 'کارەکەم']
+                    question: 'بە ئینگلیزی بنووسە: "من سروشتم خۆشدەوێت"',
+                    sourceText: 'من سروشتم خۆشدەوێت',
+                    correctSentence: ['I', 'love', 'nature'],
+                    options: ['I', 'love', 'nature', 'hate', 'my job']
                 },
                 {
+                    id: 4,
                     type: 'fill-blank',
-                    question: 'Complete: "My ___ hurts" (head)',
-                    sentenceParts: ['___', 'م', 'ئێشێت'],
-                    correctOption: 'سەر',
-                    options: ['سەر', 'دەست', 'پێ', 'چاو']
+                    question: 'Complete: "My ___ hurts" (سەر)',
+                    sentenceParts: ['My', '___', 'hurts'],
+                    correctOption: 'head',
+                    options: ['head', 'hand', 'foot', 'eye']
                 },
                 {
+                    id: 5,
                     type: 'multiple-choice',
-                    question: 'Review: What is "Follow" in social media?',
+                    question: "پێداچوونەوە: 'فۆڵۆکردن' لە سۆشیال میدیا واتای چییە لە ئینگلیزیدا؟",
                     options: [
-                        { text: 'فۆڵۆکردن', image: '➕', correct: true },
-                        { text: 'بلۆککردن', image: '🚫', correct: false },
-                        { text: 'لایککردن', image: '❤️', correct: false }
+                        { id: 'opt1', text: 'Follow', image: '➕', correct: true },
+                        { id: 'opt2', text: 'Block', image: '🚫', correct: false },
+                        { id: 'opt3', text: 'Like', image: '❤️', correct: false }
                     ]
                 }
             ]
